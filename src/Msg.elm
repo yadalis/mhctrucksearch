@@ -10,10 +10,7 @@ import Json.Encode as Encode
 type Msg
     --= OnFetchTrucks (WebData (Array Truck))
     = OnFetchTrucks (Result Error (List Truck) )
-    --| UnwrapWebDataTrucks
     | FilterCDLNoCheckBoxClicked Bool
     | FilterCDLYesCheckBoxClicked Bool
     | SearchString String
     | SearchPressed
-        -- | Refresh Int
-        -- | Roll

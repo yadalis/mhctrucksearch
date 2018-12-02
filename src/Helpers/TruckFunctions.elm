@@ -34,35 +34,30 @@ buildCDLValueGroups uiModel trucks =
 
         cdlNoCheckboxLabel = "Nodd"
         cdlYesCheckboxLabel = "Yesdd"
-
     in
-        
         row[spy 15, wf]
         [
-
             column[spy 10, wf,  bw one]
             [
                 row[bw 0, hf, bwb 1, wf, pdb 3]
                 [
                     paragraph [bw one, fal, wf][textValue <| "CDL"]
                 ]
-                ,column[spy 5][
-                    row[bw two, pdl 15]
+                ,column[spy 10, pdl 15][
+                    row[bw two]
                     [
                         filterCheckBox  uiModel "CDLNo" cdlNoCheckboxLabel
                         , textValue <| "No (" ++  (String.fromInt <| (List.length cdlNoList))  ++ ")"
                     ]
-                    ,row[bw two, pdl 15]
+                    ,row[bw two]
                     [
                         filterCheckBox  uiModel "CDLYes" cdlYesCheckboxLabel
                         , textValue <| "Yes (" ++  (String.fromInt <| (List.length cdlYesList))  ++ ")"
                     ]
                 ]
             ]
-            
         ]
 
-    
 filterCheckBox : UIModel -> String -> String -> Element Msg
 filterCheckBox uiModel filterName chkboxLabel =
         case filterName of
@@ -92,4 +87,3 @@ buildChkBoxImage userAction =
             image [hpx 24] {src = "checked.png", description ="Logo" }
         else 
             el [hpx 24, wpx 24, bw 2, br 5] <| none
-

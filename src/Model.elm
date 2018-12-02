@@ -27,7 +27,7 @@ type alias Model =
         -- trucks : WebData ( Array Truck )
         -- ,
         truckList : List Truck
-        , textVal : String
+        ,filteredTruckList : List Truck
     }
 
 type alias UIModel =
@@ -35,6 +35,7 @@ type alias UIModel =
         filterCDLNoSelected : Bool
         ,filterCDLYesSelected : Bool
         ,searchString : String
+        ,onLoadSearchFilters : List String
     }
 
 type alias FilterSelectionsModel =
@@ -49,14 +50,15 @@ initialModel =
         -- trucks = RemoteData.Loading
         -- ,
         truckList = [] -- Array.empty
-        , textVal = "Init Model"
+        ,filteredTruckList = []
     }
 
-initalUIModel : UIModel
-initalUIModel =
+initalUIModel : String -> UIModel
+initalUIModel jsFlag =
     {
         --filterSelectionsModel = FilterSelectionsModel False False
         filterCDLNoSelected = False,
         filterCDLYesSelected = False,
-        searchString = ""
+        searchString = "",
+        onLoadSearchFilters  = String.split "&" jsFlag
     }
