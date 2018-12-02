@@ -19,12 +19,12 @@ import Helpers.Utils exposing (..)
 trucksView  : List Truck -> Element Msg
 trucksView trucks =
     trucks
-        |> List.map truckView
+        |> List.indexedMap truckView
         |> column [hf, wf, spy 5]
 
-truckView  : Truck -> Element Msg
-truckView truck =
-    row[bw new, wf, pd 5, bc 221 221 221] --bc 47 48 49
+truckView  : Int -> Truck -> Element Msg
+truckView index truck =
+    row[bw new, wf, pd 5, bc 231 231 231] --bc 47 48 49
     [
         column[wf]
         [
@@ -32,7 +32,9 @@ truckView truck =
         ]
         ,
         column[wfp 3]
-        []
+        [
+            textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  (String.fromInt <| truck.year) ++ " - APU - " ++ truck.apu
+        ]
         ,
         column[wf]
         []

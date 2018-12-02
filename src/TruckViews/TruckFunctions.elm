@@ -1,4 +1,4 @@
-module Helpers.TruckFunctions exposing (..)
+module TruckViews.TruckFunctions exposing (..)
 
 import Element exposing (..)
 import Element.Input exposing (..)
@@ -7,7 +7,7 @@ import Helpers.ElmUI exposing (..)
 import Helpers.Utils exposing (..)
 import Model exposing (..)
 import Msg exposing (..)
---import List.Unique exposing (..)
+import List.Unique exposing (..)
 
 buildCDLValueList : List Truck -> List String
 buildCDLValueList trucks =
@@ -56,6 +56,45 @@ buildCDLValueGroups uiModel trucks =
                     ]
                 ]
             ]
+        ]
+
+buildYearValueList : List Truck -> List Int
+buildYearValueList trucks =
+    List.map (\t -> t.year) trucks
+        |> filterDuplicates
+
+buildYearValueGroups : UIModel -> List Truck -> Element Msg
+buildYearValueGroups uiModel trucks =
+    let
+        yearList = List.sort <| buildYearValueList trucks
+        
+    in
+        row[spy 15, wf]
+        [
+            column[spy 10, wf,  bw one]
+            [
+                row[bw 0, hf, bwb 1, wf, pdb 3]
+                [
+                    paragraph [bw one, fal, wf][textValue <| "Year"]
+                ]
+                ,column[spy 10, pdl 15]
+                (
+                    List.map buildYearCheckboxes yearList
+                )
+            ]
+        ]
+
+buildYearCheckboxes : Int -> Element Msg
+buildYearCheckboxes year =
+        row[bw two]
+        [
+            checkbox [bw one, pdr 5 ] {
+                onChange = FilterYearCheckBoxClicked year
+                ,icon = buildChkBoxImage
+                , label = labelRight [] (el [] <| textValue (String.fromInt year) )
+                --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
+                , checked = False
+            }
         ]
 
 filterCheckBox : UIModel -> String -> String -> Element Msg

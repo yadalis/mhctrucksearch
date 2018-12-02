@@ -17,7 +17,7 @@ import TruckViews.Truck exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Utils exposing (..)
-import Helpers.TruckFunctions exposing (..)
+import TruckViews.TruckFunctions exposing (..)
 import Task
 import Array exposing(..)
 
@@ -47,11 +47,25 @@ update msg (model, uiModel) =
             in
                 ( ({ model | truckList = trucks, filteredTruckList = trucks}, uiModel), Cmd.none)
         FilterCDLNoCheckBoxClicked userAction ->
-            ( (model, {uiModel | filterCDLNoSelected = userAction}), Cmd.none )
+            let
+                cdlNoTruckList  = List.filter (\t -> String.trim t.cdl == "No" ) model.truckList
+            in
+                ( ({model | truckList = cdlNoTruckList}, {uiModel | filterCDLNoSelected = userAction}), Cmd.none )
         FilterCDLYesCheckBoxClicked userAction ->
-            ( (model, {uiModel | filterCDLYesSelected = userAction}), Cmd.none )
+            let
+                cdlYesTruckList  = List.filter (\t -> String.trim t.cdl == "Yes" ) model.truckList
+            in
+                ( ({model | truckList = cdlYesTruckList}, {uiModel | filterCDLYesSelected = userAction}), Cmd.none )
+        FilterYearCheckBoxClicked year userAction ->
+            let
+                cdlYearTruckList  = List.filter (\t -> t.year == year ) model.truckList
+            in
+                ( ({model | truckList = cdlYearTruckList}, {uiModel | filterCDLYesSelected = userAction}), Cmd.none )
         SearchString searchString ->
-            ( (model, {uiModel | searchString = searchString}), Cmd.none )
+            let
+                apuTruckList  = List.filter (\t -> String.toUpper t.apu == String.toUpper searchString ) model.truckList
+            in
+                ( ({model | truckList = apuTruckList}, {uiModel | searchString = searchString}), Cmd.none )
         SearchPressed ->
             ( (model, uiModel), Cmd.none )
 
@@ -91,7 +105,7 @@ view (model, uiModel) =
         <|
             row[hf,wf, pdt 76]
             [
-                column [hf, wf , pde 5 10 0 10, bc 225 225 225, spy 25] -- Search Filter Panel
+                column [hf, wf , pde 5 10 0 10, spy 25] -- Search Filter Panel bc 225 225 225, 
                 [
                     row[wf, pdt 15]
                     [ 
@@ -108,15 +122,37 @@ view (model, uiModel) =
                                 ,label = searchBtnIcon
                             }
                     ]
-                    ,if List.length model.truckList > 0 then
-                        (buildCDLValueGroups uiModel model.truckList)
-                    else
-                        loaderIconElement
+                    ,column[scrollbarY,hf, wf, spy 20]
+                    [
+                        if List.length model.truckList > 0 then
+                            (buildCDLValueGroups uiModel model.truckList)
+                        else
+                            loaderIconElement
+                        ,if List.length model.truckList > 0 then
+                            (buildYearValueGroups uiModel model.truckList)
+                        else
+                            none
+                    ]
                 ]
-                ,column[hf, wfp 5, bc 205 205 205, bwl 0, pdl 15 ] -- Trucks List Panel
+                ,column[hf, wfp 5,  bwl 0, bc 225 225 225,pd 15 ] -- Trucks List Panel 
                 [
-                    row[wf, bw 0, hpx 100, pde 10 10 10 0][ el [alignTop] <| textValue <| "Selected Filters... "]
-                    ,column[wf, scrollbarY] [trucksView model.truckList]                        
+                    row[hf, wf, bw 0, hpx 100, pde 10 10 10 0]
+                    [ 
+                        column[pdl 15, hf][] --, bc 244 66 95
+                        ,column[hf, pdl 5, spaceEvenly][
+                            el [] <| textValue <| "Selected Filters... ", 
+                            el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
+                        ]
+                    ]
+                    ,column[hf, wf, scrollbarY, bw 2] [trucksView model.truckList]
+                    ,row[hf, wf, bw 0, hpx 50, pde 10 10 10 10]
+                    [ 
+                        column[pdl 15, hf][] --, bc 244 66 95
+                        ,column[hf, pdl 5, spaceEvenly][
+                            -- el [] <| textValue <| "Page nav bar... ", 
+                            -- el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
+                        ]
+                    ]                  
                 ]
             ]
             

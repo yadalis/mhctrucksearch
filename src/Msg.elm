@@ -12,5 +12,6 @@ type Msg
     = OnFetchTrucks (Result Error (List Truck) )
     | FilterCDLNoCheckBoxClicked Bool
     | FilterCDLYesCheckBoxClicked Bool
+    | FilterYearCheckBoxClicked Int Bool
     | SearchString String
     | SearchPressed
