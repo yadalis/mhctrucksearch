@@ -1,9 +1,19 @@
 module Msg exposing (..)
 
 import Model exposing (..)
-import RemoteData exposing (..)
+--import RemoteData exposing (..)
+import Array exposing (..)
+import Http exposing(..)
+import Json.Decode as Decode
+import Json.Encode as Encode
 
 type Msg
-    = OnFetchTrucks (WebData (List Truck))
+    --= OnFetchTrucks (WebData (Array Truck))
+    = OnFetchTrucks (Result Error (List Truck) )
+    --| UnwrapWebDataTrucks
+    | FilterCDLNoCheckBoxClicked Bool
+    | FilterCDLYesCheckBoxClicked Bool
+    | SearchString String
+    | SearchPressed
         -- | Refresh Int
         -- | Roll
