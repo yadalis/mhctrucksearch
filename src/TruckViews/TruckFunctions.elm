@@ -8,6 +8,76 @@ import Helpers.Utils exposing (..)
 import Model exposing (..)
 import Msg exposing (..)
 import List.Unique exposing (..)
+import Array exposing (..)
+
+buildSearchFilters : Model -> UIModel -> UIModel
+buildSearchFilters model uiModel =
+    let
+        x = 5
+
+        hasThisTruckYearMatchesWithUserSelectedYear truck = 
+            uiModel.yearFilters
+                |> Array.toList
+                |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
+                |> List.length
+                |> (\length  -> length > 0)
+            -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
+            --     |> List.length
+            --     |> (\length  -> length > 0)
+            --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
+            --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
+
+        yearByFilterdTruckList  = 
+                model.filteredTruckList
+                    |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
+
+    in
+        uiModel
+
+applySearchFilters: Model -> UIModel -> List Truck
+applySearchFilters model uiModel =
+    let
+        hasThisTruckYearMatchesWithUserSelectedYear truck = 
+            uiModel.yearFilters
+                |> Array.toList
+                |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
+                |> List.length
+                |> (\length  -> length > 0)
+            -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
+            --     |> List.length
+            --     |> (\length  -> length > 0)
+            --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
+            --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
+
+        yearByFilterdTruckList  = 
+                model.truckList
+                    |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
+
+        newFilteredTruckList = 
+            if List.length yearByFilterdTruckList > 0 then
+                yearByFilterdTruckList
+            else
+                model.truckList
+        
+        cdlByFilteredTruckList = 
+                if uiModel.filterCDLNoSelected then
+                    List.filter (\t -> String.trim t.cdl == "No" ) newFilteredTruckList
+                else
+                    if uiModel.filterCDLYesSelected then
+                        List.filter (\t -> String.trim t.cdl == "Yes" ) newFilteredTruckList
+                    else
+                        newFilteredTruckList
+         
+        sortedFilterdTruckList =
+            cdlByFilteredTruckList
+                |> List.sortBy .year
+        
+        -- filteredTruckList  = 
+        --     sortedFilterdTruckList
+        --         |> List.length
+        --         |> (\sortedFilterdTruckListLength -> if sortedFilterdTruckListLength > 0 then  sortedFilterdTruckList else originalTruckList) 
+    in
+        sortedFilterdTruckList --filteredTruckList
 
 buildCDLValueList : List Truck -> List String
 buildCDLValueList trucks =
@@ -18,22 +88,14 @@ buildCDLValueList trucks =
 -- buildCDLCheckboxList trucks =
 --     List.map buildCDLCheckboxList trucks
 
-
-buildCDLValueGroups : UIModel -> List Truck -> Element Msg
-buildCDLValueGroups uiModel trucks =
+buildCDLValueGroups : Model -> UIModel -> Element Msg
+buildCDLValueGroups model uiModel =
     let
-        cdlList = buildCDLValueList trucks
+        cdlList = buildCDLValueList model.filteredTruckList
         
         cdlNoList =     List.filter (\cdl -> String.trim cdl == "No") cdlList
 
         cdlYesList =    List.filter (\cdl -> String.trim cdl == "Yes") cdlList
-
-
-        -- cdlNoCheckboxLabel = "No (" ++  (String.fromInt <| (List.length cdlNoList))  ++ ")"
-        -- cdlYesCheckboxLabel = "Yes (" ++  (String.fromInt <| (List.length cdlYesList))  ++ ")"
-
-        cdlNoCheckboxLabel = "Nodd"
-        cdlYesCheckboxLabel = "Yesdd"
     in
         row[spy 15, wf]
         [
@@ -46,28 +108,72 @@ buildCDLValueGroups uiModel trucks =
                 ,column[spy 10, pdl 15][
                     row[bw two]
                     [
-                        filterCheckBox  uiModel "CDLNo" cdlNoCheckboxLabel
+                        filterCheckBox  uiModel "CDLNo"
                         , textValue <| "No (" ++  (String.fromInt <| (List.length cdlNoList))  ++ ")"
                     ]
                     ,row[bw two]
                     [
-                        filterCheckBox  uiModel "CDLYes" cdlYesCheckboxLabel
+                        filterCheckBox  uiModel "CDLYes"
                         , textValue <| "Yes (" ++  (String.fromInt <| (List.length cdlYesList))  ++ ")"
                     ]
                 ]
             ]
         ]
 
-buildYearValueList : List Truck -> List Int
+--flippedComparison a b =
+desendingOrder a b =
+    case compare a b of
+        LT -> GT
+        EQ -> EQ
+        GT -> LT
+        
+buildYearValueList : List Truck -> Array Int
 buildYearValueList trucks =
     List.map (\t -> t.year) trucks
         |> filterDuplicates
+        |> List.sortWith desendingOrder -- to do descending order
+        |> Array.fromList
 
-buildYearValueGroups : UIModel -> List Truck -> Element Msg
-buildYearValueGroups uiModel trucks =
+buildYearValueTupleList : List Truck -> Array (Int, Bool)
+buildYearValueTupleList trucks =
+    buildYearValueList trucks
+        |> Array.map (\year -> (year, False))
+
+buildYearValueGroups : Model -> UIModel -> Element Msg
+buildYearValueGroups model uiModel = --currentFilteredTrucks =
     let
-        yearList = List.sort <| buildYearValueList trucks
-        
+        yearFilters = uiModel.yearFilters
+
+        buildYearCheckboxes :  Int -> (Int, Bool) -> Element Msg
+        buildYearCheckboxes index (year, userAction) =
+            let
+                yearWiseCount =    List.filter (\t -> t.year == year) model.filteredTruckList --currentFilteredTrucks
+            in
+                row[bw two]
+                [
+                    checkbox [bw one, pdr 5 ] {
+                        onChange = FilterYearCheckBoxClicked index year
+                        ,icon = buildChkBoxImage
+                        , label = labelRight [] (el [] <| textValue (String.fromInt year) )
+                        --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
+                        , checked = userAction
+                    }
+                    , textValue <| " (" ++  (String.fromInt <| (List.length yearWiseCount))  ++ ")"
+                ]
+                -- if List.length yearWiseCount > 0 then
+                --     row[bw two]
+                --     [
+                --         checkbox [bw one, pdr 5 ] {
+                --             onChange = FilterYearCheckBoxClicked index year
+                --             ,icon = buildChkBoxImage
+                --             , label = labelRight [] (el [] <| textValue (String.fromInt year) )
+                --             --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
+                --             , checked = userAction
+                --         }
+                --         , textValue <| " (" ++  (String.fromInt <| (List.length yearWiseCount))  ++ ")"
+                --     ]
+                -- else
+                --     none
     in
         row[spy 15, wf]
         [
@@ -79,26 +185,14 @@ buildYearValueGroups uiModel trucks =
                 ]
                 ,column[spy 10, pdl 15]
                 (
-                    List.map buildYearCheckboxes yearList
+                    Array.toList <| Array.indexedMap buildYearCheckboxes yearFilters -- column function needs List of item and not Array of items, so need conversion
                 )
             ]
         ]
 
-buildYearCheckboxes : Int -> Element Msg
-buildYearCheckboxes year =
-        row[bw two]
-        [
-            checkbox [bw one, pdr 5 ] {
-                onChange = FilterYearCheckBoxClicked year
-                ,icon = buildChkBoxImage
-                , label = labelRight [] (el [] <| textValue (String.fromInt year) )
-                --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                , checked = False
-            }
-        ]
 
-filterCheckBox : UIModel -> String -> String -> Element Msg
-filterCheckBox uiModel filterName chkboxLabel =
+filterCheckBox : UIModel -> String -> Element Msg
+filterCheckBox uiModel filterName =
         case filterName of
             "CDLNo" -> 
                 checkbox [bw one, pdr 5 ] {

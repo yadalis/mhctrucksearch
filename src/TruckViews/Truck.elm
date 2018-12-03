@@ -33,7 +33,7 @@ truckView index truck =
         ,
         column[wfp 3]
         [
-            textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  (String.fromInt <| truck.year) ++ " - APU - " ++ truck.apu
+            textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  (String.fromInt <| truck.year) ++ " - APU - " ++ truck.apu
         ]
         ,
         column[wf]

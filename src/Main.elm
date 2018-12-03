@@ -20,6 +20,7 @@ import Helpers.Utils exposing (..)
 import TruckViews.TruckFunctions exposing (..)
 import Task
 import Array exposing(..)
+import SearchFilterViews.MakeSearchFilter exposing (..)
 
 ---- INIT ----
 
@@ -44,28 +45,104 @@ update msg (model, uiModel) =
                                     truckList
                             Err err ->
                                     []
+
+                yearFilters = buildYearValueTupleList trucks
+                makeFilters = buildMakeValueRecordList trucks
+                
             in
-                ( ({ model | truckList = trucks, filteredTruckList = trucks}, uiModel), Cmd.none)
+                ( ({ model | truckList = trucks, filteredTruckList = trucks}, {uiModel | yearFilters = yearFilters, makeFilters = makeFilters}), Cmd.none)
+                
         FilterCDLNoCheckBoxClicked userAction ->
             let
-                cdlNoTruckList  = List.filter (\t -> String.trim t.cdl == "No" ) model.truckList
+                newUIModel = {uiModel | filterCDLNoSelected = userAction}
+                currentFilteredTruckList = applySearchFilters model newUIModel
+                newSearchFilterList = buildSearchFilters model newUIModel
+                -- newFilteredTruckList  =
+                --     if userAction then
+                --         List.filter (\t -> String.trim t.cdl == "No" ) currentFilteredList
+                --     else
+                --         currentFilteredList
             in
-                ( ({model | truckList = cdlNoTruckList}, {uiModel | filterCDLNoSelected = userAction}), Cmd.none )
+                ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
+
         FilterCDLYesCheckBoxClicked userAction ->
             let
-                cdlYesTruckList  = List.filter (\t -> String.trim t.cdl == "Yes" ) model.truckList
+                newUIModel = {uiModel | filterCDLYesSelected = userAction}
+                currentFilteredTruckList = applySearchFilters model newUIModel
+                -- newFilteredTruckList  =
+                --     if userAction then
+                --         List.filter (\t -> String.trim t.cdl == "Yes" ) currentFilteredList
+                --     else
+                --         currentFilteredList
             in
-                ( ({model | truckList = cdlYesTruckList}, {uiModel | filterCDLYesSelected = userAction}), Cmd.none )
-        FilterYearCheckBoxClicked year userAction ->
+                ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
+
+        FilterYearCheckBoxClicked index year userAction ->
             let
-                cdlYearTruckList  = List.filter (\t -> t.year == year ) model.truckList
+                newUIModel = 
+                    uiModel.yearFilters
+                        |> Array.get index
+                        |> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
+                        |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
+                        |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
+                        |> Maybe.withDefault uiModel
+
+                -- hasThisTruckYearMatchesWithUserSelectedYear truck = 
+                --     newUIModel.yearFilters
+                --         |> Array.toList
+                --         |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
+                --         |> List.length
+                --         |> (\length  -> length > 0)
+                --     -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
+                --     --     |> List.length
+                --     --     |> (\length  -> length > 0)
+                --     --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
+                --     --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
+
+                -- sortedFilterdTruckList  = 
+                --             model.truckList
+                --                 |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
+                --                 |> List.sortBy .year
+                
+                -- yearTruckList  = 
+                --             sortedFilterdTruckList
+                --                 |> List.length
+                --                 |> (\sortedFilterdTruckListLength -> if sortedFilterdTruckListLength > 0 then  sortedFilterdTruckList else model.truckList)
+
+                --modfiledYearFilterList = List.map toggle uiModel.yearFilters
+
+                --selectedYear = List.member year ( List.map (\x -> Tuple.first x) uiModel.yearFilters )
+                
+                --newSelectedYear = Tuple.mapSecond (\x -> userAction) selectedYear
+
+                --newUIModel =  {uiModel | yearFilters = ((year, userAction) ::  uiModel.yearFilters) }
+
+                --newUIModel =  {uiModel | yearFilters = modfiledYearFilterList }
+                newFilteredTruckList = applySearchFilters model newUIModel
             in
-                ( ({model | truckList = cdlYearTruckList}, {uiModel | filterCDLYesSelected = userAction}), Cmd.none )
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
+        
+        FilterMakeCheckBoxClicked index make resultCount userAction ->
+            let
+                newUIModel = 
+                    uiModel.makeFilters
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
+                        |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
+                        |> Maybe.withDefault uiModel
+
+                newFilteredTruckList = applySearchFilters model newUIModel
+
+            in
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
         SearchString searchString ->
             let
                 apuTruckList  = List.filter (\t -> String.toUpper t.apu == String.toUpper searchString ) model.truckList
             in
-                ( ({model | truckList = apuTruckList}, {uiModel | searchString = searchString}), Cmd.none )
+                ( ({model | filteredTruckList = apuTruckList}, {uiModel | searchString = searchString}), Cmd.none )
         SearchPressed ->
             ( (model, uiModel), Cmd.none )
 
@@ -125,11 +202,19 @@ view (model, uiModel) =
                     ,column[scrollbarY,hf, wf, spy 20]
                     [
                         if List.length model.truckList > 0 then
-                            (buildCDLValueGroups uiModel model.truckList)
+                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
+                            ( buildMakeValuesGroup model uiModel ) -- Year Filter Group
                         else
                             loaderIconElement
+
+                        -- ,if List.length model.truckList > 0 then
+                        --     ( buildCDLValueGroups model uiModel )  -- CDL Filter Group
+                        -- else
+                        --     loaderIconElement
+                            
                         ,if List.length model.truckList > 0 then
-                            (buildYearValueGroups uiModel model.truckList)
+                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
+                            ( buildYearValueGroups model uiModel ) -- Year Filter Group
                         else
                             none
                     ]
@@ -138,13 +223,13 @@ view (model, uiModel) =
                 [
                     row[hf, wf, bw 0, hpx 100, pde 10 10 10 0]
                     [ 
-                        column[pdl 15, hf][] --, bc 244 66 95
+                        column[pdl 15, hf, bc 244 66 95][] --
                         ,column[hf, pdl 5, spaceEvenly][
                             el [] <| textValue <| "Selected Filters... ", 
-                            el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
+                            el [] <| textValue <| "Total used trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                         ]
                     ]
-                    ,column[hf, wf, scrollbarY, bw 2] [trucksView model.truckList]
+                    ,column[hf, wf, scrollbarY, bw 2] [trucksView model.filteredTruckList]
                     ,row[hf, wf, bw 0, hpx 50, pde 10 10 10 10]
                     [ 
                         column[pdl 15, hf][] --, bc 244 66 95

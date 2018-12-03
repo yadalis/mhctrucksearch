@@ -36,6 +36,15 @@ type alias UIModel =
         ,filterCDLYesSelected : Bool
         ,searchString : String
         ,onLoadSearchFilters : List String
+        ,yearFilters : Array (Int, Bool)
+        ,makeFilters : Array MakeSearchFilter
+    }
+
+type alias MakeSearchFilter =
+    {   
+        make : String
+        ,userAction : Bool
+        ,resultCount : Int
     }
 
 type alias FilterSelectionsModel =
@@ -60,5 +69,7 @@ initalUIModel jsFlag =
         filterCDLNoSelected = False,
         filterCDLYesSelected = False,
         searchString = "",
-        onLoadSearchFilters  = String.split "&" jsFlag
+        onLoadSearchFilters  = String.split "&" jsFlag,
+        yearFilters = Array.empty,
+        makeFilters = Array.empty
     }
