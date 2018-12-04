@@ -21,6 +21,8 @@ import TruckViews.TruckFunctions exposing (..)
 import Task
 import Array exposing(..)
 import SearchFilterViews.MakeSearchFilter exposing (..)
+import SearchFilterViews.ModelSearchFilter exposing (..)
+import SearchFilterViews.SearchFilter exposing (..)
 
 ---- INIT ----
 
@@ -48,9 +50,21 @@ update msg (model, uiModel) =
 
                 yearFilters = buildYearValueTupleList trucks
                 makeFilters = buildMakeValueRecordList trucks
+                modelFilters = buildModelValueRecordList trucks
+                salesStatusFilters = buildSearchFilterValueRecordList SalesStatus trucks
+                sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof trucks
+                sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk trucks
                 
             in
-                ( ({ model | truckList = trucks, filteredTruckList = trucks}, {uiModel | yearFilters = yearFilters, makeFilters = makeFilters}), Cmd.none)
+                ( (
+                        { model | truckList = trucks, filteredTruckList = trucks},
+                        {uiModel | 
+                                    yearFilters = yearFilters, 
+                                    makeFilters = makeFilters, 
+                                    modelFilters = modelFilters, 
+                                    salesStatusFilters = salesStatusFilters, 
+                                    sleeperRoofFilters = sleeperRoofFilters, 
+                                    sleeperBunkFilters = sleeperBunkFilters }), Cmd.none)
                 
         FilterCDLNoCheckBoxClicked userAction ->
             let
@@ -123,7 +137,7 @@ update msg (model, uiModel) =
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
 
         
-        FilterMakeCheckBoxClicked index make resultCount userAction ->
+        FilterMakeCheckBoxClicked index userAction->
             let
                 newUIModel = 
                     uiModel.makeFilters
@@ -131,6 +145,66 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mf -> { mf | userAction = userAction} )
                         |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
                         |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
+                        |> Maybe.withDefault uiModel
+
+                newFilteredTruckList = applySearchFilters model newUIModel
+
+            in
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+        
+        FilterModelCheckBoxClicked index userAction ->
+            let
+                newUIModel = 
+                    uiModel.modelFilters
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf uiModel.modelFilters)
+                        |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
+                        |> Maybe.withDefault uiModel
+
+                newFilteredTruckList = applySearchFilters model newUIModel
+
+            in
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
+        FilterSalesStatusCheckBoxClicked index userAction ->
+            let
+                newUIModel = 
+                    uiModel.salesStatusFilters
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf uiModel.salesStatusFilters)
+                        |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
+                        |> Maybe.withDefault uiModel
+
+                newFilteredTruckList = applySearchFilters model newUIModel
+
+            in
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
+        FilterSleeperRoofCheckBoxClicked index userAction ->
+            let
+                newUIModel = 
+                    uiModel.sleeperRoofFilters
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperRoofFilters)
+                        |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
+                        |> Maybe.withDefault uiModel
+
+                newFilteredTruckList = applySearchFilters model newUIModel
+
+            in
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
+        FilterSleeperBunkCheckBoxClicked index userAction ->
+            let
+                newUIModel = 
+                    uiModel.sleeperBunkFilters
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperBunkFilters)
+                        |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
                 newFilteredTruckList = applySearchFilters model newUIModel
@@ -201,27 +275,49 @@ view (model, uiModel) =
                     ]
                     ,column[scrollbarY,hf, wf, spy 20]
                     [
-                        if List.length model.truckList > 0 then
-                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
-                            ( buildMakeValuesGroup model uiModel ) -- Year Filter Group
-                        else
-                            loaderIconElement
-
+                       
                         -- ,if List.length model.truckList > 0 then
                         --     ( buildCDLValueGroups model uiModel )  -- CDL Filter Group
                         -- else
                         --     loaderIconElement
                             
-                        ,if List.length model.truckList > 0 then
+                        if List.length model.truckList > 0 then
                             --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
                             ( buildYearValueGroups model uiModel ) -- Year Filter Group
                         else
                             none
+                        , 
+                        if List.length model.truckList > 0 then
+                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
+                            ( buildMakeValuesGroup model uiModel ) -- Year Filter Group
+                        else
+                            loaderIconElement    
+                        , if List.length model.truckList > 0 then
+                            (buildModelValuesGroup model uiModel) -- Year Filter Group
+                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                        else
+                            none
+                        , if List.length model.truckList > 0 then
+                            (buildSearchFilterValuesGroup SalesStatus model uiModel) -- Year Filter Group
+                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                        else
+                            none
+                        , if List.length model.truckList > 0 then
+                            (buildSearchFilterValuesGroup SleeperRoof model uiModel) -- Year Filter Group
+                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                        else
+                            none
+                        , if List.length model.truckList > 0 then
+                            (buildSearchFilterValuesGroup SleeperBunk model uiModel) -- Year Filter Group
+                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                        else
+                            none                                                        
+
                     ]
                 ]
-                ,column[hf, wfp 5,  bwl 0, bc 225 225 225,pd 15 ] -- Trucks List Panel 
+                ,column[hf, wfp 5,  bwl 0, bc 225 225 225,pd 15 ] -- Trucks Search Result List Panel 
                 [
-                    row[hf, wf, bw 0, hpx 100, pde 10 10 10 0]
+                    row[hf, wf, bw 0, hpx 75, pde 10 10 10 0]
                     [ 
                         column[pdl 15, hf, bc 244 66 95][] --
                         ,column[hf, pdl 5, spaceEvenly][
@@ -230,14 +326,14 @@ view (model, uiModel) =
                         ]
                     ]
                     ,column[hf, wf, scrollbarY, bw 2] [trucksView model.filteredTruckList]
-                    ,row[hf, wf, bw 0, hpx 50, pde 10 10 10 10]
-                    [ 
-                        column[pdl 15, hf][] --, bc 244 66 95
-                        ,column[hf, pdl 5, spaceEvenly][
-                            -- el [] <| textValue <| "Page nav bar... ", 
-                            -- el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
-                        ]
-                    ]                  
+                    -- ,row[hf, wf, bw 0, hpx 50, pde 10 10 10 10]
+                    -- [ 
+                    --     column[pdl 15, hf][] --, bc 244 66 95
+                    --     ,column[hf, pdl 5, spaceEvenly][
+                    --         -- el [] <| textValue <| "Page nav bar... ", 
+                    --         -- el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
+                    --     ]
+                    -- ]                  
                 ]
             ]
             

@@ -20,6 +20,9 @@ type alias Truck =
         , year              : Int
         , primaryImageLink  : String
         , truckType         : String
+        , salesStatus       : String
+        , sleeperRoof       : String
+        , sleeperBunk       : String
     }
 
 type alias Model =
@@ -37,12 +40,16 @@ type alias UIModel =
         ,searchString : String
         ,onLoadSearchFilters : List String
         ,yearFilters : Array (Int, Bool)
-        ,makeFilters : Array MakeSearchFilter
+        ,makeFilters : Array SearchFilterType
+        ,modelFilters : Array SearchFilterType
+        ,salesStatusFilters : Array SearchFilterType
+        ,sleeperRoofFilters : Array SearchFilterType
+        ,sleeperBunkFilters : Array SearchFilterType
     }
 
-type alias MakeSearchFilter =
+type alias SearchFilterType =
     {   
-        make : String
+        searchFilterKey : String
         ,userAction : Bool
         ,resultCount : Int
     }
@@ -71,5 +78,9 @@ initalUIModel jsFlag =
         searchString = "",
         onLoadSearchFilters  = String.split "&" jsFlag,
         yearFilters = Array.empty,
-        makeFilters = Array.empty
+        makeFilters = Array.empty,
+        modelFilters = Array.empty,
+        salesStatusFilters = Array.empty,
+        sleeperRoofFilters = Array.empty,
+        sleeperBunkFilters = Array.empty
     }

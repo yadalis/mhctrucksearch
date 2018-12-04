@@ -42,4 +42,7 @@ trucksDecoder  =
         |> required "year" Decode.int
         |> required "primaryImageLink" Decode.string
         |> required "truckType" Decode.string
+        |> required "salesStatus" Decode.string
+        |> required "sleeperRoof" Decode.string
+        |> required "sleeperBunk" Decode.string
     

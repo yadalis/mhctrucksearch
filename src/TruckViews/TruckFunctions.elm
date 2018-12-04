@@ -37,10 +37,36 @@ buildSearchFilters model uiModel =
 applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
-        hasThisTruckYearMatchesWithUserSelectedYear truck = 
-            uiModel.yearFilters
+        -- hasThisTruckYearMatchesWithUserSelectedYear truck = 
+        --     uiModel.yearFilters
+        --         |> Array.toList
+        --         |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
+        --         |> List.length
+        --         |> (\length  -> length > 0)
+        --     -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
+        --     --     |> List.length
+        --     --     |> (\length  -> length > 0)
+        --     --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
+        --     --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
+
+        -- yearByFilterdTruckList  = 
+        --         model.truckList
+        --             |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
+
+        -- tempFilteredTruckList = 
+        --     if List.length yearByFilterdTruckList > 0 then
+        --         yearByFilterdTruckList
+        --     else
+        --         model.truckList
+        
+
+----------------------------------------------- MAKE ---------------------------------------------------------
+
+
+        hasThisTruckMakeMatchesWithUserSelectedMake truck = 
+            uiModel.makeFilters
                 |> Array.toList
-                |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
+                |> List.filter (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.make && mkModel.userAction == True) 
                 |> List.length
                 |> (\length  -> length > 0)
             -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
@@ -49,28 +75,30 @@ applySearchFilters model uiModel =
             --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
             --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
 
-        yearByFilterdTruckList  = 
+        makeByFilterdTruckList  = 
                 model.truckList
-                    |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
+                    |> List.filter (\t -> hasThisTruckMakeMatchesWithUserSelectedMake t )
+
+----------------------------------------------- MAKE ---------------------------------------------------------
 
         newFilteredTruckList = 
-            if List.length yearByFilterdTruckList > 0 then
-                yearByFilterdTruckList
+            if List.length makeByFilterdTruckList > 0 then
+                makeByFilterdTruckList
             else
                 model.truckList
         
-        cdlByFilteredTruckList = 
-                if uiModel.filterCDLNoSelected then
-                    List.filter (\t -> String.trim t.cdl == "No" ) newFilteredTruckList
-                else
-                    if uiModel.filterCDLYesSelected then
-                        List.filter (\t -> String.trim t.cdl == "Yes" ) newFilteredTruckList
-                    else
-                        newFilteredTruckList
+        -- cdlByFilteredTruckList = 
+        --         if uiModel.filterCDLNoSelected then
+        --             List.filter (\t -> String.trim t.cdl == "No" ) newFilteredTruckList
+        --         else
+        --             if uiModel.filterCDLYesSelected then
+        --                 List.filter (\t -> String.trim t.cdl == "Yes" ) newFilteredTruckList
+        --             else
+        --                 newFilteredTruckList
          
         sortedFilterdTruckList =
-            cdlByFilteredTruckList
-                |> List.sortBy .year
+            newFilteredTruckList
+                |> List.sortBy .make
         
         -- filteredTruckList  = 
         --     sortedFilterdTruckList
@@ -181,9 +209,9 @@ buildYearValueGroups model uiModel = --currentFilteredTrucks =
             [
                 row[bw 0, hf, bwb 1, wf, pdb 3]
                 [
-                    paragraph [bw one, fal, wf][textValue <| "Year"]
+                    paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5][textValue <| "Year"]
                 ]
-                ,column[spy 10, pdl 15]
+                ,column[spy 10, pdl 15, hf, scrollbarY, wf]
                 (
                     Array.toList <| Array.indexedMap buildYearCheckboxes yearFilters -- column function needs List of item and not Array of items, so need conversion
                 )

@@ -1,5 +1,5 @@
 
-module SearchFilterViews.MakeSearchFilter exposing (..)
+module SearchFilterViews.ModelSearchFilter exposing (..)
 
 import Element exposing (..)
 import Element.Input exposing (..)
@@ -18,38 +18,38 @@ desendingOrder a b =
         EQ -> EQ
         GT -> LT
         
-buildMakeValueList : List Truck -> Array String
-buildMakeValueList trucks =
-    List.map (\t -> t.make) trucks
+buildModelValueList : List Truck -> Array String
+buildModelValueList trucks =
+    List.map (\t -> t.model) trucks
         |> filterDuplicates
         |> List.sort -- to do descending order
         |> Array.fromList
 
-buildMakeValueRecordList : List Truck -> Array SearchFilterType
-buildMakeValueRecordList trucks =
-    buildMakeValueList trucks
-        |> Array.map (\make -> {searchFilterKey = make, userAction = False, resultCount = 0})
+buildModelValueRecordList : List Truck -> Array SearchFilterType
+buildModelValueRecordList trucks =
+    buildModelValueList trucks
+        |> Array.map (\model -> {searchFilterKey = model, userAction = False, resultCount = 0})
 
-buildMakeValuesGroup : Model -> UIModel -> Element Msg
-buildMakeValuesGroup model uiModel = --currentFilteredTrucks =
+buildModelValuesGroup : Model -> UIModel -> Element Msg
+buildModelValuesGroup model uiModel = --currentFilteredTrucks =
     let
-        makeFilters = uiModel.makeFilters
+        modelFilters = uiModel.modelFilters
 
-        buildMakeCheckboxes :  Int -> SearchFilterType -> Element Msg
-        buildMakeCheckboxes index makeSearchFilter =
+        buildModelCheckboxes :  Int -> SearchFilterType -> Element Msg
+        buildModelCheckboxes index modelSearchFilter =
             let
-                makeWiseCount =    List.filter (\t -> String.trim t.make == makeSearchFilter.searchFilterKey) model.filteredTruckList --currentFilteredTrucks
+                modelWiseCount =    List.filter (\t -> String.trim t.model == modelSearchFilter.searchFilterKey) model.filteredTruckList --currentFilteredTrucks
             in
                 row[bw two]
                 [
                     checkbox [bw one, pdr 5 ] {
-                        onChange = FilterMakeCheckBoxClicked index
+                        onChange = FilterModelCheckBoxClicked index
                         ,icon = buildChkBoxImage
-                        , label = labelRight [] (el [] <| textValue makeSearchFilter.searchFilterKey )
+                        , label = labelRight [] (el [] <| textValue modelSearchFilter.searchFilterKey )
                         --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                        , checked = makeSearchFilter.userAction
+                        , checked = modelSearchFilter.userAction
                     }
-                    , textValue <| " (" ++  (String.fromInt <| (List.length makeWiseCount))  ++ ")"
+                    , textValue <| " (" ++  (String.fromInt <| (List.length modelWiseCount))  ++ ")"
                 ]
                 -- if List.length yearWiseCount > 0 then
                 --     row[bw two]
@@ -72,11 +72,11 @@ buildMakeValuesGroup model uiModel = --currentFilteredTrucks =
             [
                 row[bw 0, hf, bwb 1, wf, pdb 3]
                 [
-                    paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5, centerY][textValue <| "Make"]
+                    paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5, centerY][textValue <| "Model"]
                 ]
                 ,column[spy 10, pdl 15, hf, scrollbarY, wf]
                 (
-                    Array.toList <| Array.indexedMap buildMakeCheckboxes makeFilters -- column function needs List of item and not Array of items, so need conversion
+                    Array.toList <| Array.indexedMap buildModelCheckboxes modelFilters -- column function needs List of item and not Array of items, so need conversion
                 )
             ]
         ]
