@@ -43,6 +43,15 @@ buildSearchFilterValueList searchFilterCustomType trucks =
         SalesStatus -> 
             List.map (\t -> t.salesStatus) trucks
                 |> applyExtraOnSearchFilter
+
+        Make -> 
+            List.map (\t -> t.make) trucks
+                |> applyExtraOnSearchFilter
+
+        MakeModel -> 
+            List.map (\t -> t.model) trucks
+                |> applyExtraOnSearchFilter
+
         SleeperRoof -> 
             List.map (\t -> t.sleeperRoof) trucks
                 |> applyExtraOnSearchFilter
@@ -62,7 +71,13 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 =   case searchFilterCustomType of
                             SalesStatus -> 
                                 (uiModel.salesStatusFilters, "Sales Status", FilterSalesStatusCheckBoxClicked)
-                                
+                            
+                            Make -> 
+                                (uiModel.makeFilters, "Make", FilterMakeCheckBoxClicked)
+
+                            MakeModel -> 
+                                (uiModel.modelFilters, "Model", FilterModelCheckBoxClicked)
+
                             SleeperRoof -> 
                                 (uiModel.sleeperRoofFilters, "Sleeper Roof", FilterSleeperRoofCheckBoxClicked)
                                 
@@ -76,6 +91,10 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                          case searchFilterCustomType of
                             SalesStatus -> 
                                 List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.filteredTruckList
+                            Make -> 
+                                List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.filteredTruckList
+                            MakeModel -> 
+                                List.filter (\t -> String.trim t.model == searchFilter.searchFilterKey) model.filteredTruckList
                             SleeperRoof -> 
                                 List.filter (\t -> String.trim t.sleeperRoof == searchFilter.searchFilterKey) model.filteredTruckList
                             SleeperBunk -> 

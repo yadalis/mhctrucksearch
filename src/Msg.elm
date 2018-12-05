@@ -24,7 +24,7 @@ type Msg
 type SearchFilterCustomType
     = SalesStatus
     -- | Year
-    -- | Make
-    -- | Model
+    | Make
+    | MakeModel
     | SleeperRoof
     | SleeperBunk
