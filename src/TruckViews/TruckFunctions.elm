@@ -34,39 +34,15 @@ buildSearchFilters model uiModel =
     in
         uiModel
 
-applySearchFilters: Model -> UIModel -> List Truck
-applySearchFilters model uiModel =
+ 
+
+applyYearSearchFilters: Model -> UIModel -> List Truck
+applyYearSearchFilters model uiModel =
     let
-        -- hasThisTruckYearMatchesWithUserSelectedYear truck = 
-        --     uiModel.yearFilters
-        --         |> Array.toList
-        --         |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
-        --         |> List.length
-        --         |> (\length  -> length > 0)
-        --     -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
-        --     --     |> List.length
-        --     --     |> (\length  -> length > 0)
-        --     --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
-        --     --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
-
-        -- yearByFilterdTruckList  = 
-        --         model.truckList
-        --             |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
-
-        -- tempFilteredTruckList = 
-        --     if List.length yearByFilterdTruckList > 0 then
-        --         yearByFilterdTruckList
-        --     else
-        --         model.truckList
-        
-
------------------------------------------------ MAKE ---------------------------------------------------------
-
-
-        hasThisTruckMakeMatchesWithUserSelectedMake truck = 
-            uiModel.makeFilters
+        hasThisTruckYearMatchesWithUserSelectedYear truck = 
+            uiModel.yearFilters
                 |> Array.toList
-                |> List.filter (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.make && mkModel.userAction == True) 
+                |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
                 |> List.length
                 |> (\length  -> length > 0)
             -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
@@ -75,37 +51,157 @@ applySearchFilters model uiModel =
             --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
             --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
 
+        yearByFilterdTruckList  = 
+                model.truckList
+                    |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
+
+        newFilteredTruckList = 
+            if List.length yearByFilterdTruckList > 0 then
+                yearByFilterdTruckList
+            else
+                model.truckList
+
+        sortedFilterdTruckList =
+            newFilteredTruckList
+                |> List.sortBy .year
+    in
+        sortedFilterdTruckList
+
+
+------------------------------------------------- MAKE ---------------------------------------------------------
+
+
+applyMakeSearchFilters: Model -> UIModel -> List Truck
+applyMakeSearchFilters model uiModel =
+    let
+        hasThisTruckMakeMatchesWithUserSelectedMake truck = 
+            uiModel.makeFilters
+                |> Array.toList
+                |> List.filter (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.make && mkModel.userAction == True) 
+                |> List.length
+                |> (\length  -> length > 0)
+
         makeByFilterdTruckList  = 
                 model.truckList
                     |> List.filter (\t -> hasThisTruckMakeMatchesWithUserSelectedMake t )
-
------------------------------------------------ MAKE ---------------------------------------------------------
 
         newFilteredTruckList = 
             if List.length makeByFilterdTruckList > 0 then
                 makeByFilterdTruckList
             else
                 model.truckList
-        
-        -- cdlByFilteredTruckList = 
-        --         if uiModel.filterCDLNoSelected then
-        --             List.filter (\t -> String.trim t.cdl == "No" ) newFilteredTruckList
-        --         else
-        --             if uiModel.filterCDLYesSelected then
-        --                 List.filter (\t -> String.trim t.cdl == "Yes" ) newFilteredTruckList
-        --             else
-        --                 newFilteredTruckList
-         
+
         sortedFilterdTruckList =
             newFilteredTruckList
                 |> List.sortBy .make
-        
-        -- filteredTruckList  = 
-        --     sortedFilterdTruckList
-        --         |> List.length
-        --         |> (\sortedFilterdTruckListLength -> if sortedFilterdTruckListLength > 0 then  sortedFilterdTruckList else originalTruckList) 
     in
-        sortedFilterdTruckList --filteredTruckList
+        sortedFilterdTruckList
+
+
+---------------------------------------------------MODEL---------------------------------------------------------------
+
+
+applySearchFilters: SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
+applySearchFilters searchFilterCustomType model searchFilters =
+    let
+        hasThisSearchKeyValueMatchesWithUserSelectedSearchFilter truck = 
+            searchFilters
+                |> Array.toList
+                |>List.filter 
+                         (case searchFilterCustomType of
+                            SalesStatus -> 
+                                (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.salesStatus && mkModel.userAction == True) 
+                                
+                            SleeperRoof -> 
+                                (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.sleeperRoof && mkModel.userAction == True) 
+                                
+                            SleeperBunk -> 
+                                (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.sleeperBunk && mkModel.userAction == True) )
+                |> List.length
+                |> (\length  -> length > 0)
+
+        filterdTruckList  = 
+                model.truckList
+                    |> List.filter (\t -> hasThisSearchKeyValueMatchesWithUserSelectedSearchFilter t )
+
+        newFilteredTruckList = 
+            if List.length filterdTruckList > 0 then
+                filterdTruckList
+            else
+                model.truckList
+
+        sortedFilterdTruckList =
+            newFilteredTruckList
+                |> List.sortBy .make
+    in
+        sortedFilterdTruckList
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+-- applySearchFilters_1: SearchFilterCustomType -> Model -> UIModel -> Array SearchFilterType -> List Truck
+-- applySearchFilters_1 searchFilterCustomType model uiModel searchFilters =
+--     let
+        -- hasThisSearchKeyValueMatchesWithUserSelectedSearchFilter truck = 
+        --     searchFilters
+        --         |> Array.toList
+        --         |>List.filter 
+        --                  (case searchFilterCustomType of
+        --                     SalesStatus -> 
+        --                         (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.salesStatus && mkModel.userAction == True) 
+                                
+        --                     SleeperRoof -> 
+        --                         (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.sleeperRoof && mkModel.userAction == True) 
+                                
+        --                     SleeperBunk -> 
+        --                         (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.sleeperBunk && mkModel.userAction == True) )
+        --         |> List.length
+        --         |> (\length  -> length > 0)
+
+        -- hasThisTruckMakeMatchesWithUserSelectedMake truck = 
+        --     uiModel.makeFilters
+        --         |> Array.toList
+        --         |> List.filter (\mkModel -> String.trim mkModel.searchFilterKey == String.trim truck.make && mkModel.userAction == True) 
+        --         |> List.length
+        --         |> (\length  -> length > 0)
+
+
+        -- filterdTruckList  = 
+        --         model.truckList
+        --             |> List.filter (\t -> 
+        --                                 (
+        --                                     \trk -> 
+        --                                         uiModel.yearFilters
+        --                                             |> Array.toList
+        --                                             |> List.filter (\yfModel -> Tuple.first yfModel == trk.year && Tuple.second yfModel == True )
+        --                                 ) t
+        --                             )
+                    -- |> List.filter (\t -> 
+                    --                     ( uiModel.makeFilters
+                    --                             |> Array.toList
+                    --                             |> List.filter (\yfModel -> String.trim yfModel.searchFilterKey == String.trim t.make && yfModel.userAction == True) t                                        
+                    --                 ))
+                    -- |> List.filter (\t -> 
+                    --                     ( uiModel.modelFilters
+                    --                             |> Array.toList
+                    --                             |> List.filter (\yfModel -> String.trim yfModel.searchFilterKey == String.trim t.model && yfModel.userAction == True) t                                        
+                    --                 ))
+
+    --     newFilteredTruckList = 
+    --         if List.length filterdTruckList > 0 then
+    --             filterdTruckList
+    --         else
+    --             model.truckList
+
+    --     sortedFilterdTruckList =
+    --         newFilteredTruckList
+    --             |> List.sortBy .make
+    -- in
+    --     sortedFilterdTruckList
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
 
 buildCDLValueList : List Truck -> List String
 buildCDLValueList trucks =
@@ -116,37 +212,37 @@ buildCDLValueList trucks =
 -- buildCDLCheckboxList trucks =
 --     List.map buildCDLCheckboxList trucks
 
-buildCDLValueGroups : Model -> UIModel -> Element Msg
-buildCDLValueGroups model uiModel =
-    let
-        cdlList = buildCDLValueList model.filteredTruckList
+-- buildCDLValueGroups : Model -> UIModel -> Element Msg
+-- buildCDLValueGroups model uiModel =
+--     let
+--         cdlList = buildCDLValueList model.filteredTruckList
         
-        cdlNoList =     List.filter (\cdl -> String.trim cdl == "No") cdlList
+--         cdlNoList =     List.filter (\cdl -> String.trim cdl == "No") cdlList
 
-        cdlYesList =    List.filter (\cdl -> String.trim cdl == "Yes") cdlList
-    in
-        row[spy 15, wf]
-        [
-            column[spy 10, wf,  bw one]
-            [
-                row[bw 0, hf, bwb 1, wf, pdb 3]
-                [
-                    paragraph [bw one, fal, wf][textValue <| "CDL"]
-                ]
-                ,column[spy 10, pdl 15][
-                    row[bw two]
-                    [
-                        filterCheckBox  uiModel "CDLNo"
-                        , textValue <| "No (" ++  (String.fromInt <| (List.length cdlNoList))  ++ ")"
-                    ]
-                    ,row[bw two]
-                    [
-                        filterCheckBox  uiModel "CDLYes"
-                        , textValue <| "Yes (" ++  (String.fromInt <| (List.length cdlYesList))  ++ ")"
-                    ]
-                ]
-            ]
-        ]
+--         cdlYesList =    List.filter (\cdl -> String.trim cdl == "Yes") cdlList
+--     in
+--         row[spy 15, wf]
+--         [
+--             column[spy 10, wf,  bw one]
+--             [
+--                 row[bw 0, hf, bwb 1, wf, pdb 3]
+--                 [
+--                     paragraph [bw one, fal, wf][textValue <| "CDL"]
+--                 ]
+--                 ,column[spy 10, pdl 15][
+--                     row[bw two]
+--                     [
+--                         filterCheckBox  uiModel "CDLNo"
+--                         , textValue <| "No (" ++  (String.fromInt <| (List.length cdlNoList))  ++ ")"
+--                     ]
+--                     ,row[bw two]
+--                     [
+--                         filterCheckBox  uiModel "CDLYes"
+--                         , textValue <| "Yes (" ++  (String.fromInt <| (List.length cdlYesList))  ++ ")"
+--                     ]
+--                 ]
+--             ]
+--         ]
 
 --flippedComparison a b =
 desendingOrder a b =
@@ -219,29 +315,29 @@ buildYearValueGroups model uiModel = --currentFilteredTrucks =
         ]
 
 
-filterCheckBox : UIModel -> String -> Element Msg
-filterCheckBox uiModel filterName =
-        case filterName of
-            "CDLNo" -> 
-                checkbox [bw one, pdr 5 ] {
-                    onChange = FilterCDLNoCheckBoxClicked
-                    ,icon = buildChkBoxImage
-                    , label = labelLeft [] none-- (el [] <| textValue chkboxLabel)
-                    --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                    , checked = uiModel.filterCDLNoSelected
-                }
+-- filterCheckBox : UIModel -> String -> Element Msg
+-- filterCheckBox uiModel filterName =
+--         case filterName of
+--             "CDLNo" -> 
+--                 checkbox [bw one, pdr 5 ] {
+--                     onChange = FilterCDLNoCheckBoxClicked
+--                     ,icon = buildChkBoxImage
+--                     , label = labelLeft [] none-- (el [] <| textValue chkboxLabel)
+--                     --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
+--                     , checked = uiModel.filterCDLNoSelected
+--                 }
 
-            "CDLYes" -> 
-                checkbox [bw one, pdr 5 ] {
-                    onChange = FilterCDLYesCheckBoxClicked
-                    ,icon = buildChkBoxImage
-                    , label = labelLeft [] none --(el [] <| textValue chkboxLabel)
-                    --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                    , checked = uiModel.filterCDLYesSelected
-                }
+--             "CDLYes" -> 
+--                 checkbox [bw one, pdr 5 ] {
+--                     onChange = FilterCDLYesCheckBoxClicked
+--                     ,icon = buildChkBoxImage
+--                     , label = labelLeft [] none --(el [] <| textValue chkboxLabel)
+--                     --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
+--                     , checked = uiModel.filterCDLYesSelected
+--                 }
             
-            _ ->
-                none
+--             _ ->
+--                 none
 
 buildChkBoxImage userAction =
         if userAction == True then 

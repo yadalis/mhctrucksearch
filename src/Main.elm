@@ -54,7 +54,6 @@ update msg (model, uiModel) =
                 salesStatusFilters = buildSearchFilterValueRecordList SalesStatus trucks
                 sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof trucks
                 sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk trucks
-                
             in
                 ( (
                         { model | truckList = trucks, filteredTruckList = trucks},
@@ -66,30 +65,30 @@ update msg (model, uiModel) =
                                     sleeperRoofFilters = sleeperRoofFilters, 
                                     sleeperBunkFilters = sleeperBunkFilters }), Cmd.none)
                 
-        FilterCDLNoCheckBoxClicked userAction ->
-            let
-                newUIModel = {uiModel | filterCDLNoSelected = userAction}
-                currentFilteredTruckList = applySearchFilters model newUIModel
-                newSearchFilterList = buildSearchFilters model newUIModel
-                -- newFilteredTruckList  =
-                --     if userAction then
-                --         List.filter (\t -> String.trim t.cdl == "No" ) currentFilteredList
-                --     else
-                --         currentFilteredList
-            in
-                ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
+        -- FilterCDLNoCheckBoxClicked userAction ->
+        --     let
+        --         newUIModel = {uiModel | filterCDLNoSelected = userAction}
+        --         currentFilteredTruckList = applySearchFilters model newUIModel -- SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
+        --         newSearchFilterList = buildSearchFilters model newUIModel
+        --         -- newFilteredTruckList  =
+        --         --     if userAction then
+        --         --         List.filter (\t -> String.trim t.cdl == "No" ) currentFilteredList
+        --         --     else
+        --         --         currentFilteredList
+        --     in
+        --         ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
 
-        FilterCDLYesCheckBoxClicked userAction ->
-            let
-                newUIModel = {uiModel | filterCDLYesSelected = userAction}
-                currentFilteredTruckList = applySearchFilters model newUIModel
-                -- newFilteredTruckList  =
-                --     if userAction then
-                --         List.filter (\t -> String.trim t.cdl == "Yes" ) currentFilteredList
-                --     else
-                --         currentFilteredList
-            in
-                ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
+        -- FilterCDLYesCheckBoxClicked userAction ->
+        --     let
+        --         newUIModel = {uiModel | filterCDLYesSelected = userAction}
+        --         currentFilteredTruckList = applySearchFilters model newUIModel
+        --         -- newFilteredTruckList  =
+        --         --     if userAction then
+        --         --         List.filter (\t -> String.trim t.cdl == "Yes" ) currentFilteredList
+        --         --     else
+        --         --         currentFilteredList
+        --     in
+        --         ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
 
         FilterYearCheckBoxClicked index year userAction ->
             let
@@ -132,7 +131,7 @@ update msg (model, uiModel) =
                 --newUIModel =  {uiModel | yearFilters = ((year, userAction) ::  uiModel.yearFilters) }
 
                 --newUIModel =  {uiModel | yearFilters = modfiledYearFilterList }
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newFilteredTruckList = applyYearSearchFilters model newUIModel
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
 
@@ -147,7 +146,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newFilteredTruckList = applyMakeSearchFilters model newUIModel
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -162,7 +161,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newFilteredTruckList = applyMakeSearchFilters model newUIModel
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -177,7 +176,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newFilteredTruckList = applySearchFilters SalesStatus model newUIModel.salesStatusFilters --SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -192,7 +191,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newFilteredTruckList = applySearchFilters SleeperRoof model newUIModel.sleeperRoofFilters 
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -207,7 +206,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newFilteredTruckList = applySearchFilters SleeperBunk model newUIModel.sleeperBunkFilters 
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -218,7 +217,10 @@ update msg (model, uiModel) =
             in
                 ( ({model | filteredTruckList = apuTruckList}, {uiModel | searchString = searchString}), Cmd.none )
         SearchPressed ->
-            ( (model, uiModel), Cmd.none )
+            let
+                newFilteredTruckList = applyMakeSearchFilters model uiModel
+            in
+                ( ( {model | filteredTruckList = newFilteredTruckList } , uiModel), Cmd.none )
 
 ---- VIEW ----
 

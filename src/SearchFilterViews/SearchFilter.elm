@@ -115,7 +115,6 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel = --currentFil
                 (
                     Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion
                 )
-
             ]
         ]
 
