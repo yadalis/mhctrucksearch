@@ -17,11 +17,10 @@ import TruckViews.Truck exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Utils exposing (..)
-import TruckViews.TruckFunctions exposing (..)
+import BusinessFunctions.TruckFunctions exposing (..)
 import Task
 import Array exposing(..)
-import SearchFilterViews.MakeSearchFilter exposing (..)
-import SearchFilterViews.ModelSearchFilter exposing (..)
+
 import SearchFilterViews.SearchFilter exposing (..)
 
 ---- INIT ----
@@ -48,10 +47,10 @@ update msg (model, uiModel) =
                             Err err ->
                                     []
 
-                yearFilters = buildYearValueTupleList trucks
-                makeFilters = buildMakeValueRecordList trucks
-                modelFilters = buildModelValueRecordList trucks
                 salesStatusFilters = buildSearchFilterValueRecordList SalesStatus trucks
+                yearFilters = buildSearchFilterValueRecordList Year trucks
+                makeFilters = buildSearchFilterValueRecordList Make trucks
+                modelFilters = buildSearchFilterValueRecordList MakeModel trucks
                 sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof trucks
                 sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk trucks
             in
@@ -65,12 +64,13 @@ update msg (model, uiModel) =
                                     sleeperRoofFilters = sleeperRoofFilters, 
                                     sleeperBunkFilters = sleeperBunkFilters }), Cmd.none)
         
-        FilterYearCheckBoxClicked index year userAction ->
+        FilterYearCheckBoxClicked index userAction ->
             let
                 newUIModel = 
                     uiModel.yearFilters
                         |> Array.get index
-                        |> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
+                        --|> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
                         |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
                         |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
                         |> Maybe.withDefault uiModel
@@ -225,28 +225,30 @@ view (model, uiModel) =
                         --     ( buildCDLValueGroups model uiModel )  -- CDL Filter Group
                         -- else
                         --     loaderIconElement
-                            
+
                         if List.length model.truckList > 0 then
-                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
-                            ( buildYearValueGroups model uiModel ) -- Year Filter Group
-                        else
-                            none
-                        , 
-                        if List.length model.truckList > 0 then
-                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
-                            ( buildMakeValuesGroup model uiModel ) -- Year Filter Group
-                        else
-                            loaderIconElement    
-                        , if List.length model.truckList > 0 then
-                            (buildModelValuesGroup model uiModel) -- Year Filter Group
-                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
-                        else
-                            none
-                        , if List.length model.truckList > 0 then
                             (buildSearchFilterValuesGroup SalesStatus model uiModel) -- Year Filter Group
                             --( buildModelValuesGroup model uiModel ) -- Year Filter Group
                         else
                             none
+    
+                        ,if List.length model.truckList > 0 then
+                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
+                            ( buildSearchFilterValuesGroup Year model uiModel) -- Year Filter Group
+                        else
+                            none
+
+                        ,if List.length model.truckList > 0 then
+                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
+                            ( buildSearchFilterValuesGroup Make model uiModel ) -- Year Filter Group
+                        else
+                            loaderIconElement    
+                        , if List.length model.truckList > 0 then
+                            (buildSearchFilterValuesGroup MakeModel model uiModel) -- Year Filter Group
+                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                        else
+                            none
+                        
                         , if List.length model.truckList > 0 then
                             (buildSearchFilterValuesGroup SleeperRoof model uiModel) -- Year Filter Group
                             --( buildModelValuesGroup model uiModel ) -- Year Filter Group

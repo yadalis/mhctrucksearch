@@ -1,4 +1,4 @@
-module TruckViews.TruckFunctions exposing (..)
+module BusinessFunctions.TruckFunctions exposing (..)
 
 import Element exposing (..)
 import Element.Input exposing (..)
@@ -15,7 +15,8 @@ applySearchFilters model uiModel =
     let
         hasThisTruckYearMatchesWithUserSelectedYear truck = 
             uiModel.yearFilters
-                |> Array.filter (\sf -> Tuple.first sf == truck.year && Tuple.second sf == True)
+                --|> Array.filter (\sf -> Tuple.first sf == truck.year && Tuple.second sf == True)
+                |> Array.filter (\sf -> String.trim sf.searchFilterKey == String.trim truck.year && sf.userAction == True) 
                 |> Array.length
                 |> (\length  -> length > 0)
 
@@ -55,12 +56,6 @@ applySearchFilters model uiModel =
                 |> Array.length
                 |> (\length  -> length > 0)
 
-        hasYearSearchFilterValuesChecked  =
-            uiModel.yearFilters
-                |> Array.filter (\sf -> Tuple.second sf == True)
-                |> Array.length
-                |> (\length  -> length > 0)
-
         filterdTruckList  = 
             model.truckList
                 |> (\trks ->
@@ -70,7 +65,7 @@ applySearchFilters model uiModel =
                             trks
                     )
                 |> (\trks ->
-                        if hasYearSearchFilterValuesChecked then
+                        if hasSearchFilterValuesChecked uiModel.yearFilters then
                             List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t ) trks 
                         else
                             trks
@@ -105,82 +100,3 @@ applySearchFilters model uiModel =
                 |> List.sortBy .make
     in
         sortedFilterdTruckList
-
-----------------------------------------------------------------------------------------------------------------------------------------
-
-
---flippedComparison a b =
-desendingOrder a b =
-    case compare a b of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
-        
-buildYearValueList : List Truck -> Array Int
-buildYearValueList trucks =
-    List.map (\t -> t.year) trucks
-        |> filterDuplicates
-        |> List.sortWith desendingOrder -- to do descending order
-        |> Array.fromList
-
-buildYearValueTupleList : List Truck -> Array (Int, Bool)
-buildYearValueTupleList trucks =
-    buildYearValueList trucks
-        |> Array.map (\year -> (year, False))
-
-buildYearValueGroups : Model -> UIModel -> Element Msg
-buildYearValueGroups model uiModel = --currentFilteredTrucks =
-    let
-        yearFilters = uiModel.yearFilters
-
-        buildYearCheckboxes :  Int -> (Int, Bool) -> Element Msg
-        buildYearCheckboxes index (year, userAction) =
-            let
-                yearWiseCount =    List.filter (\t -> t.year == year) model.filteredTruckList --currentFilteredTrucks
-            in
-                row[bw two]
-                [
-                    checkbox [bw one, pdr 5 ] {
-                        onChange = FilterYearCheckBoxClicked index year
-                        ,icon = buildChkBoxImage
-                        , label = labelRight [] (el [] <| textValue (String.fromInt year) )
-                        --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                        , checked = userAction
-                    }
-                    , textValue <| " (" ++  (String.fromInt <| (List.length yearWiseCount))  ++ ")"
-                ]
-                -- if List.length yearWiseCount > 0 then
-                --     row[bw two]
-                --     [
-                --         checkbox [bw one, pdr 5 ] {
-                --             onChange = FilterYearCheckBoxClicked index year
-                --             ,icon = buildChkBoxImage
-                --             , label = labelRight [] (el [] <| textValue (String.fromInt year) )
-                --             --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                --             , checked = userAction
-                --         }
-                --         , textValue <| " (" ++  (String.fromInt <| (List.length yearWiseCount))  ++ ")"
-                --     ]
-                -- else
-                --     none
-    in
-        row[spy 15, wf]
-        [
-            column[spy 10, wf,  bw one]
-            [
-                row[bw 0, hf, bwb 1, wf, pdb 3]
-                [
-                    paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5][textValue <| "Year"]
-                ]
-                ,column[spy 10, pdl 15, hf, scrollbarY, wf]
-                (
-                    Array.toList <| Array.indexedMap buildYearCheckboxes yearFilters -- column function needs List of item and not Array of items, so need conversion
-                )
-            ]
-        ]
-
-buildChkBoxImage userAction =
-        if userAction == True then 
-            image [hpx 24] {src = "checked.png", description ="Logo" }
-        else 
-            el [hpx 24, wpx 24, bw 2, br 5] <| none

@@ -17,7 +17,8 @@ type alias Truck =
         , model             : String
         , apu               : String
         , cdl               : String
-        , year              : Int
+--        , year              : Int
+        , year              : String
         , primaryImageLink  : String
         , truckType         : String
         , salesStatus       : String
@@ -39,7 +40,7 @@ type alias UIModel =
         ,filterCDLYesSelected : Bool
         ,searchString : String
         ,onLoadSearchFilters : List String
-        ,yearFilters : Array (Int, Bool)
+        ,yearFilters : Array SearchFilterType
         ,makeFilters : Array SearchFilterType
         ,modelFilters : Array SearchFilterType
         ,salesStatusFilters : Array SearchFilterType

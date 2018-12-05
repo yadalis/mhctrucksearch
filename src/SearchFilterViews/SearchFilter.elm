@@ -30,11 +30,14 @@ filterEmptyValuesFromList  searchFilterList =
                 
                 searchFilterList
 
-applyExtraOnSearchFilter  : List String -> Array String
-applyExtraOnSearchFilter searchFilterKeyValue =
+applyExtraOnSearchFilter  : Int -> List String -> Array String
+applyExtraOnSearchFilter sortOrder searchFilterKeyValue =
     filterDuplicates searchFilterKeyValue
         |> filterEmptyValuesFromList
-        |> List.sort
+        |> (if sortOrder == 0 then 
+                List.sort 
+            else 
+                List.sortWith desendingOrder)
         |> Array.fromList
 
 buildSearchFilterValueList : SearchFilterCustomType -> List Truck -> Array String
@@ -42,22 +45,27 @@ buildSearchFilterValueList searchFilterCustomType trucks =
     case searchFilterCustomType of
         SalesStatus -> 
             List.map (\t -> t.salesStatus) trucks
-                |> applyExtraOnSearchFilter
+                |> applyExtraOnSearchFilter 0
 
+        Year -> 
+            List.map (\t -> t.year) trucks
+                |> applyExtraOnSearchFilter 1
+                
         Make -> 
             List.map (\t -> t.make) trucks
-                |> applyExtraOnSearchFilter
+                |> applyExtraOnSearchFilter 0
 
         MakeModel -> 
             List.map (\t -> t.model) trucks
-                |> applyExtraOnSearchFilter
+                |> applyExtraOnSearchFilter 0
 
         SleeperRoof -> 
             List.map (\t -> t.sleeperRoof) trucks
-                |> applyExtraOnSearchFilter
+                |> applyExtraOnSearchFilter 0
+                
         SleeperBunk -> 
             List.map (\t -> t.sleeperBunk) trucks
-                |> applyExtraOnSearchFilter
+                |> applyExtraOnSearchFilter 0
 
 buildSearchFilterValueRecordList : SearchFilterCustomType -> List Truck -> Array SearchFilterType
 buildSearchFilterValueRecordList searchFilterCustomType trucks =
@@ -71,7 +79,10 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 =   case searchFilterCustomType of
                             SalesStatus -> 
                                 (uiModel.salesStatusFilters, "Sales Status", FilterSalesStatusCheckBoxClicked)
-                            
+
+                            Year -> 
+                                (uiModel.yearFilters, "Year", FilterYearCheckBoxClicked)
+
                             Make -> 
                                 (uiModel.makeFilters, "Make", FilterMakeCheckBoxClicked)
 
@@ -91,6 +102,8 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                          case searchFilterCustomType of
                             SalesStatus -> 
                                 List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.filteredTruckList
+                            Year -> 
+                                List.filter (\t -> String.trim t.year == searchFilter.searchFilterKey) model.filteredTruckList
                             Make -> 
                                 List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.filteredTruckList
                             MakeModel -> 

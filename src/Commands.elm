@@ -39,7 +39,8 @@ trucksDecoder  =
         |> required "model" Decode.string
         |> required "apu" Decode.string
         |> required "cdl" Decode.string
-        |> required "year" Decode.int
+        |> required "year" Decode.string
+        --|> hardcoded "2000"
         |> required "primaryImageLink" Decode.string
         |> required "truckType" Decode.string
         |> required "salesStatus" Decode.string

@@ -12,7 +12,7 @@ type Msg
     = OnFetchTrucks (Result Error (List Truck) )
     -- | FilterCDLNoCheckBoxClicked Bool
     -- | FilterCDLYesCheckBoxClicked Bool
-    | FilterYearCheckBoxClicked Int Int Bool -- index year and userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
+    | FilterYearCheckBoxClicked Int Bool -- index year and userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
     | FilterMakeCheckBoxClicked Int Bool-- might want to use MakeSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
     | FilterModelCheckBoxClicked Int Bool -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
     | FilterSalesStatusCheckBoxClicked Int Bool -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
@@ -23,7 +23,7 @@ type Msg
 
 type SearchFilterCustomType
     = SalesStatus
-    -- | Year
+    | Year
     | Make
     | MakeModel
     | SleeperRoof
