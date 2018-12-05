@@ -131,7 +131,7 @@ update msg (model, uiModel) =
                 --newUIModel =  {uiModel | yearFilters = ((year, userAction) ::  uiModel.yearFilters) }
 
                 --newUIModel =  {uiModel | yearFilters = modfiledYearFilterList }
-                newFilteredTruckList = applyYearSearchFilters model newUIModel
+                newFilteredTruckList = applySearchFilters model newUIModel
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
 
@@ -146,7 +146,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applyMakeSearchFilters model newUIModel
+                newFilteredTruckList = applySearchFilters model newUIModel
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -161,7 +161,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applyMakeSearchFilters model newUIModel
+                newFilteredTruckList = applySearchFilters model newUIModel
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -176,7 +176,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters SalesStatus model newUIModel.salesStatusFilters --SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
+                newFilteredTruckList = applySearchFilters model newUIModel  --SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -191,7 +191,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters SleeperRoof model newUIModel.sleeperRoofFilters 
+                newFilteredTruckList = applySearchFilters model newUIModel
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -206,7 +206,7 @@ update msg (model, uiModel) =
                         |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
                         |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters SleeperBunk model newUIModel.sleeperBunkFilters 
+                newFilteredTruckList = applySearchFilters model newUIModel
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
@@ -218,7 +218,7 @@ update msg (model, uiModel) =
                 ( ({model | filteredTruckList = apuTruckList}, {uiModel | searchString = searchString}), Cmd.none )
         SearchPressed ->
             let
-                newFilteredTruckList = applyMakeSearchFilters model uiModel
+                newFilteredTruckList = applySearchFilters model uiModel
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , uiModel), Cmd.none )
 
