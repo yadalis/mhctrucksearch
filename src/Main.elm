@@ -65,95 +65,155 @@ update msg (model, uiModel) =
                                     sleeperRoofFilters = sleeperRoofFilters, 
                                     sleeperBunkFilters = sleeperBunkFilters }), Cmd.none)
         
-        FilterYearCheckBoxClicked index userAction ->
-            let
-                newUIModel = 
-                    uiModel.yearFilters
-                        |> Array.get index
-                        --|> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
-                        |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
-                        |> Maybe.withDefault uiModel
+        -- FilterYearCheckBoxClicked index userAction ->
+        --     let
+        --         newUIModel = 
+        --             uiModel.yearFilters
+        --                 |> Array.get index
+        --                 --|> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
+        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --                 |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
+        --                 |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
+        --                 |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
-            in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+        --         newFilteredTruckList = applySearchFilters model newUIModel
+        --     in
+        --         ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
         
-        FilterMakeCheckBoxClicked index userAction->
-            let
-                newUIModel = 
-                    uiModel.makeFilters
-                        |> Array.get index
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
-                        |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
-                        |> Maybe.withDefault uiModel
+        -- FilterMakeCheckBoxClicked index userAction->
+        --     let
+        --         newUIModel = 
+        --             uiModel.makeFilters
+        --                 |> Array.get index
+        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --                 |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
+        --                 |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
+        --                 |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+        --         newFilteredTruckList = applySearchFilters model newUIModel
 
-            in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+        --     in
+        --         ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
         
-        FilterModelCheckBoxClicked index userAction ->
+        -- FilterModelCheckBoxClicked index userAction ->
+        --     let
+        --         newUIModel = 
+        --             uiModel.modelFilters
+        --                 |> Array.get index
+        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --                 |> Maybe.map (\mf -> Array.set index mf uiModel.modelFilters)
+        --                 |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
+        --                 |> Maybe.withDefault uiModel
+
+        --         newFilteredTruckList = applySearchFilters model newUIModel
+
+        --     in
+        --         ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
+
+        FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
                 newUIModel = 
-                    uiModel.modelFilters
-                        |> Array.get index
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        |> Maybe.map (\mf -> Array.set index mf uiModel.modelFilters)
-                        |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
-                        |> Maybe.withDefault uiModel
+                    case searchFilterCustomType of
+                        SalesStatus -> 
+                            uiModel.salesStatusFilters
+                                |> Array.get index
+                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                |> Maybe.map (\mf -> Array.set index mf uiModel.salesStatusFilters)
+                                |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
+                                |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                        Year -> 
+                             uiModel.yearFilters
+                                |> Array.get index
+                                --|> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
+                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
+                                |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
+                                |> Maybe.withDefault uiModel
+                                
+                        Make -> 
+                             uiModel.makeFilters
+                                |> Array.get index
+                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
+                                |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
+                                |> Maybe.withDefault uiModel
 
-            in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+                        MakeModel -> 
+                            uiModel.modelFilters
+                                |> Array.get index
+                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                |> Maybe.map (\mf -> Array.set index mf uiModel.modelFilters)
+                                |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
+                                |> Maybe.withDefault uiModel
 
-        FilterSalesStatusCheckBoxClicked index userAction ->
-            let
-                newUIModel = 
-                    uiModel.salesStatusFilters
-                        |> Array.get index
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        |> Maybe.map (\mf -> Array.set index mf uiModel.salesStatusFilters)
-                        |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
-                        |> Maybe.withDefault uiModel
+                        SleeperRoof -> 
+                            uiModel.sleeperRoofFilters
+                                |> Array.get index
+                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperRoofFilters)
+                                |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
+                                |> Maybe.withDefault uiModel
+                                
+                        SleeperBunk -> 
+                            uiModel.sleeperBunkFilters
+                                |> Array.get index
+                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperBunkFilters)
+                                |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
+                                |> Maybe.withDefault uiModel
 
                 newFilteredTruckList = applySearchFilters model newUIModel  --SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
 
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
 
-        FilterSleeperRoofCheckBoxClicked index userAction ->
-            let
-                newUIModel = 
-                    uiModel.sleeperRoofFilters
-                        |> Array.get index
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperRoofFilters)
-                        |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
-                        |> Maybe.withDefault uiModel
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+        -- FilterSalesStatusCheckBoxClicked index userAction ->
+        --     let
+        --         newUIModel = 
+        --             uiModel.salesStatusFilters
+        --                 |> Array.get index
+        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --                 |> Maybe.map (\mf -> Array.set index mf uiModel.salesStatusFilters)
+        --                 |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
+        --                 |> Maybe.withDefault uiModel
 
-            in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+        --         newFilteredTruckList = applySearchFilters model newUIModel  --SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
 
-        FilterSleeperBunkCheckBoxClicked index userAction ->
-            let
-                newUIModel = 
-                    uiModel.sleeperBunkFilters
-                        |> Array.get index
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperBunkFilters)
-                        |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
-                        |> Maybe.withDefault uiModel
+        --     in
+        --         ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+        -- FilterSleeperRoofCheckBoxClicked index userAction ->
+        --     let
+        --         newUIModel = 
+        --             uiModel.sleeperRoofFilters
+        --                 |> Array.get index
+        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --                 |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperRoofFilters)
+        --                 |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
+        --                 |> Maybe.withDefault uiModel
 
-            in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+        --         newFilteredTruckList = applySearchFilters model newUIModel
+
+        --     in
+        --         ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+
+        -- FilterSleeperBunkCheckBoxClicked index userAction ->
+        --     let
+        --         newUIModel = 
+        --             uiModel.sleeperBunkFilters
+        --                 |> Array.get index
+        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --                 |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperBunkFilters)
+        --                 |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
+        --                 |> Maybe.withDefault uiModel
+
+        --         newFilteredTruckList = applySearchFilters model newUIModel
+
+        --     in
+        --         ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
 
         SearchString searchString ->
             let
@@ -213,7 +273,7 @@ view (model, uiModel) =
             [
                 column [hf, wf , pde 5 10 0 10, spy 25] -- Search Filter Panel bc 225 225 225, 
                 [
-                    row[wf, pd 5, bw 2, spaceEvenly]
+                    row[wf, pd 5, bw 1, spaceEvenly]
                     [ 
                         Input.text [wf, hf, bw 0]
                         {
@@ -230,43 +290,28 @@ view (model, uiModel) =
                     ]
                     ,column[scrollbarY,hf, wf, spy 20]
                     [
-                       
-                        -- ,if List.length model.truckList > 0 then
-                        --     ( buildCDLValueGroups model uiModel )  -- CDL Filter Group
-                        -- else
-                        --     loaderIconElement
-
                         if List.length model.truckList > 0 then
-                            (buildSearchFilterValuesGroup SalesStatus model uiModel) -- Year Filter Group
-                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                            (buildSearchFilterValuesGroup SalesStatus model uiModel)
                         else
                             none
-    
                         ,if List.length model.truckList > 0 then
-                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
-                            ( buildSearchFilterValuesGroup Year model uiModel) -- Year Filter Group
+                            ( buildSearchFilterValuesGroup Year model uiModel)
                         else
                             none
-
                         ,if List.length model.truckList > 0 then
-                            --(buildYearValueGroups uiModel model.truckList) -- Year Filter Group
-                            ( buildSearchFilterValuesGroup Make model uiModel ) -- Year Filter Group
+                            ( buildSearchFilterValuesGroup Make model uiModel )
                         else
                             loaderIconElement    
                         , if List.length model.truckList > 0 then
-                            (buildSearchFilterValuesGroup MakeModel model uiModel) -- Year Filter Group
-                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
-                        else
-                            none
-                        
-                        , if List.length model.truckList > 0 then
-                            (buildSearchFilterValuesGroup SleeperRoof model uiModel) -- Year Filter Group
-                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                            (buildSearchFilterValuesGroup MakeModel model uiModel)
                         else
                             none
                         , if List.length model.truckList > 0 then
-                            (buildSearchFilterValuesGroup SleeperBunk model uiModel) -- Year Filter Group
-                            --( buildModelValuesGroup model uiModel ) -- Year Filter Group
+                            (buildSearchFilterValuesGroup SleeperRoof model uiModel)
+                        else
+                            none
+                        , if List.length model.truckList > 0 then
+                            (buildSearchFilterValuesGroup SleeperBunk model uiModel)
                         else
                             none                                                        
 

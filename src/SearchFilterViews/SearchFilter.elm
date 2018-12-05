@@ -78,22 +78,22 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
             (searchFilters, filterLabel, msg)
                 =   case searchFilterCustomType of
                             SalesStatus -> 
-                                (uiModel.salesStatusFilters, "Sales Status", FilterSalesStatusCheckBoxClicked)
+                                (uiModel.salesStatusFilters, "Sales Status", FilterCheckBoxClicked )
 
                             Year -> 
-                                (uiModel.yearFilters, "Year", FilterYearCheckBoxClicked)
+                                (uiModel.yearFilters, "Year", FilterCheckBoxClicked)
 
                             Make -> 
-                                (uiModel.makeFilters, "Make", FilterMakeCheckBoxClicked)
+                                (uiModel.makeFilters, "Make", FilterCheckBoxClicked)
 
                             MakeModel -> 
-                                (uiModel.modelFilters, "Model", FilterModelCheckBoxClicked)
+                                (uiModel.modelFilters, "Model", FilterCheckBoxClicked)
 
                             SleeperRoof -> 
-                                (uiModel.sleeperRoofFilters, "Sleeper Roof", FilterSleeperRoofCheckBoxClicked)
+                                (uiModel.sleeperRoofFilters, "Sleeper Roof", FilterCheckBoxClicked)
                                 
                             SleeperBunk -> 
-                                (uiModel.sleeperBunkFilters, "Sleeper Bunk", FilterSleeperBunkCheckBoxClicked)
+                                (uiModel.sleeperBunkFilters, "Sleeper Bunk", FilterCheckBoxClicked)
 
             buildCheckboxes :  Int -> SearchFilterType -> Element Msg
             buildCheckboxes index searchFilter =
@@ -116,7 +116,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                     row[bw two]
                     [
                         checkbox [bw one, pdr 5 ] {
-                            onChange = msg index
+                            onChange = msg index searchFilterCustomType
                             ,icon = buildChkBoxImage
                             , label = labelRight [] (el [] <| textValue searchFilter.searchFilterKey )
                             , checked = searchFilter.userAction
