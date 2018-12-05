@@ -21,7 +21,8 @@ import Helpers.Utils exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
 import Task
 import Array exposing(..)
-
+import String exposing (..)
+import Html.Events.Extra as ExtraHtmlEvents
 import SearchFilterViews.SearchFilter exposing (..)
 
 ---- INIT ----
@@ -36,6 +37,56 @@ init jsflg =
     )
 
 ---- UPDATE ----
+
+performFinalSearch : Model -> String -> Model
+performFinalSearch model userSearchString =
+    let
+        searchFilterValueList = split "=" userSearchString -- "a:THERMOKING", "md:t880", "y:2019" etc...
+        searchFilterTypeCode =     
+            case List.head <| searchFilterValueList of -- gives first element in the list
+                Just val -> val
+                Nothing -> ""
+        searchFilterValue =
+                -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style
+                --     Just val -> val
+                --     Nothing -> ""
+                case List.head <| List.reverse searchFilterValueList of -- gives last element in the list -- 2nd style
+                    Just val -> val
+                    Nothing -> ""
+
+        --logsToBrowswerDevTools = Debug.log "searchValues -> " [searchFilterTypeCode,searchFilterValue]
+
+        searchResultTruckList  = 
+                if String.isEmpty userSearchString then
+                    model.truckList
+                else if ( (not <| String.isEmpty searchFilterTypeCode) && String.isEmpty searchFilterValue) then
+                    []
+                else
+                    model.truckList      
+                        |> List.filter (\t ->     
+
+                                case searchFilterTypeCode of
+                                    "ss"    -> startsWith  (toUpper searchFilterValue) (toUpper t.salesStatus) 
+                                    "y"     -> startsWith  ( searchFilterValue) ( t.year) 
+                                    "m"     -> startsWith  (toUpper searchFilterValue) (toUpper t.make) 
+                                    "md"     -> startsWith  (toUpper searchFilterValue) (toUpper t.model) 
+                                    "sr"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperRoof) 
+                                    "sb"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperBunk) 
+                                    _       -> False -- invalid search string entered by the user
+                            -- else
+                            --     False
+                        )
+                    |> List.sortBy .make
+        
+        finalSearchResultTruckList =
+            if List.length searchResultTruckList > 0 then
+                searchResultTruckList
+            else
+                []
+        
+        newModel = {model | filteredTruckList = finalSearchResultTruckList}
+    in
+        newModel
 
 update : Msg -> (Model, UIModel) -> ( (Model, UIModel) , Cmd Msg  )
 update msg (model, uiModel) =
@@ -125,16 +176,22 @@ update msg (model, uiModel) =
 
         SearchString searchString ->
             let
-                apuTruckList  = List.filter (\t -> String.toUpper t.apu == String.toUpper searchString ) model.truckList
-            in
-                ( ({model | filteredTruckList = apuTruckList}, {uiModel | searchString = searchString}), Cmd.none )
-        SearchPressed ->
-            let
-                newFilteredTruckList = applySearchFilters model uiModel
-            in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , uiModel), Cmd.none )
+                newModel = 
+                    if String.length searchString > 0 then
+                        model
+                    else
+                        {model | filteredTruckList = model.truckList }
 
+            in
+                ( ( newModel , {uiModel | searchString = searchString}), Cmd.none )
+
+        SearchPressed ->
+            ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
+
+        HandleKeyboardEvent ->
+            ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
 ---- VIEW ----
+
 
 
 view : (Model, UIModel) -> Html Msg
@@ -171,7 +228,7 @@ view (model, uiModel) =
                     [
                         image [hpx 32, bw one] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ,
-                        el [pdl 25] <| textValue "Truck Search - Powerfull-Flexible search app"
+                        el [pdl 25] <| textValue "Truck Search - Powerfull, fluid truck search platform, get the result with less than blink of an eye !!!"
                     ] 
         in
         
@@ -183,12 +240,16 @@ view (model, uiModel) =
                 [
                     row[wf, pd 5, bw 1, spaceEvenly]
                     [ 
-                        Input.text [wf, hf, bw 0]
+                        Input.text [wf, hf, bw 0
+                                    --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
+                                    ,Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
+                                ]
                         {
                             onChange = SearchString
                             ,text  = uiModel.searchString
                             ,label = labelLeft [] none
-                            ,placeholder = Just (Input.placeholder [] (el [] <| textValue "Search trucks"))
+                            ,placeholder = Just (Input.placeholder [] (el [] <| textValue "Fluid trucks Search"))
+
                         }
                         ,Input.button ( [ hf, wpx 50, eId "prntEst"] ++ searchStringBtnStyle)
                             { 
@@ -201,7 +262,7 @@ view (model, uiModel) =
                         if List.length model.truckList > 0 then
                             (buildSearchFilterValuesGroup SalesStatus model uiModel)
                         else
-                            none
+                            loaderIconElement
                         ,if List.length model.truckList > 0 then
                             ( buildSearchFilterValuesGroup Year model uiModel)
                         else
@@ -209,7 +270,7 @@ view (model, uiModel) =
                         ,if List.length model.truckList > 0 then
                             ( buildSearchFilterValuesGroup Make model uiModel )
                         else
-                            loaderIconElement    
+                            none    
                         , if List.length model.truckList > 0 then
                             (buildSearchFilterValuesGroup MakeModel model uiModel)
                         else
