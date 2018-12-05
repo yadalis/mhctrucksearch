@@ -113,56 +113,76 @@ update msg (model, uiModel) =
 
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
+
+                buildSearchResult: Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel
+                buildSearchResult filterList func =
+                    filterList
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf filterList)
+                        --|> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
+                        |> Maybe.map func
+                        |> Maybe.withDefault uiModel
+
                 newUIModel = 
                     case searchFilterCustomType of
                         SalesStatus -> 
                             uiModel.salesStatusFilters
-                                |> Array.get index
-                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                                |> Maybe.map (\mf -> Array.set index mf uiModel.salesStatusFilters)
-                                |> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
-                                |> Maybe.withDefault uiModel
+                                ---> Array.get index
+                                --|> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                --|> Maybe.map (\mf -> Array.set index mf uiModel.salesStatusFilters)
+                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | salesStatusFilters = mfArr}) )
+                                --|>  
+                                --|> 
+                                --|> Maybe.map (\mfArr -> {uiModel | salesStatusFilters = mfArr})
+
+                                --|> Maybe.withDefault uiModel
 
                         Year -> 
                              uiModel.yearFilters
-                                |> Array.get index
-                                --|> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
-                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                                |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
-                                |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
-                                |> Maybe.withDefault uiModel
+                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
+                                -- |> Array.get index
+                                -- --|> Maybe.map (\yf -> Tuple.mapSecond (\chkd -> userAction) yf)
+                                -- |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                -- |> Maybe.map (\yf -> Array.set index yf uiModel.yearFilters)
+                                -- |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
+                                -- |> Maybe.withDefault uiModel
                                 
                         Make -> 
                              uiModel.makeFilters
-                                |> Array.get index
-                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                                |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
-                                |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
-                                |> Maybe.withDefault uiModel
+                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
+                                -- |> Array.get index
+                                -- |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                -- |> Maybe.map (\mf -> Array.set index mf uiModel.makeFilters)
+                                -- |> Maybe.map (\mfArr -> {uiModel | makeFilters = mfArr})
+                                -- |> Maybe.withDefault uiModel
 
                         MakeModel -> 
                             uiModel.modelFilters
-                                |> Array.get index
-                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                                |> Maybe.map (\mf -> Array.set index mf uiModel.modelFilters)
-                                |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
-                                |> Maybe.withDefault uiModel
+                                    |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
+                                -- |> Array.get index
+                                -- |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                -- |> Maybe.map (\mf -> Array.set index mf uiModel.modelFilters)
+                                -- |> Maybe.map (\mfArr -> {uiModel | modelFilters = mfArr})
+                                -- |> Maybe.withDefault uiModel
 
                         SleeperRoof -> 
                             uiModel.sleeperRoofFilters
-                                |> Array.get index
-                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                                |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperRoofFilters)
-                                |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
-                                |> Maybe.withDefault uiModel
+                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
+                                -- |> Array.get index
+                                -- |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                -- |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperRoofFilters)
+                                -- |> Maybe.map (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
+                                -- |> Maybe.withDefault uiModel
                                 
                         SleeperBunk -> 
                             uiModel.sleeperBunkFilters
-                                |> Array.get index
-                                |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                                |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperBunkFilters)
-                                |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
-                                |> Maybe.withDefault uiModel
+                                    |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+                                -- |> Array.get index
+                                -- |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                                -- |> Maybe.map (\mf -> Array.set index mf uiModel.sleeperBunkFilters)
+                                -- |> Maybe.map (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
+                                -- |> Maybe.withDefault uiModel
 
                 newFilteredTruckList = applySearchFilters model newUIModel  --SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
 
