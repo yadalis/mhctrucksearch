@@ -20,11 +20,15 @@ desendingOrder a b =
 
 filterEmptyValuesFromList : List String -> List String
 filterEmptyValuesFromList  searchFilterList =
-    List.filter (\str -> 
+    List.filter (
+                    \str -> 
                         str
                             |> String.trim
                             |> String.isEmpty
-                            |> not ) searchFilterList
+                            |> not 
+                )
+                
+                searchFilterList
 
 applyExtraOnSearchFilter  : List String -> Array String
 applyExtraOnSearchFilter searchFilterKeyValue =
@@ -52,7 +56,7 @@ buildSearchFilterValueRecordList searchFilterCustomType trucks =
         |> Array.map (\sfValue -> {searchFilterKey = sfValue, userAction = False, resultCount = 0})
 
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
-buildSearchFilterValuesGroup searchFilterCustomType model uiModel = --currentFilteredTrucks =
+buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
     let
             (searchFilters, filterLabel, msg)
                 =   case searchFilterCustomType of
@@ -83,25 +87,10 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel = --currentFil
                             onChange = msg index
                             ,icon = buildChkBoxImage
                             , label = labelRight [] (el [] <| textValue searchFilter.searchFilterKey )
-                            --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
                             , checked = searchFilter.userAction
                         }
                         , textValue <| " (" ++  (String.fromInt <| (List.length searchKeyWiseCount))  ++ ")"
                     ]
-                -- if List.length yearWiseCount > 0 then
-                --     row[bw two]
-                --     [
-                --         checkbox [bw one, pdr 5 ] {
-                --             onChange = FilterYearCheckBoxClicked index year
-                --             ,icon = buildChkBoxImage
-                --             , label = labelRight [] (el [] <| textValue (String.fromInt year) )
-                --             --, checked = uiModel.filterSelectionsModel.filterCDLNoSelected
-                --             , checked = userAction
-                --         }
-                --         , textValue <| " (" ++  (String.fromInt <| (List.length yearWiseCount))  ++ ")"
-                --     ]
-                -- else
-                --     none
     in
         row[spy 15, wf]
         [

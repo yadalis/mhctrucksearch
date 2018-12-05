@@ -64,32 +64,7 @@ update msg (model, uiModel) =
                                     salesStatusFilters = salesStatusFilters, 
                                     sleeperRoofFilters = sleeperRoofFilters, 
                                     sleeperBunkFilters = sleeperBunkFilters }), Cmd.none)
-                
-        -- FilterCDLNoCheckBoxClicked userAction ->
-        --     let
-        --         newUIModel = {uiModel | filterCDLNoSelected = userAction}
-        --         currentFilteredTruckList = applySearchFilters model newUIModel -- SearchFilterCustomType -> Model -> Array SearchFilterType -> List Truck
-        --         newSearchFilterList = buildSearchFilters model newUIModel
-        --         -- newFilteredTruckList  =
-        --         --     if userAction then
-        --         --         List.filter (\t -> String.trim t.cdl == "No" ) currentFilteredList
-        --         --     else
-        --         --         currentFilteredList
-        --     in
-        --         ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
-
-        -- FilterCDLYesCheckBoxClicked userAction ->
-        --     let
-        --         newUIModel = {uiModel | filterCDLYesSelected = userAction}
-        --         currentFilteredTruckList = applySearchFilters model newUIModel
-        --         -- newFilteredTruckList  =
-        --         --     if userAction then
-        --         --         List.filter (\t -> String.trim t.cdl == "Yes" ) currentFilteredList
-        --         --     else
-        --         --         currentFilteredList
-        --     in
-        --         ( ({model | filteredTruckList = currentFilteredTruckList}, newUIModel), Cmd.none )
-
+        
         FilterYearCheckBoxClicked index year userAction ->
             let
                 newUIModel = 
@@ -100,41 +75,9 @@ update msg (model, uiModel) =
                         |> Maybe.map (\yfArr -> {uiModel | yearFilters = yfArr})
                         |> Maybe.withDefault uiModel
 
-                -- hasThisTruckYearMatchesWithUserSelectedYear truck = 
-                --     newUIModel.yearFilters
-                --         |> Array.toList
-                --         |> List.filter (\yfModel -> Tuple.first yfModel == truck.year && Tuple.second yfModel == True) 
-                --         |> List.length
-                --         |> (\length  -> length > 0)
-                --     -- List.filter (\x -> Tuple.first x == truck.year && Tuple.second x == True) (Array.toList <| newUIModel.yearFilters )
-                --     --     |> List.length
-                --     --     |> (\length  -> length > 0)
-                --     --List.member truck.year ( List.map (\x -> Tuple.first) (Array.toList <|  newUIModel.yearFilters ) )
-                --     --Array.get truck.year  ( Array.map (\x -> Tuple.first x) uiModel.yearFilters )
-
-                -- sortedFilterdTruckList  = 
-                --             model.truckList
-                --                 |> List.filter (\t -> hasThisTruckYearMatchesWithUserSelectedYear t )
-                --                 |> List.sortBy .year
-                
-                -- yearTruckList  = 
-                --             sortedFilterdTruckList
-                --                 |> List.length
-                --                 |> (\sortedFilterdTruckListLength -> if sortedFilterdTruckListLength > 0 then  sortedFilterdTruckList else model.truckList)
-
-                --modfiledYearFilterList = List.map toggle uiModel.yearFilters
-
-                --selectedYear = List.member year ( List.map (\x -> Tuple.first x) uiModel.yearFilters )
-                
-                --newSelectedYear = Tuple.mapSecond (\x -> userAction) selectedYear
-
-                --newUIModel =  {uiModel | yearFilters = ((year, userAction) ::  uiModel.yearFilters) }
-
-                --newUIModel =  {uiModel | yearFilters = modfiledYearFilterList }
                 newFilteredTruckList = applySearchFilters model newUIModel
             in
                 ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
-
         
         FilterMakeCheckBoxClicked index userAction->
             let
