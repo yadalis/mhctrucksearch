@@ -75,7 +75,7 @@ update msg (model, uiModel) =
             let
 
                 buildSearchResult: Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
-                buildSearchResult filterList pushModifiedFilterListToUIModel =
+                buildSearchResult  filterList pushModifiedFilterListToUIModel =
                     filterList
                         |> Array.get index
                         |> Maybe.map (\mf -> { mf | userAction = userAction} )
@@ -86,28 +86,37 @@ update msg (model, uiModel) =
                 newUIModel = 
                     case searchFilterCustomType of
                         SalesStatus -> 
-                            uiModel.salesStatusFilters
-                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | salesStatusFilters = mfArr}) )
-
+                            
+                            --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | salesStatusFilters = mfArr}) ) -- first style
+                            ----------------------------------------------------------------------------------------------------------------
+                            -- let
+                            --     fx = uiModel.salesStatusFilters
+                            --             |> buildSearchResult
+                                
+                            -- in
+                            --     fx  (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- second style
+                            -----------------------------------------------------------------------------------------------------------------
+                            (uiModel.salesStatusFilters |> buildSearchResult) (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- 3rd style
+                            -----------------------------------------------------------------------------------------------------------------
                         Year -> 
-                             uiModel.yearFilters
-                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
+                            (uiModel.yearFilters |> buildSearchResult) (\mfArr -> {uiModel | yearFilters = mfArr})
+                            --     |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
                                 
                         Make -> 
-                             uiModel.makeFilters
-                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
+                            (uiModel.makeFilters |> buildSearchResult) (\mfArr -> {uiModel | makeFilters = mfArr})
+                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
 
                         MakeModel -> 
-                            uiModel.modelFilters
-                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
+                            (uiModel.modelFilters |> buildSearchResult) (\mfArr -> {uiModel | modelFilters = mfArr})
+                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
 
                         SleeperRoof -> 
-                            uiModel.sleeperRoofFilters
-                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
+                            (uiModel.sleeperRoofFilters |> buildSearchResult) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
+                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
 
                         SleeperBunk -> 
-                            uiModel.sleeperBunkFilters
-                                |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+                            (uiModel.sleeperBunkFilters |> buildSearchResult) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
+                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
 
