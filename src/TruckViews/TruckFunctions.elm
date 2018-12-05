@@ -264,22 +264,12 @@ applySearchFilters model uiModel =
                         else
                             trks
                     )
-                
-                -- |> List.filter (\t -> hasThisTruckModelMatchesWithUserSelectedModel t )
-                -- |> List.filter (\t -> hasThisTruckSalesStatusMatchesWithUserSelectedSalesStatus t )
-                -- |> List.filter (\t -> hasThisTruckSleeperRoofMatchesWithUserSelectedSleeperRoof t )
-                -- |> List.filter (\t -> hasThisTruckSleeperBunkMatchesWithUserSelectedSleeperBunk t )
-
-    -- sortedFilterdTruckList = 
-    --     if List.length filterdTruckList > 0 then
-    --         filterdTruckList
-    --             |> List.sortBy .make
-    --     else
-    --         model.truckList
-
+        
+        sortedFilterdTruckList =
+            filterdTruckList
+                |> List.sortBy .make
     in
-        filterdTruckList --sortedFilterdTruckList
-
+        sortedFilterdTruckList
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------
