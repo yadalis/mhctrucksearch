@@ -12,6 +12,7 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (..)
 import Element exposing (..)
 import Element.Input as Input exposing (..) 
+import Element.Border as Border exposing (..) 
 import Element.Font as Font exposing (..) 
 import TruckViews.Truck exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
@@ -188,6 +189,15 @@ view (model, uiModel) =
                         image [hpx 32, bw one] {src = "srch_white.ico", description ="Logo" }
                     else
                         image [hpx 32, bw one] {src = "srch_grey.ico", description ="Logo" }
+                        
+            focusStyle : Element.Option
+            focusStyle =
+                Element.focusStyle
+                    { borderColor = Nothing
+                    , backgroundColor = Nothing
+                    , shadow = Nothing
+                    }
+        
             navBar =
                     row[wf, hpx 75, bc 47 48 49, fc 250 250 250, alpha  0.95]
                     [
@@ -197,15 +207,15 @@ view (model, uiModel) =
                     ] 
         in
         
-        layout [hf, pd 0, inFront navBar ] --  inFront navBar is to make menu bar fixed
+        layoutWith {options = [focusStyle]}  [hf, pd 0, inFront navBar ] --  inFront navBar is to make menu bar fixed
         <|
             row[hf,wf, pdt 76]
             [
                 column [hf, wf , pde 5 10 0 10, spy 25] -- Search Filter Panel bc 225 225 225, 
                 [
-                    row[wf, pdt 15]
+                    row[wf, pd 5, bw 2, spaceEvenly]
                     [ 
-                        Input.text [wf, hf]
+                        Input.text [wf, hf, bw 0]
                         {
                             onChange = SearchString
                             ,text  = uiModel.searchString
