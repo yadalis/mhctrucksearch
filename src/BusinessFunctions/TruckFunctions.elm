@@ -25,10 +25,10 @@ applySearchFilters model uiModel =
                 |> Array.length
                 |> (\length  -> length > 0)
 
-        buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruck trucks =
+        buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckParam trucks =
              if hasAnyOfSearchFilterValuesChecked filterList then
                 List.filter (\truck -> 
-                                    hasThisTruckMatchesWithUserSelectedFilterValue filterList (comparefilterKeyValueWithTruck truck)
+                                    hasThisTruckMatchesWithUserSelectedFilterValue filterList (comparefilterKeyValueWithTruckParam truck)
                             )  trucks 
             else
                 trucks
