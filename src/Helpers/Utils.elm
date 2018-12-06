@@ -2,6 +2,7 @@ module Helpers.Utils exposing (..)
 
 import Html.Events exposing (on, targetValue)
 import Json.Decode as Decode
+import Task
 
 onChange  tagger =
     on "change" (Decode.map tagger targetValue)
@@ -21,3 +22,10 @@ buildQueryString list =
 
 apiURL str =
     "https://opentdb.com/api.php" ++ str
+
+
+    -- this is just to send a message back in to update function when there are no side-effects needed and just a way to put the message back in to update function
+sendMessage : msg -> Cmd msg
+sendMessage msg =
+    Task.succeed msg
+        |> Task.perform identity -- dont know what is identity, find out.

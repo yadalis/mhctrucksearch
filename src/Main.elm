@@ -100,6 +100,8 @@ update msg (model, uiModel) =
                             Err err ->
                                     []
 
+                --c = Debug.log "Updated year list by held salesstatus"  [trucks]--, newUIModel1.yearFilters]
+
                 salesStatusFilters = buildSearchFilterValueRecordList SalesStatus trucks
                 yearFilters = buildSearchFilterValueRecordList Year trucks
                 makeFilters = buildSearchFilterValueRecordList Make trucks
@@ -173,9 +175,9 @@ update msg (model, uiModel) =
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
-
+                
             in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), Cmd.none )
+                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
 
         SearchString searchString ->
             let
@@ -189,8 +191,35 @@ update msg (model, uiModel) =
                 ( ( newModel , {uiModel | searchString = searchString}), Cmd.none )
 
         SearchPressed ->
-            ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
+            --( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
+            let
+                newUIModel = rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel
+                
 
+                --newUIModel2 = {newUIModel | salesStatusFilters = newUIModel1.salesStatusFilters,yearFilters = newUIModel1.yearFilters, makeFilters = newUIModel1.makeFilters}
+
+                -- newUIModel1 = {
+                --                 newUIModel | 
+                --                             salesStatusFilters = 
+                --                                                     case updatedSalesStatusFilterList of 
+                --                                                         Just array -> array
+                --                                                         Nothing -> Array.empty
+                --                             ,yearFilters = 
+                --                                                     case updatedYearFilterList of 
+                --                                                         Just array -> array
+                --                                                         Nothing -> Array.empty
+                --             }
+                
+                                
+                -- y = Debug.log "Updated salesstatus list by year"  [newUIModel.salesStatusFilters]--, newUIModel1.yearFilters]
+                -- z = Debug.log "---------------------------------------------------------------------------------------------------"  [] --, newUIModel1.yearFilters]
+                -- c = Debug.log "Updated year list by held salesstatus"  [newUIModel.yearFilters]--, newUIModel1.yearFilters]
+                -- e = Debug.log "---------------------------------------------------------------------------------------------------"  [] --, newUIModel1.yearFilters]
+                -- a = Debug.log "Updated make list by held salesstatus"  [newUIModel.makeFilters]--, newUIModel1.yearFilters]
+
+            in
+                ( (model , newUIModel) , Cmd.none )
+            
         HandleKeyboardEvent ->
             ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
 ---- VIEW ----
@@ -267,7 +296,7 @@ view (model, uiModel) =
                                 -- }
                                 ,Input.button ( [ hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
                                     { 
-                                        onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
+                                        onPress = Just SearchPressed --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
                                         ,label = searchBtnIcon
                                     }
                             ]

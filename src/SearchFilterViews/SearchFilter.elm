@@ -101,11 +101,11 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                     searchKeyWiseCount =
                          case searchFilterCustomType of
                             SalesStatus -> 
-                                List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.filteredTruckList
+                                List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.truckList
                             Year -> 
-                                List.filter (\t -> String.trim t.year == searchFilter.searchFilterKey) model.filteredTruckList
+                                List.filter (\t -> String.trim t.year == searchFilter.searchFilterKey) model.truckList
                             Make -> 
-                                List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.filteredTruckList
+                                List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.truckList
                             MakeModel -> 
                                 List.filter (\t -> String.trim t.model == searchFilter.searchFilterKey) model.filteredTruckList
                             SleeperRoof -> 
