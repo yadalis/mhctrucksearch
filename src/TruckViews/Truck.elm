@@ -24,21 +24,25 @@ trucksView trucks =
 
 truckView  : Int -> Truck -> Element Msg
 truckView index truck =
-    row[bw new, wf, pd 5, bc 231 231 231] --bc 47 48 49
-    [
-        column[wf]
+    let
+        logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
+    in
+    
+        row[bw one, wf, pdr 0, bc 247 247 247 ] --bc 47 48 49
         [
-             image [alignLeft, bw one, wfp 3, pdl 5] {src = "https://az832863.vo.msecnd.net/~/media/images/trucks/i0414681/i0414681_1.jpg?_=-1039260339&mw=2048&thn=0&w=1024", description ="Logo" }
+            column[wf]
+            [
+                image [alignLeft, bw one, wfp 3, pdl 0] {src = "https://az832863.vo.msecnd.net/~/media/images/trucks/i0414681/i0414681_1.jpg?_=-1039260339&mw=2048&thn=0&w=1024", description ="Logo" }
+            ]
+            ,
+            column[wfp 3]
+            [
+                textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  truck.year ++ " - APU - " ++ truck.apu
+            ]
+            ,
+            column[wf]
+            []
         ]
-        ,
-        column[wfp 3]
-        [
-            textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  truck.year ++ " - APU - " ++ truck.apu
-        ]
-        ,
-        column[wf]
-        []
-    ]
 
 
 
