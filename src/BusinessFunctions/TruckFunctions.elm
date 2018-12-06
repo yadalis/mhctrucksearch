@@ -36,17 +36,18 @@ applySearchFilters model uiModel =
         filterdTruckList  = 
             model.truckList
                 |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
+                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True ) -- truckList gets passed as a last arg automatically from the previous |> pipe
+                        -- the result from the above function gets feed in to the below function and so on until it ends
                 >> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                |> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                |> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                |> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                |> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
+                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
+                >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
+                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
+                >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
+                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
+                >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
+                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
+                >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
+                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
         
         sortedFilterdTruckList =
             filterdTruckList
