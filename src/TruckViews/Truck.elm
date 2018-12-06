@@ -51,15 +51,15 @@ truckView index truck =
                 [
                     column[bw 0, wf, hf, pd 5, spy 15]
                     [
-                        paragraph[Font.light, fal][ textValue <| "Sales Status: " ++  truck.salesStatus]
-                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Roof: " ++  truck.sleeperRoof]
-                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Bunk: " ++  truck.sleeperBunk]
+                        paragraph[Font.light, fal][ textValue <| getTruckIdNumber truck]
+                        ,paragraph[Font.light, fal][ textValue <| "Make: " ++  truck.make]
+                        ,paragraph[Font.light, fal][ textValue <| "Model: " ++  truck.model]
                     ]
                     ,column[bw 0, wf, hf, pd 5, spy 15]
                     [
-                        paragraph[Font.light, fal][ textValue <| "Year: " ++  truck.year]
-                        ,paragraph[Font.light, fal][ textValue <| "Make: " ++  truck.make]
-                        ,paragraph[Font.light, fal][ textValue <| "Model: " ++  truck.model]
+                        paragraph[Font.light, fal][ textValue <| "Sales Status: " ++  truck.salesStatus]
+                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Roof: " ++  truck.sleeperRoof]
+                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Bunk: " ++  truck.sleeperBunk]
                     ]
                 ]
             ]
@@ -68,9 +68,11 @@ truckView index truck =
             -- []
         ]
 
-
-
-
-
-
-          
+getTruckIdNumber : Truck -> String
+getTruckIdNumber truck =
+    if truck.stockNumber > 0 then 
+        "Stock Number: i0" ++  String.fromInt truck.stockNumber
+    else if truck.appraisalNumber > 0 then 
+        "Appraisal Number: A" ++  String.fromInt truck.appraisalNumber
+    else
+        "PO Number: " ++ truck.poNumber

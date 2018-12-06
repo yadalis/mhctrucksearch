@@ -126,49 +126,51 @@ update msg (model, uiModel) =
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
 
-                buildSearchResult: Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
-                buildSearchResult  filterList pushModifiedFilterListToUIModel =
+                updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
+                updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
                     filterList
                         |> Array.get index
                         |> Maybe.map (\mf -> { mf | userAction = userAction} )
                         |> Maybe.map (\mf -> Array.set index mf filterList)
-                        |> Maybe.map pushModifiedFilterListToUIModel
+                        |> Maybe.map pushModifiedFilterListBackInToUIModel
                         |> Maybe.withDefault uiModel
 
                 newUIModel = 
                     case searchFilterCustomType of
                         SalesStatus -> 
                             
-                            --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | salesStatusFilters = mfArr}) ) -- first style
+                            --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | salesStatusFilters = mfArr}) ) -- first style
                             ----------------------------------------------------------------------------------------------------------------
                             -- let
                             --     fx = uiModel.salesStatusFilters
-                            --             |> buildSearchResult
+                            --             |> updateUserSelectedSearchFilter
                                 
                             -- in
-                            --     fx  (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- second style
+                            --     fx  (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- second style is a partial applications style
                             -----------------------------------------------------------------------------------------------------------------
-                            (uiModel.salesStatusFilters |> buildSearchResult) (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- 3rd style
+                            (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters ) (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- 3rd style is also a partial applications style
                             -----------------------------------------------------------------------------------------------------------------
                         Year -> 
-                            (uiModel.yearFilters |> buildSearchResult) (\mfArr -> {uiModel | yearFilters = mfArr})
-                            --     |> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
+                            (uiModel.yearFilters 
+                                    |> updateUserSelectedSearchFilter) 
+                                                            (\mfArr -> {uiModel | yearFilters = mfArr})
+                            --      |> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
                                 
                         Make -> 
-                            (uiModel.makeFilters |> buildSearchResult) (\mfArr -> {uiModel | makeFilters = mfArr})
-                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
+                            (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr})
+                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
 
                         MakeModel -> 
-                            (uiModel.modelFilters |> buildSearchResult) (\mfArr -> {uiModel | modelFilters = mfArr})
-                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
+                            (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr})
+                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
 
                         SleeperRoof -> 
-                            (uiModel.sleeperRoofFilters |> buildSearchResult) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
-                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
+                            (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
+                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
 
                         SleeperBunk -> 
-                            (uiModel.sleeperBunkFilters |> buildSearchResult) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
-                                --|> (\filters -> buildSearchResult filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
+                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
 
@@ -299,11 +301,11 @@ view (model, uiModel) =
                         ]
                         ,column[hf, wfp 5,  bwl 0, bc 235 235 235,pde 0 0 10 15 ] -- Trucks Search Result List Panel 
                         [
-                            row[hf, wf, bw 0, hpx 75]
+                            row[hf, wf, bw 0, hpx 50]
                             [ 
                                 column[pdl 0, hf][] --, bc 244 66 95
                                 ,column[hf, pdl 0, spaceEvenly][
-                                    el [] <| textValue <| "Selected Filters... ", 
+                                    el [] << textValue <| "Selected Filters... ", 
                                     el [] <| textValue <| "Total used trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
                             ]
