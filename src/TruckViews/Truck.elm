@@ -11,6 +11,7 @@ import Http exposing (..)
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (..)
 import Element exposing (..)
+import Element.Font as Font
 
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
@@ -28,20 +29,43 @@ truckView index truck =
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
     in
     
-        row[bw one, wf, pdr 0, bc 247 247 247 ] --bc 47 48 49
+        row[bw 0, wf, pdr 0, bc 247 247 247, spx 3, hf ] --bc 47 48 49
         [
-            column[wf]
+            column[wf, bw 0, hf, pdt 5]
             [
-                image [alignLeft, bw one, wfp 3, pdl 0] {src = "https://az832863.vo.msecnd.net/~/media/images/trucks/i0414681/i0414681_1.jpg?_=-1039260339&mw=2048&thn=0&w=1024", description ="Logo" }
+                image [bw one, pdl 0, hf] {src = "https://az832863.vo.msecnd.net/~/media/images/trucks/i0414681/i0414681_1.jpg?_=-1039260339&mw=2048&thn=0&w=1024", description ="Logo" }
             ]
             ,
-            column[wfp 3]
+            column[wfp 4, bw 0, hf, pd 5, spy 15]
             [
-                textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  truck.year ++ " - APU - " ++ truck.apu
+                --textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  truck.year ++ " - APU - " ++ truck.apu
+                row[]
+                [
+                    paragraph [Font.size 25, Font.bold, Font.color <| rgb255 244 66 95] [textValue <| truck.title]
+                ]
+                ,row[]
+                [
+                    paragraph [Font.size 20, Font.bold] [textValue <| " $" ++  String.fromInt truck.price ++ ".00"]
+                ]
+                ,row[spaceEvenly, hf, wf]
+                [
+                    column[bw 0, wf, hf, pd 5, spy 15]
+                    [
+                        paragraph[Font.light, fal][ textValue <| "Sales Status: " ++  truck.salesStatus]
+                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Roof: " ++  truck.sleeperRoof]
+                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Bunk: " ++  truck.sleeperBunk]
+                    ]
+                    ,column[bw 0, wf, hf, pd 5, spy 15]
+                    [
+                        paragraph[Font.light, fal][ textValue <| "Year: " ++  truck.year]
+                        ,paragraph[Font.light, fal][ textValue <| "Make: " ++  truck.make]
+                        ,paragraph[Font.light, fal][ textValue <| "Model: " ++  truck.model]
+                    ]
+                ]
             ]
-            ,
-            column[wf]
-            []
+            -- ,
+            -- column[wfp 4, bw 2, hf, pdl 15]
+            -- []
         ]
 
 

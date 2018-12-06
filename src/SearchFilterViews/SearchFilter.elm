@@ -115,7 +115,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 in
                     row[bw two]
                     [
-                        checkbox [bw one, pdr 5 ] {
+                        checkbox [bw one, pdr 0 ] {
                             onChange = msg index searchFilterCustomType
                             ,icon = buildChkBoxImage
                             , label = labelRight [] (el [] <| textValue searchFilter.searchFilterKey )
@@ -128,7 +128,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
         [
             column[spy 10, wf,  bw one]
             [
-                row[bw 0, hf, bwb 1, wf, pdb 3]
+                row[bw 0, hf, bwb 1, wf, pdb 1]
                 [
                     paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5, centerY][textValue <| filterLabel]
                 ]

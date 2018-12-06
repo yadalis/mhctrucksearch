@@ -237,9 +237,9 @@ view (model, uiModel) =
                 <|
                     row[hf,wf, pdt 76]
                     [
-                        column [hf, wf , pde 5 10 0 10, spy 25] -- Search Filter Panel bc 225 225 225, 
+                        column [hf, wf , pde 0 10 10 10, spy 5] -- Search Filter Panel bc 225 225 225, 
                         [
-                            row[wf, pd 5, bw 1, spaceEvenly]
+                            row[wf, pd 0, bw 1, spaceEvenly]
                             [ 
                                 Input.text [wf, hf, bw 0
                                             --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
@@ -263,13 +263,13 @@ view (model, uiModel) =
                                 --     ,placeholder = Just (Input.placeholder [] (el [] <| textValue "Fluid trucks Search"))
                                 
                                 -- }
-                                ,Input.button ( [ hf, wpx 50, eId "prntEst"] ++ searchStringBtnStyle)
+                                ,Input.button ( [ hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
                                     { 
                                         onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
                                         ,label = searchBtnIcon
                                     }
                             ]
-                            ,column[scrollbarY,hf, wf, spy 20]
+                            ,column[scrollbarY,hf, wf, spy 20, bw 0]
                             [
                                 if List.length model.truckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
@@ -297,12 +297,12 @@ view (model, uiModel) =
                                     none                                                        
                             ]
                         ]
-                        ,column[hf, wfp 4,  bwl 0, bc 235 235 235,pde 15 0 15 15 ] -- Trucks Search Result List Panel 
+                        ,column[hf, wfp 5,  bwl 0, bc 235 235 235,pde 0 0 10 15 ] -- Trucks Search Result List Panel 
                         [
                             row[hf, wf, bw 0, hpx 75]
                             [ 
-                                column[pdl 15, hf, bc 244 66 95][] --
-                                ,column[hf, pdl 5, spaceEvenly][
+                                column[pdl 0, hf][] --, bc 244 66 95
+                                ,column[hf, pdl 0, spaceEvenly][
                                     el [] <| textValue <| "Selected Filters... ", 
                                     el [] <| textValue <| "Total used trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
@@ -316,6 +316,14 @@ view (model, uiModel) =
                             --         -- el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
                             --     ]
                             -- ]                  
+                        ]
+                        ,column[bw 2, wfp 4, hf, pd 0]
+                        [
+                            row[bc 200 200 200, wf, hf, scrollbarY]
+                            [
+                                el [alignTop] <| textValue <| "Truck Details"
+                            ]
+                            
                         ]
                     ]
             
