@@ -120,7 +120,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
@@ -138,9 +138,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                                 >> buildSearchFilterValueRecordList SleeperRoof
@@ -156,11 +156,11 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
                                 >> buildSearchFilterValueRecordList SleeperBunk
                                         >> Array.map
                                                 (\sf ->

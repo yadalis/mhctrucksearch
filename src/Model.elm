@@ -46,6 +46,9 @@ type alias UIModel =
         ,salesStatusFilters : Array SearchFilterType
         ,sleeperRoofFilters : Array SearchFilterType
         ,sleeperBunkFilters : Array SearchFilterType
+        ,expandCollapseSalesStatusChecked : Bool
+        ,expandCollapseYearChecked : Bool
+        ,expandCollapseAllChecked : Bool
     }
 
 type alias SearchFilterType =
@@ -83,5 +86,8 @@ initalUIModel jsFlag =
         modelFilters = Array.empty,
         salesStatusFilters = Array.empty,
         sleeperRoofFilters = Array.empty,
-        sleeperBunkFilters = Array.empty
+        sleeperBunkFilters = Array.empty,
+        expandCollapseSalesStatusChecked = False,
+        expandCollapseYearChecked = False,
+        expandCollapseAllChecked = True
     }

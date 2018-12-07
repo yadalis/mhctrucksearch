@@ -41,6 +41,20 @@ wfp number
 wpx number
     = width <| px number
 
+wfmin minValue
+   = width (fill
+        |> minimum minValue
+    )
+wfmax maxValue
+   = width (fill
+        |> maximum maxValue
+    )
+wfRange minValue maxValue
+   = width (fill
+        |> minimum minValue
+        |> maximum maxValue
+    )
+
 --Spacing
 sp number
     = spacing number

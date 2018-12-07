@@ -156,13 +156,23 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 row[bw 0, hf, bwb 1, wf, pdb 1]
                 [
                     paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5, centerY][textValue <| filterLabel]
+                   
                 ]
-                ,column[spy 10, pdl 15, hf, scrollbarY, wf]
+                ,column[spy 10, pdl 15, scrollbarY, wf, expandCollapseAll uiModel.expandCollapseAllChecked]
                 (
                     Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion
                 )
             ]
         ]
+
+expandCollapseAll state =
+    
+        if state then
+            hf
+        else
+            hpx 0
+
+
 
 buildChkBoxImage userAction =
         if userAction == True then 

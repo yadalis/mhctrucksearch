@@ -198,6 +198,22 @@ update msg (model, uiModel) =
             
         HandleKeyboardEvent ->
             ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
+        
+        -- CollapseClicked searchFilterType userAction ->
+        --     let
+        --         x = if searchFilterType == SalesStatus then              
+        --                 ( ( model , {uiModel | expandCollapseSalesStatusChecked = userAction}), Cmd.none )
+        --             else
+        --                 ( ( model , {uiModel | expandCollapseYearChecked = userAction}), Cmd.none )   
+        --     in
+        --         x
+
+        CollapseAllClicked userAction ->
+            ( ( model , {uiModel | expandCollapseAllChecked = userAction}), Cmd.none )
+ 
+
+            
+             
 ---- VIEW ----
 
 
@@ -223,6 +239,12 @@ view (model, uiModel) =
                     else
                         image [hpx 32, bw one] {src = "srch_grey.ico", description ="Logo" }
                         
+            buildCollapseAllImage userAction =
+                if userAction == True then 
+                    image [hpx 32, bw one] {src = "collapse.png", description ="Logo" }
+                else 
+                    image [hpx 32, bw one] {src = "expand.png", description ="Logo" }
+
             focusStyle : Element.Option
             focusStyle =
                 Element.focusStyle
@@ -244,7 +266,7 @@ view (model, uiModel) =
                 <|
                     row[hf,wf, pdt 76]
                     [
-                        column [hf, wpx 350 , pde 0 10 10 10, spy 5] -- Search Filter Panel bc 225 225 225, 
+                        column [hf, wfmin 350, pde 0 10 10 10, spy 5] -- Search Filter Panel bc 225 225 225, 
                         [
                             row[wf, pd 0, bw 1, spaceEvenly]
                             [ 
@@ -275,6 +297,15 @@ view (model, uiModel) =
                                         onPress = Just SearchPressed --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
                                         ,label = searchBtnIcon
                                     }
+                            ]
+                            ,row[pd 5, bc 221 221 221, wf, bw 0]
+                            [
+                                checkbox [bw one, hf, far , bw 0] {
+                                    onChange = CollapseAllClicked
+                                    ,icon = buildCollapseAllImage
+                                    , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse Filters" else "Expand Filters" )
+                                    , checked = uiModel.expandCollapseAllChecked
+                                }
                             ]
                             ,column[scrollbarY,hf, wf, spy 20, bw 0]
                             [

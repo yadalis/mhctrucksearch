@@ -14,6 +14,8 @@ type Msg
     | SearchString String
     | SearchPressed
     | HandleKeyboardEvent
+    --| CollapseClicked SearchFilterCustomType Bool
+    | CollapseAllClicked Bool
 
 type SearchFilterCustomType
     = SalesStatus
