@@ -16,6 +16,7 @@ type Msg
     | HandleKeyboardEvent
     --| CollapseClicked SearchFilterCustomType Bool
     | CollapseAllClicked Bool
+    | RemoveSearchFilterItemFromPinnedSearchFilters SearchFilterType
 
 type SearchFilterCustomType
     = SalesStatus

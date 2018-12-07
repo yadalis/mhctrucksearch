@@ -203,6 +203,7 @@ applySearchFilters model uiModel =
 
         sortedFilterdTruckList =
             filterdTruckList
+                |> List.take 100
                 |> List.sortBy .make
     in
         sortedFilterdTruckList

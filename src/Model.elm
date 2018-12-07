@@ -49,11 +49,13 @@ type alias UIModel =
         ,expandCollapseSalesStatusChecked : Bool
         ,expandCollapseYearChecked : Bool
         ,expandCollapseAllChecked : Bool
+        ,selectedFilterItems : Array SearchFilterType
     }
 
 type alias SearchFilterType =
     {   
-        searchFilterKey : String
+        index : Int
+        ,searchFilterKey : String
         ,userAction : Bool
         ,resultCount : Int
     }
@@ -89,5 +91,6 @@ initalUIModel jsFlag =
         sleeperBunkFilters = Array.empty,
         expandCollapseSalesStatusChecked = False,
         expandCollapseYearChecked = False,
-        expandCollapseAllChecked = True
+        expandCollapseAllChecked = True,
+        selectedFilterItems = Array.empty
     }

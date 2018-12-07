@@ -29,14 +29,14 @@ truckView index truck =
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
     in
     
-        row[bw 0, wf, pdr 0, bc 247 247 247, spx 3, hf ] --bc 47 48 49
+        row[bwb 2, wf, pdr 0, bc 247 247 247, spx 3, hf ] --bc 47 48 49
         [
             column[wf, bw 0, hf, pdt 5]
             [
                 image [bw one, pdl 0, hf] {src = "https://az832863.vo.msecnd.net/~/media/images/trucks/i0414681/i0414681_1.jpg?_=-1039260339&mw=2048&thn=0&w=1024", description ="Logo" }
             ]
             ,
-            column[wfp 4, bw 0, hf, pd 5, spy 15]
+            column[wfp 4, hf, pd 5, spy 15]
             [
                 --textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  truck.year ++ " - APU - " ++ truck.apu
                 row[]
