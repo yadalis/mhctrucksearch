@@ -40,37 +40,61 @@ applyExtraOnSearchFilter sortOrder searchFilterKeyValue =
                 List.sortWith desendingOrder)
         |> Array.fromList
 
-buildSearchFilterValueList : SearchFilterCustomType -> List Truck -> Array String
+buildSearchFilterValueList : SearchFilterCustomType -> List Truck -> Array (String, Int)
 buildSearchFilterValueList searchFilterCustomType trucks =
     case searchFilterCustomType of
         SalesStatus -> 
             List.map (\t -> t.salesStatus) trucks
                 |> applyExtraOnSearchFilter 0
+                |> (\sfArray -> 
+                                Array.map (\sf -> 
+                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) ) sfArray
+                    ) 
 
         Year -> 
             List.map (\t -> t.year) trucks
                 |> applyExtraOnSearchFilter 1
+                |> (\sfArray -> 
+                                Array.map (\sf -> 
+                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.year == sf) trucks )) ) sfArray
+                    )
                 
         Make -> 
             List.map (\t -> t.make) trucks
                 |> applyExtraOnSearchFilter 0
+                |> (\sfArray -> 
+                                Array.map (\sf -> 
+                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.make == sf) trucks )) ) sfArray
+                    )                
 
         MakeModel -> 
             List.map (\t -> t.model) trucks
                 |> applyExtraOnSearchFilter 0
+                |> (\sfArray -> 
+                                Array.map (\sf -> 
+                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.model == sf) trucks )) ) sfArray
+                    )                
 
         SleeperRoof -> 
             List.map (\t -> t.sleeperRoof) trucks
                 |> applyExtraOnSearchFilter 0
+                |> (\sfArray -> 
+                                Array.map (\sf -> 
+                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.sleeperRoof == sf) trucks )) ) sfArray
+                    )                
                 
         SleeperBunk -> 
             List.map (\t -> t.sleeperBunk) trucks
                 |> applyExtraOnSearchFilter 0
+                |> (\sfArray -> 
+                                Array.map (\sf -> 
+                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.sleeperBunk == sf) trucks )) ) sfArray
+                    )                
 
 buildSearchFilterValueRecordList : SearchFilterCustomType -> List Truck -> Array SearchFilterType
 buildSearchFilterValueRecordList searchFilterCustomType trucks =
     buildSearchFilterValueList searchFilterCustomType trucks
-        |> Array.map (\sfValue -> {searchFilterKey = sfValue, userAction = False, resultCount = 0})
+        |> Array.map (\sfValue -> {searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue})
 
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
@@ -97,22 +121,22 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
 
             buildCheckboxes :  Int -> SearchFilterType -> Element Msg
             buildCheckboxes index searchFilter =
-                let
-                    searchKeyWiseCount =
-                         case searchFilterCustomType of
-                            SalesStatus -> 
-                                List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.truckList
-                            Year -> 
-                                List.filter (\t -> String.trim t.year == searchFilter.searchFilterKey) model.truckList
-                            Make -> 
-                                List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.truckList
-                            MakeModel -> 
-                                List.filter (\t -> String.trim t.model == searchFilter.searchFilterKey) model.filteredTruckList
-                            SleeperRoof -> 
-                                List.filter (\t -> String.trim t.sleeperRoof == searchFilter.searchFilterKey) model.filteredTruckList
-                            SleeperBunk -> 
-                                List.filter (\t -> String.trim t.sleeperBunk == searchFilter.searchFilterKey) model.filteredTruckList
-                in
+                -- let
+                --     searchKeyWiseCount =
+                --          case searchFilterCustomType of
+                --             SalesStatus -> 
+                --                 List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.truckList
+                --             Year -> 
+                --                 List.filter (\t -> String.trim t.year == searchFilter.searchFilterKey) model.truckList
+                --             Make -> 
+                --                 List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.truckList
+                --             MakeModel -> 
+                --                 List.filter (\t -> String.trim t.model == searchFilter.searchFilterKey) model.truckList
+                --             SleeperRoof -> 
+                --                 List.filter (\t -> String.trim t.sleeperRoof == searchFilter.searchFilterKey) model.truckList
+                --             SleeperBunk -> 
+                --                 List.filter (\t -> String.trim t.sleeperBunk == searchFilter.searchFilterKey) model.truckList
+                -- in
                     row[bw two]
                     [
                         checkbox [bw one, pdr 0 ] {
@@ -121,7 +145,8 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             , label = labelRight [] (el [] <| textValue searchFilter.searchFilterKey )
                             , checked = searchFilter.userAction
                         }
-                        , textValue <| " (" ++  (String.fromInt <| (List.length searchKeyWiseCount))  ++ ")"
+                        --, textValue <| " (" ++  (String.fromInt <| (List.length searchKeyWiseCount))  ++ ")"
+                        , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
                     ]
     in
         row[spy 15, wf]

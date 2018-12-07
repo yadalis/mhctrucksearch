@@ -175,9 +175,12 @@ update msg (model, uiModel) =
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
+
+                uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
                 
             in
-                ( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
+                --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
+                ( ( {model | filteredTruckList = newFilteredTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
         SearchString searchString ->
             let
@@ -191,34 +194,7 @@ update msg (model, uiModel) =
                 ( ( newModel , {uiModel | searchString = searchString}), Cmd.none )
 
         SearchPressed ->
-            --( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
-            let
-                newUIModel = rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel
-                
-
-                --newUIModel2 = {newUIModel | salesStatusFilters = newUIModel1.salesStatusFilters,yearFilters = newUIModel1.yearFilters, makeFilters = newUIModel1.makeFilters}
-
-                -- newUIModel1 = {
-                --                 newUIModel | 
-                --                             salesStatusFilters = 
-                --                                                     case updatedSalesStatusFilterList of 
-                --                                                         Just array -> array
-                --                                                         Nothing -> Array.empty
-                --                             ,yearFilters = 
-                --                                                     case updatedYearFilterList of 
-                --                                                         Just array -> array
-                --                                                         Nothing -> Array.empty
-                --             }
-                
-                                
-                -- y = Debug.log "Updated salesstatus list by year"  [newUIModel.salesStatusFilters]--, newUIModel1.yearFilters]
-                -- z = Debug.log "---------------------------------------------------------------------------------------------------"  [] --, newUIModel1.yearFilters]
-                -- c = Debug.log "Updated year list by held salesstatus"  [newUIModel.yearFilters]--, newUIModel1.yearFilters]
-                -- e = Debug.log "---------------------------------------------------------------------------------------------------"  [] --, newUIModel1.yearFilters]
-                -- a = Debug.log "Updated make list by held salesstatus"  [newUIModel.makeFilters]--, newUIModel1.yearFilters]
-
-            in
-                ( (model , newUIModel) , Cmd.none )
+            ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
             
         HandleKeyboardEvent ->
             ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
@@ -268,7 +244,7 @@ view (model, uiModel) =
                 <|
                     row[hf,wf, pdt 76]
                     [
-                        column [hf, wf , pde 0 10 10 10, spy 5] -- Search Filter Panel bc 225 225 225, 
+                        column [hf, wpx 350 , pde 0 10 10 10, spy 5] -- Search Filter Panel bc 225 225 225, 
                         [
                             row[wf, pd 0, bw 1, spaceEvenly]
                             [ 
