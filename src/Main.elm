@@ -267,7 +267,7 @@ view (model, uiModel) =
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [pde 125 50 50 50, inFront navBar ] --  inFront navBar is to make menu bar fixed
+                layoutWith {options = [focusStyle]}  [pde 78 50 50 50, inFront navBar ] --  inFront navBar is to make menu bar fixed
                 --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
@@ -333,8 +333,7 @@ view (model, uiModel) =
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
                             ]
-                            ,row[ wf, bwb 0, pde 5 0 15 0][
-                                row[  wf,  bw 0, pd 0 ][
+                            ,row[ wf, bwb 0, pde 5 0 5 0][
                                     lazy searchFilterBulletView 
                                             << Array.fromList <| List.concat
                                                                             [ 
@@ -345,27 +344,30 @@ view (model, uiModel) =
                                                                                 Array.toList uiModel.sleeperRoofFilters,
                                                                                 Array.toList uiModel.sleeperBunkFilters
                                                                             ]
-                                ]                               
                             ]
-                            ,column[ scrollbarY, wf,  bw 0, pde 0 0 0 0   ]
+                            ,row[ wf, bwb 0, pd 0][
+                                wrappedRow[  wf,  bw 0, pd 0 ]
+                                    getPageNumbersList         
+                            ]
+                            ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
                             [
                                     lazy trucksView model.filteredTruckList
                             ]         
                         ]
                         --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page or show page numbers ?
-                        ,column[bw 0, wpx 50, hf, pdl 15, pdt 87]
-                            getPageNumbersList
+                        -- ,column[bw 0, wpx 50, hf, pdl 15, pdt 87]
+                        --     getPageNumbersList
                     ]
 
 getNumberList =
-    List.range 1 150
+    List.range 1 50
 
 getPageNumbersList = 
     List.map (\num -> 
             
-                row[bc 230 230 230, wf, hf, bwb 1, pd 10]
+                row[pd 0, bw 0,wpx 35, hpx 35]
                             [
-                                el [centerX, centerY] <| textValue <| String.fromInt num
+                                el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
                             ]
 
             ) getNumberList
