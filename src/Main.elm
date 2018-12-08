@@ -26,6 +26,7 @@ import Html.Events.Extra as ExtraHtmlEvents
 import SearchFilterViews.SearchFilter exposing (..)
 import Element.Lazy as Lazy exposing(..)
 import TruckViews.SearchFilterBullet exposing (..)
+import List.Extra exposing (..)
 
 ---- INIT ----
 
@@ -217,7 +218,32 @@ update msg (model, uiModel) =
                         |> Array.map (\item -> {item | userAction = userAction})
             in
                 ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, expandCollapseAllChecked = userAction}), Cmd.none )
-            --( ( model , uiModel), Cmd.none )
+
+        PageNumberClicked pageNumber totalPages ->
+            let
+                -- totalSearchResultTrucks = List.length model.filteredTruckList
+                -- endPosition =   if (startPosition + 99) <= totalSearchResultTrucks then 
+                --                     (startPosition + 99) 
+                --                 else
+                --                     ( totalSearchResultTrucks - startPosition )
+                
+                grps = greedyGroupsOf 100 model.filteredTruckList
+                newgrps = List.drop (pageNumber - 1) grps
+
+                firstList = case List.head newgrps of
+                                    Just lst -> lst
+                                    Nothing -> []
+                
+                
+                --a = Debug.log "start & end" [startPosition, endPosition, totalSearchResultTrucks]
+                a1 = Debug.log "start & end" [List.length <| case (List.head <| grps) of 
+                                                                        Just val -> val
+                                                                        Nothing -> []]
+                
+                a2 = Debug.log "grps leng" [List.length grps, totalPages]
+                                                                 
+            in
+                ( ( {model | pagedTruckList = firstList } , uiModel ), Cmd.none )
 
 ---- VIEW ----
 
@@ -337,6 +363,7 @@ view (model, uiModel) =
                             [ 
                                 column[hf,Element.alignRight, bwb 0, pd 3][
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                    ,el [Element.alignBottom, pdr 5] <| textValue <| "Total page trucks found : " ++ (String.fromInt <| (List.length model.pagedTruckList))
                                 ]
                             ]
                             ,row[ wf, bwb 0, pde 5 0 5 0][
@@ -409,17 +436,29 @@ getNumberList model uiModel =
 
         totalPages = pageNumberIntPositionPart + if pageNumberDecimalPositionPart > 0 then 1 else 0
     in
-        List.range 1  <| if totalPages == 1 then 0 else totalPages
+        (List.range 1  <| if totalPages == 1 then 0 else totalPages, totalPages)
 
 getPageNumbersList  model uiModel  = 
-    List.map (\num -> 
-            
-                row[pd 0, bw 0,wpx 35, hpx 35]
-                            [
-                                el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
-                            ]
+    let
+        (pageNumbers, totalPages) =  getNumberList  model uiModel
+        
+ 
+    in
+    
+        List.map (\num -> 
+                
+                    row[pd 0, bw 0,wpx 35, hpx 35]
+                                [
+                                    --el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
+                                    --Input.button [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
+                                    Input.button [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ]
+                                        { 
+                                            onPress = Just (PageNumberClicked num  totalPages) --Just (PageNumberClicked (((num - 1) * 100) + 1)  totalPages)
+                                            ,label = textValue <| String.fromInt num
+                                        }
+                                ]
 
-            ) <| getNumberList  model uiModel   -- use this style to skip parans...
+                ) pageNumbers -- use this style to skip parans...
 
 
 ---- PROGRAM ----
