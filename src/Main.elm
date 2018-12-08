@@ -254,14 +254,16 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[ wfmax 1920, hpx 75,  fc 250 250 250, alpha  0.95]
+                    row[ wfmax 1920, hpx 75,  fc 250 250 250, alpha  0.99]
                     [
                         column[wpx 50][]
-                        ,column[bc 200 200 200, wf, hf, bwb 2, brc 97 97 97][
+                        ,column[bc 250 250 250, wfp 2, hf, bwb 2, brc 97 97 97][
                             image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ]
+                        ,column[bc 240 240 240, wf, hf, bwb 2, brc 97 97 97][
+                            
+                        ]
                         ,column[wpx 50][]
-                        
                     ] 
         in
             
@@ -269,7 +271,8 @@ view (model, uiModel) =
                 --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
-                    row[hf,wf, spx 25, wfmax 1920]
+                    --row[hf,wf, spx 25, wfmax 1920]
+                    row[hf,wf, wfmax 1920]
                     [
                         -- Search Filter Panel
                         column [hf, wfmin 300,  spy 0,  bc 221 221 221] 
@@ -322,7 +325,7 @@ view (model, uiModel) =
                         ]
                         
                          -- Trucks Search Result List Panel 
-                        ,column[hf, wfp 5,  bwl 0 ]
+                        ,column[hf, wfp 5,  bwl 0 , pdl 25]
                         [
                             row[hf, wf, bwb 1, hpx 65, pd 10,  bc 221 221 221]
                             [ 
@@ -344,20 +347,30 @@ view (model, uiModel) =
                                                                             ]
                                 ]                               
                             ]
-                            ,column[ scrollbarY, wf,  bw 0, pde 0 0 0 0   ][
+                            ,column[ scrollbarY, wf,  bw 0, pde 0 0 0 0   ]
+                            [
                                     lazy trucksView model.filteredTruckList
-                                ]         
+                            ]         
                         ]
-                        --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page.
-                        -- ,column[bw 0, wfp 4, hf, pd 0]
-                        -- [
-                        --     row[bc 200 200 200, wf, hf, scrollbarY]
-                        --     [
-                        --         el [alignTop] <| textValue <| ""
-                        --     ]
-                        -- ]
+                        --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page or show page numbers ?
+                        ,column[bw 0, wpx 50, hf, pdl 15, pdt 87]
+                            getPageNumbersList
                     ]
+
+getNumberList =
+    List.range 1 150
+
+getPageNumbersList = 
+    List.map (\num -> 
             
+                row[bc 230 230 230, wf, hf, bwb 1, pd 10]
+                            [
+                                el [centerX, centerY] <| textValue <| String.fromInt num
+                            ]
+
+            ) getNumberList
+
+
 ---- PROGRAM ----
 
 
