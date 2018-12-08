@@ -100,12 +100,6 @@ buildSearchFilterValueRecordList searchFilterCustomType trucks =
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
     let
-            -- buildCollapseAllImage userAction =
-            --     if userAction == True then 
-            --         image [hpx 18, bw one] {src = "collapse.png", description ="Logo" }
-            --     else 
-            --         image [hpx 18, bw one] {src = "expand.png", description ="Logo" }
-                    
             (searchFilters, filterLabel, msg)
                 =   case searchFilterCustomType of
                             SalesStatus -> 
@@ -175,16 +169,3 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 )
             ]
         ]
-
-expandCollapseAll state =
-    
-        if state then
-            hf
-        else
-            hpx 0
-
-buildChkBoxImage userAction =
-        if userAction == True then 
-            image [hpx 16] {src = "checked.png", description ="Logo" }
-        else 
-            el [hpx 16, wpx 16, bw 1, br 3] <| none --this put empty square, unchecked checkbox style

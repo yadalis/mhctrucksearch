@@ -245,9 +245,6 @@ view (model, uiModel) =
                     else
                         image [hpx 18, bw one, wf, pdl 5, bwb 2, alignTop] {src = "loader.gif", description ="Logo" }  
 
-                        
-
-
             focusStyle : Element.Option
             focusStyle =
                 Element.focusStyle

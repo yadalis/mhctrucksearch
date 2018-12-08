@@ -12,6 +12,15 @@ import Array exposing (..)
 import SearchFilterViews.SearchFilter exposing (..)
 
 
+getTruckIdNumber : Truck -> String
+getTruckIdNumber truck =
+    if truck.stockNumber > 0 then 
+        "Stock Number: i0" ++  String.fromInt truck.stockNumber
+    else if truck.appraisalNumber > 0 then 
+        "Appraisal Number: A" ++  String.fromInt truck.appraisalNumber
+    else
+        "PO Number: " ++ truck.poNumber
+        
 hasAnyOfSearchFilterValuesChecked searchFilters =
         searchFilters
         |> Array.filter (\sf -> sf.userAction == True) 

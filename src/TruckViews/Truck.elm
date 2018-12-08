@@ -16,6 +16,7 @@ import Element.Font as Font
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Utils exposing (..)
+import BusinessFunctions.TruckFunctions exposing (..)
 
 trucksView  : List Truck -> Element Msg
 trucksView trucks =
@@ -66,12 +67,3 @@ truckView index truck =
             -- column[wfp 4, bw 2, hf, pdl 15]
             -- []
         ]
-
-getTruckIdNumber : Truck -> String
-getTruckIdNumber truck =
-    if truck.stockNumber > 0 then 
-        "Stock Number: i0" ++  String.fromInt truck.stockNumber
-    else if truck.appraisalNumber > 0 then 
-        "Appraisal Number: A" ++  String.fromInt truck.appraisalNumber
-    else
-        "PO Number: " ++ truck.poNumber
