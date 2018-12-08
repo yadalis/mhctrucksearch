@@ -158,6 +158,6 @@ expandCollapseAll state =
 
 buildChkBoxImage userAction =
         if userAction == True then 
-            image [hpx 24] {src = "checked.png", description ="Logo" }
+            image [hpx 16] {src = "checked.png", description ="Logo" }
         else 
-            el [hpx 24, wpx 24, bw 2, br 5] <| none --this put empty square, unchecked checkbox style
+            el [hpx 16, wpx 16, bw 1, br 3] <| none --this put empty square, unchecked checkbox style

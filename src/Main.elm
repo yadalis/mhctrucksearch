@@ -255,17 +255,22 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[wf, hpx 75,  bc 200 200 200 , fc 250 250 250, alpha  0.95, bwb 2, brc 0 0 0]
+                    row[ wfmax 1920, hpx 75,  fc 250 250 250, alpha  0.95]
                     [
-                        image [hpx 32, bw one] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
+                        column[wpx 50][]
+                        ,column[bc 200 200 200, wf, hf, bwb 2, brc 97 97 97][
+                            image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
+                        ]
+                        ,column[wpx 50][]
+                        
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [ inFront navBar ] --  inFront navBar is to make menu bar fixed
+                layoutWith {options = [focusStyle]}  [pde 125 50 50 50, inFront navBar ] --  inFront navBar is to make menu bar fixed
                 --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
-                    row[hf,wf, pde 125 50 0 50, spx 50, wfmax 1920]
+                    row[hf,wf, spx 50, wfmax 1920]
                     [
                         -- Search Filter Panel
                         column [hf, wfmin 300,  spy 0,  bc 221 221 221] 
@@ -288,7 +293,7 @@ view (model, uiModel) =
                             --         , checked = uiModel.expandCollapseAllChecked
                             --     }
                             -- ]
-                            ,column[scrollbarY,hf, wf, spy 20, pdt 15, bw 0,  bc 245 245 245 ]
+                            ,column[scrollbarY,hf, wf, spy 20, pdt 15, bw 0,  bc 240 240 240 ]
                             [
                                 if List.length model.filteredTruckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
@@ -340,7 +345,7 @@ view (model, uiModel) =
                                                                             ]
                                 ]                               
                             ]
-                            ,column[ scrollbarY, wf,  bw 0, pde 0 0 0 0, bc 205 205 205  ][
+                            ,column[ scrollbarY, wf,  bw 0, pde 0 0 0 0   ][
                                     lazy trucksView model.filteredTruckList
                                 ]         
                         ]
