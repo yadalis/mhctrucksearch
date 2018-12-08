@@ -121,22 +121,6 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
 
             buildCheckboxes :  Int -> SearchFilterType -> Element Msg
             buildCheckboxes index searchFilter =
-                -- let
-                --     searchKeyWiseCount =
-                --          case searchFilterCustomType of
-                --             SalesStatus -> 
-                --                 List.filter (\t -> String.trim t.salesStatus == searchFilter.searchFilterKey) model.truckList
-                --             Year -> 
-                --                 List.filter (\t -> String.trim t.year == searchFilter.searchFilterKey) model.truckList
-                --             Make -> 
-                --                 List.filter (\t -> String.trim t.make == searchFilter.searchFilterKey) model.truckList
-                --             MakeModel -> 
-                --                 List.filter (\t -> String.trim t.model == searchFilter.searchFilterKey) model.truckList
-                --             SleeperRoof -> 
-                --                 List.filter (\t -> String.trim t.sleeperRoof == searchFilter.searchFilterKey) model.truckList
-                --             SleeperBunk -> 
-                --                 List.filter (\t -> String.trim t.sleeperBunk == searchFilter.searchFilterKey) model.truckList
-                -- in
                     row[bw two]
                     [
                         checkbox [bw one, pdr 0 ] {
@@ -145,7 +129,6 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             , label = labelRight [] (el [] <| textValue searchFilter.searchFilterKey )
                             , checked = searchFilter.userAction
                         }
-                        --, textValue <| " (" ++  (String.fromInt <| (List.length searchKeyWiseCount))  ++ ")"
                         , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
                     ]
     in
@@ -171,8 +154,6 @@ expandCollapseAll state =
             hf
         else
             hpx 0
-
-
 
 buildChkBoxImage userAction =
         if userAction == True then 

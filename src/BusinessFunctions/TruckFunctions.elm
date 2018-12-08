@@ -183,8 +183,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
-
-
         filterdTruckList  = 
                 model.truckList
                         |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)

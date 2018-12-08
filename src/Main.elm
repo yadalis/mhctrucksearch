@@ -76,8 +76,6 @@ performFinalSearch model userSearchString =
                                     "sr"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperRoof) 
                                     "sb"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperBunk) 
                                     _       -> False -- invalid search string entered by the user
-                            -- else
-                            --     False
                         )
                     --|> List.take 100
                     |> List.sortBy .make
@@ -131,43 +129,15 @@ update msg (model, uiModel) =
         
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
-
-                getItemFromArray arrayItems =
-                    arrayItems
-                        |> Array.get index
-                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        
                 updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
                 updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
                     filterList
                         |> Array.get index
                         |> Maybe.map (\mf -> { mf | userAction = userAction} )
-                        --|> getItemFromArray
                         |> Maybe.map (\mf -> Array.set index mf filterList)
                         |> Maybe.map pushModifiedFilterListBackInToUIModel
                         |> Maybe.withDefault uiModel
 
-                -- buildSelectedSearchFilterItems : Array SearchFilterType -> Array SearchFilterType -- Anonymous funcs
-                -- buildSelectedSearchFilterItems  filterList =
-                --     let
-                --         selectedFilterItem =
-                --                  case (filterList
-                --                             |> getItemFromArray) of
-                --                                 Just item -> item
-                --                                 Nothing -> SearchFilterType 0 "" False 0
-                                
-                --         newSelectedFilterItems = 
-                --                 if selectedFilterItem.searchFilterKey == "" then
-                --                     uiModel.selectedFilterItems
-                --                 else
-                --                     if selectedFilterItem.userAction then
-                --                         Array.push selectedFilterItem uiModel.selectedFilterItems
-                --                     else
-                --                         Array.filter (\item -> item.searchFilterKey /= selectedFilterItem.searchFilterKey) uiModel.selectedFilterItems
-                --     in
-                --         newSelectedFilterItems
-                     
-                
                 newUIModel = 
                     case searchFilterCustomType of
                         SalesStatus -> 
@@ -183,41 +153,29 @@ update msg (model, uiModel) =
                             -----------------------------------------------------------------------------------------------------------------
                              
                             (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters)
-                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr
-                                        --    , selectedFilterItems = buildSelectedSearchFilterItems uiModel.salesStatusFilters
-                                        })  -- 3rd style is also a partial applications style
+                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr})  -- 3rd style is also a partial applications style
                                    
                             -----------------------------------------------------------------------------------------------------------------
                         Year -> 
                             (uiModel.yearFilters 
                                     |> updateUserSelectedSearchFilter) 
-                                                            (\mfArr -> {uiModel | yearFilters = mfArr
-                                                            --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.yearFilters
-                                                            })
+                                                            (\mfArr -> {uiModel | yearFilters = mfArr})
                             --      |> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
                                 
                         Make -> 
-                            (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr
-                                                            --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.makeFilters
-                                                            })
+                            (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr})
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
 
                         MakeModel -> 
-                            (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr
-                                    --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.modelFilters
-                                    })
+                            (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr})
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
 
                         SleeperRoof -> 
-                            (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr
-                                    --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.sleeperRoofFilters
-                                    })
+                            (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
 
                         SleeperBunk -> 
-                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr
-                                        --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.sleeperBunkFilters
-                                        })
+                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
@@ -229,15 +187,6 @@ update msg (model, uiModel) =
                 ( ( {model | filteredTruckList = newFilteredTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
         SearchString searchString ->
-            -- let
-            --     newModel = 
-            --         if String.length searchString > 0 then
-            --             model
-            --         else
-            --             {model | filteredTruckList = model.truckList }
-
-            -- in
-                --( ( model , {uiModel | searchString = searchString}), sendMessage SearchPressed )
             ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
         SearchPressed ->
@@ -257,42 +206,7 @@ update msg (model, uiModel) =
 
         CollapseAllClicked userAction ->
             ( ( model , {uiModel | expandCollapseAllChecked = userAction}), Cmd.none )
- 
 
-        -- RemoveSearchFilterItemFromPinnedSearchFilters pinnedSearchFilterItem ->
-        --     --( ( model , uiModel), Cmd.none )
-        --      let
-        --             -- itemFromSalesStatusList =  case  List.head <| Array.toList (Array.filter (\item -> item.index == pinnedSearchFilterItem.index) uiModel.salesStatusFilters) of
-        --             --                                         Just val -> val
-        --             --                                         Nothing -> SearchFilterType -1 "" False 0
-
-        --             -- selectedPinnedItem = case List.head <| Array.toList (Array.filter (\item -> item.searchFilterKey == pinnedSearchFilterItem.searchFilterKey) uiModel.selectedFilterItems) of
-        --             --                                     Just val -> val
-        --             --                                     Nothing -> SearchFilterType -1 "" False 0
-        --             -- itemFromSalesStatusList =  case  List.head <| Array.toList (Array.filter (\item -> item.searchFilterKey == selectedPinnedItem.searchFilterKey) uiModel.salesStatusFilters) of
-        --             --                                     Just val -> val
-        --             --                                     Nothing -> SearchFilterType -1 "" False 0
-
-        --             updatedSalesStatusFilterList = 
-        --                 uiModel.salesStatusFilters
-        --                     |> Array.get pinnedSearchFilterItem.index
-        --                     |> Maybe.map (\mf -> { mf | userAction = False} )
-        --                     |> Maybe.map (\mf -> Array.set pinnedSearchFilterItem.index mf uiModel.salesStatusFilters)
-        --                     |> Maybe.withDefault uiModel.salesStatusFilters
-                    
-        --             newUIModel = {uiModel | salesStatusFilters = updatedSalesStatusFilterList}
-
-        --             newFilteredTruckList = applySearchFilters model newUIModel
-
-        --             uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
-
-        --             -- updatedSelectedFilterList =
-        --             --     uiModel.selectedFilterItems
-        --             --         |> Array.filter (\item -> item.searchFilterKey /= selectedPinnedItem.searchFilterKey)
-        --      in
-        --         --( ( model , {uiModel | salesStatusFilters = updatedSalesStatusFilterList } ),  Cmd.none  )
-        --          ( ( {model | filteredTruckList = newFilteredTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
-             
 ---- VIEW ----
 
 textBox uiModel=
@@ -349,8 +263,6 @@ view (model, uiModel) =
                     row[wf, hpx 75,  bc 200 200 200 , fc 250 250 250, alpha  0.95, bwb 2, brc 0 0 0]
                     [
                         image [hpx 32, bw one] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
-                        -- ,
-                        -- el [pdl 25, Element.alignRight] <| textValue "Fluid & Powerfull truck search platform, get the result with less than blink of an eye !!!"
                     ] 
         in
             
@@ -360,36 +272,15 @@ view (model, uiModel) =
                 <|
                     row[hf,wf, pde 125 50 0 50, spx 50, wfmax 1920]
                     [
-                        column [hf, wfmin 300,  spy 0,  bc 221 221 221] -- Search Filter Panel bc 225 225 225, 
+                        -- Search Filter Panel
+                        column [hf, wfmin 300,  spy 0,  bc 221 221 221] 
                         [
                             row[wf, pd 10, bwb 1, spaceEvenly]
                             [ 
-                                -- Input.text [wf, hf, bw 0
-                                --             --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
-                                --             , Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
-                                --         ]
-                                -- {
-                                --     onChange = SearchString
-                                --     ,text  = uiModel.searchString
-                                --     ,label = labelLeft [] none
-                                --     ,placeholder = Just (Input.placeholder [] (el [] <| textValue "Fluid truck Search"))
-
-                                -- }
                                 lazy textBox uiModel
-                                -- ,Input.text [wf, hf, bw 0
-                                --             --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
-                                --             ,Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
-                                --         ]
-                                -- {
-                                --     onChange = SearchString
-                                --     ,text  = uiModel.searchString
-                                --     ,label = labelLeft [] none
-                                --     ,placeholder = Just (Input.placeholder [] (el [] <| textValue "Fluid trucks Search"))
-                                
-                                -- }
                                 ,Input.button ( [ hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
                                     { 
-                                        onPress = Just SearchPressed --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
+                                        onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
                                         ,label = searchBtnIcon
                                     }
                             ]
@@ -431,26 +322,15 @@ view (model, uiModel) =
                             ]
                         ]
                         
-                        ,column[hf, wfp 5,  bwl 0 ,pde 0 0 0 0 ] -- Trucks Search Result List Panel 
+                         -- Trucks Search Result List Panel 
+                        ,column[hf, wfp 5,  bwl 0 ,pde 0 0 0 0 ]
                         [
                             row[hf, wf, bwb 1, hpx 65, pd 10,  bc 221 221 221]
                             [ 
-                                --column[pdl 0, hf][] --, bc 244 66 95,
-                                
-                                -- column[hf,wf, bwr 2, pd 3][
-                                --     --el [] << textValue <| "Selected Filters... ", 
-                                --     --el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
-                                --     --el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
-                                --      lazy searchFilterBulletView uiModel.modelFilters
-
-                                -- ],
                                 column[hf,Element.alignRight, bwb 0, pd 3][
-                                    --el [] << textValue <| "Selected Filters... ", 
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
-                                    --el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
                             ]
-                            --,column[hf, wf, scrollbarY, bw 0, pde 10 10 10 0] [ lazy trucksView model.filteredTruckList]
                             ,row[ wf, bwb 0, pdt 5][
                                 row[  wf,  bw 0, pd 0 ][
                                     lazy searchFilterBulletView 
@@ -463,44 +343,19 @@ view (model, uiModel) =
                                                                                 Array.toList uiModel.sleeperRoofFilters,
                                                                                 Array.toList uiModel.sleeperBunkFilters
                                                                             ]
-                                ]
-                                
-                                -- ,
-                                 
-                                --     lazy trucksView model.filteredTruckList
-                                
+                                ]                               
                             ]
-                            -- ,row[ wf, bwb 2, pdb 3][
-                            --     row[  wf,  bw 0, pd 0 ][
-                            --         lazy searchFilterBulletView uiModel.yearFilters
-                                    
-                            --     ]
-                                
-                            --     -- ,
-                                 
-                            --     --     lazy trucksView model.filteredTruckList
-                                
-                            -- ]
                             ,column[ scrollbarY, wf,  bw 0, pde 15 5 5 5 ][
                                     lazy trucksView model.filteredTruckList
-                                ]
-                            
-                            -- ,row[hf, wf, bw 0, hpx 50, pde 10 10 10 10]
-                            -- [ 
-                            --     column[pdl 15, hf][] --, bc 244 66 95
-                            --     ,column[hf, pdl 5, spaceEvenly][
-                            --         -- el [] <| textValue <| "Page nav bar... ", 
-                            --         -- el [] <| textValue <| "Total Used Trucks : " ++ (String.fromInt <| (List.length model.truckList))
-                            --     ]
-                            -- ]                  
+                                ]         
                         ]
+                        --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page.
                         -- ,column[bw 0, wfp 4, hf, pd 0]
                         -- [
                         --     row[bc 200 200 200, wf, hf, scrollbarY]
                         --     [
                         --         el [alignTop] <| textValue <| ""
                         --     ]
-                            
                         -- ]
                     ]
             

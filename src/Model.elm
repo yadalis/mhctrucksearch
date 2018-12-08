@@ -17,7 +17,6 @@ type alias Truck =
         , model             : String
         , apu               : String
         , cdl               : String
---        , year              : Int
         , year              : String
         , primaryImageLink  : String
         , truckType         : String
@@ -49,7 +48,6 @@ type alias UIModel =
         ,expandCollapseSalesStatusChecked : Bool
         ,expandCollapseYearChecked : Bool
         ,expandCollapseAllChecked : Bool
-        --,selectedFilterItems : Array SearchFilterType
     }
 
 type SearchFilterCustomType
@@ -87,7 +85,6 @@ initialModel =
 initalUIModel : String -> UIModel
 initalUIModel jsFlag =
     {
-        --filterSelectionsModel = FilterSelectionsModel False False
         filterCDLNoSelected = False,
         filterCDLYesSelected = False,
         searchString = "",
@@ -101,6 +98,4 @@ initalUIModel jsFlag =
         expandCollapseSalesStatusChecked = False,
         expandCollapseYearChecked = False,
         expandCollapseAllChecked = True
-        --,
-        --selectedFilterItems = Array.empty
     }

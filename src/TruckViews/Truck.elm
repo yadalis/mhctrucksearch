@@ -38,7 +38,6 @@ truckView index truck =
             ,
             column[wfp 4, hf, pd 5, spy 15]
             [
-                --textValue <| (String.fromInt <| index) ++ " - " ++  truck.cdl ++ " - " ++  truck.make ++ " - " ++  truck.year ++ " - APU - " ++ truck.apu
                 row[]
                 [
                     paragraph [Font.size 25, Font.bold, Font.color <| rgb255 244 66 95] [textValue <| truck.title]
