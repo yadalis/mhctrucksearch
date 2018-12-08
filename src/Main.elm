@@ -110,10 +110,13 @@ update msg (model, uiModel) =
                 modelFilters = buildSearchFilterValueRecordList MakeModel trucks
                 sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof trucks
                 sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk trucks
+
+                filteredTruckList = List.filter (\t -> t.year == "2019" ) trucks
+                pagedTruckList = List.take 100 filteredTruckList
             in
                 ( 
                     (
-                        {   model     | truckList = trucks, filteredTruckList = (List.filter (\t -> t.year == "2019" ) trucks)},
+                        {   model     | truckList = trucks,  filteredTruckList = filteredTruckList, pagedTruckList = pagedTruckList},
                         { 
                             uiModel   | 
                                         yearFilters = yearFilters, 
@@ -181,10 +184,13 @@ update msg (model, uiModel) =
                 newFilteredTruckList = applySearchFilters model newUIModel
 
                 uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
+
+                pagedTruckList = List.take 100 newFilteredTruckList
+                
                 
             in
                 --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
-                ( ( {model | filteredTruckList = newFilteredTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+                ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -347,11 +353,12 @@ view (model, uiModel) =
                             ]
                             ,row[ wf, bwb 0, pd 0][
                                 wrappedRow[  wf,  bw 0, pd 0 ]
-                                    getPageNumbersList         
+                                    --<| getPageNumbersList  model uiModel  -- use this style to skip parans...
+                                    <| (getPageNumbersList  model uiModel)
                             ]
                             ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
                             [
-                                    lazy trucksView model.filteredTruckList
+                                    lazy trucksView model.pagedTruckList -- model.filteredTruckList
                             ]         
                         ]
                         --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page or show page numbers ?
@@ -359,10 +366,52 @@ view (model, uiModel) =
                         --     getPageNumbersList
                     ]
 
-getNumberList =
-    List.range 1 50
+getNumberList model uiModel =
+    let
+        --lng = String.split "." (String.fromFloat (Basics.toFloat ( List.length model.filteredTruckList  )/ 100))
+        (pageNumberIntPositionPart, pageNumberDecimalPositionPart) =
+            model.filteredTruckList
+                |> List.length
+                |> Basics.toFloat
+                |> (\flt -> flt / 100)
+                |> String.fromFloat
+                |> String.split "."
+                |> (\brokenStrList -> 
+                                   
+                                    (
+                                        case List.head brokenStrList of
+                                                    Just val -> case String.toInt val of 
+                                                                    Just num -> num 
+                                                                    Nothing -> 0
+                                                    Nothing -> 0
+                                        ,
+                                            if List.length brokenStrList > 1 then
+                                                case List.head << List.reverse <| brokenStrList of
+                                                        Just val -> case String.toInt val of 
+                                                                        Just num -> num 
+                                                                        Nothing -> 0
+                                                        Nothing -> 0
+                                            else
+                                                0
+                                    )
 
-getPageNumbersList = 
+                                -- let -- this is fine too
+                                --     first = case List.head strList of
+                                --                 Just val -> val
+                                --                 Nothing -> ""
+                                --     second = case List.head << List.reverse <| strList of
+                                --                 Just val -> val
+                                --                 Nothing -> ""
+                                -- in
+                                --     (first, second)
+                                 
+                )
+
+        totalPages = pageNumberIntPositionPart + if pageNumberDecimalPositionPart > 0 then 1 else 0
+    in
+        List.range 1  <| if totalPages == 1 then 0 else totalPages
+
+getPageNumbersList  model uiModel  = 
     List.map (\num -> 
             
                 row[pd 0, bw 0,wpx 35, hpx 35]
@@ -370,7 +419,7 @@ getPageNumbersList =
                                 el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
                             ]
 
-            ) getNumberList
+            ) <| getNumberList  model uiModel   -- use this style to skip parans...
 
 
 ---- PROGRAM ----

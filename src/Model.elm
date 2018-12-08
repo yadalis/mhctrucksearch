@@ -31,6 +31,7 @@ type alias Model =
         -- ,
         truckList : List Truck
         ,filteredTruckList : List Truck
+        ,pagedTruckList : List Truck
     }
 
 type alias UIModel =
@@ -86,6 +87,7 @@ initialModel =
         -- ,
         truckList = [] -- Array.empty
         ,filteredTruckList = []
+        ,pagedTruckList = []
     }
 
 initalUIModel : String -> UIModel
