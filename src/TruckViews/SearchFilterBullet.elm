@@ -29,11 +29,11 @@ searchFilterBulletView filterList =
                                 row[ bw 0, pd 3, spx 0]
                                 [
                                     column[][
-                                        el [bw 1, Font.size 14, brc 97 97 97, fc  250 250 250,  bc 105 105 125,pd 3, Font.light] (textValue <| sf.searchFilterKey)
+                                        el [bw 1, Font.size 14, brc 97 97 97, fc  250 250 250,  bc 105 105 125,pd 5, Font.light] (textValue <| sf.searchFilterKey)
                                     ]
                                     ,column[][
 
-                                                    Input.button ( [ hf, eId "X",bw 1, brc 97 97 97,  bc 35 35 35,pd 3])
+                                                    Input.button ( [ hf, bw 1, brc 97 97 97,  bc 35 35 35,pd 5])
                                                     { 
                                                         onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory False )                                                       
                                                         ,label = (el [Font.size 14,fc 300 300 300] <| textValue <| "x")

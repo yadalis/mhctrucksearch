@@ -187,7 +187,7 @@ update msg (model, uiModel) =
                 ( ( {model | filteredTruckList = newFilteredTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
         SearchString searchString ->
-            ( ( model , {uiModel | searchString = searchString}), Cmd.none)
+                ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
         SearchPressed ->
             ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
@@ -219,7 +219,7 @@ textBox uiModel=
         onChange = SearchString
         ,text  = uiModel.searchString
         ,label = labelLeft [] none
-        ,placeholder = Just (Input.placeholder [] (el [] <| textValue "Fluid truck Search"))
+        ,placeholder = Just (Input.placeholder [Font.size 14] (el [centerY] <| textValue "Fluid truck Search"))
 
     }
 
@@ -227,11 +227,11 @@ textBox uiModel=
 view : (Model, UIModel) -> Html Msg
 view (model, uiModel) =
         let
-            searchStringBtnStyle = 
-                        if String.length uiModel.searchString > 0 then 
-                            [ bc 226 63 63, fc 250 250 250] 
+            (searchStringBtnStyle, searchBtnIcon) = 
+                        if String.length (String.trim <| uiModel.searchString) > 0 then 
+                            ([ bc 226 63 63, fc 250 250 250], image [hpx 32, bw one] {src = "srch_white.ico", description ="Logo" })
                         else
-                            [ bc 198 201 206, fc 245 245 245]
+                            ([ bc 198 201 206, fc 245 245 245], image [hpx 32, bw one] {src = "srch_grey.ico", description ="Logo" })
 
             loaderIconElement = 
                     if List.length model.filteredTruckList > 0 then
@@ -239,11 +239,6 @@ view (model, uiModel) =
                     else
                         image [hpx 18, bw one, wf, pdl 5, bwb 2, alignTop] {src = "loader.gif", description ="Logo" }  
 
-            searchBtnIcon =
-                    if String.length uiModel.searchString > 0 then 
-                        image [hpx 32, bw one] {src = "srch_white.ico", description ="Logo" }
-                    else
-                        image [hpx 32, bw one] {src = "srch_grey.ico", description ="Logo" }
                         
             buildCollapseAllImage userAction =
                 if userAction == True then 
@@ -323,7 +318,7 @@ view (model, uiModel) =
                         ]
                         
                          -- Trucks Search Result List Panel 
-                        ,column[hf, wfp 5,  bwl 0 ,pde 0 0 0 0 ]
+                        ,column[hf, wfp 5,  bwl 0 ]
                         [
                             row[hf, wf, bwb 1, hpx 65, pd 10,  bc 221 221 221]
                             [ 
@@ -331,7 +326,7 @@ view (model, uiModel) =
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
                             ]
-                            ,row[ wf, bwb 0, pdt 5][
+                            ,row[ wf, bwb 0, pde 5 0 15 0][
                                 row[  wf,  bw 0, pd 0 ][
                                     lazy searchFilterBulletView 
                                             << Array.fromList <| List.concat
@@ -345,7 +340,7 @@ view (model, uiModel) =
                                                                             ]
                                 ]                               
                             ]
-                            ,column[ scrollbarY, wf,  bw 0, pde 15 5 5 5 ][
+                            ,column[ scrollbarY, wf,  bw 0, pde 0 0 0 0, bc 205 205 205  ][
                                     lazy trucksView model.filteredTruckList
                                 ]         
                         ]
