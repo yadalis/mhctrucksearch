@@ -325,21 +325,23 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[wf, hpx 75, bc 47 48 49, fc 250 250 250, alpha  0.95]
+                    row[wf, hpx 75,  bc 200 200 200 , fc 250 250 250, alpha  0.95, bwb 2, brc 0 0 0]
                     [
                         image [hpx 32, bw one] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
-                        ,
-                        el [pdl 25, Element.alignRight] <| textValue "Fluid & Powerfull truck search platform, get the result with less than blink of an eye !!!"
+                        -- ,
+                        -- el [pdl 25, Element.alignRight] <| textValue "Fluid & Powerfull truck search platform, get the result with less than blink of an eye !!!"
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [hf, pd 0, inFront navBar ] --  inFront navBar is to make menu bar fixed
+                layoutWith {options = [focusStyle]}  [ inFront navBar ] --  inFront navBar is to make menu bar fixed
+                --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
+                -- in mormal web style and user has to scroll up and down the page
                 <|
-                    row[hf,wf, pdt 78]
+                    row[hf,wf, pde 150 50 0 50, spx 50]
                     [
-                        column [hf, wfmin 350, pde 0 10 10 10, spy 5] -- Search Filter Panel bc 225 225 225, 
+                        column [hf, wfmin 350,  spy 0,  bc 221 221 221] -- Search Filter Panel bc 225 225 225, 
                         [
-                            row[wf, pd 0, bw 1, spaceEvenly]
+                            row[wf, pd 10, bw 0, spaceEvenly]
                             [ 
                                 -- Input.text [wf, hf, bw 0
                                 --             --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
@@ -370,16 +372,16 @@ view (model, uiModel) =
                                         ,label = searchBtnIcon
                                     }
                             ]
-                            ,row[pd 5, bc 221 221 221, wf, bw 0]
-                            [
-                                checkbox [bw one, hf, far , bw 0] {
-                                    onChange = CollapseAllClicked
-                                    ,icon = buildCollapseAllImage
-                                    , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse Filters" else "Expand Filters" )
-                                    , checked = uiModel.expandCollapseAllChecked
-                                }
-                            ]
-                            ,column[scrollbarY,hf, wf, spy 20, bw 0]
+                            -- ,row[pd 5,   bc 245 245 245, wf, bw 0]
+                            -- [
+                            --     checkbox [bw one, hf, far , bw 0] {
+                            --         onChange = CollapseAllClicked
+                            --         ,icon = buildCollapseAllImage
+                            --         , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse Filters" else "Expand Filters" )
+                            --         , checked = uiModel.expandCollapseAllChecked
+                            --     }
+                            -- ]
+                            ,column[scrollbarY,hf, wf, spy 20, pdt 15, bw 0,  bc 245 245 245 ]
                             [
                                 if List.length model.filteredTruckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
@@ -407,9 +409,10 @@ view (model, uiModel) =
                                     none                                                        
                             ]
                         ]
-                        ,column[hf, wfp 5,  bwl 1, bc 235 235 235,pde 0 0 0 0 ] -- Trucks Search Result List Panel 
+                        
+                        ,column[hf, wfp 5,  bwl 0 ,pde 0 0 0 0 ] -- Trucks Search Result List Panel 
                         [
-                            row[hf, wf, bwb 1, hpx 50,  bc 221 221 221]
+                            row[hf, wf, bwb 1, hpx 65, pd 10,  bc 221 221 221]
                             [ 
                                 --column[pdl 0, hf][] --, bc 244 66 95,
                                 
@@ -427,7 +430,7 @@ view (model, uiModel) =
                                 ]
                             ]
                             --,column[hf, wf, scrollbarY, bw 0, pde 10 10 10 0] [ lazy trucksView model.filteredTruckList]
-                            ,row[ wf, bwb 0, pdb 3][
+                            ,row[ wf, bwb 0, pdt 5][
                                 row[  wf,  bw 0, pd 0 ][
                                     lazy searchFilterBulletView uiModel.selectedFilterItems
                                 ]
@@ -448,7 +451,7 @@ view (model, uiModel) =
                             --     --     lazy trucksView model.filteredTruckList
                                 
                             -- ]
-                            ,column[ scrollbarY, wf,  bw 0, pdt 10, pdl 5 ][
+                            ,column[ scrollbarY, wf,  bw 0, pde 15 5 5 5 ][
                                     lazy trucksView model.filteredTruckList
                                 ]
                             
@@ -461,14 +464,14 @@ view (model, uiModel) =
                             --     ]
                             -- ]                  
                         ]
-                        ,column[bw 1, wfp 4, hf, pd 0]
-                        [
-                            row[bc 200 200 200, wf, hf, scrollbarY]
-                            [
-                                el [alignTop] <| textValue <| "Truck Details"
-                            ]
+                        -- ,column[bw 0, wfp 4, hf, pd 0]
+                        -- [
+                        --     row[bc 200 200 200, wf, hf, scrollbarY]
+                        --     [
+                        --         el [alignTop] <| textValue <| ""
+                        --     ]
                             
-                        ]
+                        -- ]
                     ]
             
 ---- PROGRAM ----

@@ -29,7 +29,7 @@ truckView index truck =
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
     in
     
-        row[bwb 2, wf, pdr 0, bc 247 247 247, spx 3, hf ] --bc 47 48 49
+        row[bwb 2, wf, pdb 25, bc 247 247 247, spx 3, hf ] --bc 47 48 49
         [
             column[wf, bw 0, hf, pdt 5]
             [
