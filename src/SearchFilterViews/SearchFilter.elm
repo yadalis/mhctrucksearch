@@ -3,6 +3,7 @@ module SearchFilterViews.SearchFilter exposing (..)
 
 import Element exposing (..)
 import Element.Input exposing (..)
+import Element.Font exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Utils exposing (..)
@@ -121,12 +122,12 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
 
             buildCheckboxes :  Int -> SearchFilterType -> Element Msg
             buildCheckboxes index searchFilter =
-                    row[bw two]
+                    row[bw two, size 14]
                     [
                         checkbox [bw one, pdr 0 ] {
                             onChange = msg index searchFilterCustomType
                             ,icon = buildChkBoxImage
-                            , label = labelRight [] (el [] <| textValue searchFilter.searchFilterKey )
+                            , label = labelRight [centerY] (el [] <| textValue searchFilter.searchFilterKey )
                             , checked = searchFilter.userAction
                         }
                         , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
@@ -159,4 +160,4 @@ buildChkBoxImage userAction =
         if userAction == True then 
             image [hpx 24] {src = "checked.png", description ="Logo" }
         else 
-            el [hpx 24, wpx 24, bw 2, br 5] <| none
+            el [hpx 24, wpx 24, bw 2, br 5] <| none --this put empty square, unchecked checkbox style

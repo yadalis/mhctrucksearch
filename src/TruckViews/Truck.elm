@@ -29,7 +29,7 @@ truckView index truck =
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
     in
     
-        row[bwb 2, wf, pdb 25, bc 247 247 247, spx 3, hf ] --bc 47 48 49
+        row[bwb 0, wf, pdb 25, bc 245 245 245, spx 3, hf ] --bc 47 48 49
         [
             column[wf, bw 0, hf, pdt 5]
             [
@@ -40,7 +40,7 @@ truckView index truck =
             [
                 row[]
                 [
-                    paragraph [Font.size 25, Font.bold, Font.color <| rgb255 244 66 95] [textValue <| truck.title]
+                    paragraph [Font.size 25, Font.bold, fc  244 66 95] [textValue <| truck.title]
                 ]
                 ,row[]
                 [
