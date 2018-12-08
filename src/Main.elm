@@ -195,17 +195,23 @@ update msg (model, uiModel) =
         HandleKeyboardEvent ->
             ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
         
-        -- CollapseClicked searchFilterType userAction ->
-        --     let
-        --         x = if searchFilterType == SalesStatus then              
-        --                 ( ( model , {uiModel | expandCollapseSalesStatusChecked = userAction}), Cmd.none )
-        --             else
-        --                 ( ( model , {uiModel | expandCollapseYearChecked = userAction}), Cmd.none )   
-        --     in
-        --         x
+        CollapseClicked searchFilterState userAction->
+            let
+                newSearchFilterState = {searchFilterState | userAction = userAction }
+                updatedSearchFilterStates = 
+                    uiModel.expandCollapseSearchFilterStates
+                        |> Array.set searchFilterState.index newSearchFilterState
+            in
+                ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates}), Cmd.none )
 
         CollapseAllClicked userAction ->
-            ( ( model , {uiModel | expandCollapseAllChecked = userAction}), Cmd.none )
+            let
+                updatedSearchFilterStates = 
+                    uiModel.expandCollapseSearchFilterStates
+                        |> Array.map (\item -> {item | userAction = userAction})
+            in
+                ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, expandCollapseAllChecked = userAction}), Cmd.none )
+            --( ( model , uiModel), Cmd.none )
 
 ---- VIEW ----
 
@@ -240,11 +246,7 @@ view (model, uiModel) =
                         image [hpx 18, bw one, wf, pdl 5, bwb 2, alignTop] {src = "loader.gif", description ="Logo" }  
 
                         
-            buildCollapseAllImage userAction =
-                if userAction == True then 
-                    image [hpx 32, bw one] {src = "collapse.png", description ="Logo" }
-                else 
-                    image [hpx 32, bw one] {src = "expand.png", description ="Logo" }
+
 
             focusStyle : Element.Option
             focusStyle =
@@ -270,7 +272,7 @@ view (model, uiModel) =
                 --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
-                    row[hf,wf, spx 50, wfmax 1920]
+                    row[hf,wf, spx 25, wfmax 1920]
                     [
                         -- Search Filter Panel
                         column [hf, wfmin 300,  spy 0,  bc 221 221 221] 
@@ -284,16 +286,16 @@ view (model, uiModel) =
                                         ,label = searchBtnIcon
                                     }
                             ]
-                            -- ,row[pd 5,   bc 245 245 245, wf, bw 0]
-                            -- [
-                            --     checkbox [bw one, hf, far , bw 0] {
-                            --         onChange = CollapseAllClicked
-                            --         ,icon = buildCollapseAllImage
-                            --         , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse Filters" else "Expand Filters" )
-                            --         , checked = uiModel.expandCollapseAllChecked
-                            --     }
-                            -- ]
-                            ,column[scrollbarY,hf, wf, spy 20, pdt 15, bw 0,  bc 240 240 240 ]
+                            ,row[centerY,   bc 245 245 245, wf, bw 0, pdt 10]
+                            [
+                                checkbox [bw one, hf, far , bw 0, wf, pdr 5] {
+                                    onChange = CollapseAllClicked
+                                    ,icon = buildCollapseAllImage
+                                    , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
+                                    , checked = uiModel.expandCollapseAllChecked
+                                }
+                            ]
+                            ,column[scrollbarY,hf, wf, spy 5, pdt 15, bw 0,  bc 240 240 240 ]
                             [
                                 if List.length model.filteredTruckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel

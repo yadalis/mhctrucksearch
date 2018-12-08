@@ -45,11 +45,17 @@ type alias UIModel =
         ,salesStatusFilters : Array SearchFilterType
         ,sleeperRoofFilters : Array SearchFilterType
         ,sleeperBunkFilters : Array SearchFilterType
-        ,expandCollapseSalesStatusChecked : Bool
-        ,expandCollapseYearChecked : Bool
+        ,expandCollapseSearchFilterStates : Array SearchFilterState
         ,expandCollapseAllChecked : Bool
     }
 
+type alias SearchFilterState =
+    {
+        index : Int
+        ,searchFilterCustomType : SearchFilterCustomType
+        ,userAction : Bool
+    }
+    
 type SearchFilterCustomType
     = SalesStatus
     | Year
@@ -95,7 +101,14 @@ initalUIModel jsFlag =
         salesStatusFilters = Array.empty,
         sleeperRoofFilters = Array.empty,
         sleeperBunkFilters = Array.empty,
-        expandCollapseSalesStatusChecked = False,
-        expandCollapseYearChecked = False,
-        expandCollapseAllChecked = True
+                                            -- this is to initialize an Array, repeat creates one item in this case and that lets us push rest of the items
+                                            -- this list can be generated off of datasource, when that happens we dont need to hardcode index value, just use indexedMap
+                                            -- and set the generated index value to index prop
+        expandCollapseSearchFilterStates = Array.repeat 1 {index = 0,searchFilterCustomType = SalesStatus, userAction = False} 
+                                                |> Array.push {index = 1,searchFilterCustomType = Year, userAction = False}
+                                                |> Array.push {index = 2,searchFilterCustomType = Make, userAction = True}
+                                                |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
+                                                |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}
+                                                |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False},
+        expandCollapseAllChecked = False
     }

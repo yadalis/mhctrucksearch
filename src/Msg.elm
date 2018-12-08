@@ -14,5 +14,5 @@ type Msg
     | SearchString String
     | SearchPressed
     | HandleKeyboardEvent
-    --| CollapseClicked SearchFilterCustomType Bool
+    | CollapseClicked SearchFilterState Bool
     | CollapseAllClicked Bool
