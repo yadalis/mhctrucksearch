@@ -337,11 +337,11 @@ view (model, uiModel) =
                 --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
-                    row[hf,wf, pde 125 50 0 50, spx 50]
+                    row[hf,wf, pde 125 50 0 50, spx 50, wfmax 1920]
                     [
-                        column [hf, wfmin 350,  spy 0,  bc 221 221 221] -- Search Filter Panel bc 225 225 225, 
+                        column [hf, wfmin 300,  spy 0,  bc 221 221 221] -- Search Filter Panel bc 225 225 225, 
                         [
-                            row[wf, pd 10, bw 0, spaceEvenly]
+                            row[wf, pd 10, bwb 1, spaceEvenly]
                             [ 
                                 -- Input.text [wf, hf, bw 0
                                 --             --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )

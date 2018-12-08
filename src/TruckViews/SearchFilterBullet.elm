@@ -29,14 +29,14 @@ searchFilterBulletView filterList =
                                 row[ bw 0, pd 3, spx 0]
                                 [
                                     column[][
-                                        el [bw 1, Font.size 14, brc 97 97 97, Font.color <| rgb255 244 69 66,  bc 215 215 215,pd 3, Font.light] (textValue <| sf.searchFilterKey)
+                                        el [bw 1, Font.size 14, brc 97 97 97, Font.color <| rgb255 250 250 250,  bc 105 105 125,pd 3, Font.light] (textValue <| sf.searchFilterKey)
                                     ]
                                     ,column[][
 
-                                                    Input.button ( [ hf, eId "X",bw 1, brc 97 97 97,  bc 97 97 97,pd 3])
+                                                    Input.button ( [ hf, eId "X",bw 1, brc 97 97 97,  bc 35 35 35,pd 3])
                                                     { 
                                                         onPress = Just (RemoveSearchFilterItemFromPinnedSearchFilters sf) --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
-                                                        ,label = (el [Font.size 14,Font.color <| rgb255 250 250 250] <| textValue <| "x")
+                                                        ,label = (el [Font.size 14,Font.color <| rgb255 300 300 300] <| textValue <| "x")
                                                     }
 
 

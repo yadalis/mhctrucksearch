@@ -155,7 +155,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
             [
                 row[bw 0, hf, bwb 1, wf, pdb 1]
                 [
-                    paragraph [bw one, fal, wf, bc 200 200 200, hpx 25, pd 5, centerY][textValue <| filterLabel]
+                    paragraph [bw one, fal, wf, bc 221 221 221, hpx 25, pd 5, centerY][textValue <| filterLabel]
                    
                 ]
                 ,column[spy 10, pdl 15, scrollbarY, wf, expandCollapseAll uiModel.expandCollapseAllChecked]
