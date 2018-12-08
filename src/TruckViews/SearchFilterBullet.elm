@@ -35,11 +35,11 @@ searchFilterBulletView filterList =
 
                                                     Input.button ( [ hf, eId "X",bw 1, brc 97 97 97,  bc 35 35 35,pd 3])
                                                     { 
-                                                        onPress = Just (RemoveSearchFilterItemFromPinnedSearchFilters sf) --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
+                                                        --onPress = Just (RemoveSearchFilterItemFromPinnedSearchFilters sf) --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
+                                                        onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory False ) --if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing
+                                                        
                                                         ,label = (el [Font.size 14,Font.color <| rgb255 300 300 300] <| textValue <| "x")
                                                     }
-
-
                                     ]
                                 ]
                             else

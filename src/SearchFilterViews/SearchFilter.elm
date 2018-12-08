@@ -94,7 +94,7 @@ buildSearchFilterValueList searchFilterCustomType trucks =
 buildSearchFilterValueRecordList : SearchFilterCustomType -> List Truck -> Array SearchFilterType
 buildSearchFilterValueRecordList searchFilterCustomType trucks =
     buildSearchFilterValueList searchFilterCustomType trucks
-        |> Array.indexedMap (\index  sfValue -> {index = index, searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue})
+        |> Array.indexedMap (\index  sfValue -> {index = index, searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue, filterCategory = searchFilterCustomType})
 
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =

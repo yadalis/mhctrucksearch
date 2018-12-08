@@ -16,12 +16,5 @@ type Msg
     | HandleKeyboardEvent
     --| CollapseClicked SearchFilterCustomType Bool
     | CollapseAllClicked Bool
-    | RemoveSearchFilterItemFromPinnedSearchFilters SearchFilterType
+    --| RemoveSearchFilterItemFromPinnedSearchFilters SearchFilterType
 
-type SearchFilterCustomType
-    = SalesStatus
-    | Year
-    | Make
-    | MakeModel
-    | SleeperRoof
-    | SleeperBunk

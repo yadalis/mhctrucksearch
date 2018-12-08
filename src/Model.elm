@@ -49,8 +49,16 @@ type alias UIModel =
         ,expandCollapseSalesStatusChecked : Bool
         ,expandCollapseYearChecked : Bool
         ,expandCollapseAllChecked : Bool
-        ,selectedFilterItems : Array SearchFilterType
+        --,selectedFilterItems : Array SearchFilterType
     }
+
+type SearchFilterCustomType
+    = SalesStatus
+    | Year
+    | Make
+    | MakeModel
+    | SleeperRoof
+    | SleeperBunk
 
 type alias SearchFilterType =
     {   
@@ -58,6 +66,7 @@ type alias SearchFilterType =
         ,searchFilterKey : String
         ,userAction : Bool
         ,resultCount : Int
+        ,filterCategory : SearchFilterCustomType
     }
 
 type alias FilterSelectionsModel =
@@ -91,6 +100,7 @@ initalUIModel jsFlag =
         sleeperBunkFilters = Array.empty,
         expandCollapseSalesStatusChecked = False,
         expandCollapseYearChecked = False,
-        expandCollapseAllChecked = True,
-        selectedFilterItems = Array.empty
+        expandCollapseAllChecked = True
+        --,
+        --selectedFilterItems = Array.empty
     }

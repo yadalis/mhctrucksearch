@@ -147,25 +147,25 @@ update msg (model, uiModel) =
                         |> Maybe.map pushModifiedFilterListBackInToUIModel
                         |> Maybe.withDefault uiModel
 
-                buildSelectedSearchFilterItems : Array SearchFilterType -> Array SearchFilterType -- Anonymous funcs
-                buildSelectedSearchFilterItems  filterList =
-                    let
-                        selectedFilterItem =
-                                 case (filterList
-                                            |> getItemFromArray) of
-                                                Just item -> item
-                                                Nothing -> SearchFilterType 0 "" False 0
+                -- buildSelectedSearchFilterItems : Array SearchFilterType -> Array SearchFilterType -- Anonymous funcs
+                -- buildSelectedSearchFilterItems  filterList =
+                --     let
+                --         selectedFilterItem =
+                --                  case (filterList
+                --                             |> getItemFromArray) of
+                --                                 Just item -> item
+                --                                 Nothing -> SearchFilterType 0 "" False 0
                                 
-                        newSelectedFilterItems = 
-                                if selectedFilterItem.searchFilterKey == "" then
-                                    uiModel.selectedFilterItems
-                                else
-                                    if selectedFilterItem.userAction then
-                                        Array.push selectedFilterItem uiModel.selectedFilterItems
-                                    else
-                                        Array.filter (\item -> item.searchFilterKey /= selectedFilterItem.searchFilterKey) uiModel.selectedFilterItems
-                    in
-                        newSelectedFilterItems
+                --         newSelectedFilterItems = 
+                --                 if selectedFilterItem.searchFilterKey == "" then
+                --                     uiModel.selectedFilterItems
+                --                 else
+                --                     if selectedFilterItem.userAction then
+                --                         Array.push selectedFilterItem uiModel.selectedFilterItems
+                --                     else
+                --                         Array.filter (\item -> item.searchFilterKey /= selectedFilterItem.searchFilterKey) uiModel.selectedFilterItems
+                --     in
+                --         newSelectedFilterItems
                      
                 
                 newUIModel = 
@@ -183,29 +183,41 @@ update msg (model, uiModel) =
                             -----------------------------------------------------------------------------------------------------------------
                              
                             (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters)
-                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr, selectedFilterItems = buildSelectedSearchFilterItems uiModel.salesStatusFilters})  -- 3rd style is also a partial applications style
+                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr
+                                        --    , selectedFilterItems = buildSelectedSearchFilterItems uiModel.salesStatusFilters
+                                        })  -- 3rd style is also a partial applications style
                                    
                             -----------------------------------------------------------------------------------------------------------------
                         Year -> 
                             (uiModel.yearFilters 
                                     |> updateUserSelectedSearchFilter) 
-                                                            (\mfArr -> {uiModel | yearFilters = mfArr, selectedFilterItems = buildSelectedSearchFilterItems uiModel.yearFilters})
+                                                            (\mfArr -> {uiModel | yearFilters = mfArr
+                                                            --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.yearFilters
+                                                            })
                             --      |> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
                                 
                         Make -> 
-                            (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr, selectedFilterItems = buildSelectedSearchFilterItems uiModel.makeFilters})
+                            (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr
+                                                            --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.makeFilters
+                                                            })
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
 
                         MakeModel -> 
-                            (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr, selectedFilterItems = buildSelectedSearchFilterItems uiModel.modelFilters})
+                            (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr
+                                    --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.modelFilters
+                                    })
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
 
                         SleeperRoof -> 
-                            (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr, selectedFilterItems = buildSelectedSearchFilterItems uiModel.sleeperRoofFilters})
+                            (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr
+                                    --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.sleeperRoofFilters
+                                    })
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
 
                         SleeperBunk -> 
-                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr, selectedFilterItems = buildSelectedSearchFilterItems uiModel.sleeperBunkFilters})
+                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr
+                                        --, selectedFilterItems = buildSelectedSearchFilterItems uiModel.sleeperBunkFilters
+                                        })
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
@@ -247,30 +259,39 @@ update msg (model, uiModel) =
             ( ( model , {uiModel | expandCollapseAllChecked = userAction}), Cmd.none )
  
 
-        RemoveSearchFilterItemFromPinnedSearchFilters pinnedSearchFilterItem ->
-             let
-                    selectedPinnedItem = case List.head <| Array.toList (Array.filter (\item -> item.searchFilterKey == pinnedSearchFilterItem.searchFilterKey) uiModel.selectedFilterItems) of
-                                                        Just val -> val
-                                                        Nothing -> SearchFilterType -1 "" False 0
-                    itemFromSalesStatusList =  case  List.head <| Array.toList (Array.filter (\item -> item.searchFilterKey == selectedPinnedItem.searchFilterKey) uiModel.salesStatusFilters) of
-                                                        Just val -> val
-                                                        Nothing -> SearchFilterType -1 "" False 0
+        -- RemoveSearchFilterItemFromPinnedSearchFilters pinnedSearchFilterItem ->
+        --     --( ( model , uiModel), Cmd.none )
+        --      let
+        --             -- itemFromSalesStatusList =  case  List.head <| Array.toList (Array.filter (\item -> item.index == pinnedSearchFilterItem.index) uiModel.salesStatusFilters) of
+        --             --                                         Just val -> val
+        --             --                                         Nothing -> SearchFilterType -1 "" False 0
 
-                    updatedSalesStatusFilterList = 
-                        uiModel.salesStatusFilters
-                            |> Array.get itemFromSalesStatusList.index
-                            |> Maybe.map (\mf -> { mf | userAction = False} )
-                            --|> getItemFromArray
-                            |> Maybe.map (\mf -> Array.set itemFromSalesStatusList.index mf uiModel.salesStatusFilters)
-                            |> Maybe.withDefault uiModel.salesStatusFilters
+        --             -- selectedPinnedItem = case List.head <| Array.toList (Array.filter (\item -> item.searchFilterKey == pinnedSearchFilterItem.searchFilterKey) uiModel.selectedFilterItems) of
+        --             --                                     Just val -> val
+        --             --                                     Nothing -> SearchFilterType -1 "" False 0
+        --             -- itemFromSalesStatusList =  case  List.head <| Array.toList (Array.filter (\item -> item.searchFilterKey == selectedPinnedItem.searchFilterKey) uiModel.salesStatusFilters) of
+        --             --                                     Just val -> val
+        --             --                                     Nothing -> SearchFilterType -1 "" False 0
+
+        --             updatedSalesStatusFilterList = 
+        --                 uiModel.salesStatusFilters
+        --                     |> Array.get pinnedSearchFilterItem.index
+        --                     |> Maybe.map (\mf -> { mf | userAction = False} )
+        --                     |> Maybe.map (\mf -> Array.set pinnedSearchFilterItem.index mf uiModel.salesStatusFilters)
+        --                     |> Maybe.withDefault uiModel.salesStatusFilters
                     
-                    updatedSelectedFilterList =
-                        uiModel.selectedFilterItems
-                            |> Array.filter (\item -> item.searchFilterKey /= selectedPinnedItem.searchFilterKey)
-             in
-             
-            
-                ( ( model , {uiModel | salesStatusFilters = updatedSalesStatusFilterList, selectedFilterItems = updatedSelectedFilterList} ), sendMessage (FilterCheckBoxClicked itemFromSalesStatusList.index SalesStatus False)  )
+        --             newUIModel = {uiModel | salesStatusFilters = updatedSalesStatusFilterList}
+
+        --             newFilteredTruckList = applySearchFilters model newUIModel
+
+        --             uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
+
+        --             -- updatedSelectedFilterList =
+        --             --     uiModel.selectedFilterItems
+        --             --         |> Array.filter (\item -> item.searchFilterKey /= selectedPinnedItem.searchFilterKey)
+        --      in
+        --         --( ( model , {uiModel | salesStatusFilters = updatedSalesStatusFilterList } ),  Cmd.none  )
+        --          ( ( {model | filteredTruckList = newFilteredTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
              
 ---- VIEW ----
 
@@ -432,7 +453,16 @@ view (model, uiModel) =
                             --,column[hf, wf, scrollbarY, bw 0, pde 10 10 10 0] [ lazy trucksView model.filteredTruckList]
                             ,row[ wf, bwb 0, pdt 5][
                                 row[  wf,  bw 0, pd 0 ][
-                                    lazy searchFilterBulletView uiModel.selectedFilterItems
+                                    lazy searchFilterBulletView 
+                                            << Array.fromList <| List.concat
+                                                                            [ 
+                                                                                Array.toList uiModel.salesStatusFilters,
+                                                                                Array.toList uiModel.yearFilters,
+                                                                                Array.toList uiModel.makeFilters,
+                                                                                Array.toList uiModel.modelFilters,
+                                                                                Array.toList uiModel.sleeperRoofFilters,
+                                                                                Array.toList uiModel.sleeperBunkFilters
+                                                                            ]
                                 ]
                                 
                                 -- ,
