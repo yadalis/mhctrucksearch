@@ -45,7 +45,8 @@ buildSearchFilterValueList : SearchFilterCustomType -> List Truck -> Array (Stri
 buildSearchFilterValueList searchFilterCustomType trucks =
     case searchFilterCustomType of
         SalesStatus -> 
-            List.map (\t -> t.salesStatus) trucks
+            --List.map (\t -> t.salesStatus) trucks
+            List.map .salesStatus trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
                                 Array.map (\sf -> 
@@ -53,7 +54,8 @@ buildSearchFilterValueList searchFilterCustomType trucks =
                     ) 
 
         Year -> 
-            List.map (\t -> t.year) trucks
+            --List.map (\t -> t.year) trucks
+            List.map .year trucks
                 |> applyExtraOnSearchFilter 1
                 |> (\sfArray -> 
                                 Array.map (\sf -> 
@@ -61,7 +63,8 @@ buildSearchFilterValueList searchFilterCustomType trucks =
                     )
                 
         Make -> 
-            List.map (\t -> t.make) trucks
+            --List.map (\t -> t.make) trucks
+            List.map .make trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
                                 Array.map (\sf -> 
@@ -69,7 +72,8 @@ buildSearchFilterValueList searchFilterCustomType trucks =
                     )                
 
         MakeModel -> 
-            List.map (\t -> t.model) trucks
+            --List.map (\t -> t.model) trucks
+            List.map .model trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
                                 Array.map (\sf -> 
@@ -77,7 +81,8 @@ buildSearchFilterValueList searchFilterCustomType trucks =
                     )                
 
         SleeperRoof -> 
-            List.map (\t -> t.sleeperRoof) trucks
+            --List.map (\t -> t.sleeperRoof) trucks
+            List.map .sleeperRoof trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
                                 Array.map (\sf -> 
@@ -85,7 +90,8 @@ buildSearchFilterValueList searchFilterCustomType trucks =
                     )                
                 
         SleeperBunk -> 
-            List.map (\t -> t.sleeperBunk) trucks
+            --List.map (\t -> t.sleeperBunk) trucks
+            List.map .sleeperBunk trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
                                 Array.map (\sf -> 
@@ -95,7 +101,11 @@ buildSearchFilterValueList searchFilterCustomType trucks =
 buildSearchFilterValueRecordList : SearchFilterCustomType -> List Truck -> Array SearchFilterType
 buildSearchFilterValueRecordList searchFilterCustomType trucks =
     buildSearchFilterValueList searchFilterCustomType trucks
-        |> Array.indexedMap (\index  sfValue -> {index = index, searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue, filterCategory = searchFilterCustomType})
+        |> Array.indexedMap 
+        (\index  sfValue -> 
+                        --{index = index, searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue, filterCategory = searchFilterCustomType}
+                    SearchFilterType index (Tuple.first sfValue) False (Tuple.second sfValue) searchFilterCustomType --using Constructor
+        )
 
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
