@@ -32,6 +32,7 @@ type alias Model =
         truckList : List Truck
         ,filteredTruckList : List Truck
         ,pagedTruckList : List Truck
+        ,currentPageNumber : Int
     }
 
 type alias UIModel =
@@ -48,6 +49,7 @@ type alias UIModel =
         ,sleeperBunkFilters : Array SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         ,expandCollapseAllChecked : Bool
+        
     }
 
 type alias SearchFilterState =
@@ -88,6 +90,7 @@ initialModel =
         truckList = [] -- Array.empty
         ,filteredTruckList = []
         ,pagedTruckList = []
+        ,currentPageNumber = 1
     }
 
 initalUIModel : String -> UIModel

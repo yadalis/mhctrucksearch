@@ -191,7 +191,7 @@ update msg (model, uiModel) =
                 
             in
                 --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
-                ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+                ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -243,7 +243,7 @@ update msg (model, uiModel) =
                 a2 = Debug.log "grps leng" [List.length grps, totalPages]
                                                                  
             in
-                ( ( {model | pagedTruckList = firstList } , uiModel ), Cmd.none )
+                ( ( {model | pagedTruckList = firstList, currentPageNumber = pageNumber } , uiModel ), Cmd.none )
 
 ---- VIEW ----
 
@@ -359,11 +359,13 @@ view (model, uiModel) =
                          -- Trucks Search Result List Panel 
                         ,column[hf, wfp 5,  bwl 0 , pdl 25]
                         [
-                            row[hf, wf, bwb 1, hpx 65, pd 10,  bc 221 221 221]
+                            row[hf, wf, bwb 1, hpx 65, pd 0,  bc 221 221 221]
                             [ 
-                                column[hf,Element.alignRight, bwb 0, pd 3][
+                                column[hf,Element.alignRight, bwb 0, pd 0][
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                     ,el [Element.alignBottom, pdr 5] <| textValue <| "Total page trucks found : " ++ (String.fromInt <| (List.length model.pagedTruckList))
+                                    ,el [Element.alignBottom, pdr 5] <| textValue <| "Current Page Number : " ++ (String.fromInt <| (model.currentPageNumber))
+                                    
                                 ]
                             ]
                             ,row[ wf, bwb 0, pde 5 0 5 0][
