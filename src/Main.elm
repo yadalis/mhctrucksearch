@@ -239,7 +239,7 @@ update msg (model, uiModel) =
 
 textBox uiModel=
 
-    Input.text [wf, hf, bw 0
+    Input.text [wfp 3,  bw 0
                 --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
                 , Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
             ]
@@ -289,7 +289,15 @@ view (model, uiModel) =
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [pde 78 50 50 50, inFront navBar ] --  inFront navBar is to make menu bar fixed
+                layoutWith {options = [focusStyle]}  [pde 78 50 50 50, inFront navBar
+                                            ,Font.family
+                                                [ Font.external
+                                                    { name = "Roboto"
+                                                    , url = "https://fonts.googleapis.com/css?family=Roboto"
+                                                    }
+                                                , Font.sansSerif
+                                                ] 
+                                        ] --  inFront navBar is to make menu bar fixed
                 --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
@@ -297,27 +305,27 @@ view (model, uiModel) =
                     row[hf,wf, wfmax 1920]
                     [
                         -- Search Filter Panel
-                        column [hf, wpx 300,  spy 0,  bc 221 221 221] 
+                        column [wf,  spy 15,  bc 221 221 221, alignTop] 
                         [
-                            row[wf, pd 10, bwb 1, spaceEvenly, hpx 70]
+                            row[wf, pd 10, bw 0]
                             [ 
                                 lazy textBox uiModel
-                                ,Input.button ( [ hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
+                                ,Input.button ( [hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
                                     { 
                                         onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
                                         ,label = searchBtnIcon
                                     }
                             ]
-                            ,row[centerY,   bc 245 245 245, wf, bw 0, pdt 10]
+                            ,row[centerY, bw 0, wf ]
                             [
-                                checkbox [bw one, hf, far , bw 0, wf, pdr 5] {
+                                checkbox [ pdr 5] {
                                     onChange = CollapseAllClicked
                                     ,icon = buildCollapseAllImage
                                     , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
                                     , checked = uiModel.expandCollapseAllChecked
                                 }
                             ]
-                            ,column[scrollbarY,hf, wf, spy 5, pdt 15, bw 0,  bc 240 240 240 ]
+                            ,column[wf, spy 5, bc 240 240 240, bw 0 ]
                             [
                                 if List.length model.filteredTruckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
@@ -390,7 +398,7 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
 
         searchStringBtnStyle num = 
                     if currentPageNumber == num then 
-                        [  bw 4, bc  244 66 95 ]
+                        [  bw 0, bc  244 66 95 ]
                     else
                         [   bw 1]
     in

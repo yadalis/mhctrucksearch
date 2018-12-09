@@ -1,8 +1,9 @@
 module Helpers.ElmUI exposing (..)
 
-import Element exposing (htmlAttribute, text, image, el, none)
+import Element exposing (htmlAttribute, text, image, el, none, scrollbarY)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Html.Attributes exposing (id)
+import Element.Font as Font
 
 eId idValue
     = htmlAttribute (id idValue)
@@ -19,9 +20,10 @@ buildCollapseAllImage userAction =
 expandCollapseAll state =
     
         if state then
-            hf
+            [hf,  pd 10]
         else
-            hpx 0
+            [hfmax 0, pd 0, scrollbarY]
+            --bw 1
 
 buildChkBoxImage userAction =
         if userAction == True then 

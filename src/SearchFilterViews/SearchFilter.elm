@@ -154,17 +154,17 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                         , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
                     ]
     in
-        row[spy 15, wf, pdb 0]
+        row[ wf, bw 0]
         [
-            column[spy 10, wf,  bw one]
+            column[spy 0, wf,  bw one]
             [
-                row[bw 0, hf, bwb 1, wf, pdb 1, bc 221 221 221]
+                row[bw 0,  bwb 1, wf, pdb 1, bc 205 205 205]
                 [
                     column[wf, hf][
                         paragraph [bw one, fal, wf, hpx 25, pd 5, centerY][textValue <| filterLabel]
                     ]
                     ,column[pdr 5][
-                        checkbox [bw one, hf, far , bw 0] {
+                        checkbox [bw one,   far , bw 0] {
                                     onChange = CollapseClicked searchFilterState
                                     ,icon = buildCollapseAllImage
                                     , label = labelLeft [] <| none
@@ -173,7 +173,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 }
                     ]
                 ]
-                ,column[spy 10, pdl 15, scrollbarY, wf, expandCollapseAll searchFilterState.userAction]
+                ,column ( [spy 10, wf] ++ expandCollapseAll searchFilterState.userAction)
                 (
                     Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion
                 )
