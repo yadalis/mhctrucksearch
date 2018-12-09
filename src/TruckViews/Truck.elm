@@ -49,7 +49,7 @@ truckView index truck =
                 ]
                 ,row[spaceEvenly, hf, wf]
                 [
-                    column[bw 0, wf, hf, pd 5, spy 15]
+                    column[bw 0, wfmax 350, hf, pd 5, spy 15]
                     [
                         paragraph[Font.light, fal][ textValue <| getTruckIdNumber truck]
                         ,paragraph[Font.light, fal][ textValue <| "Make: " ++  truck.make]

@@ -220,28 +220,14 @@ update msg (model, uiModel) =
                 ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, expandCollapseAllChecked = userAction}), Cmd.none )
 
         PageNumberClicked pageNumber ->
-            let
-                -- totalSearchResultTrucks = List.length model.filteredTruckList
-                -- endPosition =   if (startPosition + 99) <= totalSearchResultTrucks then 
-                --                     (startPosition + 99) 
-                --                 else
-                --                     ( totalSearchResultTrucks - startPosition )
-                
+            let              
                 grps = greedyGroupsOf 100 model.filteredTruckList
-                newgrps = List.drop (pageNumber - 1) grps
+                grpByPageNumber = List.drop (pageNumber - 1) grps
 
-                firstList = case List.head newgrps of
-                                    Just lst -> lst
+                firstList = case List.head grpByPageNumber of
+                                    Just page -> page
                                     Nothing -> []
-                
-                
-                --a = Debug.log "start & end" [startPosition, endPosition, totalSearchResultTrucks]
-                -- a1 = Debug.log "start & end" [List.length <| case (List.head <| grps) of 
-                --                                                         Just val -> val
-                --                                                         Nothing -> []]
-                
-                -- a2 = Debug.log "grps leng" [List.length grps, totalPages]
-                                                                 
+               
             in
                 ( ( {model | pagedTruckList = firstList, currentPageNumber = pageNumber } , uiModel ), Cmd.none )
 
@@ -307,7 +293,7 @@ view (model, uiModel) =
                     row[hf,wf, wfmax 1920]
                     [
                         -- Search Filter Panel
-                        column [hf, wfmin 300,  spy 0,  bc 221 221 221] 
+                        column [hf, wpx 300,  spy 0,  bc 221 221 221] 
                         [
                             row[wf, pd 10, bwb 1, spaceEvenly]
                             [ 
@@ -363,15 +349,12 @@ view (model, uiModel) =
                             [ 
                                 row[wf, hf]
                                 [
-                                    wrappedRow[  wf,  bw 0, pdl 2 , alignTop]
-                                    --<| getPageNumbersList  model uiModel  -- use this style to skip parans...
-                                    <| (buildPageNumbersView  model.filteredTruckList model.currentPageNumber)
+                                    wrappedRow [wf,  bw 0, pdl 2 , alignTop]
+                                        -- using <| u can avoid parans around the below func and its params
+                                        <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                 ]
                                 ,column[hf,bw 0, pd 0,  bc 221 221 221][
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
-                                    --,el [Element.alignBottom, pdr 5] <| textValue <| "Total page trucks found : " ++ (String.fromInt <| (List.length model.pagedTruckList))
-                                    --,el [Element.alignBottom, pdr 5] <| textValue <| "Current Page Number : " ++ (String.fromInt <| (model.currentPageNumber))
-                                    
                                 ]
                             ]
                             ,row[ wf, bwb 0, pde 5 0 5 0][
@@ -386,11 +369,6 @@ view (model, uiModel) =
                                                                                 Array.toList uiModel.sleeperBunkFilters
                                                                             ]
                             ]
-                            -- ,row[ wf, bwb 0, pd 0][
-                            --     wrappedRow[  wf,  bw 0, pd 0 ]
-                            --         --<| getPageNumbersList  model uiModel  -- use this style to skip parans...
-                            --         <| (buildPageNumbersView  model.filteredTruckList model.currentPageNumber)
-                            -- ]
                             ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
                             [
                                     lazy trucksView model.pagedTruckList -- model.filteredTruckList
@@ -401,56 +379,8 @@ view (model, uiModel) =
                         --     getPageNumbersList
                     ]
 
-getNumberList model =
-    let
-        --lng = String.split "." (String.fromFloat (Basics.toFloat ( List.length model.filteredTruckList  )/ 100))
-        -- (pageNumberIntPositionPart, pageNumberDecimalPositionPart) =
-        --     model.filteredTruckList
-        --         |> List.length
-        --         |> Basics.toFloat
-        --         |> (\flt -> flt / 100)
-        --         |> String.fromFloat
-        --         |> String.split "."
-        --         |> (\brokenStrList -> 
-                                   
-        --                             (
-        --                                 case List.head brokenStrList of
-        --                                             Just val -> case String.toInt val of 
-        --                                                             Just num -> num 
-        --                                                             Nothing -> 0
-        --                                             Nothing -> 0
-        --                                 ,
-        --                                     if List.length brokenStrList > 1 then
-        --                                         case List.head << List.reverse <| brokenStrList of
-        --                                                 Just val -> case String.toInt val of 
-        --                                                                 Just num -> num 
-        --                                                                 Nothing -> 0
-        --                                                 Nothing -> 0
-        --                                     else
-        --                                         0
-        --                             )
-
-        --                         -- let -- this is fine too
-        --                         --     first = case List.head strList of
-        --                         --                 Just val -> val
-        --                         --                 Nothing -> ""
-        --                         --     second = case List.head << List.reverse <| strList of
-        --                         --                 Just val -> val
-        --                         --                 Nothing -> ""
-        --                         -- in
-        --                         --     (first, second)
-                                 
-        --         )
-
-        -- totalPages = pageNumberIntPositionPart + if pageNumberDecimalPositionPart > 0 then 1 else 0
-        grps = greedyGroupsOf 100 model.filteredTruckList
-    in
-        (List.range 1  <| List.length grps)
-
 buildPageNumbersView  filteredTruckList currentPageNumber = 
     let
-        --(pageNumbers, totalPages) =  getNumberList  model uiModel
-
         grps = greedyGroupsOf 100 filteredTruckList
         pageNumbers = (List.range 1  <| List.length grps)
 
@@ -459,17 +389,12 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
                         [  bw 4, bc  244 66 95 ]
                     else
                         [   bw 1]
-        
-
     in
     
         if List.length pageNumbers > 1 then
             List.map (\num -> 
-                    
-                        row[pd 0, bw 0,wpx 35, hpx 35]
+                           row[pd 0, bw 0,wpx 35, hpx 35]
                                     [
-                                        --el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
-                                        --Input.button [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
                                         Input.button ([
                                                         if currentPageNumber /= num then
                                                             mouseOver [ bc  0 0 0 ]
@@ -479,12 +404,12 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
                                              ,
                                                         pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] ++ (searchStringBtnStyle num))
                                             { 
-                                                onPress = Just (PageNumberClicked num ) --Just (PageNumberClicked (((num - 1) * 100) + 1)  totalPages)
+                                                onPress = Just (PageNumberClicked num )
                                                 ,label = textValue <| String.fromInt num
                                             }
                                     ]
 
-                    ) pageNumbers -- use this style to skip parans...
+                    ) pageNumbers
         else
             [none]
 
