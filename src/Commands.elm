@@ -37,6 +37,8 @@ trucksDecoder  =
         |> required "condition" Decode.string
         |> required "make" Decode.string
         |> required "model" Decode.string
+        |> required "engineMake" Decode.string
+        |> required "engineModel" Decode.string
         |> required "apu" Decode.string
         |> required "cdl" Decode.string
         |> required "year" Decode.string
@@ -46,4 +48,9 @@ trucksDecoder  =
         |> required "salesStatus" Decode.string
         |> required "sleeperRoof" Decode.string
         |> required "sleeperBunk" Decode.string
+        |> required "sleeperInches" Decode.string
+        |> required "chassisNumber" Decode.string
+        |> required "transType" Decode.string
+        |> required "mileage" Decode.string
+        |> required "location" Decode.string
     

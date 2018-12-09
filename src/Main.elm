@@ -103,6 +103,10 @@ update msg (model, uiModel) =
                             Err err ->
                                     []
 
+                -- x = List.map .sleeperInches trucks
+
+                -- u = Debug.log "asddddddddddddddd" [x]
+                
                 --c = Debug.log "Updated year list by held salesstatus"  [trucks]--, newUIModel1.yearFilters]
 
                 salesStatusFilters = buildSearchFilterValueRecordList SalesStatus trucks

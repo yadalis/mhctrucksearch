@@ -11,15 +11,14 @@ import List.Unique exposing (..)
 import Array exposing (..)
 import SearchFilterViews.SearchFilter exposing (..)
 
-
-getTruckIdNumber : Truck -> String
-getTruckIdNumber truck =
+buildTruckIdNumber : Truck -> (String, String)
+buildTruckIdNumber truck =
     if truck.stockNumber > 0 then 
-        "Stock Number: i0" ++  String.fromInt truck.stockNumber
+        ("Stock#: " , "i0" ++ String.fromInt truck.stockNumber)
     else if truck.appraisalNumber > 0 then 
-        "Appraisal Number: A" ++  String.fromInt truck.appraisalNumber
+        ("Appraisal#: " , "A" ++ String.fromInt truck.appraisalNumber)
     else
-        "PO Number: " ++ truck.poNumber
+        ("PO#: " , "P" ++ truck.poNumber)
         
 hasAnyOfSearchFilterValuesChecked searchFilters =
         searchFilters

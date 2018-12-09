@@ -15,6 +15,8 @@ type alias Truck =
         , condition         : String
         , make              : String
         , model             : String
+        , engineMake        : String
+        , engineModel       : String
         , apu               : String
         , cdl               : String
         , year              : String
@@ -23,6 +25,11 @@ type alias Truck =
         , salesStatus       : String
         , sleeperRoof       : String
         , sleeperBunk       : String
+        , sleeperInches     : String
+        , chassisNumber     : String
+        , transType         : String
+        , mileage           : String
+        , location          : String
     }
 
 type alias Model =

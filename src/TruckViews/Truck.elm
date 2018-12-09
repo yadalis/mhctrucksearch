@@ -41,25 +41,30 @@ truckView index truck =
             [
                 row[]
                 [
-                    paragraph [Font.size 25, Font.bold, fc  244 66 95] [textValue <| truck.title]
+                    paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
                 ]
                 ,row[]
                 [
-                    paragraph [Font.size 20, Font.bold] [textValue <| " $" ++  String.fromInt truck.price ++ ".00"]
-                ]
-                ,row[spaceEvenly, hf, wf]
-                [
-                    column[bw 0, wfmax 350, hf, pd 5, spy 15]
-                    [
-                        paragraph[Font.light, fal][ textValue <| getTruckIdNumber truck]
-                        ,paragraph[Font.light, fal][ textValue <| "Make: " ++  truck.make]
-                        ,paragraph[Font.light, fal][ textValue <| "Model: " ++  truck.model]
+                    paragraph [Font.size 26, Font.bold, fc 68 68 68] [textValue <| 
+                        buildPriceValue truck.price
                     ]
-                    ,column[bw 0, wf, hf, pd 5, spy 15]
+                ]
+                ,row[spaceEvenly, hf, wf, Font.size 16]
+                [
+                    column[bw 0, wfmax 350, hf, pd 0, spy 8]
                     [
-                        paragraph[Font.light, fal][ textValue <| "Sales Status: " ++  truck.salesStatus]
-                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Roof: " ++  truck.sleeperRoof]
-                        ,paragraph[Font.light, fal][ textValue <| "Sleeper Bunk: " ++  truck.sleeperBunk]
+                        dataFieldView "Location:" truck.location
+                        ,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
+                        ,dataFieldView "Chassis#:" truck.chassisNumber
+                        ,dataFieldView "Mileage:"  truck.mileage
+                        ,dataFieldView "Sleeper Size:" truck.sleeperInches
+                    ]
+                    ,column[bw 0, wf, hf, pd 0, spy 8]
+                    [
+                        dataFieldView  "Engine Make:"   truck.engineMake
+                        ,dataFieldView  "Engine Make:"   truck.engineModel
+                        ,dataFieldView  "Horsepower:" ""
+                        ,dataFieldView  "Transmission:"    truck.transType
                     ]
                 ]
             ]
@@ -67,3 +72,20 @@ truckView index truck =
             -- column[wfp 4, bw 2, hf, pdl 15]
             -- []
         ]
+
+dataFieldView fieldName fieldValue =
+    row[bw 0, wf]
+    [
+        paragraph[fal,spy 1, Font.size 18,  fc 105 105 105]
+        [
+            el[Font.bold ] <| textValue <| fieldName
+            , el[pdl 5, Font.size 16] <| textValue <| fieldValue
+        ]
+        
+    ]
+
+buildPriceValue price =
+    if price == 0 then
+        "Call for pricing"
+    else
+        " $" ++  String.fromInt price ++ ".00"
