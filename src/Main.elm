@@ -299,7 +299,7 @@ view (model, uiModel) =
                         -- Search Filter Panel
                         column [hf, wpx 300,  spy 0,  bc 221 221 221] 
                         [
-                            row[wf, pd 10, bwb 1, spaceEvenly]
+                            row[wf, pd 10, bwb 1, spaceEvenly, hpx 70]
                             [ 
                                 lazy textBox uiModel
                                 ,Input.button ( [ hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
@@ -349,11 +349,11 @@ view (model, uiModel) =
                          -- Trucks Search Result List Panel 
                         ,column[hf, wfp 5,  bwl 0 , pdl 25]
                         [
-                            row[hf, wf, bwb 1, hpx 65, pd 0,  bc 221 221 221]
+                            row[hf, wf, bwb 1, hpx 70 , pd 0,  bc 221 221 221]
                             [ 
                                 row[wf, hf]
                                 [
-                                    wrappedRow [wf,  bw 0, pdl 2 , alignTop]
+                                    wrappedRow [wf,  bw 0, pdl 5 , alignTop]
                                         -- using <| u can avoid parans around the below func and its params
                                         <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                 ]
@@ -397,7 +397,7 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
     
         if List.length pageNumbers > 1 then
             List.map (\num -> 
-                           row[pd 0, bw 0,wpx 35, hpx 35]
+                           row[pd 0, bw 0,wpx 30, hpx 30, pdt 10]
                                     [
                                         Input.button ([
                                                         if currentPageNumber /= num then
