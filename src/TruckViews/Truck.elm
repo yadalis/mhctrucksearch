@@ -49,21 +49,22 @@ truckView index truck =
                         buildPriceValue truck.price
                     ]
                 ]
-                ,row[spaceEvenly, hf, wf, Font.size 16]
+                --,row[spaceEvenly, hf, wf, Font.size 16]
+                ,row[hf, wf, Font.size 16]
                 [
                     column[bw 0, wfmax 350, hf, pd 0, spy 8]
                     [
-                        dataFieldView "Location:" truck.location
+                        dataFieldView "Location:" "Kansas City | Internet Sales"
                         ,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
                         ,dataFieldView "Chassis#:" truck.chassisNumber
                         ,dataFieldView "Mileage:"  truck.mileage
                         ,dataFieldView "Sleeper Size:" truck.sleeperInches
                     ]
-                    ,column[bw 0, wf, hf, pd 0, spy 8]
+                    ,column[bw 0,  wf, hf, pd 0, spy 8]
                     [
                         dataFieldView  "Engine Make:"   truck.engineMake
-                        ,dataFieldView  "Engine Make:"   truck.engineModel
-                        ,dataFieldView  "Horsepower:" ""
+                        ,dataFieldView  "Engine Model:"   truck.engineModel
+                        ,dataFieldView  "Horsepower:" truck.engineHP
                         ,dataFieldView  "Transmission:"    truck.transType
                     ]
                 ]
@@ -79,7 +80,7 @@ dataFieldView fieldName fieldValue =
         paragraph[fal,spy 1, Font.size 18,  fc 105 105 105]
         [
             el[Font.bold ] <| textValue <| fieldName
-            , el[pdl 5, Font.size 16] <| textValue <| fieldValue
+            , el[pdl 5, Font.size 16, fc 97 97 97] <| textValue <| fieldValue
         ]
         
     ]

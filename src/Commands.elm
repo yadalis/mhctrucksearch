@@ -39,6 +39,7 @@ trucksDecoder  =
         |> required "model" Decode.string
         |> required "engineMake" Decode.string
         |> required "engineModel" Decode.string
+        |> required "engineHP" Decode.string
         |> required "apu" Decode.string
         |> required "cdl" Decode.string
         |> required "year" Decode.string

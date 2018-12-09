@@ -17,6 +17,7 @@ type alias Truck =
         , model             : String
         , engineMake        : String
         , engineModel       : String
+        , engineHP          : String
         , apu               : String
         , cdl               : String
         , year              : String
