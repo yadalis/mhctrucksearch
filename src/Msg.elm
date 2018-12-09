@@ -16,4 +16,4 @@ type Msg
     | HandleKeyboardEvent
     | CollapseClicked SearchFilterState Bool
     | CollapseAllClicked Bool
-    | PageNumberClicked Int Int
+    | PageNumberClicked Int

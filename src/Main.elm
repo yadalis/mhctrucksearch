@@ -219,7 +219,7 @@ update msg (model, uiModel) =
             in
                 ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, expandCollapseAllChecked = userAction}), Cmd.none )
 
-        PageNumberClicked pageNumber totalPages ->
+        PageNumberClicked pageNumber ->
             let
                 -- totalSearchResultTrucks = List.length model.filteredTruckList
                 -- endPosition =   if (startPosition + 99) <= totalSearchResultTrucks then 
@@ -236,11 +236,11 @@ update msg (model, uiModel) =
                 
                 
                 --a = Debug.log "start & end" [startPosition, endPosition, totalSearchResultTrucks]
-                a1 = Debug.log "start & end" [List.length <| case (List.head <| grps) of 
-                                                                        Just val -> val
-                                                                        Nothing -> []]
+                -- a1 = Debug.log "start & end" [List.length <| case (List.head <| grps) of 
+                --                                                         Just val -> val
+                --                                                         Nothing -> []]
                 
-                a2 = Debug.log "grps leng" [List.length grps, totalPages]
+                -- a2 = Debug.log "grps leng" [List.length grps, totalPages]
                                                                  
             in
                 ( ( {model | pagedTruckList = firstList, currentPageNumber = pageNumber } , uiModel ), Cmd.none )
@@ -361,10 +361,16 @@ view (model, uiModel) =
                         [
                             row[hf, wf, bwb 1, hpx 65, pd 0,  bc 221 221 221]
                             [ 
-                                column[hf,Element.alignRight, bwb 0, pd 0][
+                                row[wf, hf]
+                                [
+                                    wrappedRow[  wf,  bw 0, pdl 2 , alignTop]
+                                    --<| getPageNumbersList  model uiModel  -- use this style to skip parans...
+                                    <| (buildPageNumbersView  model.filteredTruckList model.currentPageNumber)
+                                ]
+                                ,column[hf,bw 0, pd 0,  bc 221 221 221][
                                     el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
-                                    ,el [Element.alignBottom, pdr 5] <| textValue <| "Total page trucks found : " ++ (String.fromInt <| (List.length model.pagedTruckList))
-                                    ,el [Element.alignBottom, pdr 5] <| textValue <| "Current Page Number : " ++ (String.fromInt <| (model.currentPageNumber))
+                                    --,el [Element.alignBottom, pdr 5] <| textValue <| "Total page trucks found : " ++ (String.fromInt <| (List.length model.pagedTruckList))
+                                    --,el [Element.alignBottom, pdr 5] <| textValue <| "Current Page Number : " ++ (String.fromInt <| (model.currentPageNumber))
                                     
                                 ]
                             ]
@@ -380,11 +386,11 @@ view (model, uiModel) =
                                                                                 Array.toList uiModel.sleeperBunkFilters
                                                                             ]
                             ]
-                            ,row[ wf, bwb 0, pd 0][
-                                wrappedRow[  wf,  bw 0, pd 0 ]
-                                    --<| getPageNumbersList  model uiModel  -- use this style to skip parans...
-                                    <| (getPageNumbersList  model uiModel)
-                            ]
+                            -- ,row[ wf, bwb 0, pd 0][
+                            --     wrappedRow[  wf,  bw 0, pd 0 ]
+                            --         --<| getPageNumbersList  model uiModel  -- use this style to skip parans...
+                            --         <| (buildPageNumbersView  model.filteredTruckList model.currentPageNumber)
+                            -- ]
                             ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
                             [
                                     lazy trucksView model.pagedTruckList -- model.filteredTruckList
@@ -395,72 +401,92 @@ view (model, uiModel) =
                         --     getPageNumbersList
                     ]
 
-getNumberList model uiModel =
+getNumberList model =
     let
         --lng = String.split "." (String.fromFloat (Basics.toFloat ( List.length model.filteredTruckList  )/ 100))
-        (pageNumberIntPositionPart, pageNumberDecimalPositionPart) =
-            model.filteredTruckList
-                |> List.length
-                |> Basics.toFloat
-                |> (\flt -> flt / 100)
-                |> String.fromFloat
-                |> String.split "."
-                |> (\brokenStrList -> 
+        -- (pageNumberIntPositionPart, pageNumberDecimalPositionPart) =
+        --     model.filteredTruckList
+        --         |> List.length
+        --         |> Basics.toFloat
+        --         |> (\flt -> flt / 100)
+        --         |> String.fromFloat
+        --         |> String.split "."
+        --         |> (\brokenStrList -> 
                                    
-                                    (
-                                        case List.head brokenStrList of
-                                                    Just val -> case String.toInt val of 
-                                                                    Just num -> num 
-                                                                    Nothing -> 0
-                                                    Nothing -> 0
-                                        ,
-                                            if List.length brokenStrList > 1 then
-                                                case List.head << List.reverse <| brokenStrList of
-                                                        Just val -> case String.toInt val of 
-                                                                        Just num -> num 
-                                                                        Nothing -> 0
-                                                        Nothing -> 0
-                                            else
-                                                0
-                                    )
+        --                             (
+        --                                 case List.head brokenStrList of
+        --                                             Just val -> case String.toInt val of 
+        --                                                             Just num -> num 
+        --                                                             Nothing -> 0
+        --                                             Nothing -> 0
+        --                                 ,
+        --                                     if List.length brokenStrList > 1 then
+        --                                         case List.head << List.reverse <| brokenStrList of
+        --                                                 Just val -> case String.toInt val of 
+        --                                                                 Just num -> num 
+        --                                                                 Nothing -> 0
+        --                                                 Nothing -> 0
+        --                                     else
+        --                                         0
+        --                             )
 
-                                -- let -- this is fine too
-                                --     first = case List.head strList of
-                                --                 Just val -> val
-                                --                 Nothing -> ""
-                                --     second = case List.head << List.reverse <| strList of
-                                --                 Just val -> val
-                                --                 Nothing -> ""
-                                -- in
-                                --     (first, second)
+        --                         -- let -- this is fine too
+        --                         --     first = case List.head strList of
+        --                         --                 Just val -> val
+        --                         --                 Nothing -> ""
+        --                         --     second = case List.head << List.reverse <| strList of
+        --                         --                 Just val -> val
+        --                         --                 Nothing -> ""
+        --                         -- in
+        --                         --     (first, second)
                                  
-                )
+        --         )
 
-        totalPages = pageNumberIntPositionPart + if pageNumberDecimalPositionPart > 0 then 1 else 0
+        -- totalPages = pageNumberIntPositionPart + if pageNumberDecimalPositionPart > 0 then 1 else 0
+        grps = greedyGroupsOf 100 model.filteredTruckList
     in
-        (List.range 1  <| if totalPages == 1 then 0 else totalPages, totalPages)
+        (List.range 1  <| List.length grps)
 
-getPageNumbersList  model uiModel  = 
+buildPageNumbersView  filteredTruckList currentPageNumber = 
     let
-        (pageNumbers, totalPages) =  getNumberList  model uiModel
+        --(pageNumbers, totalPages) =  getNumberList  model uiModel
+
+        grps = greedyGroupsOf 100 filteredTruckList
+        pageNumbers = (List.range 1  <| List.length grps)
+
+        searchStringBtnStyle num = 
+                    if currentPageNumber == num then 
+                        [  bw 4, bc  244 66 95 ]
+                    else
+                        [   bw 1]
         
- 
+
     in
     
-        List.map (\num -> 
-                
-                    row[pd 0, bw 0,wpx 35, hpx 35]
-                                [
-                                    --el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
-                                    --Input.button [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
-                                    Input.button [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ]
-                                        { 
-                                            onPress = Just (PageNumberClicked num  totalPages) --Just (PageNumberClicked (((num - 1) * 100) + 1)  totalPages)
-                                            ,label = textValue <| String.fromInt num
-                                        }
-                                ]
+        if List.length pageNumbers > 1 then
+            List.map (\num -> 
+                    
+                        row[pd 0, bw 0,wpx 35, hpx 35]
+                                    [
+                                        --el [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
+                                        --Input.button [pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] <| textValue <| String.fromInt num
+                                        Input.button ([
+                                                        if currentPageNumber /= num then
+                                                            mouseOver [ bc  0 0 0 ]
+                                                        else
+                                                            mouseOver [ bc  244 66 95 ]
+                                             
+                                             ,
+                                                        pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] ++ (searchStringBtnStyle num))
+                                            { 
+                                                onPress = Just (PageNumberClicked num ) --Just (PageNumberClicked (((num - 1) * 100) + 1)  totalPages)
+                                                ,label = textValue <| String.fromInt num
+                                            }
+                                    ]
 
-                ) pageNumbers -- use this style to skip parans...
+                    ) pageNumbers -- use this style to skip parans...
+        else
+            [none]
 
 
 ---- PROGRAM ----
