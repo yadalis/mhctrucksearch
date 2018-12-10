@@ -279,10 +279,10 @@ view (model, uiModel) =
                     row[ wfmax 1920, hpx 75,  alpha  0.99]
                     [
                         column[wpx 50][]
-                        ,column[bc 250 250 250, wfp 2, hf, bwb 2, brc 97 97 97][
+                        ,column[bc 250 250 250, wfp 2, hf, bwb 0, brc 97 97 97][
                             image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ]
-                        ,column[bc 248 248 248, wf, hf, bwb 2, brc 97 97 97, pd 10,fc 97 97 97][
+                        ,column[bc 248 248 248, wf, hf, bwb 0, brc 97 97 97, pd 10,fc 97 97 97][
                             el [Font.size 26, letterSpacing 2 ] <| textValue "Suresh Yadali"
                                 ,el [Font.size 18, pdt 15, letterSpacing 1] <| textValue "Kansas City, MO"
                         ]
@@ -358,7 +358,7 @@ view (model, uiModel) =
                          -- Trucks Search Result List Panel 
                         ,column[hf, wfp 5,  bwl 0 , pdl 25]
                         [
-                            row[hf, wf, bwb 1, hpx 70 , pd 0,  bc 221 221 221]
+                            row[hf, wf, bwb 0, hpx 70 , pd 0,  bc 221 221 221]
                             [ 
                                 row[wf, hf]
                                 [

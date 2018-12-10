@@ -53,15 +53,21 @@ truckView index truck =
             ,
             column[wf, hf, pd 5, spy 15]
             [
-                row[]
+                column[]
                 [
                     link [wf,  Element.htmlAttribute (target "_blank") ]
                         { url = 
                             crossOrigin "https://www.mhc.com/trucks/used/" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
                             , label = paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
                         }
-
-                    --paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
+                    ,
+                        if truck.stockNumber == 0 then
+                            --paragraph [Font.size 28, Font.bold, fc  190 5 30] [
+                            --el [Font.size 22, Font.regular,  fc  167 167 167, pdt 5] << textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber
+                            paragraph [Font.size 22, fc  167 167 167, pdt 5, bw 0, fal] 
+                                [textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber]
+                        else
+                            none
                 ]
                 ,row[]
                 [
@@ -72,7 +78,7 @@ truckView index truck =
                 --,row[spaceEvenly, hf, wf, Font.size 16]
                 ,row[hf, wf, Font.size 16]
                 [
-                    column[bw 0, wfmax 350, hf, pd 0, spy 8]
+                    column[bw 0, wfmax 350, hf, pd 0, spy 5]
                     [
                         dataFieldView "Location:" <| 
                                                     if String.isEmpty truck.locationName then
@@ -80,12 +86,15 @@ truckView index truck =
                                                     else
                                                         truck.locationName
                                                          
-                        ,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
+                        --,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
+                        ,dataFieldView "Stock#:" <| if truck.stockNumber == 0 then "N/A" else String.fromInt truck.stockNumber
                         ,dataFieldView "Chassis#:" truck.chassisNumber
-                        ,dataFieldView "Mileage:"  truck.mileage
+                        ,dataFieldView "Mileage:" <|  format "0,0" <| case String.toFloat truck.mileage of 
+                                                                                Just miles -> miles
+                                                                                Nothing -> 0.0
                         ,dataFieldView "Sleeper Size:" truck.sleeperInches
                     ]
-                    ,column[bw 0,  wf, hf, pd 0, spy 8]
+                    ,column[bw 0,  wf, hf, pd 0, spy 5]
                     [
                         dataFieldView  "Engine Make:"   truck.engineMake
                         ,dataFieldView  "Engine Model:"   truck.engineModel
@@ -106,8 +115,7 @@ dataFieldView fieldName fieldValue =
         [
             el[Font.bold ] <| textValue <| fieldName
             , el[pdl 5, Font.size 16, fc 97 97 97] <| textValue <| fieldValue
-        ]
-        
+        ]   
     ]
 
 buildPriceValue price =
