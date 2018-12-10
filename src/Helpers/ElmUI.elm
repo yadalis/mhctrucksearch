@@ -29,7 +29,7 @@ buildChkBoxImage userAction =
         if userAction == True then 
             image [hpx 16] {src = "checked.png", description ="Logo" }
         else 
-            el [hpx 16, wpx 16, bw 1, br 3] <| none --this put empty square, unchecked checkbox style
+            el [hpx 16, wpx 16, bw 2,brc 101 101 101, br 3] <| none --this put empty square, unchecked checkbox style
 
 one = 0
 

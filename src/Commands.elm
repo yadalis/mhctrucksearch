@@ -32,7 +32,7 @@ trucksDecoder  =
         |> required "stockNumber" Decode.int
         |> required "appraisalNumber" Decode.int
         |> required "poNumber" Decode.string
-        |> required "price" Decode.int
+        |> required "price" Decode.float
         |> required "title" Decode.string
         |> required "condition" Decode.string
         |> required "make" Decode.string
@@ -53,5 +53,6 @@ trucksDecoder  =
         |> required "chassisNumber" Decode.string
         |> required "transType" Decode.string
         |> required "mileage" Decode.string
-        |> required "location" Decode.string
+        |> required "locationNumber" Decode.string
+        |> required "locationName" Decode.string
     

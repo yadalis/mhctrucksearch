@@ -10,7 +10,7 @@ type alias Truck =
         , stockNumber       : Int
         , appraisalNumber   : Int
         , poNumber          : String   
-        , price             : Int
+        , price             : Float
         , title             : String
         , condition         : String
         , make              : String
@@ -31,6 +31,7 @@ type alias Truck =
         , transType         : String
         , mileage           : String
         , location          : String
+        , locationName      : String
     }
 
 type alias Model =
@@ -118,7 +119,7 @@ initalUIModel jsFlag =
                                             -- this list can be generated off of datasource, when that happens we dont need to hardcode index value, just use indexedMap
                                             -- and set the generated index value to index prop
         expandCollapseSearchFilterStates = Array.repeat 1 {index = 0,searchFilterCustomType = SalesStatus, userAction = False} 
-                                                |> Array.push {index = 1,searchFilterCustomType = Year, userAction = False}
+                                                |> Array.push {index = 1,searchFilterCustomType = Year, userAction = True}
                                                 |> Array.push {index = 2,searchFilterCustomType = Make, userAction = True}
                                                 |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
                                                 |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}

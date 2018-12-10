@@ -116,12 +116,12 @@ update msg (model, uiModel) =
                 sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof trucks
                 sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk trucks
 
-                filteredTruckList = List.filter (\t -> t.year == "2019" ) trucks
-                pagedTruckList = List.take 100 filteredTruckList
+                --filteredTruckList = List.filter (\t -> t.year == "2019" ) trucks
+                pagedTruckList = List.take 100 trucks
             in
                 ( 
                     (
-                        {   model     | truckList = trucks,  filteredTruckList = filteredTruckList, pagedTruckList = pagedTruckList},
+                        {   model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
                         { 
                             uiModel   | 
                                         yearFilters = yearFilters, 
@@ -276,14 +276,15 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[ wfmax 1920, hpx 75,  fc 250 250 250, alpha  0.99]
+                    row[ wfmax 1920, hpx 75,  alpha  0.99]
                     [
                         column[wpx 50][]
                         ,column[bc 250 250 250, wfp 2, hf, bwb 2, brc 97 97 97][
                             image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ]
-                        ,column[bc 240 240 240, wf, hf, bwb 2, brc 97 97 97][
-                            
+                        ,column[bc 248 248 248, wf, hf, bwb 2, brc 97 97 97, pd 10,fc 97 97 97][
+                            el [Font.size 26, letterSpacing 2 ] <| textValue "Suresh Yadali"
+                                ,el [Font.size 18, pdt 15, letterSpacing 1] <| textValue "Kansas City, MO"
                         ]
                         ,column[wpx 50][]
                     ] 
@@ -325,7 +326,7 @@ view (model, uiModel) =
                                     , checked = uiModel.expandCollapseAllChecked
                                 }
                             ]
-                            ,column[wf, spy 5, bc 240 240 240, bw 0 ]
+                            ,column[wf, spy 5, bc 231 231 231, bw 0 ]
                             [
                                 if List.length model.filteredTruckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel

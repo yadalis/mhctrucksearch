@@ -17,6 +17,8 @@ import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Utils exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
+import Numeral exposing(format, formatWithLanguage)
+import Url.Builder exposing (..)
 
 trucksView  : List Truck -> Element Msg
 trucksView trucks =
@@ -30,23 +32,41 @@ truckView index truck =
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
     in
     
-        row[bwb 0, wf, pd 5, bc 240 240 240, hf ] --bc 47 48 49
+        row[bwb 0, wf, pd 5, bc 231 231 231, hf ] --bc 47 48 49
         [
             column[wfmax 225, bw 0, hf, pdt 5]
             [
-                image [bw one, pdl 0, hf] {src = "https://az832863.vo.msecnd.net/~/media/images/trucks/i0414681/i0414681_1.jpg?_=-1039260339&mw=2048&thn=0&w=1024", description ="Logo" }
+                image [bw one, pdl 0, wf] {src = 
+                                            
+                                                    String.split "&" truck.primaryImageLink
+                                                        |> (\list -> case  List.head list  of
+                                                                    Just url -> 
+                                                                                if String.isEmpty url then
+                                                                                    "photoscomingsoon.png"     
+                                                                                else
+                                                                                    url
+                                                                    Nothing -> "photoscomingsoon.png"
+                                                        )
+                                            
+                                            , description ="Logo" }
             ]
             ,
             column[wf, hf, pd 5, spy 15]
             [
                 row[]
                 [
-                    paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
+                    link [wf,  Element.htmlAttribute (target "_blank") ]
+                        { url = 
+                            crossOrigin "https://www.mhc.com/trucks/used/" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
+                            , label = paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
+                        }
+
+                    --paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
                 ]
                 ,row[]
                 [
                     paragraph [Font.size 26, Font.bold, fc 68 68 68] [textValue <| 
-                        buildPriceValue truck.price
+                        buildPriceValue truck.price                        
                     ]
                 ]
                 --,row[spaceEvenly, hf, wf, Font.size 16]
@@ -54,7 +74,12 @@ truckView index truck =
                 [
                     column[bw 0, wfmax 350, hf, pd 0, spy 8]
                     [
-                        dataFieldView "Location:" "Kansas City | Internet Sales"
+                        dataFieldView "Location:" <| 
+                                                    if String.isEmpty truck.locationName then
+                                                        "N/A" 
+                                                    else
+                                                        truck.locationName
+                                                         
                         ,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
                         ,dataFieldView "Chassis#:" truck.chassisNumber
                         ,dataFieldView "Mileage:"  truck.mileage
@@ -89,4 +114,4 @@ buildPriceValue price =
     if price == 0 then
         "Call for pricing"
     else
-        " $" ++  String.fromInt price ++ ".00"
+       format "$0,0" price
