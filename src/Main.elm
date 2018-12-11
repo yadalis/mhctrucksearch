@@ -276,24 +276,24 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[ wfmax 1920, hpx 75,  alpha  0.99,bwb 1, brc 97 97 97]
+                    row[ wfmax 1920, hpx 80,  alpha  0.99, brc 97 97 97]
                     [
-                        column[wpx 0][]
-                        ,column[bc 250 250 250, wfp 2, hf, bwb 0, brc 97 97 97][
+                        column[wpx 10][]
+                        ,column[bc 250 250 250, wfp 2, hf, bwb 5, brc 97 97 97][
                             image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ]
-                        ,column[bc 248 248 248, wf, hf, bwb 0, brc 97 97 97, pd 10,fc 97 97 97][
+                        ,column[bc 248 248 248, wf, hf, bwb 5, brc 97 97 97, pd 10,fc 97 97 97][
                             column[ bwl 5, pdl 5, brc 255 94 94]
                                 [el [Font.size 26, letterSpacing 2 ] <| textValue "Suresh Yadali"
                                 ,el [Font.size 18, pdt 15, letterSpacing 1] <| textValue "Kansas City, MO"
                             ]
                             
                         ]
-                        ,column[wpx 0][]
+                        ,column[wpx 10][]
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [pde 78 10 10 10, inFront navBar
+                layoutWith {options = [focusStyle]}  [pde 83 10 10 10, inFront navBar
                                             ,Font.family
                                                 [ Font.external
                                                     { name = "Roboto"

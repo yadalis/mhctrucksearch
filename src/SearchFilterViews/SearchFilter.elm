@@ -158,7 +158,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
         [
             column[spy 0, wf,  bw one]
             [
-                row[bw 0,  bwb 0, wf, pdb 1, bc 221 221 221]
+                row[bw 0,  bwb 0, wf, pdb 1, bc 227 227 227]
                 [
                     column[wf, hf][
                         paragraph [bw one, fal, wf, hpx 25, pd 5, centerY][textValue <| filterLabel]
