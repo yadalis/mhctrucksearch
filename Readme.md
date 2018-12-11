@@ -1,3 +1,10 @@
+# MHC Truck Search
+
+Run json-server --watch src/truckdata.json --port 3333 in one terminal windows
+
+Run elm-app start in another terminal windows
+
+
 # Elm App
 
 This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).
