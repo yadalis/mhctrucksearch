@@ -18,7 +18,8 @@ fetchTrucks =
 
 fetchTrucksUrl: String
 fetchTrucksUrl =
-        "http://localhost:13627/api/repairorder/gettrucks"
+        --"http://localhost:13627/api/repairorder/gettrucks"
+        "http://localhost:3333/trks"
 
 fetchTrucksDecoder: Decode.Decoder (List Truck)
 fetchTrucksDecoder = 
