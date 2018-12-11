@@ -92,7 +92,10 @@ truckView index truck =
                         ,dataFieldView "Mileage:" <|  format "0,0" <| case String.toFloat truck.mileage of 
                                                                                 Just miles -> miles
                                                                                 Nothing -> 0.0
-                        ,dataFieldView "Sleeper Size:" truck.sleeperInches
+                        ,dataFieldView "Sleeper Size:" 
+                                                        <| case String.toInt truck.sleeperInches of
+                                                                    Just num -> String.fromInt num ++ " Inch"
+                                                                    Nothing -> truck.sleeperInches
                     ]
                     ,column[bw 0,  wf, hf, pd 0, spy 5]
                     [

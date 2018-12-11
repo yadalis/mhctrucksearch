@@ -283,8 +283,11 @@ view (model, uiModel) =
                             image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ]
                         ,column[bc 248 248 248, wf, hf, bwb 0, brc 97 97 97, pd 10,fc 97 97 97][
-                            el [Font.size 26, letterSpacing 2 ] <| textValue "Suresh Yadali"
+                            column[ bwl 5, pdl 5, brc 255 94 94]
+                                [el [Font.size 26, letterSpacing 2 ] <| textValue "Suresh Yadali"
                                 ,el [Font.size 18, pdt 15, letterSpacing 1] <| textValue "Kansas City, MO"
+                            ]
+                            
                         ]
                         ,column[wpx 50][]
                     ] 
@@ -358,16 +361,16 @@ view (model, uiModel) =
                          -- Trucks Search Result List Panel 
                         ,column[hf, wfp 5,  bwl 0 , pdl 25]
                         [
-                            row[hf, wf, bwb 0, hpx 70 , pd 0,  bc 221 221 221]
+                            row[hf, wf, bwb 0, hfRange 70 150 , pd 0,  bc 221 221 221]
                             [ 
-                                row[wf, hf]
+                                row[wfp 3, hf]
                                 [
                                     wrappedRow [wf,  bw 0, pdl 5 , alignTop]
                                         -- using <| u can avoid parans around the below func and its params
                                         <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                 ]
-                                ,column[hf,bw 0, pd 0,  bc 221 221 221][
-                                    el [Element.alignBottom, pdr 5] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                ,column[hf,bw 0, pdb 3,  bc 221 221 221,wfp 3][
+                                    el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
                             ]
                             ,row[ wf, bwb 0, pde 5 0 5 0][
@@ -399,9 +402,9 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
 
         searchStringBtnStyle num = 
                     if currentPageNumber == num then 
-                        [  bw 0, bc  244 66 95 ]
+                        [  bwb 0, bc 185 185 185, fc 57 57 57 , Font.size 16]
                     else
-                        [   bw 1]
+                        [   bwb 0, fc 244 66 95  , Font.size 12]
     in
     
         if List.length pageNumbers > 1 then
@@ -410,12 +413,11 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
                                     [
                                         Input.button ([
                                                         if currentPageNumber /= num then
-                                                            mouseOver [ bc  0 0 0 ]
+                                                            mouseOver [ bc  0 0 0, fc 250 250 250  ]
                                                         else
-                                                            mouseOver [ bc  244 66 95 ]
-                                             
-                                             ,
-                                                        pd 5, wf,  bw 1, bc 95 95 95,fc  250 250 250, Font.size 16 ] ++ (searchStringBtnStyle num))
+                                                            mouseOver [ bc  175 175 175 ]
+                                                        ,
+                                                        pd 5, wf,    Font.bold ] ++ (searchStringBtnStyle num))
                                             { 
                                                 onPress = Just (PageNumberClicked num )
                                                 ,label = textValue <| String.fromInt num
