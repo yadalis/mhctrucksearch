@@ -32,11 +32,11 @@ truckView index truck =
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
     in
     
-        row[bwb 0, wf, pd 5, bc 231 231 231, hf ] --bc 47 48 49
+        row[bwb 0, wf, pd 5, bc 240 240 240, hf ] --bc 47 48 49
         [
-            column[wfmax 225, bw 0, hf, pdt 5]
+            column[wfmax 225, bw 0, hf, pdt 0]
             [
-                image [bw one, pdl 0, wf] {src = 
+                image [bwl 0, pdl 0, wf] {src = 
                                             
                                                     String.split "&" truck.primaryImageLink
                                                         |> (\list -> case  List.head list  of

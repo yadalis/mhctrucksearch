@@ -276,9 +276,9 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[ wfmax 1920, hpx 75,  alpha  0.99]
+                    row[ wfmax 1920, hpx 75,  alpha  0.99,bwb 1, brc 97 97 97]
                     [
-                        column[wpx 50][]
+                        column[wpx 0][]
                         ,column[bc 250 250 250, wfp 2, hf, bwb 0, brc 97 97 97][
                             image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                         ]
@@ -289,11 +289,11 @@ view (model, uiModel) =
                             ]
                             
                         ]
-                        ,column[wpx 50][]
+                        ,column[wpx 0][]
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [pde 78 50 50 50, inFront navBar
+                layoutWith {options = [focusStyle]}  [pde 78 10 10 10, inFront navBar
                                             ,Font.family
                                                 [ Font.external
                                                     { name = "Roboto"
@@ -309,7 +309,7 @@ view (model, uiModel) =
                     row[hf,wf, wfmax 1920]
                     [
                         -- Search Filter Panel
-                        column [wf,  spy 15,  bc 221 221 221, alignTop] 
+                        column [wf,  spy 15,  bc 215 215 215, alignTop] 
                         [
                             row[wf, pd 10, bw 0]
                             [ 
@@ -329,7 +329,7 @@ view (model, uiModel) =
                                     , checked = uiModel.expandCollapseAllChecked
                                 }
                             ]
-                            ,column[wf, spy 5, bc 231 231 231, bw 0 ]
+                            ,column[wf, spy 5, bc 240 240 240, bw 0 ]
                             [
                                 if List.length model.filteredTruckList > 0 then
                                     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
@@ -359,18 +359,18 @@ view (model, uiModel) =
                         ]
                         
                          -- Trucks Search Result List Panel 
-                        ,column[hf, wfp 5,  bwl 0 , pdl 25]
+                        ,column[  wfp 5,  bw 0 ,pdl 15,  alignTop]
                         [
-                            row[hf, wf, bwb 0, hfRange 70 150 , pd 0,  bc 221 221 221]
+                            row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215]
                             [ 
-                                row[wfp 3, hf]
+                                row[wfp 3, hf, bw 0]
                                 [
                                     wrappedRow [wf,  bw 0, pdl 5 , alignTop]
                                         -- using <| u can avoid parans around the below func and its params
                                         <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                 ]
-                                ,column[hf,bw 0, pdb 3,  bc 221 221 221,wfp 3][
-                                    el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                ,column[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2][
+                                   el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                 ]
                             ]
                             ,row[ wf, bwb 0, pde 5 0 5 0][
