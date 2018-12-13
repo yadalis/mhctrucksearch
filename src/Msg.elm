@@ -17,3 +17,4 @@ type Msg
     | CollapseClicked SearchFilterState Bool
     | CollapseAllClicked Bool
     | PageNumberClicked Int
+    | ShowDropDown Bool

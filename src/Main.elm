@@ -27,6 +27,7 @@ import SearchFilterViews.SearchFilter exposing (..)
 import Element.Lazy as Lazy exposing(..)
 import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
+import TruckViews.SortDialog exposing (..)
 
 ---- INIT ----
 
@@ -235,6 +236,8 @@ update msg (model, uiModel) =
             in
                 ( ( {model | pagedTruckList = firstList, currentPageNumber = pageNumber } , uiModel ), Cmd.none )
 
+        ShowDropDown show ->
+            ( (model, {uiModel | showDropdown = show }), Cmd.none )
 ---- VIEW ----
 
 textBox uiModel=
@@ -276,25 +279,25 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[ wfmax 1920, hpx 80,  alpha  0.99, brc 97 97 97]
+                    row[wf,  hpx 75,  alpha  1.99, brc 97 97 97 , bw 0
+                     , htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
+                    ]
                     [
-                        column[wpx 10][]
-                        ,column[bc 250 250 250, wfp 2, hf, bwb 5, brc 97 97 97][
-                            image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
-                        ]
-                        ,column[bc 248 248 248, wf, hf, bwb 5, brc 97 97 97, pd 10,fc 97 97 97][
-                            column[ bwl 5, pdl 5, brc 255 94 94]
-                                [el [Font.size 26, letterSpacing 2 ] <| textValue "Suresh Yadali"
-                                ,el [Font.size 18, pdt 15, letterSpacing 1] <| textValue "Kansas City, MO"
+                             column[bc 250 250 250, wfp 2, hf, bwb 5, brc 97 97 97][
+                                    image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                             ]
-                            
-                        ]
-                        ,column[wpx 10][]
+                            ,column[bc 248 248 248, wf, hf, bwb 5, brc 97 97 97, fc 97 97 97][
+                                    column[ bwl 5, pdl 5, brc 255 94 94, centerY]
+                                        [el [Font.size 26, letterSpacing 0 ] <| textValue "Suresh Yadali"
+                                        ,el [Font.size 18, pdt 15, letterSpacing 0] <| textValue "Kansas City, MO"
+                                ]
+                            ]
                     ] 
         in
             
-                layoutWith {options = [focusStyle]}  [pde 83 10 10 10, inFront navBar
-                                            ,Font.family
+                --layoutWith {options = [focusStyle]}  [pde 83 10 10 10 
+                layoutWith {options = [focusStyle]}  [ 
+                                            Font.family
                                                 [ Font.external
                                                     { name = "Roboto"
                                                     , url = "https://fonts.googleapis.com/css?family=Roboto"
@@ -306,94 +309,108 @@ view (model, uiModel) =
                 -- in mormal web style and user has to scroll up and down the page
                 <|
                     --row[hf,wf, spx 25, wfmax 1920]
-                    row[hf,wf, wfmax 1920]
+                    column[hf, wfmax 1920]
                     [
-                        -- Search Filter Panel
-                        column [wf,  spy 15,  bc 215 215 215, alignTop] 
-                        [
-                            row[wf, pd 10, bw 0]
-                            [ 
-                                lazy textBox uiModel
-                                ,Input.button ( [hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
-                                    { 
-                                        onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
-                                        ,label = searchBtnIcon
-                                    }
-                            ]
-                            ,row[centerY, bw 0, wf ]
+                        navBar,
+                        row[hf,wf, pde 85 5 100 5]
+                        [     
+                            -- Search Filter Panel
+                            column [wf,  spy 15,  bc 215 215 215, alignTop] 
                             [
-                                checkbox [ pdr 5] {
-                                    onChange = CollapseAllClicked
-                                    ,icon = buildCollapseAllImage
-                                    , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
-                                    , checked = uiModel.expandCollapseAllChecked
-                                }
-                            ]
-                            ,column[wf, spy 5, bc 240 240 240, bw 0 ]
-                            [
-                                if List.length model.filteredTruckList > 0 then
-                                    lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
-                                else
-                                    loaderIconElement
-                                ,if List.length model.filteredTruckList > 0 then
-                                    lazy3 buildSearchFilterValuesGroup Year model uiModel
-                                else
-                                    none
-                                ,if List.length model.filteredTruckList > 0 then
-                                    lazy3 buildSearchFilterValuesGroup Make model uiModel
-                                else
-                                    none    
-                                , if List.length model.filteredTruckList > 0 then
-                                    lazy3 buildSearchFilterValuesGroup MakeModel model uiModel
-                                else
-                                    none
-                                , if List.length model.filteredTruckList > 0 then
-                                    lazy3 buildSearchFilterValuesGroup SleeperRoof model uiModel
-                                else
-                                    none
-                                , if List.length model.filteredTruckList > 0 then
-                                    lazy3 buildSearchFilterValuesGroup SleeperBunk model uiModel
-                                else
-                                    none                                                        
-                            ]
-                        ]
-                        
-                         -- Trucks Search Result List Panel 
-                        ,column[  wfp 5,  bw 0 ,pdl 15,  alignTop]
-                        [
-                            row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215]
-                            [ 
-                                row[wfp 3, hf, bw 0]
+                                row[wf, pd 10, bw 0]
+                                [ 
+                                    lazy textBox uiModel
+                                    ,Input.button ( [hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
+                                        { 
+                                            onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
+                                            ,label = searchBtnIcon
+                                        }
+                                ]
+                                ,row[centerY, bw 0, wf ]
                                 [
-                                    wrappedRow [wf,  bw 0, pdl 5 , alignTop]
-                                        -- using <| u can avoid parans around the below func and its params
-                                        <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
+                                    checkbox [ pdr 5] {
+                                        onChange = CollapseAllClicked
+                                        ,icon = buildCollapseAllImage
+                                        , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
+                                        , checked = uiModel.expandCollapseAllChecked
+                                    }
                                 ]
-                                ,column[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2][
-                                   el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                ,column[wf, spy 5, bc 240 240 240, bw 0 ]
+                                [
+                                    if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
+                                    else
+                                        loaderIconElement
+                                    ,if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup Year model uiModel
+                                    else
+                                        none
+                                    ,if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup Make model uiModel
+                                    else
+                                        none    
+                                    , if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup MakeModel model uiModel
+                                    else
+                                        none
+                                    , if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup SleeperRoof model uiModel
+                                    else
+                                        none
+                                    , if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup SleeperBunk model uiModel
+                                    else
+                                        none                                                        
                                 ]
                             ]
-                            ,row[ wf, bwb 0, pde 5 0 5 0][
-                                    lazy searchFilterBulletView 
-                                            << Array.fromList <| List.concat
-                                                                            [ 
-                                                                                Array.toList uiModel.salesStatusFilters,
-                                                                                Array.toList uiModel.yearFilters,
-                                                                                Array.toList uiModel.makeFilters,
-                                                                                Array.toList uiModel.modelFilters,
-                                                                                Array.toList uiModel.sleeperRoofFilters,
-                                                                                Array.toList uiModel.sleeperBunkFilters
-                                                                            ]
-                            ]
-                            ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
+                            
+                            -- Trucks Search Result List Panel 
+                            ,column[  wfp 5,  bw 0 ,pdl 15,  alignTop]
                             [
-                                    lazy trucksView model.pagedTruckList -- model.filteredTruckList
-                            ]         
-                        ]
-                        --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page or show page numbers ?
-                        -- ,column[bw 0, wpx 50, hf, pdl 15, pdt 87]
-                        --     getPageNumbersList
+                                row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215]
+                                [ 
+                                    row[wfp 3, hf, bw 0]
+                                    [
+                                        wrappedRow [wf,  bw 0, pdl 5 , alignTop]
+                                            -- using <| u can avoid parans around the below func and its params
+                                            <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
+                                    ]
+                                    ,column[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2]
+                                    [
+                                        el [Element.alignTop, pdr 15,bw 0, Element.alignLeft, fc 97 97 97
+                                                , below (showSortOptionsDialog uiModel.showDropdown)
+                                            ]
+                                            <| Input.button [pd 5, wf,    Font.bold, Font.underline ]  
+                                                { 
+                                                    onPress = Just <| ShowDropDown <| not <| uiModel.showDropdown
+                                                    ,label = textValue "Sort by Make"
+                                                }
+                                    ,el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                    ]
+                                ]
+                                ,row[ wf, bwb 0, pde 5 0 5 0][
+                                        lazy searchFilterBulletView 
+                                                << Array.fromList <| List.concat
+                                                                                [ 
+                                                                                    Array.toList uiModel.salesStatusFilters,
+                                                                                    Array.toList uiModel.yearFilters,
+                                                                                    Array.toList uiModel.makeFilters,
+                                                                                    Array.toList uiModel.modelFilters,
+                                                                                    Array.toList uiModel.sleeperRoofFilters,
+                                                                                    Array.toList uiModel.sleeperBunkFilters
+                                                                                ]
+                                ]
+                                ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
+                                [
+                                        lazy trucksView model.pagedTruckList -- model.filteredTruckList
+                                ]         
+                            ]
+                            --Possible 3rd column to show truck details, dont need this in case of opening truck detials in a new page or show page numbers ?
+                            -- ,column[bw 0, wpx 50, hf, pdl 15, pdt 87]
+                            --     getPageNumbersList
+                        ]                        
                     ]
+
 
 buildPageNumbersView  filteredTruckList currentPageNumber = 
     let

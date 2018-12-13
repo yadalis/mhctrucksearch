@@ -58,6 +58,7 @@ type alias UIModel =
         ,sleeperBunkFilters : Array SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         ,expandCollapseAllChecked : Bool
+        ,showDropdown :Bool
         
     }
 
@@ -124,5 +125,7 @@ initalUIModel jsFlag =
                                                 |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
                                                 |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}
                                                 |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False},
-        expandCollapseAllChecked = False
+        expandCollapseAllChecked = False,
+        showDropdown = False
+
     }
