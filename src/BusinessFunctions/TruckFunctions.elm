@@ -10,8 +10,11 @@ import Msg exposing (..)
 import List.Unique exposing (..)
 import Array exposing (..)
 import SearchFilterViews.SearchFilter exposing (..)
-import SearchFilterViews.SearchFilterRage exposing (..)
+--import SearchFilterViews.SearchFilterRage exposing (..)
 
+
+
+                
 buildTruckIdNumber : Truck -> (String, String)
 buildTruckIdNumber truck =
     if truck.stockNumber > 0 then 
@@ -41,6 +44,9 @@ buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckP
         else
         trucks
 
+
+        
+
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
         let 
@@ -55,6 +61,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 Just val -> val
                                                 Nothing -> sf)
                                 |> (\headItem -> {sf | userAction = headItem.userAction} )
+           
                 
                 -- SearchFilterRangeType   index 
                 --                                     range.searchFilterKey 
@@ -89,18 +96,25 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                        (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
                                 -- >> (\trks -> -- this is just to log intermediate result from with the function chains
                                 --         let
                                 --                y = Debug.log "sales filters - >" [trks]
                                 --         in
                                 --                 trks
                                 -- )
-                                >> buildSearchFilterValueRecordList SalesStatus
-                                        >> Array.map
-                                                (\sf ->
-                                                        findMatchAndSetUserAction uiModel.salesStatusFilters sf 
-                                                )
+                                >> buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.salesStatusFilters sf 
+                                        )
                 --x = Debug.log "sales filters - >" [updatedSalesStatusFitlerList]
 
                 updatedYearFitlerList =
@@ -116,14 +130,21 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                        (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
                                 -- >> (\trks -> -- this is just to log intermediate result from with the function chains
                                 --         let
                                 --                y = Debug.log "year filters - >" [trks]
                                 --         in
                                 --                 trks
                                 -- )
-                                >> buildSearchFilterValueRecordList Year
+                                >> buildSearchFilterValueRecordList Year uiModel.yearFilters
                                         >> Array.map
                                                 (\sf ->
                                                         findMatchAndSetUserAction uiModel.yearFilters sf 
@@ -142,8 +163,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                        (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
-                                >> buildSearchFilterValueRecordList Make
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                                >> buildSearchFilterValueRecordList Make uiModel.makeFilters
                                         >> Array.map
                                                 (\sf ->
                                                         findMatchAndSetUserAction uiModel.makeFilters sf 
@@ -162,8 +190,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                        (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
-                                >> buildSearchFilterValueRecordList MakeModel
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                                >> buildSearchFilterValueRecordList MakeModel uiModel.modelFilters
                                         >> Array.map
                                                 (\sf ->
                                                         findMatchAndSetUserAction uiModel.modelFilters sf 
@@ -182,8 +217,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                        (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
-                                >> buildSearchFilterValueRecordList SleeperRoof
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                                >> buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters
                                         >> Array.map
                                                 (\sf ->
                                                         findMatchAndSetUserAction uiModel.sleeperRoofFilters sf 
@@ -202,8 +244,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                        (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
-                                >> buildSearchFilterValueRecordList SleeperBunk
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                                >> buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters
                                 >> Array.map
                                                 (\sf ->
                                                         findMatchAndSetUserAction uiModel.sleeperBunkFilters sf 
@@ -223,7 +272,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                >> buildSearchFilterValueRangeList Price uiModel.priceFilters
+                                >> buildSearchFilterValueRecordList Price uiModel.priceFilters
                                 >> Array.map
                                         (\sf ->
                                                 findMatchAndSetUserAction uiModel.priceFilters sf 
@@ -262,7 +311,14 @@ applySearchFilters model uiModel =
                         >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                         >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                (\t sf -> t.price >= sf.searchFilterMinValue && t.price <= sf.searchFilterMaxValue && sf.userAction == True )
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
 
         sortedFilterdTruckList =
             filterdTruckList

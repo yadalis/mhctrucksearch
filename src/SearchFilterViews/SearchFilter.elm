@@ -12,6 +12,30 @@ import Msg exposing (..)
 import List.Unique exposing (..)
 import Array exposing (..)
  
+
+getMinMaxValue range =
+        let
+            
+                minmaxValues = String.split "-" range.searchFilterExtraData -- "a:THERMOKING", "md:t880", "y:2019" etc...
+                minValue =     
+                        case List.head <| minmaxValues of -- gives first element in the list
+                        Just strMinVal -> case String.toInt strMinVal of 
+                                                Just minVal -> minVal
+                                                Nothing -> 0                    
+                        Nothing -> 0
+                maxValue =
+                        -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style
+                        --     Just val -> val
+                        --     Nothing -> ""
+                        case List.head <| List.reverse minmaxValues of -- gives last element in the list -- 2nd style
+                                Just strMaxVal -> case String.toInt strMaxVal of 
+                                                Just maxVal -> maxVal
+                                                Nothing -> 0     
+                                Nothing -> 0     
+        in
+                (minValue, maxValue)
+
+
 --flippedComparison a b =
 desendingOrder a b =
     case compare a b of
@@ -41,16 +65,21 @@ applyExtraOnSearchFilter sortOrder searchFilterKeyValue =
                 List.sortWith desendingOrder)
         |> Array.fromList
 
-buildSearchFilterValueList : SearchFilterCustomType -> List Truck -> Array (String, Int)
-buildSearchFilterValueList searchFilterCustomType trucks =
+--buildSearchFilterValueList : SearchFilterCustomType ->  Array SearchFilterType -> List Truck -> Array (String, Int)
+buildSearchFilterValueList : SearchFilterCustomType ->  Array SearchFilterType -> List Truck -> Array SearchFilterType
+buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
     case searchFilterCustomType of
         SalesStatus -> 
             --List.map (\t -> t.salesStatus) trucks
             List.map .salesStatus trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
-                                Array.map (\sf -> 
-                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) ) sfArray
+                                Array.indexedMap (\index sf -> 
+                                               -- Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) ) sfArray
+                                               SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                                    --SearchFilterType index (Tuple.first sfValue) (Tuple.first sfValue) False (Tuple.second sfValue) searchFilterCustomType --using Constructor
                     ) 
 
         Year -> 
@@ -58,8 +87,11 @@ buildSearchFilterValueList searchFilterCustomType trucks =
             List.map .year trucks
                 |> applyExtraOnSearchFilter 1
                 |> (\sfArray -> 
-                                Array.map (\sf -> 
-                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.year == sf) trucks )) ) sfArray
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.year == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                                                --Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.year == sf) trucks )) ) sfArray
                     )
                 
         Make -> 
@@ -67,8 +99,10 @@ buildSearchFilterValueList searchFilterCustomType trucks =
             List.map .make trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
-                                Array.map (\sf -> 
-                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.make == sf) trucks )) ) sfArray
+                                Array.indexedMap (\index sf ->  
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.make == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
                     )                
 
         MakeModel -> 
@@ -76,8 +110,10 @@ buildSearchFilterValueList searchFilterCustomType trucks =
             List.map .model trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
-                                Array.map (\sf -> 
-                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.model == sf) trucks )) ) sfArray
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.model == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
                     )                
 
         SleeperRoof -> 
@@ -85,8 +121,10 @@ buildSearchFilterValueList searchFilterCustomType trucks =
             List.map .sleeperRoof trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
-                                Array.map (\sf -> 
-                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.sleeperRoof == sf) trucks )) ) sfArray
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperRoof == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
                     )                
                 
         SleeperBunk -> 
@@ -94,18 +132,44 @@ buildSearchFilterValueList searchFilterCustomType trucks =
             List.map .sleeperBunk trucks
                 |> applyExtraOnSearchFilter 0
                 |> (\sfArray -> 
-                                Array.map (\sf -> 
-                                                Tuple.pair sf (List.length <| (List.filter (\t -> String.trim t.sleeperBunk == sf) trucks )) ) sfArray
-                    )                
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperBunk == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )
 
-buildSearchFilterValueRecordList : SearchFilterCustomType -> List Truck -> Array SearchFilterType
-buildSearchFilterValueRecordList searchFilterCustomType trucks =
-    buildSearchFilterValueList searchFilterCustomType trucks
-        |> Array.indexedMap 
-        (\index  sfValue -> 
-                        --{index = index, searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue, filterCategory = searchFilterCustomType}
-                    SearchFilterType index (Tuple.first sfValue) False (Tuple.second sfValue) searchFilterCustomType --using Constructor
-        )
+        Price ->
+             Array.indexedMap
+                         (\index range -> 
+
+                            let
+                                minmaxValue = getMinMaxValue range     
+                                minValue = Tuple.first minmaxValue
+                                maxValue = Tuple.second minmaxValue
+                            in
+                                --Tuple.pair range.searchFilterExtraData ( (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks)  )
+                                --using Constructor style
+                                SearchFilterType   index 
+                                                        range.searchFilterKey 
+                                                        range.searchFilterExtraData 
+                                                        -- range.searchFilterMinValue  
+                                                        -- range.searchFilterMaxValue 
+                                                        False 
+                                                        (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
+                                                        searchFilterCustomType 
+
+                         )
+                         
+                        searchFilterTypes
+
+buildSearchFilterValueRecordList : SearchFilterCustomType -> Array SearchFilterType -> List Truck -> Array SearchFilterType
+buildSearchFilterValueRecordList searchFilterCustomType searchFilterTypes trucks =
+    buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks
+        -- |> Array.indexedMap 
+        --     (\index  sfValue -> 
+        --                     --{index = index, searchFilterKey = Tuple.first sfValue, userAction = False, resultCount = Tuple.second sfValue, filterCategory = searchFilterCustomType}
+        --                 SearchFilterType index (Tuple.first sfValue) (Tuple.first sfValue) False (Tuple.second sfValue) searchFilterCustomType --using Constructor
+        --     )
 
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
@@ -129,6 +193,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 
                             SleeperBunk -> 
                                 (uiModel.sleeperBunkFilters, "Sleeper Bunk", FilterCheckBoxClicked)
+                            
+                            Price -> 
+                                (uiModel.priceFilters, "Price", FilterCheckBoxClicked)
 
             searchFilterState = 
                     uiModel.expandCollapseSearchFilterStates

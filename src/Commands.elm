@@ -76,18 +76,19 @@ trucksDecoder  =
         |> required "locationName" Decode.string
     
 
-onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterRangeType)
+onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterType)
 onFetchSearchFilterRangesDecoder = 
     Decode.list searchFilterRangeDecoder
 
       
-searchFilterRangeDecoder :  Decode.Decoder SearchFilterRangeType
+searchFilterRangeDecoder :  Decode.Decoder SearchFilterType
 searchFilterRangeDecoder  =       
-    Decode.succeed SearchFilterRangeType  
+    Decode.succeed SearchFilterType  
         |> hardcoded 0
         |> required "searchFilterKey" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
-        |> required "searchFilterMinValue" Decode.int
-        |> required "searchFilterMaxValue" Decode.int
+        |> required "searchFilterExtraData" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
+        -- |> required "searchFilterMinValue" Decode.int
+        -- |> required "searchFilterMaxValue" Decode.int
         |> required "userAction" stringBoolDecoder
         |> hardcoded 0
         |> required "filterCategory" searchFilterRangeUnionTypeDecoder
@@ -124,11 +125,11 @@ stringBoolDecoder =
 --                 _ ->
 --                     Ok Year
 
-searchFilterRangeUnionTypeDecoder : Decode.Decoder SearchFilterRangeUnionType
+searchFilterRangeUnionTypeDecoder : Decode.Decoder SearchFilterCustomType
 searchFilterRangeUnionTypeDecoder = 
     Decode.string |> Decode.andThen searchFilterRangeUnionTypeString
 
-searchFilterRangeUnionTypeString : String -> Decode.Decoder SearchFilterRangeUnionType
+searchFilterRangeUnionTypeString : String -> Decode.Decoder SearchFilterCustomType
 searchFilterRangeUnionTypeString string =
             case string of
                 "Price" ->

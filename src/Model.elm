@@ -56,9 +56,10 @@ type alias UIModel =
         ,salesStatusFilters : Array SearchFilterType
         ,sleeperRoofFilters : Array SearchFilterType
         ,sleeperBunkFilters : Array SearchFilterType
-        ,priceFilters : Array SearchFilterRangeType
+        ,priceFilters : Array SearchFilterType
+        --,priceFilters : Array SearchFilterRangeType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
-        ,expandCollapseSearchFilterRangeStates : Array SearchFilterRangeState
+        --,expandCollapseSearchFilterRangeStates : Array SearchFilterRangeState
         ,expandCollapseAllChecked : Bool
         ,showDropdown :Bool
         
@@ -71,12 +72,12 @@ type alias SearchFilterState =
         ,userAction : Bool
     }
     
-type alias SearchFilterRangeState =
-    {
-        index : Int
-        ,searchFilterRangeUnionType : SearchFilterRangeUnionType
-        ,userAction : Bool
-    }
+-- type alias SearchFilterRangeState =
+--     {
+--         index : Int
+--         ,searchFilterRangeUnionType : SearchFilterRangeUnionType
+--         ,userAction : Bool
+--     }
 
 type SearchFilterCustomType
     = SalesStatus
@@ -85,29 +86,32 @@ type SearchFilterCustomType
     | MakeModel
     | SleeperRoof
     | SleeperBunk
+    | Price
 
-type SearchFilterRangeUnionType
-    = Price
+-- type SearchFilterRangeUnionType
+--     = Price
 
 type alias SearchFilterType =
     {   
         index : Int
         ,searchFilterKey : String
+        ,searchFilterExtraData : String
         ,userAction : Bool
         ,resultCount : Int
         ,filterCategory : SearchFilterCustomType
     }
 
-type alias SearchFilterRangeType =
-    {   
-        index : Int
-        ,searchFilterKey : String
-        ,searchFilterMinValue : Int
-        ,searchFilterMaxValue : Int
-        ,userAction : Bool
-        ,resultCount : Int
-        ,filterCategory : SearchFilterRangeUnionType
-    }
+-- type alias SearchFilterRangeType =
+--     {   
+--         index : Int
+--         ,searchFilterKey : String
+--         ,searchFilterExtraData : String
+--         -- ,searchFilterMinValue : Int
+--         -- ,searchFilterMaxValue : Int
+--         ,userAction : Bool
+--         ,resultCount : Int
+--         ,filterCategory : SearchFilterRangeUnionType
+--     }
 
 type alias FilterSelectionsModel =
     {   
@@ -148,11 +152,11 @@ initalUIModel jsFlag =
                                                 |> Array.push {index = 2,searchFilterCustomType = Make, userAction = False}
                                                 |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
                                                 |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}
-                                                |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False},
+                                                |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False}
+                                                |> Array.push {index = 6,searchFilterCustomType = Price, userAction = True},
 
-        expandCollapseSearchFilterRangeStates = Array.repeat 1 {index = 0,searchFilterRangeUnionType = Price, userAction = True},
+        --expandCollapseSearchFilterRangeStates = Array.repeat 1 {index = 0,searchFilterRangeUnionType = Price, userAction = True},
 
         expandCollapseAllChecked = False,
         showDropdown = False
-
     }
