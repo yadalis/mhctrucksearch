@@ -159,7 +159,34 @@ update msg (model, uiModel) =
                     , fetchSearchFilterRanges
                 )
         FilterRangeCheckBoxClicked index searchFilterRangeUnionType userAction  ->
-            ((model, uiModel), Cmd.none)
+             let
+                updateUserSelectedSearchRangeFilter : Array SearchFilterRangeType -> (Array SearchFilterRangeType -> UIModel) -> UIModel -- Anonymous funcs
+                updateUserSelectedSearchRangeFilter  filterList pushModifiedFilterListBackInToUIModel =
+                    filterList
+                        |> Array.get index
+                        |> Maybe.map (\mf -> { mf | userAction = userAction} )
+                        |> Maybe.map (\mf -> Array.set index mf filterList)
+                        |> Maybe.map pushModifiedFilterListBackInToUIModel
+                        |> Maybe.withDefault uiModel
+
+                newUIModel = 
+                    case searchFilterRangeUnionType of
+                        
+                        Price -> 
+                            (uiModel.priceFilters |> updateUserSelectedSearchRangeFilter) (\mfArr -> {uiModel | priceFilters = mfArr})
+                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+
+                newFilteredTruckList = applySearchFilters model newUIModel
+
+                uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
+
+                pagedTruckList = List.take 100 newFilteredTruckList
+                
+                
+            in
+                --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
+                ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+
 
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
@@ -241,13 +268,29 @@ update msg (model, uiModel) =
             in
                 ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates}), Cmd.none )
 
+        CollapseRangeClicked searchFilterRangeState userAction->
+            let
+                newSearchFilterRangeState = {searchFilterRangeState | userAction = userAction }
+                updatedSearchFilterRangeStates = 
+                    uiModel.expandCollapseSearchFilterRangeStates
+                        |> Array.set searchFilterRangeState.index newSearchFilterRangeState
+            in
+                ( ( model , {uiModel |  expandCollapseSearchFilterRangeStates = updatedSearchFilterRangeStates}), Cmd.none )
+
+
         CollapseAllClicked userAction ->
             let
                 updatedSearchFilterStates = 
                     uiModel.expandCollapseSearchFilterStates
                         |> Array.map (\item -> {item | userAction = userAction})
+                
+                updatedSearchFilterRangeStates = 
+                    uiModel.expandCollapseSearchFilterRangeStates
+                        |> Array.map (\item -> {item | userAction = userAction})
             in
-                ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, expandCollapseAllChecked = userAction}), Cmd.none )
+                ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, 
+                                        expandCollapseSearchFilterRangeStates = updatedSearchFilterRangeStates,
+                                        expandCollapseAllChecked = userAction}), Cmd.none )
 
         PageNumberClicked pageNumber ->
             let              

@@ -107,16 +107,19 @@ buildSearchFilterValuesRangeGroup searchFilterRangeUnionType model uiModel =
                     x = Debug.log "------------->" [searchFilter]
                 in
                 
-                    row[bw two, size 14]
-                    [
-                        checkbox [bw one, pdr 0 ] {
-                            onChange = msg index searchFilterRangeUnionType
-                            ,icon = buildChkBoxImage
-                            , label = labelRight [centerY] (el [] <| textValue searchFilter.searchFilterKey )
-                            , checked = searchFilter.userAction
-                        }
-                        , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
-                    ]
+                    if searchFilter.resultCount > 0 then 
+                        row[bw two, size 14]
+                        [
+                            checkbox [bw one, pdr 0 ] {
+                                onChange = msg index searchFilterRangeUnionType
+                                ,icon = buildChkBoxImage
+                                , label = labelRight [centerY] (el [] <| textValue searchFilter.searchFilterKey )
+                                , checked = searchFilter.userAction
+                            }
+                            , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
+                        ]
+                    else
+                        none
     in
         row[ wf, bw 0]
         [
@@ -129,14 +132,12 @@ buildSearchFilterValuesRangeGroup searchFilterRangeUnionType model uiModel =
                     ]
                     ,column[pdr 5][
 
-                        -- checkbox [bw one,   far , bw 0] {
-                        --             onChange = Nothing --CollapseClicked searchFilterState
-                        --             ,icon = buildCollapseAllImage
-                        --             , label = labelLeft [] <| none
-                        --             , checked = 
-                        --                     True
-                        --                      --searchFilterState.userAction
-                        --         }
+                        checkbox [bw one,   far , bw 0] {
+                                    onChange = CollapseRangeClicked searchFilterRangeState
+                                    ,icon = buildCollapseAllImage
+                                    , label = labelLeft [] <| none
+                                    , checked = searchFilterRangeState.userAction
+                                }
                     ]
                 ]
                 ,column ( [spy 10, wf] ++ expandCollapseAll searchFilterRangeState.userAction)

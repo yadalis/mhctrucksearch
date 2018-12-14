@@ -17,6 +17,7 @@ type Msg
     | SearchPressed
     | HandleKeyboardEvent
     | CollapseClicked SearchFilterState Bool
+    | CollapseRangeClicked SearchFilterRangeState Bool
     | CollapseAllClicked Bool
     | PageNumberClicked Int
     | ShowDropDown Bool
