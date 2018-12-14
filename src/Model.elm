@@ -91,6 +91,22 @@ type SearchFilterCustomType
 -- type SearchFilterRangeUnionType
 --     = Price
 
+-- type SearchFilter
+--     = SearchFilter SearchFilterType SearchFilterTypeVariants
+
+
+-- type SearchFilterTypeVariants
+--     = FloatBasedRange Float Float
+
+-- type alias SearchFilterType =
+--     {   
+--         index : Int
+--         ,searchFilterKey : String
+--         ,userAction : Bool
+--         ,resultCount : Int
+--         ,filterCategory : SearchFilterCustomType
+--     }
+
 type alias SearchFilterType =
     {   
         index : Int
