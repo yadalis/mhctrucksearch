@@ -8,6 +8,8 @@ import Model  exposing (..)
 --import RemoteData  exposing (..)
 import Array exposing(..)
 
+import Json.Decode.Extra exposing (fromResult)
+
 fetchTrucks: Cmd Msg
 fetchTrucks =
     Http.get
@@ -16,11 +18,27 @@ fetchTrucks =
         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }
 
+fetchSearchFilterRanges: Cmd Msg
+fetchSearchFilterRanges =
+    Http.get
+        { url = fetchSearchFilterRangesUrl
+        --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+        , expect = expectJson OnFetchSearchFilterRanges onFetchSearchFilterRangesDecoder
+        }
+
 fetchTrucksUrl: String
 fetchTrucksUrl =
         --"http://localhost:13627/api/repairorder/gettrucks"
-        "http://localhost:3333/trks"
+        "http://localhost:50977/api/repairorder/gettrucks"
+        --"http://localhost:3333/trks"
 
+
+fetchSearchFilterRangesUrl: String
+fetchSearchFilterRangesUrl =
+        --"http://localhost:13627/api/repairorder/gettrucks"
+        --"http://localhost:50977/api/repairorder/gettrucks"
+        "http://localhost:4444/srchRanges"
+        
 fetchTrucksDecoder: Decode.Decoder (List Truck)
 fetchTrucksDecoder = 
     Decode.list trucksDecoder
@@ -33,7 +51,7 @@ trucksDecoder  =
         |> required "stockNumber" Decode.int
         |> required "appraisalNumber" Decode.int
         |> required "poNumber" Decode.string
-        |> required "price" Decode.float
+        |> required "price" Decode.int
         |> required "title" Decode.string
         |> required "condition" Decode.string
         |> required "make" Decode.string
@@ -57,3 +75,63 @@ trucksDecoder  =
         |> required "locationNumber" Decode.string
         |> required "locationName" Decode.string
     
+
+onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterRangeType)
+onFetchSearchFilterRangesDecoder = 
+    Decode.list searchFilterRangeDecoder
+
+      
+searchFilterRangeDecoder :  Decode.Decoder SearchFilterRangeType
+searchFilterRangeDecoder  =       
+    Decode.succeed SearchFilterRangeType  
+        |> hardcoded 0
+        |> required "searchFilterKey" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
+        |> required "searchFilterMinValue" Decode.int
+        |> required "searchFilterMaxValue" Decode.int
+        |> required "userAction" stringBoolDecoder
+        |> hardcoded 0
+        |> required "filterCategory" searchFilterRangeUnionTypeDecoder
+
+stringBoolDecoder : Decode.Decoder Bool
+stringBoolDecoder =
+  Decode.string |> Decode.andThen (\val ->
+    case val of
+      "True" -> Decode.succeed True
+      "False" -> Decode.succeed False
+      _ -> Decode.fail <| "Expecting \"true\" or \"false\" but found " ++ val )
+
+-- the commented code is good as well
+-- searchFilterCustomTypeDecoder : Decode.Decoder SearchFilterCustomType
+-- searchFilterCustomTypeDecoder = 
+--     Decode.string |> Decode.andThen (fromResult << parseSearchFilterRangeTypeString)
+
+-- parseSearchFilterRangeTypeString : String -> Result String SearchFilterCustomType
+-- parseSearchFilterRangeTypeString string =
+
+--             case string of
+--                 "Price" ->
+--                     Ok Year
+                        
+
+--                 "RearAxleWeight" ->
+--                     Ok Make
+                        
+
+--                 "FrontAxleWeight" ->
+--                     Ok MakeModel
+                            
+
+--                 _ ->
+--                     Ok Year
+
+searchFilterRangeUnionTypeDecoder : Decode.Decoder SearchFilterRangeUnionType
+searchFilterRangeUnionTypeDecoder = 
+    Decode.string |> Decode.andThen searchFilterRangeUnionTypeString
+
+searchFilterRangeUnionTypeString : String -> Decode.Decoder SearchFilterRangeUnionType
+searchFilterRangeUnionTypeString string =
+            case string of
+                "Price" ->
+                    Decode.succeed Price
+                _ ->
+                    Decode.succeed Price

@@ -1,0 +1,75 @@
+{"srchRanges":[
+    {
+        "searchFilterKey" : "< $29,999"
+        ,"searchFilterMinValue" : 0
+        ,"searchFilterMaxValue" : 29999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {    
+        "searchFilterKey" : "$30,000 - $39,999"
+        ,         
+        "searchFilterMinValue" : 30000
+        ,"searchFilterMaxValue" : 39999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {             
+        "searchFilterKey" : "$40,000 - $49,999"
+        ,         
+        "searchFilterMinValue" : 40000
+        ,"searchFilterMaxValue" : 49999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {                
+        "searchFilterKey" : "$50,000 - $59,999"
+        ,         
+        "searchFilterMinValue" : 50000
+        ,"searchFilterMaxValue" : 59999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {                
+        "searchFilterKey" : "$60,000 - $69,999"
+        ,         
+        "searchFilterMinValue" : 60000
+        ,"searchFilterMaxValue" : 69999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {   
+        "searchFilterKey" : "$70,000 - $79,999"
+        ,                   
+        "searchFilterMinValue" : 70000
+        ,"searchFilterMaxValue" : 79999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {                
+        "searchFilterKey" : "$80,000 - $89,999"
+        ,         
+        "searchFilterMinValue" : 80000
+        ,"searchFilterMaxValue" : 89999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {
+        "searchFilterKey" : "> $90,000 "
+        ,         
+        "searchFilterMinValue" : 90000
+        ,"searchFilterMaxValue" : 500000
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    }
+    
+    ]
+}

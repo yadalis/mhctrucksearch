@@ -121,8 +121,9 @@ dataFieldView fieldName fieldValue =
         ]   
     ]
 
+buildPriceValue : Int -> String
 buildPriceValue price =
     if price == 0 then
         "Call for pricing"
     else
-       format "$0,0" price
+       format "$0,0" <| Basics.toFloat price

@@ -1,0 +1,201 @@
+{"srchRanges":[
+    {
+        "searchFilterKey" : "< $29,999"
+        ,"searchFilterMinValue" : 0
+        ,"searchFilterMaxValue" : 29999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {    
+        "searchFilterKey" : "< $30,000 - $39,999"
+        ,         
+        "searchFilterMinValue" : 30000
+        ,"searchFilterMaxValue" : 39999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {             
+        "searchFilterKey" : "< $40,000 - $49,999"
+        ,         
+        "searchFilterMinValue" : 40000
+        ,"searchFilterMaxValue" : 49999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {                
+        "searchFilterKey" : "< $50,000 - $59,999"
+        ,         
+        "searchFilterMinValue" : 50000
+        ,"searchFilterMaxValue" : 59999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {                
+        "searchFilterKey" : "< $60,000 - $69,999"
+        ,         
+        "searchFilterMinValue" : 60000
+        ,"searchFilterMaxValue" : 69999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {   
+        "searchFilterKey" : "< $70,000 - $79,999"
+        ,                   
+        "searchFilterMinValue" : 70000
+        ,"searchFilterMaxValue" : 79999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {                
+        "searchFilterKey" : "< $80,000 - $89,999"
+        ,         
+        "searchFilterMinValue" : 80000
+        ,"searchFilterMaxValue" : 89999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {
+        "searchFilterKey" : "> $90,000 "
+        ,         
+        "searchFilterMinValue" : 90000
+        ,"searchFilterMaxValue" : 500000
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Price"
+    },
+    {
+        "searchFilterMinValue" : 0
+        ,"searchFilterMaxValue" : 20
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 20
+        ,"searchFilterMaxValue" : 23
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 34
+        ,"searchFilterMaxValue" : 40
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 40
+        ,"searchFilterMaxValue" : 100
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 0
+        ,"searchFilterMaxValue" : 11
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 12
+        ,"searchFilterMaxValue" : 13
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 14
+        ,"searchFilterMaxValue" : 50
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontAxleWeight"
+    },
+    {
+        "searchFilterMinValue" : 0
+        ,"searchFilterMaxValue" : 199
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "EngineHP"
+    },
+    {
+        "searchFilterMinValue" : 200
+        ,"searchFilterMaxValue" : 299
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "EngineHP"
+    },
+    {
+        "searchFilterMinValue" : 300
+        ,"searchFilterMaxValue" : 399
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "EngineHP"
+    },
+    {
+        "searchFilterMinValue" : 400
+        ,"searchFilterMaxValue" : 459
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "EngineHP"
+    },
+    {
+        "searchFilterMinValue" : 460
+        ,"searchFilterMaxValue" : 1000
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "EngineHP"
+    },
+    {
+        "searchFilterMinValue" : 0
+        ,"searchFilterMaxValue" : 299999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {
+        "searchFilterMinValue" : 300000
+        ,"searchFilterMaxValue" : 399999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {
+        "searchFilterMinValue" : 400000
+        ,"searchFilterMaxValue" : 499999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {
+        "searchFilterMinValue" : 500000
+        ,"searchFilterMaxValue" : 599999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {
+        "searchFilterMinValue" : 600000
+        ,"searchFilterMaxValue" : 699999
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {
+        "searchFilterMinValue" : 700000
+        ,"searchFilterMaxValue" : 900000
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    }
+    
+    ]
+}

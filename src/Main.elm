@@ -24,6 +24,7 @@ import Array exposing(..)
 import String exposing (..)
 import Html.Events.Extra as ExtraHtmlEvents
 import SearchFilterViews.SearchFilter exposing (..)
+import SearchFilterViews.SearchFilterRage exposing (..)
 import Element.Lazy as Lazy exposing(..)
 import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
@@ -37,7 +38,8 @@ type alias OnLoadSearchFilter =
 init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
     ( (initialModel,initalUIModel jsflg)
-        , fetchTrucks
+        , Cmd.batch [fetchTrucks]
+        --, Cmd.batch [fetchTrucks, fetchSearchFilterRanges] -- this executes all commands in async manner, it seems ?
     )
 
 ---- UPDATE ----
@@ -95,6 +97,26 @@ performFinalSearch model userSearchString =
 update : Msg -> (Model, UIModel) -> ( (Model, UIModel) , Cmd Msg  )
 update msg (model, uiModel) =
     case msg of
+        OnFetchSearchFilterRanges response ->
+            let
+                --x =  Debug.log "ranges" response
+
+                priceFiltersList = case response of
+                                    Ok priceFilterList ->
+                                            priceFilterList
+                                                --|> List.take 100
+                                    Err err ->
+                                            []
+
+                priceFilters = buildSearchFilterValueRangeList Price (Array.fromList <| priceFiltersList) model.truckList
+
+                y = Debug.log "asdfasdfasdfsadfasddsaf" [List.map .price model.truckList]
+                x =  Debug.log "ranges" priceFilters
+            in
+            
+                ( ( model , {uiModel | priceFilters = priceFilters} ), Cmd.none)
+                --( ( model , uiModel ), Cmd.none)
+
         OnFetchTrucks response ->
             let
                 trucks = case response of
@@ -133,9 +155,12 @@ update msg (model, uiModel) =
                                         sleeperBunkFilters = sleeperBunkFilters 
                         }
                     )
-                    , Cmd.none
+                    --, Cmd.none
+                    , fetchSearchFilterRanges
                 )
-        
+        FilterRangeCheckBoxClicked index searchFilterRangeUnionType userAction  ->
+            ((model, uiModel), Cmd.none)
+
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
                 updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
@@ -359,6 +384,10 @@ view (model, uiModel) =
                                         none
                                     , if List.length model.filteredTruckList > 0 then
                                         lazy3 buildSearchFilterValuesGroup SleeperBunk model uiModel
+                                    else
+                                        none
+                                    , if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesRangeGroup Price model uiModel
                                     else
                                         none                                                        
                                 ]
