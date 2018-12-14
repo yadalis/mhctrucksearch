@@ -474,7 +474,8 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.makeFilters,
                                                                                     Array.toList uiModel.modelFilters,
                                                                                     Array.toList uiModel.sleeperRoofFilters,
-                                                                                    Array.toList uiModel.sleeperBunkFilters
+                                                                                    Array.toList uiModel.sleeperBunkFilters,
+                                                                                    Array.toList uiModel.priceFilters
                                                                                 ]
                                 ]
                                 ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]

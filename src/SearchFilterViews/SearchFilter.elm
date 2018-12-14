@@ -210,6 +210,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
 
             buildCheckboxes :  Int -> SearchFilterType -> Element Msg
             buildCheckboxes index searchFilter =
+                if searchFilter.resultCount > 0 then
                     row[bw two, size 14]
                     [
                         checkbox [bw one, pdr 0 ] {
@@ -220,6 +221,8 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                         }
                         , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
                     ]
+                else
+                    none
     in
         row[ wf, bw 0]
         [
