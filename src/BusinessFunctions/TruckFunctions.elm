@@ -89,38 +89,38 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                         ) filterRelatedFuncs
                         |> Debug.log "-----------"
 
-                -- updatedMakeFilters =
-                --         buildSearchFilter 
-                --                         (model.filteredTruckList
-                --                                 |> List.map (\t -> t.make)
-                --                                 --|> mapFunc
-                --                                 |> filterDuplicates
-                --                         )
+                updatedMakeFilters =
+                        buildSearchFilter 
+                                        (model.filteredTruckList
+                                                |> List.map (\t -> t.make)
+                                                --|> mapFunc
+                                                |> filterDuplicates
+                                        )
                                         
-                --                         (
-                --                                 --countFunc
-                --                                 \filterValue -> 
-                --                                         count (\t -> t.make == filterValue) model.filteredTruckList
-                --                         ) 
+                                        (
+                                                --countFunc
+                                                \filterValue -> 
+                                                        count (\t -> t.make == filterValue) model.filteredTruckList
+                                        ) 
 
 
-                -- uniqueYearValuesFromTextSearchResult = 
-                --         model.filteredTruckList
-                --                 |> List.map (\t -> t.year)
-                --                 |> filterDuplicates
+                uniqueYearValuesFromTextSearchResult = 
+                        model.filteredTruckList
+                                |> List.map (\t -> t.year)
+                                |> filterDuplicates
 
-                -- updatedYearFilters  = 
-                --         Array.indexedMap (\index yearValue -> 
+                updatedYearFilters  = 
+                        Array.indexedMap (\index yearValue -> 
 
-                --                         SearchFilterType   
-                --                                         index 
-                --                                         yearValue 
-                --                                         yearValue  
-                --                                         False 
-                --                                         (count (\t -> t.year == yearValue) model.filteredTruckList) 
-                --                                         Year
+                                        SearchFilterType   
+                                                        index 
+                                                        yearValue 
+                                                        yearValue  
+                                                        False 
+                                                        (count (\t -> t.year == yearValue) model.filteredTruckList) 
+                                                        Year
 
-                --         ) << Array.fromList <| uniqueYearValuesFromTextSearchResult
+                        ) << Array.fromList <| uniqueYearValuesFromTextSearchResult
                 
                 newUIModel = {uiModel | yearFilters = updatedYearFilters, makeFilters = updatedMakeFilters}
                 --newUIModel = {uiModel | makeFilters = updatedYearFilters}
