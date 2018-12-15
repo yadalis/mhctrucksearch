@@ -186,5 +186,5 @@ initalUIModel jsFlag =
 
         expandCollapseAllChecked = False,
         showDropdown = False,
-        currentSortBy = PriceHighToLow
+        currentSortBy = MakeAtoZ
     }

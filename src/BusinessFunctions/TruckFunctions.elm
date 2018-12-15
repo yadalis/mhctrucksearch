@@ -328,6 +328,33 @@ applySearchFilters model uiModel =
 
 
 
+sortTruckList sortBy listToSort =
+                    case sortBy of 
+                        PriceLowToHigh ->
+                            listToSort
+                                |> List.sortBy .price 
+                        PriceHighToLow ->
+                            listToSort
+                                |> List.sortWith desendingOrderByPrice
+                        MileageLowToHigh ->
+                            listToSort
+                                |> List.sortBy .mileage 
+                        MileageHighToLow ->
+                            listToSort
+                                |> List.sortWith desendingOrderByMileage
+                        MakeAtoZ ->
+                            listToSort
+                                |> List.sortBy .make     
+                        MakeZtoA ->
+                            listToSort
+                                |> List.sortWith desendingOrderByMake
+                        YearOldToNew ->
+                            listToSort
+                                |> List.sortBy .year     
+                        YearNewToOld ->
+                            listToSort
+                                |> List.sortWith desendingOrderByYear
+                                
 defaultSortBy  =
     MakeAtoZ
 
@@ -347,13 +374,13 @@ sortByItemslist =
         ("YearOtoN","Year - Old to New",YearOldToNew)
     ]
 
-getConvertedSortByFromString : String -> SortBy
-getConvertedSortByFromString key = 
-    sortByItemslist
-        |> List.filter (\(k, d, v) -> k == key)
-        |> List.head
-        |> Maybe.map (\(k, d, v) -> v)
-        |> Maybe.withDefault defaultSortBy
+-- getConvertedSortByFromString : String -> SortBy
+-- getConvertedSortByFromString key = 
+--     sortByItemslist
+--         |> List.filter (\(k, d, v) -> k == key)
+--         |> List.head
+--         |> Maybe.map (\(k, d, v) -> v)
+--         |> Maybe.withDefault defaultSortBy
 
 convertSortByToString sortBy =
     sortByItemslist

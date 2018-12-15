@@ -331,41 +331,16 @@ update msg (model, uiModel) =
 
                 sortedFilteredTruckList = sortTruckList sortBy <|
                                                                     if hasAnyFilterApplied then 
-                                                                        model.filteredTruckList
+                                                                        model.pagedTruckList
                                                                     else
-                                                                        model.pagedTruckList 
+                                                                        model.filteredTruckList 
 
             in
                 ( ({model | pagedTruckList = sortedFilteredTruckList}, {uiModel | currentSortBy = sortBy}), Cmd.none )
         
 ---- VIEW ----
 
-sortTruckList sortBy listToSort =
-                    case sortBy of 
-                        PriceLowToHigh ->
-                            listToSort
-                                |> List.sortBy .price 
-                        PriceHighToLow ->
-                            listToSort
-                                |> List.sortWith desendingOrderByPrice
-                        MileageLowToHigh ->
-                            listToSort
-                                |> List.sortBy .mileage 
-                        MileageHighToLow ->
-                            listToSort
-                                |> List.sortWith desendingOrderByMileage
-                        MakeAtoZ ->
-                            listToSort
-                                |> List.sortBy .make     
-                        MakeZtoA ->
-                            listToSort
-                                |> List.sortWith desendingOrderByMake
-                        YearOldToNew ->
-                            listToSort
-                                |> List.sortBy .year     
-                        YearNewToOld ->
-                            listToSort
-                                |> List.sortWith desendingOrderByYear
+
 
 textBox uiModel=
 
@@ -413,8 +388,8 @@ view (model, uiModel) =
                              column[bc 250 250 250, wfp 2, hf, bwb 5, brc 97 97 97][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                             ]
-                            ,column[bc 248 248 248, wf, hf, bwb 5, brc 97 97 97, fc 97 97 97][
-                                    column[ bwl 5, pdl 5, brc 255 94 94, centerY]
+                            ,column[pdl 25, bc 248 248 248, wf, hf, bwb 5, brc 97 97 97, fc 97 97 97][
+                                    column[ bwl 2, pdl 3, brc 255 94 94, centerY]
                                         [el [Font.size 26, letterSpacing 0 ] <| textValue "Suresh Yadali"
                                         ,el [Font.size 18, pdt 15, letterSpacing 0] <| textValue "Kansas City, MO"
                                 ]
