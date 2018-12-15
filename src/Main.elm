@@ -131,19 +131,19 @@ performFinalSearch model userSearchString uiModel =
         --                     List.filter  setUserAction ((Array.toList <| uiModel.yearFilters ), yearValue)
         --                 )
 
-        updatedYearFilters  = 
-                Array.map (\yf -> 
+        -- updatedYearFilters  = 
+        --         Array.map (\yf -> 
 
-                             {yf | userAction = member yf.searchFilterKey yearsFromTextSearchResult}
+        --                      {yf | userAction = member yf.searchFilterKey yearsFromTextSearchResult}
 
-                            -- if member yf.searchFilterKey yearsFromTextSearchResult then
-                            --     {yf | userAction = True}
-                            -- else
-                            --     {yf | userAction = False}
+        --                     -- if member yf.searchFilterKey yearsFromTextSearchResult then
+        --                     --     {yf | userAction = True}
+        --                     -- else
+        --                     --     {yf | userAction = False}
 
-                        ) uiModel.yearFilters
+        --                 ) uiModel.yearFilters
         
-        c = Debug.log "vars" [updatedYearFilters]
+        --c = Debug.log "vars" [updatedYearFilters]
 
         -- setYearFilterBasedOnTextSearchResult =
         --     uiModel.salesStatusFilters
@@ -155,9 +155,12 @@ performFinalSearch model userSearchString uiModel =
         --pagedTruckList = List.take 100 newFilteredTruckList
 
         newModel = {model | filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
-        newUIModel = {uiModel | yearFilters = updatedYearFilters}
+        --newUIModel = {uiModel | yearFilters = updatedYearFilters}
+
+        uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnTextSeachResults newModel uiModel
+        
     in
-        (newModel, newUIModel)
+        (newModel, uiModelUpdatedWithLatestSearchFilters)
 
 update : Msg -> (Model, UIModel) -> ( (Model, UIModel) , Cmd Msg  )
 update msg (model, uiModel) =
