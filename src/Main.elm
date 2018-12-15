@@ -45,7 +45,7 @@ init jsflg =
 
 ---- UPDATE ----
 
-performFinalSearch : Model -> String -> UIModel -> Model
+performFinalSearch : Model -> String -> UIModel -> (Model, UIModel)
 performFinalSearch model userSearchString uiModel =
     let
         searchFilterValueList = split "=" userSearchString -- "a:THERMOKING", "md:t880", "y:2019" etc...
@@ -96,9 +96,54 @@ performFinalSearch model userSearchString uiModel =
         yearsFromTextSearchResult = 
             finalSearchResultTruckList
                 |> List.map (\t -> t.year)
-                |> filterDuplicates
+                --|> filterDuplicates
+                --|> Debug.log "years prev" 
                 |> List.sort
-                --|> Debug.log "asdfasdf" 
+                |> List.Unique.fromList
+                --|> Debug.log "years" 
+
+        -- updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
+        -- updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
+        --     filterList
+        --         |> Array.get index
+        --         |> Maybe.map (\mf -> { mf | userAction = userAction} )
+        --         |> Maybe.map (\mf -> Array.set index mf filterList)
+        --         |> Maybe.map pushModifiedFilterListBackInToUIModel
+        --         |> Maybe.withDefault uiModel
+
+        -- setUserAction : (SearchFilterType, String) -> SearchFilterType
+        -- setUserAction (yearFilterItem, yearValue)=
+        --     let
+        --         u = Debug.log "yf and yv" [yearFilterItem.searchFilterKey , yearValue]
+        --         userAction  =
+        --             if yearFilterItem.searchFilterKey == yearValue then 
+        --                 True 
+        --             else 
+        --                 False    
+        --     in
+        --         {yearFilterItem | userAction = userAction}
+
+
+        -- vars = 
+        --         yearsFromTextSearchResult
+        --             |> (\yearValue ->
+
+        --                     List.filter  setUserAction ((Array.toList <| uiModel.yearFilters ), yearValue)
+        --                 )
+
+        updatedYearFilters  = 
+                Array.map (\yf -> 
+
+                             {yf | userAction = member yf.searchFilterKey yearsFromTextSearchResult}
+
+                            -- if member yf.searchFilterKey yearsFromTextSearchResult then
+                            --     {yf | userAction = True}
+                            -- else
+                            --     {yf | userAction = False}
+
+                        ) uiModel.yearFilters
+        
+        c = Debug.log "vars" [updatedYearFilters]
 
         -- setYearFilterBasedOnTextSearchResult =
         --     uiModel.salesStatusFilters
@@ -110,8 +155,9 @@ performFinalSearch model userSearchString uiModel =
         --pagedTruckList = List.take 100 newFilteredTruckList
 
         newModel = {model | filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
+        newUIModel = {uiModel | yearFilters = updatedYearFilters}
     in
-        newModel
+        (newModel, newUIModel)
 
 update : Msg -> (Model, UIModel) -> ( (Model, UIModel) , Cmd Msg  )
 update msg (model, uiModel) =
@@ -279,10 +325,24 @@ update msg (model, uiModel) =
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
         SearchPressed ->
-            ( (performFinalSearch model uiModel.searchString uiModel, uiModel ), Cmd.none )
+            (
+                let
+                    result =  performFinalSearch model uiModel.searchString uiModel
+                    newModel = Tuple.first result    
+                    newUIModel = Tuple.second result
+                in
+                    (newModel, newUIModel ), Cmd.none 
+            )
             
         HandleKeyboardEvent ->
-            ( (performFinalSearch model uiModel.searchString uiModel, uiModel ), Cmd.none )
+            (
+                let
+                    result =  performFinalSearch model uiModel.searchString uiModel
+                    newModel = Tuple.first result    
+                    newUIModel = Tuple.second result
+                in
+                    (newModel, newUIModel ), Cmd.none 
+            )
         
         CollapseClicked searchFilterState userAction->
             let
