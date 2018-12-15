@@ -29,6 +29,7 @@ import Element.Lazy as Lazy exposing(..)
 import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
+import List.Unique exposing (..)
 
 ---- INIT ----
 
@@ -44,8 +45,8 @@ init jsflg =
 
 ---- UPDATE ----
 
-performFinalSearch : Model -> String -> Model
-performFinalSearch model userSearchString =
+performFinalSearch : Model -> String -> UIModel -> Model
+performFinalSearch model userSearchString uiModel =
     let
         searchFilterValueList = split "=" userSearchString -- "a:THERMOKING", "md:t880", "y:2019" etc...
         searchFilterTypeCode =     
@@ -60,7 +61,7 @@ performFinalSearch model userSearchString =
                     Just val -> val
                     Nothing -> ""
 
-        --logsToBrowswerDevTools = Debug.log "searchValues -> " [searchFilterTypeCode,searchFilterValue]
+        logsToBrowswerDevTools = Debug.log "searchValues -> " [searchFilterTypeCode,searchFilterValue]
 
         searchResultTruckList  = 
                 if String.isEmpty userSearchString then
@@ -72,25 +73,43 @@ performFinalSearch model userSearchString =
                     model.truckList      
                         |> List.filter (\t ->     
 
-                                case searchFilterTypeCode of
-                                    "ss"    -> startsWith  (toUpper searchFilterValue) (toUpper t.salesStatus) 
-                                    "y"     -> startsWith  ( searchFilterValue) ( t.year) 
-                                    "m"     -> startsWith  (toUpper searchFilterValue) (toUpper t.make) 
-                                    "md"     -> startsWith  (toUpper searchFilterValue) (toUpper t.model) 
-                                    "sr"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperRoof) 
-                                    "sb"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperBunk) 
-                                    _       -> False -- invalid search string entered by the user
+                            startsWith  ( searchFilterValue) ( t.year) ||
+                            startsWith  (toLower searchFilterValue) (toLower t.make)
+                            -- case searchFilterTypeCode of
+                            --     "ss"    -> startsWith  (toUpper searchFilterValue) (toUpper t.salesStatus) 
+                            --     "y"     -> startsWith  ( searchFilterValue) ( t.year) 
+                            --     "m"     -> startsWith  (toUpper searchFilterValue) (toUpper t.make) 
+                            --     "md"     -> startsWith  (toUpper searchFilterValue) (toUpper t.model) 
+                            --     "sr"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperRoof) 
+                            --     "sb"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperBunk) 
+                            --    _       -> False -- invalid search string entered by the user
                         )
                     --|> List.take 100
-                    |> List.sortBy .make
+                    |> sortTruckList uiModel.currentSortBy
         
         finalSearchResultTruckList =
             if List.length searchResultTruckList > 0 then
                 searchResultTruckList
             else
                 model.filteredTruckList
-        
-        newModel = {model | filteredTruckList = finalSearchResultTruckList}
+
+        yearsFromTextSearchResult = 
+            finalSearchResultTruckList
+                |> List.map (\t -> t.year)
+                |> filterDuplicates
+                |> List.sort
+                --|> Debug.log "asdfasdf" 
+
+        -- setYearFilterBasedOnTextSearchResult =
+        --     uiModel.salesStatusFilters
+        --         |> (\sf -> 
+        --                 member sf.searchFilterKey yearsFromTextSearchResult
+        --             )
+        --uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel
+
+        --pagedTruckList = List.take 100 newFilteredTruckList
+
+        newModel = {model | filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
     in
         newModel
 
@@ -260,10 +279,10 @@ update msg (model, uiModel) =
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
         SearchPressed ->
-            ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
+            ( (performFinalSearch model uiModel.searchString uiModel, uiModel ), Cmd.none )
             
         HandleKeyboardEvent ->
-            ( (performFinalSearch model uiModel.searchString, uiModel ), Cmd.none )
+            ( (performFinalSearch model uiModel.searchString uiModel, uiModel ), Cmd.none )
         
         CollapseClicked searchFilterState userAction->
             let
