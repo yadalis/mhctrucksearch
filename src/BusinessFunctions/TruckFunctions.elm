@@ -44,16 +44,15 @@ buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckP
         trucks
 
 buildSearchFilter uniqueFilterValuesFromTextSearchResult getCountFunc filterCategory =
-        Array.indexedMap (\index filterValue -> 
-
-                                        SearchFilterType   
-                                                        index 
-                                                        filterValue 
-                                                        filterValue  
-                                                        False 
-                                                        (getCountFunc filterValue)
-                                                        filterCategory
-
+        Array.filter(\sf -> not <| String.isEmpty sf.searchFilterKey)
+                << Array.indexedMap (\index filterValue -> 
+                                                SearchFilterType   
+                                                                index 
+                                                                filterValue 
+                                                                filterValue  
+                                                                False 
+                                                                (getCountFunc filterValue)
+                                                                filterCategory
                         ) << Array.fromList <| uniqueFilterValuesFromTextSearchResult
 
 buildRangeSearchFilter trucks searchFilters filterCategory =
@@ -82,17 +81,17 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                 filterRelatedFuncs = 
                         [
                                 (SalesStatus, List.map (\t -> t.salesStatus), (\filterValue -> 
-                                                                        count (\t -> t.salesStatus == filterValue) model.filteredTruckList) ),
+                                                                        count (\t -> String.trim t.salesStatus == String.trim filterValue) model.filteredTruckList) ),
                                 (Year, List.map (\t -> t.year), (\filterValue -> 
-                                                                        count (\t -> t.year == filterValue) model.filteredTruckList) ),
+                                                                        count (\t -> String.trim t.year == String.trim filterValue) model.filteredTruckList) ),
                                 (Make, List.map (\t -> t.make), (\filterValue -> 
-                                                                        count (\t -> t.make == filterValue) model.filteredTruckList ) ),
+                                                                        count (\t -> String.trim t.make == String.trim filterValue) model.filteredTruckList ) ),
                                 (MakeModel, List.map (\t -> t.model), (\filterValue -> 
-                                                                        count (\t -> t.model == filterValue) model.filteredTruckList ) ),
+                                                                        count (\t -> String.trim t.model == String.trim filterValue) model.filteredTruckList ) ),
                                 (SleeperRoof, List.map (\t -> t.sleeperRoof), (\filterValue -> 
-                                                                        count (\t -> t.sleeperRoof == filterValue) model.filteredTruckList) ),
+                                                                        count (\t -> String.trim t.sleeperRoof == String.trim filterValue) model.filteredTruckList) ),
                                 (SleeperBunk, List.map (\t -> t.sleeperBunk), (\filterValue -> 
-                                                                        count (\t -> t.sleeperBunk == filterValue) model.filteredTruckList ) )
+                                                                        count (\t -> String.trim t.sleeperBunk == String.trim filterValue) model.filteredTruckList ) )
                         ]
 
                 allUpdatedFilters = List.map(\(filterCategory, filedMapFunc, countFunc) ->
@@ -132,6 +131,8 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                                                 |> getDefaultSearchFilters
                 updatedSleeperBunkFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperBunk ) allUpdatedFilters
                                                 |> getDefaultSearchFilters
+                                                |> Debug.log "bunk filters ===================================>"
+                
                 -- updatedPriceFilters = List.filter (\(filterCategory, lst) -> filterCategory == Price ) allUpdatedFilters
                 --                                 |> getDefaultSearchFilters
                 
@@ -418,7 +419,8 @@ applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
         filterdTruckList  = 
-                model.truckList
+                model.truckList -- you need to use filteredTruckList if the result is from the TEXT search, so figure out
+                                -- if the trucks returned by TEXT search or by clicking the filter check boxes
                         |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True ) -- truckList gets passed as a last arg automatically from the previous |> pipe
                                 -- the result from the above function gets feed in to the below function and so on until it ends

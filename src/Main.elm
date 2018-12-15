@@ -73,8 +73,12 @@ performFinalSearch model userSearchString uiModel =
                     model.truckList      
                         |> List.filter (\t ->     
 
-                            startsWith  ( searchFilterValue) ( t.year) ||
-                            startsWith  (toLower searchFilterValue) (toLower t.make)
+                            startsWith  (toLower searchFilterValue) (toLower t.salesStatus) ||
+                            startsWith  (toLower searchFilterValue) (toLower t.year) ||
+                            startsWith  (toLower searchFilterValue) (toLower t.make) ||
+                            startsWith  (toLower searchFilterValue) (toLower t.model) ||
+                            startsWith  (toLower searchFilterValue) (toLower t.sleeperRoof)||
+                            startsWith  (toLower searchFilterValue) (toLower t.sleeperBunk)
                             -- case searchFilterTypeCode of
                             --     "ss"    -> startsWith  (toUpper searchFilterValue) (toUpper t.salesStatus) 
                             --     "y"     -> startsWith  ( searchFilterValue) ( t.year) 
@@ -92,15 +96,15 @@ performFinalSearch model userSearchString uiModel =
                 searchResultTruckList
             else
                 model.filteredTruckList
-
-        yearsFromTextSearchResult = 
-            finalSearchResultTruckList
-                |> List.map (\t -> t.year)
-                --|> filterDuplicates
-                --|> Debug.log "years prev" 
-                |> List.sort
-                |> List.Unique.fromList
-                --|> Debug.log "years" 
+            |> Debug.log "222222222222222222222" 
+        -- yearsFromTextSearchResult = 
+        --     finalSearchResultTruckList
+        --         |> List.map (\t -> t.year)
+        --         --|> filterDuplicates
+        --         --|> Debug.log "years prev" 
+        --         |> List.sort
+        --         |> List.Unique.fromList
+        --         --|> Debug.log "years" 
 
         -- updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
         -- updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
