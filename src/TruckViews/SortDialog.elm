@@ -13,7 +13,7 @@ import BusinessFunctions.TruckFunctions exposing (..)
 showSortOptionsDialog : Bool -> Element Msg
 showSortOptionsDialog show =
     if show then 
-        column[bc 245 245 245, pd 15, br 5, bw 2, spy 25]
+        column[bc 245 245 245, pd 15, br 5, bw 2, spy 25, wpx 300]
         [
             row[Element.alignRight, bw 2, fac, bc 200 200 200  ][
                      Input.button ( [hf, bwb 0, fal, pdb 0])

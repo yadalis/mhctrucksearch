@@ -335,12 +335,18 @@ update msg (model, uiModel) =
                                                                     else
                                                                         model.filteredTruckList 
 
+                newModel =
+                            if hasAnyFilterApplied then 
+                                {model | pagedTruckList = sortedFilteredTruckList }
+                            else
+                                {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList }
+                
+                u = Debug.log "asdf->" [sortedFilteredTruckList]
+
             in
-                ( ({model | pagedTruckList = sortedFilteredTruckList}, {uiModel | currentSortBy = sortBy}), Cmd.none )
-        
+                ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
+
 ---- VIEW ----
-
-
 
 textBox uiModel=
 
@@ -407,7 +413,7 @@ view (model, uiModel) =
                                                 , Font.sansSerif
                                                 ] 
                                         ] --  inFront navBar is to make menu bar fixed
-                --  [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
+                -- [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
                     --row[hf,wf, spx 25, wfmax 1920]
