@@ -71,7 +71,7 @@ trucksDecoder  =
         |> required "sleeperInches" Decode.string
         |> required "chassisNumber" Decode.string
         |> required "transType" Decode.string
-        |> required "mileage" Decode.string
+        |> required "mileage" Decode.int
         |> required "locationNumber" Decode.string
         |> required "locationName" Decode.string
     

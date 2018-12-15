@@ -89,9 +89,7 @@ truckView index truck =
                         --,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
                         ,dataFieldView "Stock#:" <| if truck.stockNumber == 0 then "N/A" else String.fromInt truck.stockNumber
                         ,dataFieldView "Chassis#:" truck.chassisNumber
-                        ,dataFieldView "Mileage:" <|  format "0,0" <| case String.toFloat truck.mileage of 
-                                                                                Just miles -> miles
-                                                                                Nothing -> 0.0
+                        ,dataFieldView "Mileage:" <|  format "0,0" <|  Basics.toFloat truck.mileage
                         ,dataFieldView "Sleeper Size:" 
                                                         <| case String.toInt truck.sleeperInches of
                                                                     Just num -> String.fromInt num ++ " Inch"

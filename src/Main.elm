@@ -245,6 +245,7 @@ update msg (model, uiModel) =
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
                 newFilteredTruckList = applySearchFilters model newUIModel
+                                            |> sortTruckList uiModel.currentSortBy
 
                 uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
 
@@ -309,9 +310,62 @@ update msg (model, uiModel) =
             in
                 ( ( {model | pagedTruckList = firstList, currentPageNumber = pageNumber } , uiModel ), Cmd.none )
 
-        ShowDropDown show ->
+        OperateSortDialog show ->
             ( (model, {uiModel | showDropdown = show }), Cmd.none )
+        
+        SortTrucks sortBy ->
+            let
+
+
+                hasAnyFilterApplied = anySearchFilterBulletsApplied 
+                                                << Array.fromList <| List.concat
+                                                                                [ 
+                                                                                    Array.toList uiModel.salesStatusFilters,
+                                                                                    Array.toList uiModel.yearFilters,
+                                                                                    Array.toList uiModel.makeFilters,
+                                                                                    Array.toList uiModel.modelFilters,
+                                                                                    Array.toList uiModel.sleeperRoofFilters,
+                                                                                    Array.toList uiModel.sleeperBunkFilters,
+                                                                                    Array.toList uiModel.priceFilters
+                                                                                ]
+
+                sortedFilteredTruckList = sortTruckList sortBy <|
+                                                                    if hasAnyFilterApplied then 
+                                                                        model.filteredTruckList
+                                                                    else
+                                                                        model.pagedTruckList 
+
+            in
+                ( ({model | pagedTruckList = sortedFilteredTruckList}, {uiModel | currentSortBy = sortBy}), Cmd.none )
+        
 ---- VIEW ----
+
+sortTruckList sortBy listToSort =
+                    case sortBy of 
+                        PriceLowToHigh ->
+                            listToSort
+                                |> List.sortBy .price 
+                        PriceHighToLow ->
+                            listToSort
+                                |> List.sortWith desendingOrderByPrice
+                        MileageLowToHigh ->
+                            listToSort
+                                |> List.sortBy .mileage 
+                        MileageHighToLow ->
+                            listToSort
+                                |> List.sortWith desendingOrderByMileage
+                        MakeAtoZ ->
+                            listToSort
+                                |> List.sortBy .make     
+                        MakeZtoA ->
+                            listToSort
+                                |> List.sortWith desendingOrderByMake
+                        YearOldToNew ->
+                            listToSort
+                                |> List.sortBy .year     
+                        YearNewToOld ->
+                            listToSort
+                                |> List.sortWith desendingOrderByYear
 
 textBox uiModel=
 
@@ -457,10 +511,10 @@ view (model, uiModel) =
                                         el [Element.alignTop, pdr 15,bw 0, Element.alignLeft, fc 97 97 97
                                                 , below (showSortOptionsDialog uiModel.showDropdown)
                                             ]
-                                            <| Input.button [pd 5, wf,    Font.bold, Font.underline ]  
+                                            <| Input.button [pd 5, wf,    Font.bold, Font.hairline, bwb 1  ]  
                                                 { 
-                                                    onPress = Just <| ShowDropDown <| not <| uiModel.showDropdown
-                                                    ,label = textValue "Sort by Make"
+                                                    onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                                    ,label = textValue <| "Sort by : " ++ convertSortByToString uiModel.currentSortBy
                                                 }
                                     ,el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                     ]

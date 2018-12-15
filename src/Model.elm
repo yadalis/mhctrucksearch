@@ -29,7 +29,7 @@ type alias Truck =
         , sleeperInches     : String
         , chassisNumber     : String
         , transType         : String
-        , mileage           : String
+        , mileage           : Int
         , location          : String
         , locationName      : String
     }
@@ -61,8 +61,8 @@ type alias UIModel =
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         --,expandCollapseSearchFilterRangeStates : Array SearchFilterRangeState
         ,expandCollapseAllChecked : Bool
-        ,showDropdown :Bool
-        
+        ,showDropdown : Bool
+        ,currentSortBy : SortBy
     }
 
 type alias SearchFilterState =
@@ -106,6 +106,17 @@ type SearchFilterCustomType
 --         ,resultCount : Int
 --         ,filterCategory : SearchFilterCustomType
 --     }
+
+type SortBy
+    = PriceLowToHigh
+    | PriceHighToLow
+    | MileageLowToHigh
+    | MileageHighToLow
+    | MakeAtoZ
+    | MakeZtoA
+    | YearNewToOld
+    | YearOldToNew
+
 
 type alias SearchFilterType =
     {   
@@ -174,5 +185,6 @@ initalUIModel jsFlag =
         --expandCollapseSearchFilterRangeStates = Array.repeat 1 {index = 0,searchFilterRangeUnionType = Price, userAction = True},
 
         expandCollapseAllChecked = False,
-        showDropdown = False
+        showDropdown = False,
+        currentSortBy = PriceHighToLow
     }

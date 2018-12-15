@@ -43,3 +43,9 @@ searchFilterBulletView filterList =
                     )
         |> Array.toList
         |> wrappedRow [   bw 0, wf, pdr 0]
+
+anySearchFilterBulletsApplied : Array SearchFilterType -> Bool
+anySearchFilterBulletsApplied filterList =
+    Array.toList filterList
+        |> List.any (\sf -> sf.userAction == True)
+        

@@ -21,4 +21,5 @@ type Msg
 --    | CollapseRangeClicked SearchFilterRangeState Bool
     | CollapseAllClicked Bool
     | PageNumberClicked Int
-    | ShowDropDown Bool
+    | OperateSortDialog Bool
+    | SortTrucks SortBy

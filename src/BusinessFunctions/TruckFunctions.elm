@@ -13,8 +13,6 @@ import SearchFilterViews.SearchFilter exposing (..)
 --import SearchFilterViews.SearchFilterRage exposing (..)
 
 
-
-                
 buildTruckIdNumber : Truck -> (String, String)
 buildTruckIdNumber truck =
     if truck.stockNumber > 0 then 
@@ -326,3 +324,67 @@ applySearchFilters model uiModel =
                 --|> List.sortBy .make
     in
         sortedFilterdTruckList
+
+
+
+
+defaultSortBy  =
+    MakeAtoZ
+
+defaultSortByText  =
+    "Make A to Z"
+
+sortByItemslist : List (String, String, SortBy)
+sortByItemslist = 
+    [
+        ("priceLtoH","Price - Low to High",PriceLowToHigh),
+        ("priceHtoL","Price - High to Low",PriceHighToLow),
+        ("MileageLtoH","Mileage - Low to High",MileageLowToHigh),
+        ("MileageHtoL","Mileage - High to Low",MileageHighToLow),
+        ("MakeAtoZ","Make A to Z",MakeAtoZ),
+        ("MakeZtoA","Make Z to A",MakeZtoA),
+        ("YearNtoO","Year - New to Old",YearNewToOld),
+        ("YearOtoN","Year - Old to New",YearOldToNew)
+    ]
+
+getConvertedSortByFromString : String -> SortBy
+getConvertedSortByFromString key = 
+    sortByItemslist
+        |> List.filter (\(k, d, v) -> k == key)
+        |> List.head
+        |> Maybe.map (\(k, d, v) -> v)
+        |> Maybe.withDefault defaultSortBy
+
+convertSortByToString sortBy =
+    sortByItemslist
+        |> List.filter(\(_,_, v) -> v == sortBy)
+        |> List.head
+        |> Maybe.map (\(k, d, v) -> d)
+        |> Maybe.withDefault defaultSortByText
+                
+
+--flippedComparison a b =
+desendingOrderByPrice a b =
+    case compare a.price b.price of
+        LT -> GT
+        EQ -> EQ
+        GT -> LT
+
+--flippedComparison a b =
+desendingOrderByMileage a b =
+    case compare a.mileage b.mileage of
+        LT -> GT
+        EQ -> EQ
+        GT -> LT
+
+desendingOrderByMake a b =
+    case compare a.make b.make of
+        LT -> GT
+        EQ -> EQ
+        GT -> LT
+
+desendingOrderByYear a b =
+    case compare a.year b.year of
+        LT -> GT
+        EQ -> EQ
+        GT -> LT
