@@ -43,7 +43,7 @@ buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckP
         else
         trucks
 
-buildSearchFilter uniqueFilterValuesFromTextSearchResult func =
+buildSearchFilter uniqueFilterValuesFromTextSearchResult getCountFunc filterCategory =
         Array.indexedMap (\index filterValue -> 
 
                                         SearchFilterType   
@@ -52,8 +52,8 @@ buildSearchFilter uniqueFilterValuesFromTextSearchResult func =
                                                         filterValue  
                                                         False 
                                                         --(count (\t -> t.make == yearValue) model.filteredTruckList) 
-                                                        (func filterValue)
-                                                        Year
+                                                        (getCountFunc filterValue)
+                                                        filterCategory
 
                         ) << Array.fromList <| uniqueFilterValuesFromTextSearchResult
 
@@ -63,13 +63,23 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                 
                 filterRelatedFuncs = 
                         [
+                                (SalesStatus, List.map (\t -> t.salesStatus), (\filterValue -> 
+                                                                        count (\t -> t.salesStatus == filterValue) model.filteredTruckList) ),
                                 (Year, List.map (\t -> t.year), (\filterValue -> 
                                                                         count (\t -> t.year == filterValue) model.filteredTruckList) ),
                                 (Make, List.map (\t -> t.make), (\filterValue -> 
-                                                                        count (\t -> t.make == filterValue) model.filteredTruckList ) )
+                                                                        count (\t -> t.make == filterValue) model.filteredTruckList ) ),
+                                (MakeModel, List.map (\t -> t.model), (\filterValue -> 
+                                                                        count (\t -> t.model == filterValue) model.filteredTruckList ) ),
+                                (SleeperRoof, List.map (\t -> t.sleeperRoof), (\filterValue -> 
+                                                                        count (\t -> t.sleeperRoof == filterValue) model.filteredTruckList) ),
+                                (SleeperBunk, List.map (\t -> t.sleeperBunk), (\filterValue -> 
+                                                                        count (\t -> t.sleeperBunk == filterValue) model.filteredTruckList ) )
+                                -- (Price, List.map (\t -> t.price), (\filterValue -> 
+                                --                                         count (\t -> t.price == filterValue) model.filteredTruckList ) )
                         ]
 
-                vars = List.map(\(filterType, mapFunc, countFunc) ->
+                allUpdatedFilters = List.map(\(filterCategory, mapFunc, countFunc) ->
                                 let
                                         updatedFilters = 
                                                 buildSearchFilter 
@@ -83,46 +93,94 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                                                                 countFunc
                                                                 -- \filterValue -> 
                                                                 --         count (\t -> t.make == filterValue) model.filteredTruckList
-                                                        )     
+                                                        )
+                                                        filterCategory
                                 in
-                                        updatedFilters
+                                        (filterCategory,updatedFilters)
                         ) filterRelatedFuncs
                         |> Debug.log "-----------"
 
-                updatedMakeFilters =
-                        buildSearchFilter 
-                                        (model.filteredTruckList
-                                                |> List.map (\t -> t.make)
-                                                --|> mapFunc
-                                                |> filterDuplicates
-                                        )
-                                        
-                                        (
-                                                --countFunc
-                                                \filterValue -> 
-                                                        count (\t -> t.make == filterValue) model.filteredTruckList
-                                        ) 
-
-
-                uniqueYearValuesFromTextSearchResult = 
-                        model.filteredTruckList
-                                |> List.map (\t -> t.year)
-                                |> filterDuplicates
-
-                updatedYearFilters  = 
-                        Array.indexedMap (\index yearValue -> 
-
-                                        SearchFilterType   
-                                                        index 
-                                                        yearValue 
-                                                        yearValue  
-                                                        False 
-                                                        (count (\t -> t.year == yearValue) model.filteredTruckList) 
-                                                        Year
-
-                        ) << Array.fromList <| uniqueYearValuesFromTextSearchResult
+-- |> Maybe.map (\mf -> { mf | userAction = userAction} )
+--                         |> Maybe.map (\mf -> Array.set index mf filterList)
+--                         |> Maybe.map pushModifiedFilterListBackInToUIModel
+--                         |> Maybe.withDefault uiModel
                 
-                newUIModel = {uiModel | yearFilters = updatedYearFilters, makeFilters = updatedMakeFilters}
+                getDefaultSearchFilters : List (SearchFilterCustomType, Array SearchFilterType) -> Array SearchFilterType
+                getDefaultSearchFilters searchFilters =
+                        searchFilters
+                                |> List.head
+                                |> Maybe.map (\ssFilters -> Tuple.second ssFilters)
+                                |> Maybe.withDefault Array.empty
+
+                updatedSalesStatusFilters = List.filter (\(filterCategory, lst) -> filterCategory == SalesStatus ) allUpdatedFilters
+                                                |> getDefaultSearchFilters
+
+                updatedYearFilters = List.filter (\(filterCategory, lst) -> filterCategory == Year ) allUpdatedFilters
+                                                |> getDefaultSearchFilters
+                updatedMakeFilters = List.filter (\(filterCategory, lst) -> filterCategory == Make ) allUpdatedFilters
+                                                |> getDefaultSearchFilters
+                updatedModelFilters = List.filter (\(filterCategory, lst) -> filterCategory == MakeModel ) allUpdatedFilters
+                                                |> getDefaultSearchFilters
+                updatedSleeperRoofFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperRoof ) allUpdatedFilters
+                                                |> getDefaultSearchFilters
+                updatedSleeperBunkFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperBunk ) allUpdatedFilters
+                                                |> getDefaultSearchFilters
+                -- updatedPriceFilters = List.filter (\(filterCategory, lst) -> filterCategory == Price ) allUpdatedFilters
+                --                                 |> getDefaultSearchFilters
+                
+
+                newUIModel ={ 
+                            uiModel   | 
+                                        salesStatusFilters = updatedSalesStatusFilters, 
+                                        yearFilters = updatedYearFilters, 
+                                        makeFilters = updatedMakeFilters, 
+                                        modelFilters = updatedModelFilters, 
+                                        sleeperRoofFilters = updatedSleeperRoofFilters, 
+                                        sleeperBunkFilters = updatedSleeperBunkFilters 
+                        }
+
+                        --|> Debug.log "updated year filters"
+
+                -- g =  Debug.log ">>>>>>>>>>" [List.length vars]
+
+
+
+
+                -- updatedMakeFilters =
+                --         buildSearchFilter 
+                --                         (model.filteredTruckList
+                --                                 |> List.map (\t -> t.make)
+                --                                 --|> mapFunc
+                --                                 |> filterDuplicates
+                --                         )
+                                        
+                --                         (
+                --                                 --countFunc
+                --                                 \filterValue -> 
+                --                                         count (\t -> t.make == filterValue) model.filteredTruckList
+                --                         ) 
+
+                --                         Year
+
+                -- uniqueYearValuesFromTextSearchResult = 
+                --         model.filteredTruckList
+                --                 |> List.map (\t -> t.year)
+                --                 |> filterDuplicates
+
+                -- updatedYearFilters  = 
+                --         Array.indexedMap (\index yearValue -> 
+
+                --                         SearchFilterType   
+                --                                         index 
+                --                                         yearValue 
+                --                                         yearValue  
+                --                                         False 
+                --                                         (count (\t -> t.year == yearValue) model.filteredTruckList) 
+                --                                         Year
+
+                --         ) << Array.fromList <| uniqueYearValuesFromTextSearchResult
+                
+                -- newUIModel = {uiModel | yearFilters = updatedYearFilters, makeFilters = updatedMakeFilters}
                 --newUIModel = {uiModel | makeFilters = updatedYearFilters}
         in
                 newUIModel
