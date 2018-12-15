@@ -391,10 +391,10 @@ view (model, uiModel) =
                      , htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
                     ]
                     [
-                             column[bc 250 250 250, wfp 2, hf, bwb 5, brc 97 97 97][
+                             column[bc 250 250 250, wfp 2, hf, bwb 1, brc 97 97 97][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                             ]
-                            ,column[pdl 25, bc 248 248 248, wf, hf, bwb 5, brc 97 97 97, fc 97 97 97][
+                            ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
                                     column[ bwl 2, pdl 3, brc 255 94 94, centerY]
                                         [el [Font.size 26, letterSpacing 0 ] <| textValue "Suresh Yadali"
                                         ,el [Font.size 18, pdt 15, letterSpacing 0] <| textValue "Kansas City, MO"

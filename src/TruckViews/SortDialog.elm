@@ -19,7 +19,7 @@ showSortOptionsDialog show =
                      Input.button ( [hf, bwb 0, fal, pdb 0])
                                         { 
                                             onPress = Just <| OperateSortDialog False
-                                            ,label = textValue " X "
+                                            ,label = textValue " x "
                                         }
             ],
 
