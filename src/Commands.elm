@@ -30,11 +30,11 @@ fetchSearchFilterRanges =
 fetchTrucksUrl : String -> String
 fetchTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
-            if String.isEmpty searchText then
-                "http://localhost:50977/api/repairorder/gettrucks"
-            else
-                crossOrigin "http://localhost:50977/api/repairorder/gettrucks" [searchText] []
-        --"http://localhost:3333/trks"
+            -- if String.isEmpty searchText then
+            --     "http://localhost:50977/api/repairorder/gettrucks"
+            -- else
+            --     crossOrigin "http://localhost:50977/api/repairorder/gettrucks" [searchText] []
+        "http://localhost:3333/trks"
 
 
 fetchSearchFilterRangesUrl: String

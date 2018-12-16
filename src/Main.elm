@@ -403,12 +403,12 @@ view (model, uiModel) =
                                         column[bw 0, alignBottom, Element.alignLeft]
                                         [
                                             el [ pdr 15,bw 0, Element.alignLeft, fc 97 97 97, Element.alignBottom
-                                                , below (showSortOptionsDialog uiModel.showDropdown)
+                                                , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
                                             ]
                                             <| Input.button [pdl 5, wf,    Font.bold, Font.hairline, bwb 1  ]  
                                                 { 
                                                     onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                    ,label = textValue <| "Sort by : " ++ convertSortByToString uiModel.currentSortBy
+                                                    ,label = textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
                                                 }
                                         ]
                                         ,column[bw 0, alignBottom, Element.alignRight]

@@ -10,10 +10,10 @@ import Msg exposing (..)
 import Model exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
 
-showSortOptionsDialog : Bool -> Element Msg
-showSortOptionsDialog show =
+showSortOptionsDialog : Bool -> SortBy -> Element Msg
+showSortOptionsDialog show currentSortByOption =
     if show then 
-        column[bc 245 245 245, pd 15, br 5, bw 2, spy 25, wpx 300]
+        column[bc 245 245 245, pd 15, br 5, bw 2, spy 0, wpx 300]
         [
             row[Element.alignRight, bw 2, fac, bc 200 200 200  ][
                      Input.button ( [hf, bwb 0, fal, pdb 0])
@@ -25,9 +25,9 @@ showSortOptionsDialog show =
 
             row[wf, pdt 0]
             [
-                column[spy 10, wf]
+                column[spy 3, wf]
                     <|
-                        List.intersperse (el[bwb 1,Border.dotted, wf] <| textValue "") (List.map (\(k, d, v) -> buildSortOption d v  ) sortByItemslist)
+                        List.intersperse (el[bwb 1,Border.dotted, wf] <| textValue "") (List.map (\(key, label, msg) -> buildSortOption key label msg currentSortByOption) sortByItemslist)
             ]
         ]
         
@@ -36,9 +36,20 @@ showSortOptionsDialog show =
 
 
 
-buildSortOption label msg =
-    Input.button ( [hf, bwb 0, fal, pdb 0])
-                    { 
-                        onPress = Just <| SortTrucks msg
-                        ,label = textValue label
-                    }
+buildSortOption key label msg currentSortByOption =
+    let
+        (rowStyle, mouseOverStyle) =
+            if key == convertSortByToKey currentSortByOption then
+                ([bc 175 175 175], [])
+            else
+                ([bc 245 245 245], [bc 225 225 225])
+    in
+        row ([wf, mouseOver mouseOverStyle ] ++ rowStyle)
+        [
+            Input.button ( [hf, bwb 0, fal, pdb 0, wf
+                            ])
+                            { 
+                                onPress = Just <| SortTrucks msg
+                                ,label = el[pd 3] <| textValue label
+                            }
+        ]

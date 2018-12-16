@@ -490,14 +490,14 @@ defaultSortByText  =
 sortByItemslist : List (String, String, SortBy)
 sortByItemslist = 
     [
-        ("priceLtoH","Price - Low to High",PriceLowToHigh),
-        ("priceHtoL","Price - High to Low",PriceHighToLow),
-        ("MileageLtoH","Mileage - Low to High",MileageLowToHigh),
-        ("MileageHtoL","Mileage - High to Low",MileageHighToLow),
+        ("PriceLowToHigh","Price - Low to High",PriceLowToHigh),
+        ("PriceHighToLow","Price - High to Low",PriceHighToLow),
+        ("MileageLowToHigh","Mileage - Low to High",MileageLowToHigh),
+        ("MileageHighToLow","Mileage - High to Low",MileageHighToLow),
         ("MakeAtoZ","Make A to Z",MakeAtoZ),
         ("MakeZtoA","Make Z to A",MakeZtoA),
-        ("YearNtoO","Year - New to Old",YearNewToOld),
-        ("YearOtoN","Year - Old to New",YearOldToNew)
+        ("YearNewToOld","Year - New to Old",YearNewToOld),
+        ("YearOldToNew","Year - Old to New",YearOldToNew)
     ]
 
 -- getConvertedSortByFromString : String -> SortBy
@@ -508,13 +508,19 @@ sortByItemslist =
 --         |> Maybe.map (\(k, d, v) -> v)
 --         |> Maybe.withDefault defaultSortBy
 
-convertSortByToString sortBy =
+convertSortByToDescription sortBy =
     sortByItemslist
         |> List.filter(\(_,_, v) -> v == sortBy)
         |> List.head
         |> Maybe.map (\(k, d, v) -> d)
         |> Maybe.withDefault defaultSortByText
                 
+convertSortByToKey sortBy =
+    sortByItemslist
+        |> List.filter(\(_,_, v) -> v == sortBy)
+        |> List.head
+        |> Maybe.map (\(k, d, v) -> k)
+        |> Maybe.withDefault defaultSortByText
 
 --flippedComparison a b =
 desendingOrderByPrice a b =
