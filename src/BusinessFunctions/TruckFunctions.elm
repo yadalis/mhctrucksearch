@@ -419,9 +419,9 @@ applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
         truckSource = 
-                if uiModel.hasTextSearchReturnedAnyResult then
-                        model.filteredTruckList
-                else
+                -- if uiModel.hasTextSearchReturnedAnyResult then
+                --         model.filteredTruckList
+                -- else
                         model.truckList
         
         filterdTruckList  = 

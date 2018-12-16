@@ -69,7 +69,7 @@ performFinalSearch model userSearchString uiModel =
         ggg = Debug.log "222222222222222222222" hasTextSearchReturnedAnyResult
         
 
-        newModel = {model | filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
+        newModel = {model | truckList = finalSearchResultTruckList, filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
 
         uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnTextSeachResults newModel {uiModel | hasTextSearchReturnedAnyResult = hasTextSearchReturnedAnyResult}
 
@@ -142,36 +142,7 @@ update msg (model, uiModel) =
                     )
                     --, Cmd.none
                     , fetchSearchFilterRanges
-                )
-        -- FilterRangeCheckBoxClicked index searchFilterRangeUnionType userAction  ->
-        --      let
-        --         updateUserSelectedSearchRangeFilter : Array SearchFilterRangeType -> (Array SearchFilterRangeType -> UIModel) -> UIModel -- Anonymous funcs
-        --         updateUserSelectedSearchRangeFilter  filterList pushModifiedFilterListBackInToUIModel =
-        --             filterList
-        --                 |> Array.get index
-        --                 |> Maybe.map (\mf -> { mf | userAction = userAction} )
-        --                 |> Maybe.map (\mf -> Array.set index mf filterList)
-        --                 |> Maybe.map pushModifiedFilterListBackInToUIModel
-        --                 |> Maybe.withDefault uiModel
-
-        --         newUIModel = 
-        --             case searchFilterRangeUnionType of
-                        
-        --                 Price -> 
-        --                     (uiModel.priceFilters |> updateUserSelectedSearchRangeFilter) (\mfArr -> {uiModel | priceFilters = mfArr})
-        --                         --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
-
-        --         newFilteredTruckList = applySearchFilters model newUIModel
-
-        --         uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
-
-        --         pagedTruckList = List.take 100 newFilteredTruckList
-                
-                
-        --     in
-        --         --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
-        --         ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
-
+                ) 
 
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
             let
@@ -187,95 +158,72 @@ update msg (model, uiModel) =
                 newUIModel = 
                     case searchFilterCustomType of
                         SalesStatus -> 
-                            
-                            --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | salesStatusFilters = mfArr}) ) -- first style
-                            ----------------------------------------------------------------------------------------------------------------
-                            -- let
-                            --     fx = uiModel.salesStatusFilters
-                            --             |> updateUserSelectedSearchFilter
-                                
-                            -- in
-                            --     fx  (\mfArr -> {uiModel | salesStatusFilters = mfArr}) -- second style is a partial applications style
-                            -----------------------------------------------------------------------------------------------------------------
-                             
                             (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters)
-                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr})  -- 3rd style is also a partial applications style
-                                   
-                            -----------------------------------------------------------------------------------------------------------------
+                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr}) 
                         Year -> 
                             (uiModel.yearFilters 
                                     |> updateUserSelectedSearchFilter) 
-                                                            (\mfArr -> {uiModel | yearFilters = mfArr})
-                            --      |> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | yearFilters = mfArr}) )
-                                
+                                                            (\mfArr -> {uiModel | yearFilters = mfArr})                                
                         Make -> 
                             (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr})
-                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | makeFilters = mfArr}) )
 
                         MakeModel -> 
                             (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr})
-                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | modelFilters = mfArr}) )
 
                         SleeperRoof -> 
                             (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
-                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperRoofFilters = mfArr}) )    
 
                         SleeperBunk -> 
-                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
-                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})    
 
                         Price -> 
-                            (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})
-                                --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+                            (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
 
                 newFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
 
                 
                 uiModelUpdatedWithLatestSearchFilters =
-                    if uiModel.hasTextSearchReturnedAnyResult then
-                        rebuildSearchFiltersBasedOnTextSeachResults model newUIModel
-                    else
+                --     if uiModel.hasTextSearchReturnedAnyResult then
+                --         rebuildSearchFiltersBasedOnTextSeachResults model newUIModel
+                --     else
                         rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
 
                 pagedTruckList = List.take 100 newFilteredTruckList
                 
                 
             in
-                --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
                 ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
-        ClearSearchStringResults ->
-                --( ( {model | filteredTruckList = model.truckList} , {uiModel | searchString = ""}), Cmd.none)
-            let
+        ClearSearchStringResults -> -- redo this since it is a pure dup code lifted from onFetchTruck Msg
+           ( ( model , {uiModel | searchString = ""}), fetchTrucks)
+            -- let
                  
-                trucks = model.truckList
-                salesStatusFilters = buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters trucks
-                yearFilters = buildSearchFilterValueRecordList Year uiModel.yearFilters trucks
-                makeFilters = buildSearchFilterValueRecordList Make uiModel.makeFilters trucks
-                modelFilters = buildSearchFilterValueRecordList MakeModel uiModel.modelFilters trucks
-                sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
-                sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
+            --     trucks = model.truckList
+            --     salesStatusFilters = buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters trucks
+            --     yearFilters = buildSearchFilterValueRecordList Year uiModel.yearFilters trucks
+            --     makeFilters = buildSearchFilterValueRecordList Make uiModel.makeFilters trucks
+            --     modelFilters = buildSearchFilterValueRecordList MakeModel uiModel.modelFilters trucks
+            --     sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
+            --     sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
 
-                --filteredTruckList = List.filter (\t -> t.year == "2019" ) trucks
-                pagedTruckList = List.take 100 trucks
-            in
-                ( 
-                    (
-                        {   model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
-                        { 
-                            uiModel   | 
-                                        yearFilters = yearFilters, 
-                                        makeFilters = makeFilters, 
-                                        modelFilters = modelFilters, 
-                                        salesStatusFilters = salesStatusFilters, 
-                                        sleeperRoofFilters = sleeperRoofFilters, 
-                                        sleeperBunkFilters = sleeperBunkFilters 
-                        }
-                    )
-                    --, Cmd.none
-                    , fetchSearchFilterRanges
-                )
+            --     pagedTruckList = List.take 100 trucks
+            -- in
+            --     ( 
+            --         (
+            --             {   model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
+            --             { 
+            --                 uiModel   | 
+            --                             yearFilters = yearFilters, 
+            --                             makeFilters = makeFilters, 
+            --                             modelFilters = modelFilters, 
+            --                             salesStatusFilters = salesStatusFilters, 
+            --                             sleeperRoofFilters = sleeperRoofFilters, 
+            --                             sleeperBunkFilters = sleeperBunkFilters 
+            --             }
+            --         )
+            --         , fetchSearchFilterRanges
+            --     )
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -309,28 +257,14 @@ update msg (model, uiModel) =
             in
                 ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates}), Cmd.none )
 
-        -- CollapseRangeClicked searchFilterRangeState userAction->
-        --     let
-        --         newSearchFilterRangeState = {searchFilterRangeState | userAction = userAction }
-        --         updatedSearchFilterRangeStates = 
-        --             uiModel.expandCollapseSearchFilterRangeStates
-        --                 |> Array.set searchFilterRangeState.index newSearchFilterRangeState
-        --     in
-        --         ( ( model , {uiModel |  expandCollapseSearchFilterRangeStates = updatedSearchFilterRangeStates}), Cmd.none )
-
-
         CollapseAllClicked userAction ->
             let
                 updatedSearchFilterStates = 
                     uiModel.expandCollapseSearchFilterStates
                         |> Array.map (\item -> {item | userAction = userAction})
-                
-                -- updatedSearchFilterRangeStates = 
-                --     uiModel.expandCollapseSearchFilterRangeStates
-                --         |> Array.map (\item -> {item | userAction = userAction})
+
             in
                 ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, 
-                                        --expandCollapseSearchFilterRangeStates = updatedSearchFilterRangeStates,
                                         expandCollapseAllChecked = userAction}), Cmd.none )
 
         PageNumberClicked pageNumber ->
