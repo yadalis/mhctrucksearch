@@ -363,20 +363,11 @@ update msg (model, uiModel) =
                                                                                     Array.toList uiModel.sleeperBunkFilters,
                                                                                     Array.toList uiModel.priceFilters
                                                                                 ]
-
-                sortedFilteredTruckList = sortTruckList sortBy <|
-                                                                    if hasAnyFilterApplied then 
-                                                                        model.pagedTruckList
-                                                                    else
-                                                                        model.filteredTruckList 
+                sortedFilteredTruckList = 
+                    sortTruckList sortBy <| model.filteredTruckList 
 
                 newModel =
-                            if hasAnyFilterApplied then 
-                                {model | pagedTruckList = sortedFilteredTruckList }
-                            else
-                                {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList }
-                
-                --u = Debug.log "asdf->" [sortedFilteredTruckList]
+                    {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList, currentPageNumber = 1 }
 
             in
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
