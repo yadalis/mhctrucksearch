@@ -10,7 +10,7 @@ type alias Truck =
         , stockNumber       : Int
         , appraisalNumber   : Int
         , poNumber          : String   
-        , price             : Int
+        , price             : Float
         , title             : String
         , condition         : String
         , make              : String
@@ -29,9 +29,10 @@ type alias Truck =
         , sleeperInches     : String
         , chassisNumber     : String
         , transType         : String
-        , mileage           : Int
+        , mileage           : Float
         , location          : String
         , locationName      : String
+        , salesStatusFlag   : String
     }
 
 type alias Model =

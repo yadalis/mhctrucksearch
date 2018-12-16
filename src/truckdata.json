@@ -21,12 +21,13 @@
     "engineMake": "PACCAR",
     "engineModel": "MX-13",
     "transType": "10 SPEED",
-    "mileage": "194017",
+    "mileage": 194017,
     "sleeperInches": "76",
     "chassisNumber": "1XKYDP9X0HJ126868",
     "locationNumber": "114",
     "locationName": "Cedar Rapids",
-    "engineHP": "455"
+    "engineHP": "455",
+    "salesStatusFlag": "I"
     },
     {
     "id": "e89d0ec8-a568-4554-9a22-003b49f32d84",
@@ -50,12 +51,13 @@
     "engineMake": "PACCAR",
     "engineModel": "MX-13",
     "transType": "10 SPEED",
-    "mileage": "367669",
+    "mileage": 194017,
     "sleeperInches": "76",
     "chassisNumber": "1XKYDP9X4FJ444361",
     "locationNumber": "66",
     "locationName": "South Dallas, TX",
-    "engineHP": "455"
+    "engineHP": "455",
+    "salesStatusFlag": "A"
     },
     {
     "id": "a2145fbf-6ba6-494c-b04e-004e2c9279ff",
@@ -79,12 +81,13 @@
     "engineMake": "CATERPILLAR",
     "engineModel": "C-12",
     "transType": "13 SPEED",
-    "mileage": "1365416",
+    "mileage": 194017,
     "sleeperInches": "Non-Sleeper",
     "chassisNumber": "3WKDDBOX79F819621",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "380"
+    "engineHP": "380",
+    "salesStatusFlag": "A"
     },
     {
     "id": "764281c5-f778-414c-96cf-008ba58fb2bb",
@@ -108,12 +111,13 @@
     "engineMake": "DETROIT",
     "engineModel": "DD13",
     "transType": "10 SPD ULTRA",
-    "mileage": "522062",
+    "mileage": 194017,
     "sleeperInches": "Non-Sleeper",
     "chassisNumber": "1FUJGEDV9CSBA8653",
     "locationNumber": "45",
     "locationName": "Oklahoma City",
-    "engineHP": "450"
+    "engineHP": "450",
+    "salesStatusFlag": "A"
     },
     {
     "id": "c5f0ef4b-784f-4c30-9b40-00b3a137c5b0",
@@ -137,12 +141,13 @@
     "engineMake": "PACCAR",
     "engineModel": "MX",
     "transType": "10 SPEED",
-    "mileage": "383000",
+    "mileage": 194017,
     "sleeperInches": "38",
     "chassisNumber": "1NKALP9X4CJ319418",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "380"
+    "engineHP": "380",
+    "salesStatusFlag": "A"
     },
     {
     "id": "39a71d7d-1a24-48e6-a986-00b723ee34da",
@@ -166,12 +171,13 @@
     "engineMake": "PACCAR",
     "engineModel": "MX-13",
     "transType": "10 SPEED",
-    "mileage": "495000",
+    "mileage": 194017,
     "sleeperInches": "76",
     "chassisNumber": "1XKYDP9X4JJ181815",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "455"
+    "engineHP": "455",
+    "salesStatusFlag": "A"
     },
     {
     "id": "05610157-99d5-4da1-8aed-00cf05f83bdc",
@@ -195,12 +201,13 @@
     "engineMake": "HINO",
     "engineModel": "JO8E-TA",
     "transType": "AUTOMATIC",
-    "mileage": "225329",
+    "mileage": 194017,
     "sleeperInches": "Non-Sleeper",
     "chassisNumber": "5PVNJ8JV3F4S58154",
     "locationNumber": "77",
     "locationName": "Chattanooga",
-    "engineHP": "230"
+    "engineHP": "230",
+    "salesStatusFlag": "A"
     },
     {
     "id": "ab118f01-7767-49b5-b37c-00d12f51c117",
@@ -224,12 +231,13 @@
     "engineMake": "PACCAR",
     "engineModel": "MX",
     "transType": "10 SPEED",
-    "mileage": "672851",
+    "mileage": 194017,
     "sleeperInches": "75",
     "chassisNumber": "1XP4DP9X6CD135297",
     "locationNumber": "30",
     "locationName": "Denver",
-    "engineHP": "430"
+    "engineHP": "430",
+    "salesStatusFlag": "A"
     },
     {
     "id": "9b0970a4-44e5-49d9-a45d-00d6fa69dde9",
@@ -253,12 +261,13 @@
     "engineMake": "PACCAR",
     "engineModel": "MX-13",
     "transType": "10 SPEED",
-    "mileage": "239061",
+    "mileage": 194017,
     "sleeperInches": "76",
     "chassisNumber": "1XKYDP9X7HJ126897",
     "locationNumber": "114",
     "locationName": "Cedar Rapids",
-    "engineHP": "455"
+    "engineHP": "455",
+    "salesStatusFlag": "A"
     },
     {
     "id": "bc815ce7-fff9-4d50-a58e-00df21b06bc3",
@@ -282,12 +291,13 @@
     "engineMake": "CATERPILLAR",
     "engineModel": "C-15",
     "transType": "10 SPEED",
-    "mileage": "320761",
+    "mileage": 194017,
     "sleeperInches": "Non-Sleeper",
     "chassisNumber": "1KWLDD3J81K967494",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "475"
+    "engineHP": "475",
+    "salesStatusFlag": "S"
     }
     ]
 }

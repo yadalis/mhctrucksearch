@@ -51,7 +51,7 @@ trucksDecoder  =
         |> required "stockNumber" Decode.int
         |> required "appraisalNumber" Decode.int
         |> required "poNumber" Decode.string
-        |> required "price" Decode.int
+        |> required "price" Decode.float
         |> required "title" Decode.string
         |> required "condition" Decode.string
         |> required "make" Decode.string
@@ -71,9 +71,10 @@ trucksDecoder  =
         |> required "sleeperInches" Decode.string
         |> required "chassisNumber" Decode.string
         |> required "transType" Decode.string
-        |> required "mileage" Decode.int
+        |> required "mileage" Decode.float
         |> required "locationNumber" Decode.string
         |> required "locationName" Decode.string
+        |> required "salesStatusFlag" Decode.string
     
 
 onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterType)

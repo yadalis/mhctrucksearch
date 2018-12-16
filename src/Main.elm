@@ -48,48 +48,16 @@ init jsflg =
 performFinalSearch : Model -> String -> UIModel -> (Model, UIModel)
 performFinalSearch model userSearchString uiModel =
     let
-        -- searchFilterValueList = split "=" userSearchString -- "a:THERMOKING", "md:t880", "y:2019" etc...
-        -- searchFilterTypeCode =     
-        --     case List.head <| searchFilterValueList of -- gives first element in the list
-        --         Just val -> val
-        --         Nothing -> ""
-        -- searchFilterValue =
-        --         -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style
-        --         --     Just val -> val
-        --         --     Nothing -> ""
-        --         case List.head <| List.reverse searchFilterValueList of -- gives last element in the list -- 2nd style
-        --             Just val -> val
-        --             Nothing -> ""
-
-        --logsToBrowswerDevTools = Debug.log "searchValues -> " [searchFilterTypeCode,searchFilterValue]
-
         searchResultTruckList  = 
-                -- if String.isEmpty userSearchString then
-                --     model.truckList
-                --     --model.filteredTruckList
-                --         --|> List.take 100
-                -- -- else
-                -- --     []
-                -- else
                     model.truckList      
                         |> List.filter (\t ->     
-
                             startsWith  (toLower userSearchString) (toLower t.salesStatus) ||
                             startsWith  (toLower userSearchString) (toLower t.year) ||
                             startsWith  (toLower userSearchString) (toLower t.make) ||
                             startsWith  (toLower userSearchString) (toLower t.model) ||
                             startsWith  (toLower userSearchString) (toLower t.sleeperRoof)||
                             startsWith  (toLower userSearchString) (toLower t.sleeperBunk)
-                            -- case searchFilterTypeCode of
-                            --     "ss"    -> startsWith  (toUpper searchFilterValue) (toUpper t.salesStatus) 
-                            --     "y"     -> startsWith  ( searchFilterValue) ( t.year) 
-                            --     "m"     -> startsWith  (toUpper searchFilterValue) (toUpper t.make) 
-                            --     "md"     -> startsWith  (toUpper searchFilterValue) (toUpper t.model) 
-                            --     "sr"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperRoof) 
-                            --     "sb"     -> startsWith  (toUpper searchFilterValue) (toUpper t.sleeperBunk) 
-                            --    _       -> False -- invalid search string entered by the user
                         )
-                    --|> List.take 100
                     |> sortTruckList uiModel.currentSortBy
         
         (finalSearchResultTruckList, hasTextSearchReturnedAnyResult) =
@@ -99,69 +67,9 @@ performFinalSearch model userSearchString uiModel =
                 (model.filteredTruckList, False)
 
         ggg = Debug.log "222222222222222222222" hasTextSearchReturnedAnyResult
-        -- yearsFromTextSearchResult = 
-        --     finalSearchResultTruckList
-        --         |> List.map (\t -> t.year)
-        --         --|> filterDuplicates
-        --         --|> Debug.log "years prev" 
-        --         |> List.sort
-        --         |> List.Unique.fromList
-        --         --|> Debug.log "years" 
-
-        -- updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
-        -- updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
-        --     filterList
-        --         |> Array.get index
-        --         |> Maybe.map (\mf -> { mf | userAction = userAction} )
-        --         |> Maybe.map (\mf -> Array.set index mf filterList)
-        --         |> Maybe.map pushModifiedFilterListBackInToUIModel
-        --         |> Maybe.withDefault uiModel
-
-        -- setUserAction : (SearchFilterType, String) -> SearchFilterType
-        -- setUserAction (yearFilterItem, yearValue)=
-        --     let
-        --         u = Debug.log "yf and yv" [yearFilterItem.searchFilterKey , yearValue]
-        --         userAction  =
-        --             if yearFilterItem.searchFilterKey == yearValue then 
-        --                 True 
-        --             else 
-        --                 False    
-        --     in
-        --         {yearFilterItem | userAction = userAction}
-
-
-        -- vars = 
-        --         yearsFromTextSearchResult
-        --             |> (\yearValue ->
-
-        --                     List.filter  setUserAction ((Array.toList <| uiModel.yearFilters ), yearValue)
-        --                 )
-
-        -- updatedYearFilters  = 
-        --         Array.map (\yf -> 
-
-        --                      {yf | userAction = member yf.searchFilterKey yearsFromTextSearchResult}
-
-        --                     -- if member yf.searchFilterKey yearsFromTextSearchResult then
-        --                     --     {yf | userAction = True}
-        --                     -- else
-        --                     --     {yf | userAction = False}
-
-        --                 ) uiModel.yearFilters
         
-        --c = Debug.log "vars" [updatedYearFilters]
-
-        -- setYearFilterBasedOnTextSearchResult =
-        --     uiModel.salesStatusFilters
-        --         |> (\sf -> 
-        --                 member sf.searchFilterKey yearsFromTextSearchResult
-        --             )
-        --uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel
-
-        --pagedTruckList = List.take 100 newFilteredTruckList
 
         newModel = {model | filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
-        --newUIModel = {uiModel | yearFilters = updatedYearFilters}
 
         uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnTextSeachResults newModel {uiModel | hasTextSearchReturnedAnyResult = hasTextSearchReturnedAnyResult}
 
@@ -336,6 +244,38 @@ update msg (model, uiModel) =
             in
                 --( ( {model | filteredTruckList = newFilteredTruckList } , newUIModel), sendMessage SearchPressed )
                 ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+
+        ClearSearchStringResults ->
+                --( ( {model | filteredTruckList = model.truckList} , {uiModel | searchString = ""}), Cmd.none)
+            let
+                 
+                trucks = model.truckList
+                salesStatusFilters = buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters trucks
+                yearFilters = buildSearchFilterValueRecordList Year uiModel.yearFilters trucks
+                makeFilters = buildSearchFilterValueRecordList Make uiModel.makeFilters trucks
+                modelFilters = buildSearchFilterValueRecordList MakeModel uiModel.modelFilters trucks
+                sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
+                sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
+
+                --filteredTruckList = List.filter (\t -> t.year == "2019" ) trucks
+                pagedTruckList = List.take 100 trucks
+            in
+                ( 
+                    (
+                        {   model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
+                        { 
+                            uiModel   | 
+                                        yearFilters = yearFilters, 
+                                        makeFilters = makeFilters, 
+                                        modelFilters = modelFilters, 
+                                        salesStatusFilters = salesStatusFilters, 
+                                        sleeperRoofFilters = sleeperRoofFilters, 
+                                        sleeperBunkFilters = sleeperBunkFilters 
+                        }
+                    )
+                    --, Cmd.none
+                    , fetchSearchFilterRanges
+                )
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -531,6 +471,12 @@ view (model, uiModel) =
                                 ]
                                 ,row[centerY, bw 0, wf ]
                                 [
+                                    Input.button ( [hf, pd 3, Font.size 18, eId "clearSrch", bw 2])
+                                        { 
+                                            onPress = Just ClearSearchStringResults
+                                            ,label = textValue "Clear Results"
+                                        }
+                                    ,
                                     checkbox [ pdr 5] {
                                         onChange = CollapseAllClicked
                                         ,icon = buildCollapseAllImage

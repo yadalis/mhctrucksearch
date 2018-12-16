@@ -34,9 +34,17 @@ truckView index truck =
     
         row[bwb 0, wf, pd 5, bc 240 240 240, hf ] --bc 47 48 49
         [
-            column[wfmax 225, bw 0, hf, pdt 0]
+            column[wfmax 200, bw 0, hf, pdt 0]
             [
-                image [bwl 0, pdl 0, wf] {src = 
+                image [bwl 0, pdl 0, wpx 200,bw 0,
+
+                    inFront (
+                        if truck.salesStatusFlag == "I" || truck.salesStatusFlag == "S" then
+                            ( el[alignBottom, fc 250 250 250, bc 234 67 82, wf, alpha 0.55, Font.extraBold] <| textValue "SOLD" )
+                        else
+                            none
+                    )
+                        ] {src = 
                                             
                                                     String.split "&" truck.primaryImageLink
                                                         |> (\list -> case  List.head list  of
@@ -51,7 +59,7 @@ truckView index truck =
                                             , description ="Logo" }
             ]
             ,
-            column[wf, hf, pd 5, spy 15]
+            column[wf, hf, pde 5 5 5 15, spy 15]
             [
                 column[]
                 [
@@ -89,7 +97,7 @@ truckView index truck =
                         --,(\tup -> dataFieldView  (Tuple.first tup) (Tuple.second tup) ) <| buildTruckIdNumber truck
                         ,dataFieldView "Stock#:" <| if truck.stockNumber == 0 then "N/A" else String.fromInt truck.stockNumber
                         ,dataFieldView "Chassis#:" truck.chassisNumber
-                        ,dataFieldView "Mileage:" <|  format "0,0" <|  Basics.toFloat truck.mileage
+                        ,dataFieldView "Mileage:" <|  format "0,0" <|  truck.mileage
                         ,dataFieldView "Sleeper Size:" 
                                                         <| case String.toInt truck.sleeperInches of
                                                                     Just num -> String.fromInt num ++ " Inch"
@@ -119,9 +127,9 @@ dataFieldView fieldName fieldValue =
         ]   
     ]
 
-buildPriceValue : Int -> String
+buildPriceValue : Float -> String
 buildPriceValue price =
     if price == 0 then
         "Call for pricing"
     else
-       format "$0,0" <| Basics.toFloat price
+       format "$0,0" <| price

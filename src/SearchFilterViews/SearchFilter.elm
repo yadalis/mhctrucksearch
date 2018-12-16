@@ -19,7 +19,7 @@ getMinMaxValue range =
                 minmaxValues = String.split "-" range.searchFilterExtraData -- "a:THERMOKING", "md:t880", "y:2019" etc...
                 minValue =     
                         case List.head <| minmaxValues of -- gives first element in the list
-                        Just strMinVal -> case String.toInt strMinVal of 
+                        Just strMinVal -> case String.toFloat strMinVal of 
                                                 Just minVal -> minVal
                                                 Nothing -> 0                    
                         Nothing -> 0
@@ -28,7 +28,7 @@ getMinMaxValue range =
                         --     Just val -> val
                         --     Nothing -> ""
                         case List.head <| List.reverse minmaxValues of -- gives last element in the list -- 2nd style
-                                Just strMaxVal -> case String.toInt strMaxVal of 
+                                Just strMaxVal -> case String.toFloat strMaxVal of 
                                                 Just maxVal -> maxVal
                                                 Nothing -> 0     
                                 Nothing -> 0     
