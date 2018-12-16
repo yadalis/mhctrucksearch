@@ -26,35 +26,50 @@ trucksView trucks =
         |> List.indexedMap truckView
         |> column [hf, wf, spy 5]
 
+
+
 truckView  : Int -> Truck -> Element Msg
 truckView index truck =
     let
         logsToBrowswerDevTools = Debug.log "searchValues -> " ["truck func..."]    
+
+        isTruckSold  =
+            truck.salesStatusFlag == "I" || truck.salesStatusFlag == "S"
+
+        formatImageLink = truck.primaryImageLink
+                            |> String.isEmpty
+                            |> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else truck.primaryImageLink)
+                            |> String.replace "&h=16" "&h=200"
+                            |> String.replace "&w=16" "&w=200" 
+                            |> String.replace "&thn=1" "&thn=2"
+                                
+            -- String.split "&" truck.primaryImageLink
+            --     |> (\list -> case  List.head list  of
+            --                 Just url -> 
+            --                             if String.isEmpty url then
+            --                                 "photoscomingsoon.png"     
+            --                             else
+            --                                 url ++  "&h=200&w=200&thn=1"
+            --                 Nothing -> "photoscomingsoon.png"
+            --     ) 
     in
     
         row[bwb 0, wf, pd 5, bc 240 240 240, hf ] --bc 47 48 49
         [
-            column[wfmax 200, bw 0, hf, pdt 0]
+            column[  bw 0, hf, pdt 0]
             [
-                image [bwl 0, pdl 0, wpx 200,bw 0,
+                image [ bwl 0, pdl 0, bw 0, bc 250 250 250
+                    ,
 
                     inFront (
-                        if truck.salesStatusFlag == "I" || truck.salesStatusFlag == "S" then
+                        if isTruckSold then
                             ( el[alignBottom, fc 250 250 250, bc 234 67 82, wf, alpha 0.55, Font.extraBold] <| textValue "SOLD" )
                         else
                             none
                     )
                         ] {src = 
-                                            
-                                                    String.split "&" truck.primaryImageLink
-                                                        |> (\list -> case  List.head list  of
-                                                                    Just url -> 
-                                                                                if String.isEmpty url then
-                                                                                    "photoscomingsoon.png"     
-                                                                                else
-                                                                                    url
-                                                                    Nothing -> "photoscomingsoon.png"
-                                                        )
+                                            --String.replace "16" "200" truck.primaryImageLink
+                                            formatImageLink
                                             
                                             , description ="Logo" }
             ]
@@ -63,12 +78,18 @@ truckView index truck =
             [
                 column[]
                 [
-                    link [wf,  Element.htmlAttribute (target "_blank") ]
+                    link [wf,  Element.htmlAttribute (target "_blank"), fal ]
                         { url = 
-                            crossOrigin "https://www.mhc.com/trucks/used/" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
+                            crossOrigin "https://www.mhc.com/trucks/used" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
                             , label = paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| truck.title]
                         }
                     ,
+                    -- link [wf,  Element.htmlAttribute (target "_blank"), fal ]
+                    --     { url = 
+                    --         formatImageLink
+                    --         , label = paragraph [Font.size 28, Font.bold, fc  190 5 30] [textValue <| formatImageLink]
+                    --     }
+                    -- ,
                         if truck.stockNumber == 0 then
                             --paragraph [Font.size 28, Font.bold, fc  190 5 30] [
                             --el [Font.size 22, Font.regular,  fc  167 167 167, pdt 5] << textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber
