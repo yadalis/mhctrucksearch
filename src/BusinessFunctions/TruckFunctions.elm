@@ -25,23 +25,23 @@ buildTruckIdNumber truck =
         
 hasAnyOfSearchFilterValuesChecked searchFilters =
         searchFilters
-        |> Array.filter (\sf -> sf.userAction == True) 
+        |> Array.filter (\sf -> sf.userAction == True) --user count func, todo
         |> Array.length
         |> (\length  -> length > 0)
 
 hasThisTruckMatchesWithUserSelectedFilterValue filterList partialCompareWaitingForSecondParamSearchFilter = 
         filterList
-        |> Array.filter partialCompareWaitingForSecondParamSearchFilter
+        |> Array.filter partialCompareWaitingForSecondParamSearchFilter -- funny name :)
         |> Array.length
         |> (\length  -> length > 0)
 
 buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckParam trucks =
         if hasAnyOfSearchFilterValuesChecked filterList then
-        List.filter (\truck -> 
-                                hasThisTruckMatchesWithUserSelectedFilterValue filterList (comparefilterKeyValueWithTruckParam truck)
-                        )  trucks 
+                List.filter (\truck -> 
+                                        hasThisTruckMatchesWithUserSelectedFilterValue filterList (comparefilterKeyValueWithTruckParam truck)
+                                )  trucks 
         else
-        trucks
+                trucks
 
 buildSearchFilter uniqueFilterValuesFromTextSearchResult getCountFunc filterCategory =
         Array.filter(\sf -> not <| String.isEmpty sf.searchFilterKey)
@@ -110,7 +110,7 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                                 in
                                         (filterCategory,updatedFilters)
                         ) filterRelatedFuncs
-                        |> Debug.log "-----------"
+                        --|> Debug.log "-----------"
 
                 getDefaultSearchFilters : List (SearchFilterCustomType, Array SearchFilterType) -> Array SearchFilterType
                 getDefaultSearchFilters searchFilters =
@@ -131,7 +131,7 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                                                 |> getDefaultSearchFilters
                 updatedSleeperBunkFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperBunk ) allUpdatedFilters
                                                 |> getDefaultSearchFilters
-                                                |> Debug.log "bunk filters ===================================>"
+                                                --|> Debug.log "bunk filters ===================================>"
                 
                 -- updatedPriceFilters = List.filter (\(filterCategory, lst) -> filterCategory == Price ) allUpdatedFilters
                 --                                 |> getDefaultSearchFilters
@@ -149,7 +149,7 @@ rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
                                 (Price, (\filterValue -> 
                                                                         count (\t -> t.price == filterValue) model.filteredTruckList ) )
                         ]
-                        |> Debug.log "asdfasdfsadfsadfdsaf========="
+                        --|> Debug.log "asdfasdfsadfsadfdsaf========="
                         
                 updatedPriceFilters = buildRangeSearchFilter model.filteredTruckList uiModel.priceFilters Price
                         --|> Debug.log "vvvvvvvvvvvvvv" 
@@ -418,8 +418,14 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
+        truckSource = 
+                if uiModel.hasTextSearchReturnedAnyResult then
+                        model.filteredTruckList
+                else
+                        model.truckList
+        
         filterdTruckList  = 
-                model.truckList -- you need to use filteredTruckList if the result is from the TEXT search, so figure out
+                truckSource -- you need to use filteredTruckList if the result is from the TEXT search, so figure out
                                 -- if the trucks returned by TEXT search or by clicking the filter check boxes
                         |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True ) -- truckList gets passed as a last arg automatically from the previous |> pipe

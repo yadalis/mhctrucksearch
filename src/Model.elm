@@ -63,6 +63,7 @@ type alias UIModel =
         ,expandCollapseAllChecked : Bool
         ,showDropdown : Bool
         ,currentSortBy : SortBy
+        ,hasTextSearchReturnedAnyResult : Bool
     }
 
 type alias SearchFilterState =
@@ -186,5 +187,6 @@ initalUIModel jsFlag =
 
         expandCollapseAllChecked = False,
         showDropdown = False,
-        currentSortBy = MakeAtoZ
+        currentSortBy = MakeAtoZ,
+        hasTextSearchReturnedAnyResult = False
     }

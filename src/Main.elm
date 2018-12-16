@@ -48,37 +48,38 @@ init jsflg =
 performFinalSearch : Model -> String -> UIModel -> (Model, UIModel)
 performFinalSearch model userSearchString uiModel =
     let
-        searchFilterValueList = split "=" userSearchString -- "a:THERMOKING", "md:t880", "y:2019" etc...
-        searchFilterTypeCode =     
-            case List.head <| searchFilterValueList of -- gives first element in the list
-                Just val -> val
-                Nothing -> ""
-        searchFilterValue =
-                -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style
-                --     Just val -> val
-                --     Nothing -> ""
-                case List.head <| List.reverse searchFilterValueList of -- gives last element in the list -- 2nd style
-                    Just val -> val
-                    Nothing -> ""
+        -- searchFilterValueList = split "=" userSearchString -- "a:THERMOKING", "md:t880", "y:2019" etc...
+        -- searchFilterTypeCode =     
+        --     case List.head <| searchFilterValueList of -- gives first element in the list
+        --         Just val -> val
+        --         Nothing -> ""
+        -- searchFilterValue =
+        --         -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style
+        --         --     Just val -> val
+        --         --     Nothing -> ""
+        --         case List.head <| List.reverse searchFilterValueList of -- gives last element in the list -- 2nd style
+        --             Just val -> val
+        --             Nothing -> ""
 
-        logsToBrowswerDevTools = Debug.log "searchValues -> " [searchFilterTypeCode,searchFilterValue]
+        --logsToBrowswerDevTools = Debug.log "searchValues -> " [searchFilterTypeCode,searchFilterValue]
 
         searchResultTruckList  = 
-                if String.isEmpty userSearchString then
-                    model.truckList
-                        --|> List.take 100
-                else if ( (not <| String.isEmpty searchFilterTypeCode) && String.isEmpty searchFilterValue) then
-                    []
-                else
+                -- if String.isEmpty userSearchString then
+                --     model.truckList
+                --     --model.filteredTruckList
+                --         --|> List.take 100
+                -- -- else
+                -- --     []
+                -- else
                     model.truckList      
                         |> List.filter (\t ->     
 
-                            startsWith  (toLower searchFilterValue) (toLower t.salesStatus) ||
-                            startsWith  (toLower searchFilterValue) (toLower t.year) ||
-                            startsWith  (toLower searchFilterValue) (toLower t.make) ||
-                            startsWith  (toLower searchFilterValue) (toLower t.model) ||
-                            startsWith  (toLower searchFilterValue) (toLower t.sleeperRoof)||
-                            startsWith  (toLower searchFilterValue) (toLower t.sleeperBunk)
+                            startsWith  (toLower userSearchString) (toLower t.salesStatus) ||
+                            startsWith  (toLower userSearchString) (toLower t.year) ||
+                            startsWith  (toLower userSearchString) (toLower t.make) ||
+                            startsWith  (toLower userSearchString) (toLower t.model) ||
+                            startsWith  (toLower userSearchString) (toLower t.sleeperRoof)||
+                            startsWith  (toLower userSearchString) (toLower t.sleeperBunk)
                             -- case searchFilterTypeCode of
                             --     "ss"    -> startsWith  (toUpper searchFilterValue) (toUpper t.salesStatus) 
                             --     "y"     -> startsWith  ( searchFilterValue) ( t.year) 
@@ -91,12 +92,13 @@ performFinalSearch model userSearchString uiModel =
                     --|> List.take 100
                     |> sortTruckList uiModel.currentSortBy
         
-        finalSearchResultTruckList =
+        (finalSearchResultTruckList, hasTextSearchReturnedAnyResult) =
             if List.length searchResultTruckList > 0 then
-                searchResultTruckList
+                (searchResultTruckList, True)
             else
-                model.filteredTruckList
-            |> Debug.log "222222222222222222222" 
+                (model.filteredTruckList, False)
+
+        ggg = Debug.log "222222222222222222222" hasTextSearchReturnedAnyResult
         -- yearsFromTextSearchResult = 
         --     finalSearchResultTruckList
         --         |> List.map (\t -> t.year)
@@ -161,8 +163,9 @@ performFinalSearch model userSearchString uiModel =
         newModel = {model | filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
         --newUIModel = {uiModel | yearFilters = updatedYearFilters}
 
-        uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnTextSeachResults newModel uiModel
-        
+        uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnTextSeachResults newModel {uiModel | hasTextSearchReturnedAnyResult = hasTextSearchReturnedAnyResult}
+
+        asd=  Debug.log " hasTextSearchReturnedAnyResult " [uiModelUpdatedWithLatestSearchFilters.hasTextSearchReturnedAnyResult]
     in
         (newModel, uiModelUpdatedWithLatestSearchFilters)
 
@@ -180,10 +183,10 @@ update msg (model, uiModel) =
                                     Err err ->
                                             []
 
-                x =  Debug.log "ranges before" priceFiltersList
+                --x =  Debug.log "ranges before" priceFiltersList
                 --priceFilters = buildSearchFilterValueRangeList Price (Array.fromList <| priceFiltersList) model.truckList
                 priceFilters = buildSearchFilterValueRecordList Price (Array.fromList <| priceFiltersList) model.truckList
-                x1 =  Debug.log "ranges after " priceFilters
+                --x1 =  Debug.log "ranges after " priceFilters
                 --y = Debug.log "asdfasdfasdfsadfasddsaf" [List.map .price model.truckList]
                 
             in
@@ -316,10 +319,16 @@ update msg (model, uiModel) =
                         Price -> 
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})
                                 --|> (\filters -> updateUserSelectedSearchFilter filters (\mfArr -> {uiModel | sleeperBunkFilters = mfArr}) )    
+
                 newFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
 
-                uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
+                
+                uiModelUpdatedWithLatestSearchFilters =
+                    if uiModel.hasTextSearchReturnedAnyResult then
+                        rebuildSearchFiltersBasedOnTextSeachResults model newUIModel
+                    else
+                        rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
 
                 pagedTruckList = List.take 100 newFilteredTruckList
                 
@@ -427,7 +436,7 @@ update msg (model, uiModel) =
                             else
                                 {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList }
                 
-                u = Debug.log "asdf->" [sortedFilteredTruckList]
+                --u = Debug.log "asdf->" [sortedFilteredTruckList]
 
             in
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
@@ -473,7 +482,7 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[wf,  hpx 75,  alpha  1.99, brc 97 97 97 , bw 0
+                    row[wf,  hpx 75,  alpha  1.99, brc 97 97 97 , bw 0, pde 0 3 0 3
                      , htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
                     ]
                     [
@@ -506,7 +515,7 @@ view (model, uiModel) =
                     column[hf, wfmax 1920]
                     [
                         navBar,
-                        row[hf,wf, pde 85 5 100 5]
+                        row[hf,wf, pde 75 3 100 3]
                         [     
                             -- Search Filter Panel
                             column [wf,  spy 15,  bc 215 215 215, alignTop] 
@@ -565,25 +574,31 @@ view (model, uiModel) =
                             -- Trucks Search Result List Panel 
                             ,column[  wfp 5,  bw 0 ,pdl 15,  alignTop]
                             [
-                                row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215]
+                                row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215, bw 0]
                                 [ 
-                                    row[wfp 3, hf, bw 0]
+                                    column[wfp 3, hf, bw 0]
                                     [
                                         wrappedRow [wf,  bw 0, pdl 5 , alignTop]
                                             -- using <| u can avoid parans around the below func and its params
                                             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                     ]
-                                    ,column[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2]
+                                    ,row[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2]
                                     [
-                                        el [Element.alignTop, pdr 15,bw 0, Element.alignLeft, fc 97 97 97
+                                        column[bw 0, alignBottom, Element.alignLeft]
+                                        [
+                                            el [ pdr 15,bw 0, Element.alignLeft, fc 97 97 97, Element.alignBottom
                                                 , below (showSortOptionsDialog uiModel.showDropdown)
                                             ]
-                                            <| Input.button [pd 5, wf,    Font.bold, Font.hairline, bwb 1  ]  
+                                            <| Input.button [pdl 5, wf,    Font.bold, Font.hairline, bwb 1  ]  
                                                 { 
                                                     onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
                                                     ,label = textValue <| "Sort by : " ++ convertSortByToString uiModel.currentSortBy
                                                 }
-                                    ,el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                        ]
+                                        ,column[bw 0, alignBottom, Element.alignRight]
+                                        [
+                                            el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                        ]
                                     ]
                                 ]
                                 ,row[ wf, bwb 0, pde 5 0 5 0][
