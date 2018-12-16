@@ -39,44 +39,12 @@ type alias OnLoadSearchFilter =
 init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
     ( (initialModel,initalUIModel jsflg)
-        , Cmd.batch [fetchTrucks]
+        , Cmd.batch [fetchTrucks ""]
         --, Cmd.batch [fetchTrucks, fetchSearchFilterRanges] -- this executes all commands in async manner, it seems ?
     )
 
 ---- UPDATE ----
-
-performFinalSearch : Model -> String -> UIModel -> (Model, UIModel)
-performFinalSearch model userSearchString uiModel =
-    let
-        searchResultTruckList  = 
-                    model.truckList      
-                        |> List.filter (\t ->     
-                            startsWith  (toLower userSearchString) (toLower t.salesStatus) ||
-                            startsWith  (toLower userSearchString) (toLower t.year) ||
-                            startsWith  (toLower userSearchString) (toLower t.make) ||
-                            startsWith  (toLower userSearchString) (toLower t.model) ||
-                            startsWith  (toLower userSearchString) (toLower t.sleeperRoof)||
-                            startsWith  (toLower userSearchString) (toLower t.sleeperBunk)
-                        )
-                    |> sortTruckList uiModel.currentSortBy
-        
-        (finalSearchResultTruckList, hasTextSearchReturnedAnyResult) =
-            if List.length searchResultTruckList > 0 then
-                (searchResultTruckList, True)
-            else
-                (model.filteredTruckList, False)
-
-        ggg = Debug.log "222222222222222222222" hasTextSearchReturnedAnyResult
-        
-
-        newModel = {model | truckList = finalSearchResultTruckList, filteredTruckList = finalSearchResultTruckList, pagedTruckList = List.take 100 finalSearchResultTruckList}
-
-        uiModelUpdatedWithLatestSearchFilters = rebuildSearchFiltersBasedOnTextSeachResults newModel {uiModel | hasTextSearchReturnedAnyResult = hasTextSearchReturnedAnyResult}
-
-        asd=  Debug.log " hasTextSearchReturnedAnyResult " [uiModelUpdatedWithLatestSearchFilters.hasTextSearchReturnedAnyResult]
-    in
-        (newModel, uiModelUpdatedWithLatestSearchFilters)
-
+ 
 update : Msg -> (Model, UIModel) -> ( (Model, UIModel) , Cmd Msg  )
 update msg (model, uiModel) =
     case msg of
@@ -107,6 +75,7 @@ update msg (model, uiModel) =
                 trucks = case response of
                             Ok truckList ->
                                     truckList
+                                        |> sortTruckList uiModel.currentSortBy
                                         --|> List.take 100
                             Err err ->
                                     []
@@ -179,73 +148,49 @@ update msg (model, uiModel) =
                         Price -> 
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
 
-                newFilteredTruckList = applySearchFilters model newUIModel
+                newSortedFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
 
-                
                 uiModelUpdatedWithLatestSearchFilters =
-                --     if uiModel.hasTextSearchReturnedAnyResult then
-                --         rebuildSearchFiltersBasedOnTextSeachResults model newUIModel
-                --     else
                         rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
-
-                pagedTruckList = List.take 100 newFilteredTruckList
-                
-                
             in
-                ( ( {model | filteredTruckList = newFilteredTruckList, pagedTruckList = pagedTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+                ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
-        ClearSearchStringResults -> -- redo this since it is a pure dup code lifted from onFetchTruck Msg
-           ( ( model , {uiModel | searchString = ""}), fetchTrucks)
-            -- let
-                 
-            --     trucks = model.truckList
-            --     salesStatusFilters = buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters trucks
-            --     yearFilters = buildSearchFilterValueRecordList Year uiModel.yearFilters trucks
-            --     makeFilters = buildSearchFilterValueRecordList Make uiModel.makeFilters trucks
-            --     modelFilters = buildSearchFilterValueRecordList MakeModel uiModel.modelFilters trucks
-            --     sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
-            --     sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
-
-            --     pagedTruckList = List.take 100 trucks
-            -- in
-            --     ( 
-            --         (
-            --             {   model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
-            --             { 
-            --                 uiModel   | 
-            --                             yearFilters = yearFilters, 
-            --                             makeFilters = makeFilters, 
-            --                             modelFilters = modelFilters, 
-            --                             salesStatusFilters = salesStatusFilters, 
-            --                             sleeperRoofFilters = sleeperRoofFilters, 
-            --                             sleeperBunkFilters = sleeperBunkFilters 
-            --             }
-            --         )
-            --         , fetchSearchFilterRanges
-            --     )
+        ClearSearchStringResults ->
+            ( ( {model |
+                            filteredTruckList = [],
+                            truckList = [],
+                            pagedTruckList = []} , {uiModel | searchString = ""}), fetchTrucks "")
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
         SearchPressed ->
             (
-                let
-                    result =  performFinalSearch model uiModel.searchString uiModel
-                    newModel = Tuple.first result    
-                    newUIModel = Tuple.second result
-                in
-                    (newModel, newUIModel ), Cmd.none 
+                --(model, uiModel ), fetchTrucks uiModel.searchString 
+                (
+                    {model |
+                            filteredTruckList = [],
+                            truckList = [],
+                            pagedTruckList = []}
+                    ,uiModel
+
+                )
+                , fetchTrucks uiModel.searchString
             )
             
         HandleKeyboardEvent ->
             (
-                let
-                    result =  performFinalSearch model uiModel.searchString uiModel
-                    newModel = Tuple.first result    
-                    newUIModel = Tuple.second result
-                in
-                    (newModel, newUIModel ), Cmd.none 
+                --(model, uiModel ), fetchTrucks uiModel.searchString 
+                (
+                    {model |
+                            filteredTruckList = [],
+                            truckList = [],
+                            pagedTruckList = []}
+                    ,uiModel
+
+                )
+                , fetchTrucks uiModel.searchString
             )
         
         CollapseClicked searchFilterState userAction->

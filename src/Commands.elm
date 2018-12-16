@@ -7,13 +7,14 @@ import Msg exposing (..)
 import Model  exposing (..)
 --import RemoteData  exposing (..)
 import Array exposing(..)
+import Url.Builder exposing (..)
 
 import Json.Decode.Extra exposing (fromResult)
 
-fetchTrucks: Cmd Msg
-fetchTrucks =
+fetchTrucks : String -> Cmd Msg
+fetchTrucks searchText =
     Http.get
-        { url = fetchTrucksUrl
+        { url = fetchTrucksUrl searchText
         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }
@@ -26,10 +27,13 @@ fetchSearchFilterRanges =
         , expect = expectJson OnFetchSearchFilterRanges onFetchSearchFilterRangesDecoder
         }
 
-fetchTrucksUrl: String
-fetchTrucksUrl =
+fetchTrucksUrl : String -> String
+fetchTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
-        "http://localhost:50977/api/repairorder/gettrucks"
+            if String.isEmpty searchText then
+                "http://localhost:50977/api/repairorder/gettrucks"
+            else
+                crossOrigin "http://localhost:50977/api/repairorder/gettrucks" [searchText] []
         --"http://localhost:3333/trks"
 
 

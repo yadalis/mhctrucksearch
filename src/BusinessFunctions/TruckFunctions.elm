@@ -418,14 +418,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
-        truckSource = 
-                -- if uiModel.hasTextSearchReturnedAnyResult then
-                --         model.filteredTruckList
-                -- else
-                        model.truckList
-        
         filterdTruckList  = 
-                truckSource -- you need to use filteredTruckList if the result is from the TEXT search, so figure out
+                model.truckList -- you need to use filteredTruckList if the result is from the TEXT search, so figure out
                                 -- if the trucks returned by TEXT search or by clicking the filter check boxes
                         |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True ) -- truckList gets passed as a last arg automatically from the previous |> pipe
