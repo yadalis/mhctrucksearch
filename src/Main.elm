@@ -30,6 +30,7 @@ import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
 import List.Unique exposing (..)
+import Element.Events exposing (..)
 
 ---- INIT ----
 
@@ -244,6 +245,26 @@ update msg (model, uiModel) =
 
             in
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
+        
+        ShowTrucksWithPhotoOnly ->
+            let
+                photoOnlyTrucks =
+                    model.truckList
+                        |> List.filter (\t -> t.primaryImageLink /= "")
+                        |> (\list -> 
+                                    if List.length list > 0 then
+                                        list
+                                    else 
+                                        model.filteredTruckList)
+                
+                newModel = {model | truckList=photoOnlyTrucks,  filteredTruckList=photoOnlyTrucks, pagedTruckList = List.take 100 photoOnlyTrucks}
+
+                uiModelUpdatedWithLatestSearchFilters =
+                         rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel uiModel
+
+
+            in        
+                ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
 ---- VIEW ----
 
@@ -333,18 +354,19 @@ view (model, uiModel) =
                                             ,label = searchBtnIcon
                                         }
                                 ]
-                                ,row[centerY, bw 0, wf, pdl 5 ]
+                                ,row[centerY, bw 0,  pde 0 5 0 5, spx 75, wf ]
                                 [
-                                    Input.button ( [hf, pdl 3, Font.size 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                    Input.button ( [  Element.alignLeft, hf, pdl 3, Font.size 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
                                         { 
                                             onPress = Just ClearSearchStringResults
                                             ,label = el[pd 5] <| textValue "Clear Results"
                                         }
                                     ,
-                                    checkbox [ pdr 5] {
+                                    --centerX, centerY , brc 215 23 89, bw 2
+                                    checkbox [Font.size 16, bw 1,  hf, Element.alignRight] {
                                         onChange = CollapseAllClicked
                                         ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                        , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
+                                        , label = labelLeft [centerX] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
                                         , checked = uiModel.expandCollapseAllChecked
                                     }
                                 ]
@@ -409,9 +431,13 @@ view (model, uiModel) =
                                                     ,label = textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
                                                 }
                                         ]
+                                        ,column[bw 0, alignBottom, centerX]
+                                        [
+                                            el [Element.alignBottom,pdb 0, pdr 5,bwb 1, Element.alignRight, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                        ]
                                         ,column[bw 0, alignBottom, Element.alignRight]
                                         [
-                                            el [Element.alignBottom,pdb 5, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                            el [Element.alignBottom,pdb 0, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                         ]
                                     ]
                                 ]

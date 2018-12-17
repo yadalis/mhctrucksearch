@@ -178,7 +178,7 @@ initalUIModel jsFlag =
                                             -- this is to initialize an Array, repeat creates one item in this case and that lets us push rest of the items
                                             -- this list can be generated off of datasource, when that happens we dont need to hardcode index value, just use indexedMap
                                             -- and set the generated index value to index prop
-        expandCollapseSearchFilterStates = Array.repeat 1 {index = 0,searchFilterCustomType = SalesStatus, userAction = True} 
+        expandCollapseSearchFilterStates = Array.repeat 1 {index = 0,searchFilterCustomType = SalesStatus, userAction = False} 
                                                 |> Array.push {index = 1,searchFilterCustomType = Year, userAction = False}
                                                 |> Array.push {index = 2,searchFilterCustomType = Make, userAction = False}
                                                 |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}

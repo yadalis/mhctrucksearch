@@ -24,3 +24,4 @@ type Msg
     | PageNumberClicked Int
     | OperateSortDialog Bool
     | SortTrucks SortBy
+    | ShowTrucksWithPhotoOnly
