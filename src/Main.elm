@@ -175,7 +175,6 @@ update msg (model, uiModel) =
 
         SearchPressed ->
             (
-                --(model, uiModel ), fetchTrucks uiModel.searchString 
                 (
                     {model |
                             filteredTruckList = [],
@@ -189,7 +188,6 @@ update msg (model, uiModel) =
             
         HandleKeyboardEvent ->
             (
-                --(model, uiModel ), fetchTrucks uiModel.searchString 
                 (
                     {model |
                             filteredTruckList = [],

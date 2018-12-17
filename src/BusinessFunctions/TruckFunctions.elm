@@ -55,23 +55,23 @@ buildSearchFilter uniqueFilterValuesFromTextSearchResult getCountFunc filterCate
                                                                 filterCategory
                         ) << Array.fromList <| uniqueFilterValuesFromTextSearchResult
 
-buildRangeSearchFilter trucks searchFilters filterCategory =
-        Array.indexedMap
-                (\index range -> 
+-- buildRangeSearchFilter trucks searchFilters filterCategory =
+--         Array.indexedMap
+--                 (\index range -> 
 
-                        let
-                                minmaxValue = getMinMaxValue range     
-                                minValue = Tuple.first minmaxValue
-                                maxValue = Tuple.second minmaxValue
-                        in
-                                SearchFilterType   index 
-                                                        range.searchFilterKey 
-                                                        range.searchFilterExtraData 
-                                                        False 
-                                                        (count (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
-                                                        filterCategory
-                )
-                searchFilters
+--                         let
+--                                 minmaxValue = getMinMaxValue range     
+--                                 minValue = Tuple.first minmaxValue
+--                                 maxValue = Tuple.second minmaxValue
+--                         in
+--                                 SearchFilterType   index 
+--                                                         range.searchFilterKey 
+--                                                         range.searchFilterExtraData 
+--                                                         False 
+--                                                         (count (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
+--                                                         filterCategory
+--                 )
+--                 searchFilters
 
 
 -- rebuildSearchFiltersBasedOnTextSeachResults : Model -> UIModel -> UIModel
@@ -512,8 +512,7 @@ applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
         filterdTruckList  = 
-                model.truckList -- you need to use filteredTruckList if the result is from the TEXT search, so figure out
-                                -- if the trucks returned by TEXT search or by clicking the filter check boxes
+                model.truckList 
                         |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True ) -- truckList gets passed as a last arg automatically from the previous |> pipe
                                 -- the result from the above function gets feed in to the below function and so on until it ends
@@ -527,7 +526,7 @@ applySearchFilters model uiModel =
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
                         >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                        >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
+                        >> (buildFilteredSearchResultBySearchType uiModel.priceFilters) 
                                         (\t sf -> 
                                                 let
                                                         minmaxValue = getMinMaxValue sf    
