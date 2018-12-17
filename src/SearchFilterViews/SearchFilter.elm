@@ -138,32 +138,71 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 sfArray
                     )
 
-        Price ->
-             Array.indexedMap
-                         (\index range -> 
+        Price ->            
+            let
+                priceCheckFunc = (\minValue maxValue ->
+                            (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) )
+            in
+            
+                createFilters searchFilterTypes searchFilterCustomType priceCheckFunc
+            --  Array.indexedMap
+            --              (\index range -> 
 
-                            let
-                                minmaxValue = getMinMaxValue range     
-                                minValue = Tuple.first minmaxValue
-                                maxValue = Tuple.second minmaxValue
-                            in
-                                --Tuple.pair range.searchFilterExtraData ( (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks)  )
-                                --using Constructor style
-                                SearchFilterType   index 
-                                                        range.searchFilterKey 
-                                                        range.searchFilterExtraData 
-                                                        -- range.searchFilterMinValue  
-                                                        -- range.searchFilterMaxValue 
-                                                        False 
-                                                        (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
-                                                        searchFilterCustomType 
+            --                 let
+            --                     minmaxValue = getMinMaxValue range     
+            --                     minValue = Tuple.first minmaxValue
+            --                     maxValue = Tuple.second minmaxValue
+            --                 in
+            --                     --Tuple.pair range.searchFilterExtraData ( (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks)  )
+            --                     --using Constructor style
+            --                     SearchFilterType   index 
+            --                                             range.searchFilterKey 
+            --                                             range.searchFilterExtraData 
+            --                                             -- range.searchFilterMinValue  
+            --                                             -- range.searchFilterMaxValue 
+            --                                             False 
+            --                                             (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
+            --                                             searchFilterCustomType 
 
-                         )
+            --              )
                          
-                        searchFilterTypes
+            --             searchFilterTypes
 
         EngineHP ->
-             Array.indexedMap
+            let
+                eningeHPCheckFunc = (\minValue maxValue ->
+                            (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) )
+            in
+            
+                createFilters searchFilterTypes searchFilterCustomType eningeHPCheckFunc
+            --  Array.indexedMap
+            --              (\index range -> 
+
+            --                 let
+            --                     minmaxValue = getMinMaxValue range     
+            --                     minValue = Tuple.first minmaxValue
+            --                     maxValue = Tuple.second minmaxValue
+            --                 in
+            --                     --Tuple.pair range.searchFilterExtraData ( (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks)  )
+            --                     --using Constructor style
+            --                     SearchFilterType   index 
+            --                                             range.searchFilterKey 
+            --                                             range.searchFilterExtraData 
+            --                                             -- range.searchFilterMinValue  
+            --                                             -- range.searchFilterMaxValue 
+            --                                             False 
+            --                                             (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) 
+            --                                             searchFilterCustomType 
+
+            --              )
+                         
+            --             searchFilterTypes
+
+
+
+createFilters searchFilterTypes searchFilterCustomType filterCompareCheckFunc = 
+
+        Array.indexedMap
                          (\index range -> 
 
                             let
@@ -171,16 +210,13 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 minValue = Tuple.first minmaxValue
                                 maxValue = Tuple.second minmaxValue
                             in
-                                --Tuple.pair range.searchFilterExtraData ( (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks)  )
                                 --using Constructor style
                                 SearchFilterType   index 
                                                         range.searchFilterKey 
                                                         range.searchFilterExtraData 
-                                                        -- range.searchFilterMinValue  
-                                                        -- range.searchFilterMaxValue 
-                                                        False 
-                                                        (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) 
-                                                        searchFilterCustomType 
+                                                        False
+                                                        (filterCompareCheckFunc minValue maxValue)
+                                                        searchFilterCustomType
 
                          )
                          

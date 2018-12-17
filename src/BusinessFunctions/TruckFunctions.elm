@@ -29,6 +29,7 @@ hasAnyOfSearchFilterValuesChecked searchFilters =
         |> Array.length
         |> (\length  -> length > 0)
 
+-- the below two func shows the power of partial apps
 hasThisTruckMatchesWithUserSelectedFilterValue filterList partialCompareWaitingForSecondParamSearchFilter = 
         filterList
         |> Array.filter partialCompareWaitingForSecondParamSearchFilter -- funny name :)
@@ -527,23 +528,23 @@ applySearchFilters model uiModel =
                         >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                 (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
                         >> (buildFilteredSearchResultBySearchType uiModel.priceFilters) 
-                                        (\t sf -> 
-                                                let
-                                                        minmaxValue = getMinMaxValue sf    
-                                                        minValue = Tuple.first minmaxValue
-                                                        maxValue = Tuple.second minmaxValue
-                                                in
-                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                        )
+                                (\t sf -> 
+                                        let
+                                                minmaxValue = getMinMaxValue sf    
+                                                minValue = Tuple.first minmaxValue
+                                                maxValue = Tuple.second minmaxValue
+                                        in
+                                                t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                )
                         >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                        (\t sf -> 
-                                                let
-                                                        minmaxValue = getMinMaxValue sf    
-                                                        minValue = Tuple.first minmaxValue
-                                                        maxValue = Tuple.second minmaxValue
-                                                in
-                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                        )
+                                (\t sf -> 
+                                        let
+                                                minmaxValue = getMinMaxValue sf    
+                                                minValue = Tuple.first minmaxValue
+                                                maxValue = Tuple.second minmaxValue
+                                        in
+                                                t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                )
 
         sortedFilterdTruckList =
             filterdTruckList
