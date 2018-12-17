@@ -3,8 +3,6 @@ module TruckViews.SortDialog exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import Element exposing (..)
-import Element.Font as Font exposing (..)
-import Element.Border as Border exposing (..)
 import Element.Input as Input exposing (..)
 import Msg exposing (..)
 import Model exposing (..)
@@ -15,7 +13,7 @@ showSortOptionsDialog show currentSortByOption =
     if show then 
         column[bc 245 245 245, pd 15, br 5, bw 2, spy 0, wpx 300]
         [
-            row[Element.alignRight, bw 2, fac, bc 200 200 200  ][
+            row[ear, bw 2, fac, bc 200 200 200  ][
                      Input.button ( [hf, bwb 0, fal, pdb 0])
                                         { 
                                             onPress = Just <| OperateSortDialog False
@@ -27,14 +25,12 @@ showSortOptionsDialog show currentSortByOption =
             [
                 column[spy 3, wf]
                     <|
-                        List.intersperse (el[bwb 1,Border.dotted, wf] <| textValue "") (List.map (\(key, label, msg) -> buildSortOption key label msg currentSortByOption) sortByItemslist)
+                        List.intersperse (el[bwb 1,bdot, wf] <| textValue "") (List.map (\(key, label, msg) -> buildSortOption key label msg currentSortByOption) sortByItemslist)
             ]
         ]
         
     else
         none
-
-
 
 buildSortOption key label msg currentSortByOption =
     let

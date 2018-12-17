@@ -7,29 +7,20 @@ import Model exposing (..)
 import Msg exposing (..)
 import Commands exposing (..)
 --import RemoteData  exposing (..)
-import Http exposing (..)
-import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (..)
 import Element exposing (..)
 import Element.Input as Input exposing (..) 
-import Element.Border as Border exposing (..) 
-import Element.Font as Font exposing (..) 
+import Element.Font as Font exposing (..)
 import TruckViews.Truck exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
-import Helpers.Utils exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
-import Task
 import Array exposing(..)
-import String exposing (..)
 import Html.Events.Extra as ExtraHtmlEvents
 import SearchFilterViews.SearchFilter exposing (..)
---import SearchFilterViews.SearchFilterRage exposing (..)
 import Element.Lazy as Lazy exposing(..)
 import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
-import List.Unique exposing (..)
 import Element.Events exposing (..)
 
 ---- INIT ----
@@ -276,7 +267,7 @@ textBox uiModel=
         onChange = SearchString
         ,text  = uiModel.searchString
         ,label = labelLeft [] none
-        ,placeholder = Just (Input.placeholder [Font.size 14] (el [centerY] <| textValue "Fluid truck Search"))
+        ,placeholder = Just (Input.placeholder [fs 14] (el [centerY] <| textValue "Fluid truck Search"))
 
     }
 
@@ -294,7 +285,7 @@ view (model, uiModel) =
                     if List.length model.filteredTruckList > 0 then
                         none
                     else
-                        image [hpx 18, bw one, wf, pdl 5, bwb 2, alignTop] {src = "loader.gif", description ="Logo" }  
+                        image [hpx 18, bw one, wf, pdl 5, bwb 2, eat] {src = "loader.gif", description ="Logo" }  
 
             focusStyle : Element.Option
             focusStyle =
@@ -314,8 +305,8 @@ view (model, uiModel) =
                             ]
                             ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
                                     column[ bwl 2, pdl 3, brc 255 94 94, centerY]
-                                        [el [Font.size 26, letterSpacing 0 ] <| textValue "Suresh Yadali"
-                                        ,el [Font.size 18, pdt 15, letterSpacing 0] <| textValue "Kansas City, MO"
+                                        [el [fs 26 ] <| textValue "Suresh Yadali"
+                                        ,el [fs 18, pdt 15 ] <| textValue "Kansas City, MO"
                                 ]
                             ]
                     ] 
@@ -341,7 +332,7 @@ view (model, uiModel) =
                         row[hf,wf, pde 75 3 100 3]
                         [     
                             -- Search Filter Panel
-                            column [wf,  spy 15,  bc 215 215 215, alignTop] 
+                            column [wf,  spy 15,  bc 215 215 215, eat] 
                             [
                                 row[wf, pd 3, bw 0]
                                 [ 
@@ -354,14 +345,14 @@ view (model, uiModel) =
                                 ]
                                 ,row[centerY, bw 0,  pde 0 5 0 5, spx 75, wf ]
                                 [
-                                    Input.button ( [  Element.alignLeft, hf, pdl 3, Font.size 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                    Input.button ( [  eal, hf, pdl 3, fs 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
                                         { 
                                             onPress = Just ClearSearchStringResults
                                             ,label = el[pd 5] <| textValue "Clear Results"
                                         }
                                     ,
                                     --centerX, centerY , brc 215 23 89, bw 2
-                                    checkbox [Font.size 16, bw 1,  hf, Element.alignRight] {
+                                    checkbox [fs 16, bw 1,  hf, ear] {
                                         onChange = CollapseAllClicked
                                         ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
                                         , label = labelLeft [centerX] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
@@ -406,36 +397,36 @@ view (model, uiModel) =
                             ]
                             
                             -- Trucks Search Result List Panel 
-                            ,column[  wfp 5,  bw 0 ,pdl 15,  alignTop]
+                            ,column[  wfp 5,  bw 0 ,pdl 15,  eat]
                             [
                                 row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215, bw 0]
                                 [ 
                                     column[wfp 3, hf, bw 0]
                                     [
-                                        wrappedRow [wf,  bw 0, pdl 5 , alignTop]
+                                        wrappedRow [wf,  bw 0, pdl 5 , eat]
                                             -- using <| u can avoid parans around the below func and its params
                                             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                     ]
                                     ,row[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2]
                                     [
-                                        column[bw 0, alignBottom, Element.alignLeft]
+                                        column[bw 0, eab]
                                         [
-                                            el [ pdr 15,bw 0, Element.alignLeft, fc 97 97 97, Element.alignBottom
+                                            el [ pdr 15,bw 0,  fc 97 97 97
                                                 , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
                                             ]
-                                            <| Input.button [pdl 5, wf,    Font.bold, Font.hairline, bwb 1  ]  
+                                            <| Input.button [pdl 5, wf,    fb, fh, bwb 1  ]  
                                                 { 
                                                     onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
                                                     ,label = textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
                                                 }
                                         ]
-                                        ,column[bw 0, alignBottom, centerX]
+                                        ,column[bw 0, eab, bwl 2, pdl 15]
                                         [
-                                            el [Element.alignBottom,pdb 0, pdr 5,bwb 1, Element.alignRight, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                            el [pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
                                         ]
-                                        ,column[bw 0, alignBottom, Element.alignRight]
+                                        ,column[bw 0, eab,ear]
                                         [
-                                            el [Element.alignBottom,pdb 0, pdr 5,bw 0, Element.alignRight, fc 97 97 97] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                            el [pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
                                         ]
                                     ]
                                 ]
@@ -472,9 +463,9 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
 
         searchStringBtnStyle num = 
                     if currentPageNumber == num then 
-                        [  bwb 0, bc 185 185 185, fc 57 57 57 , Font.size 16]
+                        [  bwb 0, bc 185 185 185, fc 57 57 57 , fs 16]
                     else
-                        [   bwb 0, fc 244 66 95  , Font.size 12]
+                        [   bwb 0, fc 244 66 95  , fs 12]
     in
     
         if List.length pageNumbers > 1 then
@@ -487,7 +478,7 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
                                                         else
                                                             mouseOver [ bc  175 175 175 ]
                                                         ,
-                                                        pd 5, wf,    Font.bold ] ++ (searchStringBtnStyle num))
+                                                        pd 5, wf,    fb ] ++ (searchStringBtnStyle num))
                                             { 
                                                 onPress = Just (PageNumberClicked num )
                                                 ,label = textValue <| String.fromInt num

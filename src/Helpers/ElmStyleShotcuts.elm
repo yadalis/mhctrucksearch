@@ -83,6 +83,8 @@ bwb number
 bwl number
     = Border.widthEach    {edges | left = number}
 
+bdot =
+    Border.dotted
 
 brc red green blue 
     = Border.color <| rgb255 red green blue
@@ -140,3 +142,36 @@ fac
 
 fc red green blue 
     = Font.color <| rgb255 red green blue
+
+fs num =
+    Font.size num
+
+fl =
+    Font.light
+
+fb =
+    Font.bold
+
+feb =
+    Font.extraBold
+
+fh= 
+    Font.hairline
+
+fr =
+    Font.regular
+   
+--Element Alignments
+eat =
+    Element.alignTop
+ear = 
+    Element.alignRight
+eab =
+    Element.alignBottom
+eal = 
+    Element.alignLeft
+
+eacx =
+    Element.centerX
+eacy =
+    Element.centerY
