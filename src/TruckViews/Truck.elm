@@ -128,7 +128,7 @@ truckView index truck =
                     [
                         dataFieldView  "Engine Make:"   truck.engineMake
                         ,dataFieldView  "Engine Model:"   truck.engineModel
-                        ,dataFieldView  "Horsepower:" truck.engineHP
+                        ,dataFieldView  "Horsepower:" <| String.fromFloat truck.engineHP
                         ,dataFieldView  "Transmission:"    truck.transType
                     ]
                 ]

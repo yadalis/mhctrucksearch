@@ -17,7 +17,7 @@ type alias Truck =
         , model             : String
         , engineMake        : String
         , engineModel       : String
-        , engineHP          : String
+        , engineHP          : Float
         , apu               : String
         , cdl               : String
         , year              : String
@@ -58,6 +58,7 @@ type alias UIModel =
         ,sleeperRoofFilters : Array SearchFilterType
         ,sleeperBunkFilters : Array SearchFilterType
         ,priceFilters : Array SearchFilterType
+        ,engineHPFilters : Array SearchFilterType
         --,priceFilters : Array SearchFilterRangeType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         --,expandCollapseSearchFilterRangeStates : Array SearchFilterRangeState
@@ -88,6 +89,7 @@ type SearchFilterCustomType
     | SleeperRoof
     | SleeperBunk
     | Price
+    | EngineHP
 
 -- type SearchFilterRangeUnionType
 --     = Price
@@ -172,6 +174,7 @@ initalUIModel jsFlag =
         sleeperRoofFilters = Array.empty,
         sleeperBunkFilters = Array.empty,
         priceFilters = Array.empty,
+        engineHPFilters = Array.empty,
                                             -- this is to initialize an Array, repeat creates one item in this case and that lets us push rest of the items
                                             -- this list can be generated off of datasource, when that happens we dont need to hardcode index value, just use indexedMap
                                             -- and set the generated index value to index prop
@@ -181,7 +184,8 @@ initalUIModel jsFlag =
                                                 |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
                                                 |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}
                                                 |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False}
-                                                |> Array.push {index = 6,searchFilterCustomType = Price, userAction = True},
+                                                |> Array.push {index = 6,searchFilterCustomType = Price, userAction = True}
+                                                |> Array.push {index = 7,searchFilterCustomType = EngineHP, userAction = True},
 
         --expandCollapseSearchFilterRangeStates = Array.repeat 1 {index = 0,searchFilterRangeUnionType = Price, userAction = True},
 

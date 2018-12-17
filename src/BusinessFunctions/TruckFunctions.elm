@@ -74,98 +74,98 @@ buildRangeSearchFilter trucks searchFilters filterCategory =
                 searchFilters
 
 
-rebuildSearchFiltersBasedOnTextSeachResults : Model -> UIModel -> UIModel
-rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
-        let
+-- rebuildSearchFiltersBasedOnTextSeachResults : Model -> UIModel -> UIModel
+-- rebuildSearchFiltersBasedOnTextSeachResults model uiModel =
+--         let
                 
-                filterRelatedFuncs = 
-                        [
-                                (SalesStatus, List.map (\t -> t.salesStatus), (\filterValue -> 
-                                                                        count (\t -> String.trim t.salesStatus == String.trim filterValue) model.filteredTruckList) ),
-                                (Year, List.map (\t -> t.year), (\filterValue -> 
-                                                                        count (\t -> String.trim t.year == String.trim filterValue) model.filteredTruckList) ),
-                                (Make, List.map (\t -> t.make), (\filterValue -> 
-                                                                        count (\t -> String.trim t.make == String.trim filterValue) model.filteredTruckList ) ),
-                                (MakeModel, List.map (\t -> t.model), (\filterValue -> 
-                                                                        count (\t -> String.trim t.model == String.trim filterValue) model.filteredTruckList ) ),
-                                (SleeperRoof, List.map (\t -> t.sleeperRoof), (\filterValue -> 
-                                                                        count (\t -> String.trim t.sleeperRoof == String.trim filterValue) model.filteredTruckList) ),
-                                (SleeperBunk, List.map (\t -> t.sleeperBunk), (\filterValue -> 
-                                                                        count (\t -> String.trim t.sleeperBunk == String.trim filterValue) model.filteredTruckList ) )
-                        ]
+--                 filterRelatedFuncs = 
+--                         [
+--                                 (SalesStatus, List.map (\t -> t.salesStatus), (\filterValue -> 
+--                                                                         count (\t -> String.trim t.salesStatus == String.trim filterValue) model.filteredTruckList) ),
+--                                 (Year, List.map (\t -> t.year), (\filterValue -> 
+--                                                                         count (\t -> String.trim t.year == String.trim filterValue) model.filteredTruckList) ),
+--                                 (Make, List.map (\t -> t.make), (\filterValue -> 
+--                                                                         count (\t -> String.trim t.make == String.trim filterValue) model.filteredTruckList ) ),
+--                                 (MakeModel, List.map (\t -> t.model), (\filterValue -> 
+--                                                                         count (\t -> String.trim t.model == String.trim filterValue) model.filteredTruckList ) ),
+--                                 (SleeperRoof, List.map (\t -> t.sleeperRoof), (\filterValue -> 
+--                                                                         count (\t -> String.trim t.sleeperRoof == String.trim filterValue) model.filteredTruckList) ),
+--                                 (SleeperBunk, List.map (\t -> t.sleeperBunk), (\filterValue -> 
+--                                                                         count (\t -> String.trim t.sleeperBunk == String.trim filterValue) model.filteredTruckList ) )
+--                         ]
 
-                allUpdatedFilters = List.map(\(filterCategory, filedMapFunc, countFunc) ->
-                                let
-                                        updatedFilters = 
-                                                buildSearchFilter 
-                                                        (model.filteredTruckList
-                                                                |> filedMapFunc
-                                                                |> filterDuplicates
-                                                        )
+--                 allUpdatedFilters = List.map(\(filterCategory, filedMapFunc, countFunc) ->
+--                                 let
+--                                         updatedFilters = 
+--                                                 buildSearchFilter 
+--                                                         (model.filteredTruckList
+--                                                                 |> filedMapFunc
+--                                                                 |> filterDuplicates
+--                                                         )
                                                         
-                                                        (
-                                                                countFunc
-                                                        )
-                                                        filterCategory
-                                in
-                                        (filterCategory,updatedFilters)
-                        ) filterRelatedFuncs
-                        --|> Debug.log "-----------"
+--                                                         (
+--                                                                 countFunc
+--                                                         )
+--                                                         filterCategory
+--                                 in
+--                                         (filterCategory,updatedFilters)
+--                         ) filterRelatedFuncs
+--                         --|> Debug.log "-----------"
 
-                getDefaultSearchFilters : List (SearchFilterCustomType, Array SearchFilterType) -> Array SearchFilterType
-                getDefaultSearchFilters searchFilters =
-                        searchFilters
-                                |> List.head
-                                |> Maybe.map (\ssFilters -> Tuple.second ssFilters)
-                                |> Maybe.withDefault Array.empty
+--                 getDefaultSearchFilters : List (SearchFilterCustomType, Array SearchFilterType) -> Array SearchFilterType
+--                 getDefaultSearchFilters searchFilters =
+--                         searchFilters
+--                                 |> List.head
+--                                 |> Maybe.map (\ssFilters -> Tuple.second ssFilters)
+--                                 |> Maybe.withDefault Array.empty
 
-                updatedSalesStatusFilters = List.filter (\(filterCategory, lst) -> filterCategory == SalesStatus ) allUpdatedFilters
-                                                |> getDefaultSearchFilters
-                updatedYearFilters = List.filter (\(filterCategory, lst) -> filterCategory == Year ) allUpdatedFilters
-                                                |> getDefaultSearchFilters
-                updatedMakeFilters = List.filter (\(filterCategory, lst) -> filterCategory == Make ) allUpdatedFilters
-                                                |> getDefaultSearchFilters
-                updatedModelFilters = List.filter (\(filterCategory, lst) -> filterCategory == MakeModel ) allUpdatedFilters
-                                                |> getDefaultSearchFilters
-                updatedSleeperRoofFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperRoof ) allUpdatedFilters
-                                                |> getDefaultSearchFilters
-                updatedSleeperBunkFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperBunk ) allUpdatedFilters
-                                                |> getDefaultSearchFilters
-                                                --|> Debug.log "bunk filters ===================================>"
+--                 updatedSalesStatusFilters = List.filter (\(filterCategory, lst) -> filterCategory == SalesStatus ) allUpdatedFilters
+--                                                 |> getDefaultSearchFilters
+--                 updatedYearFilters = List.filter (\(filterCategory, lst) -> filterCategory == Year ) allUpdatedFilters
+--                                                 |> getDefaultSearchFilters
+--                 updatedMakeFilters = List.filter (\(filterCategory, lst) -> filterCategory == Make ) allUpdatedFilters
+--                                                 |> getDefaultSearchFilters
+--                 updatedModelFilters = List.filter (\(filterCategory, lst) -> filterCategory == MakeModel ) allUpdatedFilters
+--                                                 |> getDefaultSearchFilters
+--                 updatedSleeperRoofFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperRoof ) allUpdatedFilters
+--                                                 |> getDefaultSearchFilters
+--                 updatedSleeperBunkFilters = List.filter (\(filterCategory, lst) -> filterCategory == SleeperBunk ) allUpdatedFilters
+--                                                 |> getDefaultSearchFilters
+--                                                 --|> Debug.log "bunk filters ===================================>"
                 
-                -- updatedPriceFilters = List.filter (\(filterCategory, lst) -> filterCategory == Price ) allUpdatedFilters
-                --                                 |> getDefaultSearchFilters
+--                 -- updatedPriceFilters = List.filter (\(filterCategory, lst) -> filterCategory == Price ) allUpdatedFilters
+--                 --                                 |> getDefaultSearchFilters
                 
 
-                -- rangeFitlerFuncs =
-                --         [
-                --                 (Price, List.map (\sf -> sf.asdfasdf ), (\filterValue -> 
-                --                                                         count (\t -> t.price == filterValue) model.filteredTruckList ) )
-                --         ]
-                --         |> Debug.log "asdfasdfsadfsadfdsaf========="
+--                 -- rangeFitlerFuncs =
+--                 --         [
+--                 --                 (Price, List.map (\sf -> sf.asdfasdf ), (\filterValue -> 
+--                 --                                                         count (\t -> t.price == filterValue) model.filteredTruckList ) )
+--                 --         ]
+--                 --         |> Debug.log "asdfasdfsadfsadfdsaf========="
                 
-                rangeFitlerFuncs =
-                        [
-                                (Price, (\filterValue -> 
-                                                                        count (\t -> t.price == filterValue) model.filteredTruckList ) )
-                        ]
-                        --|> Debug.log "asdfasdfsadfsadfdsaf========="
+--                 rangeFitlerFuncs =
+--                         [
+--                                 (Price, (\filterValue -> 
+--                                                                         count (\t -> t.price == filterValue) model.filteredTruckList ) )
+--                         ]
+--                         --|> Debug.log "asdfasdfsadfsadfdsaf========="
                         
-                updatedPriceFilters = buildRangeSearchFilter model.filteredTruckList uiModel.priceFilters Price
-                        --|> Debug.log "vvvvvvvvvvvvvv" 
+--                 updatedPriceFilters = buildRangeSearchFilter model.filteredTruckList uiModel.priceFilters Price
+--                         --|> Debug.log "vvvvvvvvvvvvvv" 
 
-                newUIModel ={ 
-                            uiModel   | 
-                                        salesStatusFilters = updatedSalesStatusFilters, 
-                                        yearFilters = updatedYearFilters, 
-                                        makeFilters = updatedMakeFilters, 
-                                        modelFilters = updatedModelFilters, 
-                                        sleeperRoofFilters = updatedSleeperRoofFilters, 
-                                        sleeperBunkFilters = updatedSleeperBunkFilters,
-                                        priceFilters = updatedPriceFilters
-                        }
-        in
-                newUIModel
+--                 newUIModel ={ 
+--                             uiModel   | 
+--                                         salesStatusFilters = updatedSalesStatusFilters, 
+--                                         yearFilters = updatedYearFilters, 
+--                                         makeFilters = updatedMakeFilters, 
+--                                         modelFilters = updatedModelFilters, 
+--                                         sleeperRoofFilters = updatedSleeperRoofFilters, 
+--                                         sleeperBunkFilters = updatedSleeperBunkFilters,
+--                                         priceFilters = updatedPriceFilters
+--                         }
+--         in
+--                 newUIModel
         
 
         
@@ -227,6 +227,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
                                         )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                        )
                                 -- >> (\trks -> -- this is just to log intermediate result from with the function chains
                                 --         let
                                 --                y = Debug.log "sales filters - >" [trks]
@@ -261,6 +270,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
                                         )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                        )
                                 -- >> (\trks -> -- this is just to log intermediate result from with the function chains
                                 --         let
                                 --                y = Debug.log "year filters - >" [trks]
@@ -294,6 +312,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
                                         )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                        )
                                 >> buildSearchFilterValueRecordList Make uiModel.makeFilters
                                         >> Array.map
                                                 (\sf ->
@@ -320,6 +347,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                         maxValue = Tuple.second minmaxValue
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
                                         )
                                 >> buildSearchFilterValueRecordList MakeModel uiModel.modelFilters
                                         >> Array.map
@@ -348,6 +384,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
                                         )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                        )
                                 >> buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters
                                         >> Array.map
                                                 (\sf ->
@@ -375,6 +420,15 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
                                         )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                        )
                                 >> buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters
                                 >> Array.map
                                                 (\sf ->
@@ -395,10 +449,48 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
                                 >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
                                         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
+                                >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                         (\t sf ->
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
+                                        )
                                 >> buildSearchFilterValueRecordList Price uiModel.priceFilters
                                 >> Array.map
                                         (\sf ->
                                                 findMatchAndSetUserAction uiModel.priceFilters sf 
+                                        )
+                
+                updatedEngineHPFitlerList =
+                        model.truckList
+                                |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
+                                |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
+                                >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
+                                >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
+                                >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
+                                >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
+                                        (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
+                                >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                                >> buildSearchFilterValueRecordList EngineHP uiModel.engineHPFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.engineHPFilters sf 
                                         )
                 
                 newUIModel = 
@@ -411,6 +503,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 , sleeperRoofFilters = updatedSleeperRoofFitlerList
                                                 , sleeperBunkFilters = updatedSleeperBunkFitlerList
                                                 , priceFilters = updatedPriceFitlerList
+                                                , engineHPFilters = updatedEngineHPFitlerList
                         }
         in
                 newUIModel
@@ -442,6 +535,15 @@ applySearchFilters model uiModel =
                                                         maxValue = Tuple.second minmaxValue
                                                 in
                                                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
+                                        )
+                        >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
+                                        (\t sf -> 
+                                                let
+                                                        minmaxValue = getMinMaxValue sf    
+                                                        minValue = Tuple.first minmaxValue
+                                                        maxValue = Tuple.second minmaxValue
+                                                in
+                                                        t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
                                         )
 
         sortedFilterdTruckList =

@@ -162,6 +162,30 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                          
                         searchFilterTypes
 
+        EngineHP ->
+             Array.indexedMap
+                         (\index range -> 
+
+                            let
+                                minmaxValue = getMinMaxValue range     
+                                minValue = Tuple.first minmaxValue
+                                maxValue = Tuple.second minmaxValue
+                            in
+                                --Tuple.pair range.searchFilterExtraData ( (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks)  )
+                                --using Constructor style
+                                SearchFilterType   index 
+                                                        range.searchFilterKey 
+                                                        range.searchFilterExtraData 
+                                                        -- range.searchFilterMinValue  
+                                                        -- range.searchFilterMaxValue 
+                                                        False 
+                                                        (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) 
+                                                        searchFilterCustomType 
+
+                         )
+                         
+                        searchFilterTypes
+
 buildSearchFilterValueRecordList : SearchFilterCustomType -> Array SearchFilterType -> List Truck -> Array SearchFilterType
 buildSearchFilterValueRecordList searchFilterCustomType searchFilterTypes trucks =
     buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks
@@ -196,6 +220,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             
                             Price -> 
                                 (uiModel.priceFilters, "Price", FilterCheckBoxClicked)
+                            
+                            EngineHP -> 
+                                (uiModel.engineHPFilters, "HP", FilterCheckBoxClicked)
 
             searchFilterState = 
                     uiModel.expandCollapseSearchFilterStates

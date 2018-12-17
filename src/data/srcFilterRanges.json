@@ -8,35 +8,40 @@
     },
     {    
         "searchFilterKey" : "$30,000 - $39,999"
-        ,"searchFilterExtraData" : "30000-39999"        
+        ,"searchFilterExtraData" : "30000-39999"
+        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "Price"
     },
     {             
         "searchFilterKey" : "$40,000 - $49,999"
-        ,"searchFilterExtraData" : "40000-49999"        
+        ,"searchFilterExtraData" : "40000-49999"
+        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "Price"
     },
     {                
         "searchFilterKey" : "$50,000 - $59,999"
-        ,"searchFilterExtraData" : "50000-59999"        
+        ,"searchFilterExtraData" : "50000-59999"
+        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "Price"
     },
     {                
         "searchFilterKey" : "$60,000 - $69,999"
-        ,"searchFilterExtraData" : "60000-69999"        
+        ,"searchFilterExtraData" : "60000-69999"
+        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "Price"
     },
     {   
         "searchFilterKey" : "$70,000 - $79,999"
-        ,"searchFilterExtraData" : "70000-79999"        
+        ,"searchFilterExtraData" : "70000-79999"
+        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "Price"
@@ -54,41 +59,7 @@
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "Price"
-    },    
-    {
-        "searchFilterKey" : "< 200"
-        ,"searchFilterExtraData" : "0-199"
-        ,"userAction" : "False"
-        ,"resultCount" : 0
-        ,"filterCategory" : "EngineHP"
-    },
-    {
-        "searchFilterKey" : "200 - 299"
-        ,"searchFilterExtraData" : "200-299"
-        ,"userAction" : "False"
-        ,"resultCount" : 0
-        ,"filterCategory" : "EngineHP"
-    },
-    {
-        "searchFilterKey" : "300 - 399"
-        ,"searchFilterExtraData" : "300-399"
-        ,"userAction" : "False"
-        ,"resultCount" : 0
-        ,"filterCategory" : "EngineHP"
-    },
-    {
-        "searchFilterKey" : "400 - 459"
-        ,"searchFilterExtraData" : "400-459"
-        ,"userAction" : "False"
-        ,"resultCount" : 0
-        ,"filterCategory" : "EngineHP"
-    },
-    {
-        "searchFilterKey" : "> 460"
-        ,"searchFilterExtraData" : "460-999"
-        ,"userAction" : "False"
-        ,"resultCount" : 0
-        ,"filterCategory" : "EngineHP"
     }
+    
     ]
 }

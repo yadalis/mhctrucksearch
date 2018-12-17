@@ -62,7 +62,7 @@ trucksDecoder  =
         |> required "model" Decode.string
         |> required "engineMake" Decode.string
         |> required "engineModel" Decode.string
-        |> required "engineHP" Decode.string
+        |> required "engineHP" Decode.float
         |> required "apu" Decode.string
         |> required "cdl" Decode.string
         |> required "year" Decode.string
@@ -139,5 +139,8 @@ searchFilterRangeUnionTypeString string =
             case string of
                 "Price" ->
                     Decode.succeed Price
+                "EngineHP" ->
+                    Decode.succeed EngineHP
+                
                 _ ->
                     Decode.succeed Price

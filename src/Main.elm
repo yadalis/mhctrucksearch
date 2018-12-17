@@ -52,22 +52,26 @@ update msg (model, uiModel) =
             let
                 --x =  Debug.log "ranges" response
 
-                priceFiltersList = case response of
-                                    Ok priceFilterList ->
-                                            priceFilterList
-                                                --|> List.take 100
+                rangeFilters = 
+                            case response of
+                                    Ok rangeFlts ->
+                                            rangeFlts
+
                                     Err err ->
                                             []
+                priceFiltersList = List.filter (\sf -> sf.filterCategory == Price ) rangeFilters
+                engineHPFiltersList = List.filter (\sf -> sf.filterCategory == EngineHP ) rangeFilters
 
                 --x =  Debug.log "ranges before" priceFiltersList
                 --priceFilters = buildSearchFilterValueRangeList Price (Array.fromList <| priceFiltersList) model.truckList
                 priceFilters = buildSearchFilterValueRecordList Price (Array.fromList <| priceFiltersList) model.truckList
+                engineHPFilters = buildSearchFilterValueRecordList EngineHP (Array.fromList <| engineHPFiltersList) model.truckList
                 --x1 =  Debug.log "ranges after " priceFilters
                 --y = Debug.log "asdfasdfasdfsadfasddsaf" [List.map .price model.truckList]
                 
             in
             
-                ( ( model , {uiModel | priceFilters = priceFilters} ), Cmd.none)
+                ( ( model , {uiModel | priceFilters = priceFilters, engineHPFilters = engineHPFilters} ), Cmd.none)
                 --( ( model , uiModel ), Cmd.none)
 
         OnFetchTrucks response ->
@@ -147,6 +151,9 @@ update msg (model, uiModel) =
 
                         Price -> 
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
+
+                        EngineHP -> 
+                            (uiModel.engineHPFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | engineHPFilters = mfArr})    
 
                 newSortedFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
@@ -229,19 +236,6 @@ update msg (model, uiModel) =
         
         SortTrucks sortBy ->
             let
-
-
-                hasAnyFilterApplied = anySearchFilterBulletsApplied 
-                                                << Array.fromList <| List.concat
-                                                                                [ 
-                                                                                    Array.toList uiModel.salesStatusFilters,
-                                                                                    Array.toList uiModel.yearFilters,
-                                                                                    Array.toList uiModel.makeFilters,
-                                                                                    Array.toList uiModel.modelFilters,
-                                                                                    Array.toList uiModel.sleeperRoofFilters,
-                                                                                    Array.toList uiModel.sleeperBunkFilters,
-                                                                                    Array.toList uiModel.priceFilters
-                                                                                ]
                 sortedFilteredTruckList = 
                     sortTruckList sortBy <| model.filteredTruckList 
 
@@ -330,7 +324,7 @@ view (model, uiModel) =
                             -- Search Filter Panel
                             column [wf,  spy 15,  bc 215 215 215, alignTop] 
                             [
-                                row[wf, pd 10, bw 0]
+                                row[wf, pd 3, bw 0]
                                 [ 
                                     lazy textBox uiModel
                                     ,Input.button ( [hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
@@ -339,17 +333,17 @@ view (model, uiModel) =
                                             ,label = searchBtnIcon
                                         }
                                 ]
-                                ,row[centerY, bw 0, wf ]
+                                ,row[centerY, bw 0, wf, pdl 5 ]
                                 [
-                                    Input.button ( [hf, pd 3, Font.size 18, eId "clearSrch", bw 2])
+                                    Input.button ( [hf, pdl 3, Font.size 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
                                         { 
                                             onPress = Just ClearSearchStringResults
-                                            ,label = textValue "Clear Results"
+                                            ,label = el[pd 5] <| textValue "Clear Results"
                                         }
                                     ,
                                     checkbox [ pdr 5] {
                                         onChange = CollapseAllClicked
-                                        ,icon = buildCollapseAllImage
+                                        ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
                                         , label = labelLeft [Element.alignRight] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
                                         , checked = uiModel.expandCollapseAllChecked
                                     }
@@ -384,6 +378,10 @@ view (model, uiModel) =
                                         lazy3 buildSearchFilterValuesGroup Price model uiModel
                                     else
                                         none                                                        
+                                    , if List.length model.filteredTruckList > 0 then
+                                        lazy3 buildSearchFilterValuesGroup EngineHP model uiModel
+                                    else
+                                        none    
                                 ]
                             ]
                             
@@ -427,7 +425,8 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.modelFilters,
                                                                                     Array.toList uiModel.sleeperRoofFilters,
                                                                                     Array.toList uiModel.sleeperBunkFilters,
-                                                                                    Array.toList uiModel.priceFilters
+                                                                                    Array.toList uiModel.priceFilters,
+                                                                                    Array.toList uiModel.engineHPFilters
                                                                                 ]
                                 ]
                                 ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]

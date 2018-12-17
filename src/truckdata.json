@@ -26,7 +26,7 @@
     "chassisNumber": "1XKYDP9X0HJ126868",
     "locationNumber": "114",
     "locationName": "Cedar Rapids",
-    "engineHP": "455",
+    "engineHP": 455,
     "salesStatusFlag": "I"
     },
     {
@@ -56,7 +56,7 @@
     "chassisNumber": "1XKYDP9X4FJ444361",
     "locationNumber": "66",
     "locationName": "South Dallas, TX",
-    "engineHP": "455",
+    "engineHP": 455,
     "salesStatusFlag": "A"
     },
     {
@@ -86,7 +86,7 @@
     "chassisNumber": "3WKDDBOX79F819621",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "380",
+    "engineHP": 380,
     "salesStatusFlag": "A"
     },
     {
@@ -116,7 +116,7 @@
     "chassisNumber": "1FUJGEDV9CSBA8653",
     "locationNumber": "45",
     "locationName": "Oklahoma City",
-    "engineHP": "450",
+    "engineHP": 450,
     "salesStatusFlag": "A"
     },
     {
@@ -146,7 +146,7 @@
     "chassisNumber": "1NKALP9X4CJ319418",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "380",
+    "engineHP": 380,
     "salesStatusFlag": "A"
     },
     {
@@ -176,7 +176,7 @@
     "chassisNumber": "1XKYDP9X4JJ181815",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "455",
+    "engineHP": 455,
     "salesStatusFlag": "A"
     },
     {
@@ -206,7 +206,7 @@
     "chassisNumber": "5PVNJ8JV3F4S58154",
     "locationNumber": "77",
     "locationName": "Chattanooga",
-    "engineHP": "230",
+    "engineHP": 230,
     "salesStatusFlag": "A"
     },
     {
@@ -236,7 +236,7 @@
     "chassisNumber": "1XP4DP9X6CD135297",
     "locationNumber": "30",
     "locationName": "Denver",
-    "engineHP": "430",
+    "engineHP": 430,
     "salesStatusFlag": "A"
     },
     {
@@ -266,7 +266,7 @@
     "chassisNumber": "1XKYDP9X7HJ126897",
     "locationNumber": "114",
     "locationName": "Cedar Rapids",
-    "engineHP": "455",
+    "engineHP": 455,
     "salesStatusFlag": "A"
     },
     {
@@ -296,7 +296,7 @@
     "chassisNumber": "1KWLDD3J81K967494",
     "locationNumber": "",
     "locationName": "",
-    "engineHP": "475",
+    "engineHP": 475,
     "salesStatusFlag": "S"
     }
     ]
