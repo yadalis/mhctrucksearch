@@ -42,7 +42,7 @@ update msg (model, uiModel) =
     case msg of
         OnFetchSearchFilterRanges response ->
             let
-                --x =  Debug.log "ranges" response
+                --x =  Debug.log "raw json response" response
 
                 rangeSearchFilters = 
                             case response of
@@ -52,7 +52,7 @@ update msg (model, uiModel) =
                                     Err err ->
                                             []
 
-                allSearchFiltersWithNoCountsWithItsFilterType = 
+                allRangeSearchFiltersWithNoCountsWithItsFilterType = 
                                             List.map 
                                                     (
                                                         \eachRangeFilterType ->  
@@ -60,44 +60,29 @@ update msg (model, uiModel) =
                                                     ) 
                                             allRangeFilterTypesMasterList
                 
-                allSearchFiltersWithCountsWithItsFilterType = 
+                allRangeSearchFiltersWithCountsWithItsFilterType = 
                             List.map 
                                     (
                                         \(rangeFltrType, rangeFltrWithNoCountsList) ->  
                                                 (rangeFltrType, (buildSearchFilterValueRecordList rangeFltrType (Array.fromList <| rangeFltrWithNoCountsList) model.truckList ))
                                     ) 
-                            allSearchFiltersWithNoCountsWithItsFilterType
+                            allRangeSearchFiltersWithNoCountsWithItsFilterType
 
-                --yx =  Debug.log "varsXYZ" varsXYZ
-
-                -- priceFiltersList = List.filter (\sf -> sf.filterCategory == Price ) rangeFilters
-                -- engineHPFiltersList = List.filter (\sf -> sf.filterCategory == EngineHP ) rangeFilters
-
-                --x =  Debug.log "ranges before" priceFiltersList
-                --priceFilters = buildSearchFilterValueRangeList Price (Array.fromList <| priceFiltersList) model.truckList
-                -- priceFilters = buildSearchFilterValueRecordList Price (Array.fromList <| priceFiltersList) model.truckList
-                -- engineHPFilters = buildSearchFilterValueRecordList EngineHP (Array.fromList <| engineHPFiltersList) model.truckList
-
-                fetchFiltersPoplulatedWithCounts fltrType = 
+                fetchRangeFiltersPoplulatedWithCounts fltrType = 
                             case    (find 
                                                     (
                                                         \(rangeFltrType,filtrArray)  -> 
                                                                     rangeFltrType == fltrType 
                                                     ) 
-                                    allSearchFiltersWithCountsWithItsFilterType) of
+                                    allRangeSearchFiltersWithCountsWithItsFilterType) of
                                 Just item -> Tuple.second item
                                 Nothing -> Array.empty
-                
-                --x =  Debug.log "xpriceFilters" generateFilterCounts
-
-                --xengineHPFilters = List.filter (\(rangeFltrType,filtrArray)  -> rangeFltrType  == EngineHP) varsXYZ
-
             in
             
                 ( ( model , {uiModel | 
-                                        priceFilters = fetchFiltersPoplulatedWithCounts Price, 
-                                        engineHPFilters = fetchFiltersPoplulatedWithCounts EngineHP
-                            
+                                        priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
+                                        engineHPFilters = fetchRangeFiltersPoplulatedWithCounts EngineHP
+                                        
                             
                             
                             } ), Cmd.none)

@@ -91,29 +91,6 @@ type SearchFilterCustomType
     | Price
     | EngineHP
 
-allFilterTypesMasterList = 
-                        [SalesStatus
-                        , Year
-                        , Make
-                        , MakeModel
-                        , SleeperRoof
-                        , SleeperBunk
-                        , Price
-                        , EngineHP] 
-
-allRegularFilterTypesMasterList = 
-                        [SalesStatus
-                        , Year
-                        , Make
-                        , MakeModel
-                        , SleeperRoof
-                        , SleeperBunk
-                        ] 
-
-allRangeFilterTypesMasterList = 
-                        [ Price
-                        , EngineHP]
-
 -- type SearchFilterRangeUnionType
 --     = Price
 
@@ -171,6 +148,30 @@ type alias FilterSelectionsModel =
         filterCDLNoSelected : Bool
         ,filterCDLYesSelected : Bool
     }
+
+
+allFilterTypesMasterList = 
+                        [SalesStatus
+                        , Year
+                        , Make
+                        , MakeModel
+                        , SleeperRoof
+                        , SleeperBunk
+                        , Price
+                        , EngineHP] 
+
+allRegularFilterTypesMasterList = 
+                        [SalesStatus
+                        , Year
+                        , Make
+                        , MakeModel
+                        , SleeperRoof
+                        , SleeperBunk
+                        ] 
+
+allRangeFilterTypesMasterList = 
+                        [ Price
+                        , EngineHP]
 
 initialModel : Model
 initialModel =
