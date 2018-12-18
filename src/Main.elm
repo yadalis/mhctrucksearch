@@ -44,27 +44,63 @@ update msg (model, uiModel) =
             let
                 --x =  Debug.log "ranges" response
 
-                rangeFilters = 
+                rangeSearchFilters = 
                             case response of
-                                    Ok rangeFlts ->
-                                            rangeFlts
+                                    Ok rangeFltrs ->
+                                            rangeFltrs
 
                                     Err err ->
                                             []
-                priceFiltersList = List.filter (\sf -> sf.filterCategory == Price ) rangeFilters
-                engineHPFiltersList = List.filter (\sf -> sf.filterCategory == EngineHP ) rangeFilters
+
+                allSearchFiltersWithNoCountsWithItsFilterType = 
+                                            List.map 
+                                                    (
+                                                        \eachRangeFilterType ->  
+                                                                    (eachRangeFilterType, List.filter (\sf -> sf.filterCategory == eachRangeFilterType ) rangeSearchFilters)
+                                                    ) 
+                                            allRangeFilterTypesMasterList
+                
+                allSearchFiltersWithCountsWithItsFilterType = 
+                            List.map 
+                                    (
+                                        \(rangeFltrType, rangeFltrWithNoCountsList) ->  
+                                                (rangeFltrType, (buildSearchFilterValueRecordList rangeFltrType (Array.fromList <| rangeFltrWithNoCountsList) model.truckList ))
+                                    ) 
+                            allSearchFiltersWithNoCountsWithItsFilterType
+
+                --yx =  Debug.log "varsXYZ" varsXYZ
+
+                -- priceFiltersList = List.filter (\sf -> sf.filterCategory == Price ) rangeFilters
+                -- engineHPFiltersList = List.filter (\sf -> sf.filterCategory == EngineHP ) rangeFilters
 
                 --x =  Debug.log "ranges before" priceFiltersList
                 --priceFilters = buildSearchFilterValueRangeList Price (Array.fromList <| priceFiltersList) model.truckList
-                priceFilters = buildSearchFilterValueRecordList Price (Array.fromList <| priceFiltersList) model.truckList
-                engineHPFilters = buildSearchFilterValueRecordList EngineHP (Array.fromList <| engineHPFiltersList) model.truckList
-                --x1 =  Debug.log "ranges after " priceFilters
-                --y = Debug.log "asdfasdfasdfsadfasddsaf" [List.map .price model.truckList]
+                -- priceFilters = buildSearchFilterValueRecordList Price (Array.fromList <| priceFiltersList) model.truckList
+                -- engineHPFilters = buildSearchFilterValueRecordList EngineHP (Array.fromList <| engineHPFiltersList) model.truckList
+
+                fetchFiltersPoplulatedWithCounts fltrType = 
+                            case    (find 
+                                                    (
+                                                        \(rangeFltrType,filtrArray)  -> 
+                                                                    rangeFltrType == fltrType 
+                                                    ) 
+                                    allSearchFiltersWithCountsWithItsFilterType) of
+                                Just item -> Tuple.second item
+                                Nothing -> Array.empty
                 
+                --x =  Debug.log "xpriceFilters" generateFilterCounts
+
+                --xengineHPFilters = List.filter (\(rangeFltrType,filtrArray)  -> rangeFltrType  == EngineHP) varsXYZ
+
             in
             
-                ( ( model , {uiModel | priceFilters = priceFilters, engineHPFilters = engineHPFilters} ), Cmd.none)
-                --( ( model , uiModel ), Cmd.none)
+                ( ( model , {uiModel | 
+                                        priceFilters = fetchFiltersPoplulatedWithCounts Price, 
+                                        engineHPFilters = fetchFiltersPoplulatedWithCounts EngineHP
+                            
+                            
+                            
+                            } ), Cmd.none)
 
         OnFetchTrucks response ->
             let
@@ -106,7 +142,8 @@ update msg (model, uiModel) =
                         }
                     )
                     --, Cmd.none
-                    , fetchSearchFilterRanges
+                    , fetchSearchFilterRanges   -- dont do this, it will bring all json based range filters data again and again, you should only rebuild the range filter counts
+                                                -- but not regenrate the filters completely
                 ) 
 
         FilterCheckBoxClicked index searchFilterCustomType userAction ->
@@ -123,27 +160,19 @@ update msg (model, uiModel) =
                 newUIModel = 
                     case searchFilterCustomType of
                         SalesStatus -> 
-                            (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters)
-                                        (\mfArr -> {uiModel | salesStatusFilters = mfArr}) 
+                            (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters) (\mfArr -> {uiModel | salesStatusFilters = mfArr}) 
                         Year -> 
-                            (uiModel.yearFilters 
-                                    |> updateUserSelectedSearchFilter) 
-                                                            (\mfArr -> {uiModel | yearFilters = mfArr})                                
+                            (uiModel.yearFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | yearFilters = mfArr})                                
                         Make -> 
                             (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr})
-
                         MakeModel -> 
                             (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr})
-
                         SleeperRoof -> 
                             (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
-
                         SleeperBunk -> 
                             (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})    
-
                         Price -> 
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
-
                         EngineHP -> 
                             (uiModel.engineHPFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | engineHPFilters = mfArr})    
 
@@ -250,8 +279,6 @@ update msg (model, uiModel) =
 
                 uiModelUpdatedWithLatestSearchFilters =
                          rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel uiModel
-
-
             in        
                 ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 

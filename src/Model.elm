@@ -91,6 +91,29 @@ type SearchFilterCustomType
     | Price
     | EngineHP
 
+allFilterTypesMasterList = 
+                        [SalesStatus
+                        , Year
+                        , Make
+                        , MakeModel
+                        , SleeperRoof
+                        , SleeperBunk
+                        , Price
+                        , EngineHP] 
+
+allRegularFilterTypesMasterList = 
+                        [SalesStatus
+                        , Year
+                        , Make
+                        , MakeModel
+                        , SleeperRoof
+                        , SleeperBunk
+                        ] 
+
+allRangeFilterTypesMasterList = 
+                        [ Price
+                        , EngineHP]
+
 -- type SearchFilterRangeUnionType
 --     = Price
 
