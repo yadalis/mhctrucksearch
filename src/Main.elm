@@ -58,7 +58,7 @@ update msg (model, uiModel) =
                                                         \eachRangeFilterType ->  
                                                                     (eachRangeFilterType, List.filter (\sf -> sf.filterCategory == eachRangeFilterType ) rangeSearchFilters)
                                                     ) 
-                                            allRangeFilterTypesMasterList
+                                            allRangeFilterTypesMasterList -- make sure this list is up to date with all possible range filters, this is defined in model.elm
                 
                 allRangeSearchFiltersWithCountsWithItsFilterType = 
                             List.map 
@@ -413,32 +413,38 @@ view (model, uiModel) =
                             [
                                 row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215, bw 0]
                                 [ 
-                                    column[wfp 3, hf, bw 0]
+                                    column[wf , hf, bw 0]
                                     [
                                         wrappedRow [wf,  bw 0, pdl 5 , eat]
                                             -- using <| u can avoid parans around the below func and its params
                                             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                     ]
-                                    ,row[hf, bw 0, pdb 3,  bc 215 215 215,wfp 2]
+                                    ,row[hf, bw 0, pdb 3,  bc 215 215 215,wpx 500]
                                     [
-                                        column[bw 0, eab]
+                                        column[wf, hf]
                                         [
-                                            el [ pdr 15,bw 0,  fc 97 97 97
-                                                , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
-                                            ]
-                                            <| Input.button [pdl 5, wf,    fb, fh, bwb 1  ]  
-                                                { 
-                                                    onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                    ,label = textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
-                                                }
-                                        ]
-                                        ,column[bw 0, eab, bwl 2, pdl 15]
-                                        [
-                                            el [pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
-                                        ]
-                                        ,column[bw 0, eab,ear]
-                                        [
-                                            el [pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))
+                                                row[wf]
+                                                [   
+                                                        el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                                ]
+                                            
+                                             ,  row[bw 0, spaceEvenly, eab]
+                                                [
+                                                    el [ pdr 15,bw 0,  fc 97 97 97,eal
+                                                        , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
+                                                    ]
+                                                        <| Input.button [pdl 5, wf,    fb, fh, bwb 1  ]  
+                                                            { 
+                                                                onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                                                ,label = textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                                            }
+                                                    ,column[bw 0, bwl 2, pdl 15, wf, ear]
+                                                    [
+                                                        el [ear, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                                    ]
+                                                ]
+                                                
+                                            
                                         ]
                                     ]
                                 ]
