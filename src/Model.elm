@@ -91,6 +91,10 @@ type SearchFilterCustomType
     | Price
     | EngineHP
 
+type SortOrder
+    = SortASC
+    | SortDSC
+
 -- type SearchFilterRangeUnionType
 --     = Price
 

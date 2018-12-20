@@ -73,11 +73,11 @@ filterEmptyValuesFromList  searchFilterList =
                 )
                 searchFilterList
 
-applyExtraOnSearchFilter  : Int -> List String -> Array String
-applyExtraOnSearchFilter sortOrder searchFilterKeyValue =
+applyExtraOnSearchFilters  : SortOrder -> List String -> Array String
+applyExtraOnSearchFilters sortOrder searchFilterKeyValue =
     filterDuplicates searchFilterKeyValue
         |> filterEmptyValuesFromList
-        |> (if sortOrder == 0 then 
+        |> (if sortOrder == SortASC then 
                 List.sort 
             else 
                 List.sortWith desendingOrder)
@@ -89,7 +89,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
         SalesStatus -> 
             --List.map (\t -> t.salesStatus) trucks
             List.map .salesStatus trucks
-                |> applyExtraOnSearchFilter 0
+                |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) searchFilterCustomType
@@ -100,7 +100,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
         Year -> 
             --List.map (\t -> t.year) trucks
             List.map .year trucks
-                |> applyExtraOnSearchFilter 1
+                |> applyExtraOnSearchFilters SortDSC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
                                                 SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.year == sf) trucks )) searchFilterCustomType
@@ -111,7 +111,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
         Make -> 
             --List.map (\t -> t.make) trucks
             List.map .make trucks
-                |> applyExtraOnSearchFilter 0
+                |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf ->  
                                                 SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.make == sf) trucks )) searchFilterCustomType
@@ -122,7 +122,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
         MakeModel -> 
             --List.map (\t -> t.model) trucks
             List.map .model trucks
-                |> applyExtraOnSearchFilter 0
+                |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
                                                 SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.model == sf) trucks )) searchFilterCustomType
@@ -133,7 +133,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
         SleeperRoof -> 
             --List.map (\t -> t.sleeperRoof) trucks
             List.map .sleeperRoof trucks
-                |> applyExtraOnSearchFilter 0
+                |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
                                                 SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperRoof == sf) trucks )) searchFilterCustomType
@@ -144,7 +144,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
         SleeperBunk -> 
             --List.map (\t -> t.sleeperBunk) trucks
             List.map .sleeperBunk trucks
-                |> applyExtraOnSearchFilter 0
+                |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
                                                 SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperBunk == sf) trucks )) searchFilterCustomType
@@ -153,12 +153,18 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                     )
 
         Price ->            
-                createRangeFilters searchFilterTypes searchFilterCustomType (\minValue maxValue ->
-                                                                            (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) )
+                createRangeFilters  searchFilterTypes
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
+                                    )
 
         EngineHP ->
-                createRangeFilters searchFilterTypes searchFilterCustomType (\minValue maxValue ->
-                                                                            (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) )
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) 
+                                    )
 
 createRangeFilters searchFilterTypes searchFilterCustomType filterCompareCheckFunc = 
         Array.indexedMap

@@ -132,40 +132,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 
                 updatedSalesStatusFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                --         (\t sf -> 
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (\trks -> -- this is just to log intermediate result from with the function chains
-                                --         let
-                                --                y = Debug.log "sales filters - >" [trks]
-                                --         in
-                                --                 trks
-                                -- )
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByMake uiModel.makeFilters
                                 |> filterByModel uiModel.modelFilters
@@ -182,34 +148,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 
                 updatedYearFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                --         (\t sf -> 
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
                                 |> filterBySalesStatus uiModel.salesStatusFilters
                                 |> filterByMake uiModel.makeFilters
                                 |> filterByModel uiModel.modelFilters
@@ -226,34 +164,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                 
                 updatedMakeFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                --         (\t sf -> 
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
                                 |> filterBySalesStatus uiModel.salesStatusFilters
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByModel uiModel.modelFilters
@@ -270,34 +180,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                 
                 updatedModelFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                --         (\t sf -> 
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
                                 |> filterBySalesStatus uiModel.salesStatusFilters
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByMake uiModel.makeFilters
@@ -314,34 +196,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 
                 updatedSleeperRoofFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                --         (\t sf -> 
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
                                 |> filterBySalesStatus uiModel.salesStatusFilters
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByMake uiModel.makeFilters
@@ -358,34 +212,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
 
                 updatedSleeperBunkFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters)
-                                --         (\t sf -> 
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                                --         )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
                                 |> filterBySalesStatus uiModel.salesStatusFilters
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByMake uiModel.makeFilters
@@ -402,27 +228,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                 
                 updatedPriceFitlerList =
                         model.truckList
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- |> (buildFilteredSearchResultBySearchType uiModel.yearFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.year && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.makeFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.make && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.modelFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.model && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperRoofFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperRoof && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.sleeperBunkFilters)
-                                --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.sleeperBunk && sf.userAction == True )
-                                -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                                --          (\t sf ->
-                                --                 let
-                                --                         minmaxValue = getMinMaxValue sf    
-                                --                         minValue = Tuple.first minmaxValue
-                                --                         maxValue = Tuple.second minmaxValue
-                                --                 in
-                                --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                                --         )
                                 |> filterBySalesStatus uiModel.salesStatusFilters
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByMake uiModel.makeFilters
@@ -472,14 +277,10 @@ applySearchFilters: Model -> UIModel -> List Truck
 applySearchFilters model uiModel =
     let
         
-
         filterdTruckList  = 
                 model.truckList 
-                        -- |> (buildFilteredSearchResultBySearchType uiModel.salesStatusFilters)
-                        --         (\t sf -> String.trim sf.searchFilterKey == String.trim t.salesStatus && sf.userAction == True )
-                                -- truckList gets passed as a last arg automatically from the previous |> pipe
-                                -- the result from the above function gets feed in to the below function and so on until it ends
-
+                        -- truckList gets passed as a last arg automatically from the previous |> pipe
+                        -- the result from the above function gets feed in to the below function and so on until it ends
                         |> filterBySalesStatus uiModel.salesStatusFilters
                         |> filterByYear uiModel.yearFilters
                         |> filterByMake uiModel.makeFilters
@@ -488,36 +289,6 @@ applySearchFilters model uiModel =
                         |> filterBySleeperBunk uiModel.sleeperBunkFilters
                         |> filterByPrice uiModel.priceFilters
                         |> filterByEngineHP uiModel.engineHPFilters
-
-                        --|> List.filter (\t -> isGiveValueMatchesWithSelectedFilters t.year uiModel.yearFilters)
-                        --|> List.filter (\t -> isGiveValueMatchesWithSelectedFilters t.make uiModel.makeFilters)
-                        --|> List.filter (\t -> isGiveValueMatchesWithSelectedFilters t.model uiModel.makeFilters)
-                        --|> List.filter (\t -> isGiveValueMatchesWithSelectedFilters t.sleeperRoof uiModel.makeFilters)
-                        --|> List.filter (\t -> isGiveValueMatchesWithSelectedFilters t.sleeperBunk uiModel.makeFilters)
-                                        -- |> \lst -> 
-                                        --                 if List.length lst > 0 then
-                                        --                         lst
-                                        --                 else
-                                        --                         model.truckList
-                        
-                        -- >> (buildFilteredSearchResultBySearchType uiModel.priceFilters) 
-                        --         (\t sf -> 
-                        --                 let
-                        --                         minmaxValue = getMinMaxValue sf    
-                        --                         minValue = Tuple.first minmaxValue
-                        --                         maxValue = Tuple.second minmaxValue
-                        --                 in
-                        --                         t.price >= minValue && t.price <= maxValue && sf.userAction == True 
-                        --         )
-                        -- >> (buildFilteredSearchResultBySearchType uiModel.engineHPFilters)
-                        --         (\t sf -> 
-                        --                 let
-                        --                         minmaxValue = getMinMaxValue sf    
-                        --                         minValue = Tuple.first minmaxValue
-                        --                         maxValue = Tuple.second minmaxValue
-                        --                 in
-                        --                         t.engineHP >= minValue && t.engineHP <= maxValue && sf.userAction == True 
-                        --         )
 
         sortedFilterdTruckList =
             filterdTruckList
