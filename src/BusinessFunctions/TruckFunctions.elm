@@ -27,7 +27,7 @@ isGivenValueMatchesWithSelectedFilters value searchFilters  =
 isGivenValueMatchesWithSelectedRangeFilters value searchFilters  = 
         (getSelectedSearchFilterExtraData searchFilters)
                 |> List.filter (\extraData ->
-                                        getMinMaxValueFromStringRange extraData
+                                        getMinMaxValue extraData
                                         |> (\(minValue,maxValue) ->     
                                                 value >= minValue && value <= maxValue
                                         )
@@ -102,18 +102,6 @@ buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckP
                                 )  trucks 
         else
                 trucks
-
--- buildSearchFilter uniqueFilterValuesFromTextSearchResult getCountFunc filterCategory =
---         Array.filter(\sf -> not <| String.isEmpty sf.searchFilterKey)
---                 << Array.indexedMap (\index filterValue -> 
---                                                 SearchFilterType   
---                                                                 index 
---                                                                 filterValue 
---                                                                 filterValue  
---                                                                 False 
---                                                                 (getCountFunc filterValue)
---                                                                 filterCategory
---                         ) << Array.fromList <| uniqueFilterValuesFromTextSearchResult
 
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
@@ -342,14 +330,6 @@ sortByItemslist =
         ("YearOldToNew","Year - Old to New",YearOldToNew)
     ]
 
--- convertStringToSortBy : String -> SortBy
--- convertStringToSortBy key = 
---     sortByItemslist
---         |> List.filter (\(k, d, v) -> k == key)
---         |> List.head
---         |> Maybe.map (\(k, d, v) -> v)
---         |> Maybe.withDefault defaultSortBy
-
 convertSortByToDescription sortBy =
     sortByItemslist
         |> List.filter(\(_,_, v) -> v == sortBy)
@@ -364,14 +344,12 @@ convertSortByToKey sortBy =
         |> Maybe.map (\(k, d, v) -> k)
         |> Maybe.withDefault defaultSortByText
 
---flippedComparison a b =
 desendingOrderByPrice a b =
     case compare a.price b.price of
         LT -> GT
         EQ -> EQ
         GT -> LT
 
---flippedComparison a b =
 desendingOrderByMileage a b =
     case compare a.mileage b.mileage of
         LT -> GT

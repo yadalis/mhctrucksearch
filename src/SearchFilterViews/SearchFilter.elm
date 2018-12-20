@@ -10,10 +10,9 @@ import Msg exposing (..)
 import List.Unique exposing (..)
 import Array exposing (..)
 
-getMinMaxValue range =
+getMinMaxValue rangeString =
         let
-            
-                minmaxValues = String.split "-" range.searchFilterExtraData
+                minmaxValues = String.split "-" rangeString
                 minValue =     
                         case List.head <| minmaxValues of -- gives first element in the list
                         Just strMinVal -> case String.toFloat strMinVal of 
@@ -21,32 +20,6 @@ getMinMaxValue range =
                                                 Nothing -> 0                    
                         Nothing -> 0
                 maxValue =
-                        -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style, what is this ? :)
-                        --     Just val -> val
-                        --     Nothing -> ""
-                        case List.head <| List.reverse minmaxValues of -- gives last element in the list -- 2nd style
-                                Just strMaxVal -> case String.toFloat strMaxVal of 
-                                                Just maxVal -> maxVal
-                                                Nothing -> 0     
-                                Nothing -> 0     
-        in
-                (minValue, maxValue)
-
-
-getMinMaxValueFromStringRange range =
-        let
-            
-                minmaxValues = String.split "-" range
-                minValue =     
-                        case List.head <| minmaxValues of -- gives first element in the list
-                        Just strMinVal -> case String.toFloat strMinVal of 
-                                                Just minVal -> minVal
-                                                Nothing -> 0                    
-                        Nothing -> 0
-                maxValue =
-                        -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style, what is this ? :)
-                        --     Just val -> val
-                        --     Nothing -> ""
                         case List.head <| List.reverse minmaxValues of -- gives last element in the list -- 2nd style
                                 Just strMaxVal -> case String.toFloat strMaxVal of 
                                                 Just maxVal -> maxVal
@@ -171,7 +144,7 @@ createRangeFilters searchFilterTypes searchFilterCustomType filterCompareCheckFu
                          (\index range -> 
 
                             let
-                                minmaxValue = getMinMaxValue range     
+                                minmaxValue = getMinMaxValue range.searchFilterExtraData     
                                 minValue = Tuple.first minmaxValue
                                 maxValue = Tuple.second minmaxValue
                             in

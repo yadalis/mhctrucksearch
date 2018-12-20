@@ -97,12 +97,6 @@ update msg (model, uiModel) =
                             Err err ->
                                     []
 
-                -- x = List.map .sleeperInches trucks
-
-                -- u = Debug.log "asddddddddddddddd" [x]
-                
-                --c = Debug.log "Updated year list by held salesstatus"  [trucks]--, newUIModel1.yearFilters]
-
                 salesStatusFilters = buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters trucks
                 yearFilters = buildSearchFilterValueRecordList Year uiModel.yearFilters trucks
                 makeFilters = buildSearchFilterValueRecordList Make uiModel.makeFilters trucks
@@ -110,7 +104,6 @@ update msg (model, uiModel) =
                 sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
                 sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
 
-                --filteredTruckList = List.filter (\t -> t.year == "2019" ) trucks
                 pagedTruckList = List.take 100 trucks
             in
                 ( 
@@ -127,7 +120,7 @@ update msg (model, uiModel) =
                         }
                     )
                     --, Cmd.none
-                    , fetchSearchFilterRanges   -- dont do this, it will bring all json based range filters data again and again, you should only rebuild the range filter counts
+                    , fetchSearchFilterRanges   -- change this, otherwise it will bring all json based range filters data again and again, you should only rebuild the range filter counts
                                                 -- but not regenrate the filters completely
                 ) 
 
