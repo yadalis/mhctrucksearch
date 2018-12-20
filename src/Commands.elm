@@ -31,15 +31,15 @@ fetchTrucksUrl : String -> String
 fetchTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-            -- if String.isEmpty searchText then
-            --     "http://localhost:50977/api/mhc/gettrucks"
-            -- else
-            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
-
             if String.isEmpty searchText then
-                "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"
+                "http://localhost:50977/api/mhc/gettrucks"
             else
-                crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks" [searchText] []
+                crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
+
+            -- if String.isEmpty searchText then
+            --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"
+            -- else
+            --     crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks" [searchText] []
         --"http://localhost:3333/trks"
 
 

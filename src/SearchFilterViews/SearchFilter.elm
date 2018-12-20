@@ -33,6 +33,28 @@ getMinMaxValue range =
                 (minValue, maxValue)
 
 
+getMinMaxValueFromStringRange range =
+        let
+            
+                minmaxValues = String.split "-" range
+                minValue =     
+                        case List.head <| minmaxValues of -- gives first element in the list
+                        Just strMinVal -> case String.toFloat strMinVal of 
+                                                Just minVal -> minVal
+                                                Nothing -> 0                    
+                        Nothing -> 0
+                maxValue =
+                        -- case List.foldl (Just >> always) Nothing searchFilterValueList of  -- gives last element in the list -- 1st style, what is this ? :)
+                        --     Just val -> val
+                        --     Nothing -> ""
+                        case List.head <| List.reverse minmaxValues of -- gives last element in the list -- 2nd style
+                                Just strMaxVal -> case String.toFloat strMaxVal of 
+                                                Just maxVal -> maxVal
+                                                Nothing -> 0     
+                                Nothing -> 0     
+        in
+                (minValue, maxValue)
+
 -- simple type compares
 desendingOrder a b =
     case compare a b of

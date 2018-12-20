@@ -151,14 +151,34 @@ type alias FilterSelectionsModel =
 
 
 allFilterTypesMasterList = 
-                        [SalesStatus
+                        [ SalesStatus
                         , Year
                         , Make
                         , MakeModel
                         , SleeperRoof
                         , SleeperBunk
                         , Price
-                        , EngineHP] 
+                        , EngineHP]
+
+allFilterTypesMasterListWithItsInitialState = 
+                        [ {filterName = SalesStatus, expandByDefault = False}
+                        , {filterName = Year, expandByDefault = False}
+                        , {filterName = Make, expandByDefault = True}
+                        , {filterName = MakeModel, expandByDefault = False}
+                        , {filterName = SleeperRoof, expandByDefault = True}
+                        , {filterName = SleeperBunk, expandByDefault = True}
+                        , {filterName = Price, expandByDefault = True}
+                        , {filterName = EngineHP, expandByDefault = False}] 
+
+allFilterTypesMasterListWithItsCollections = 
+                        [ {filterName = SalesStatus, expandByDefault = False}
+                        , {filterName = Year, expandByDefault = False}
+                        , {filterName = Make, expandByDefault = True}
+                        , {filterName = MakeModel, expandByDefault = False}
+                        , {filterName = SleeperRoof, expandByDefault = True}
+                        , {filterName = SleeperBunk, expandByDefault = True}
+                        , {filterName = Price, expandByDefault = True}
+                        , {filterName = EngineHP, expandByDefault = False}] 
 
 allRegularFilterTypesMasterList = 
                         [SalesStatus
@@ -202,18 +222,22 @@ initalUIModel jsFlag =
                                             -- this is to initialize an Array, repeat creates one item in this case and that lets us push rest of the items
                                             -- this list can be generated off of datasource, when that happens we dont need to hardcode index value, just use indexedMap
                                             -- and set the generated index value to index prop
-        expandCollapseSearchFilterStates = Array.repeat 1 {index = 0,searchFilterCustomType = SalesStatus, userAction = True} 
-                                                |> Array.push {index = 1,searchFilterCustomType = Year, userAction = False}
-                                                |> Array.push {index = 2,searchFilterCustomType = Make, userAction = True}
-                                                |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
-                                                |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}
-                                                |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False}
-                                                |> Array.push {index = 6,searchFilterCustomType = Price, userAction = False}
-                                                |> Array.push {index = 7,searchFilterCustomType = EngineHP, userAction = False},
-
-        --expandCollapseSearchFilterRangeStates = Array.repeat 1 {index = 0,searchFilterRangeUnionType = Price, userAction = True},
-
-        expandCollapseAllChecked = False,
+        expandCollapseSearchFilterStates = 
+                        Array.indexedMap 
+                                        (
+                                            \index searchFilterTypeRecord ->
+                                                    {index = index,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
+                                        )
+                        <| Array.fromList allFilterTypesMasterListWithItsInitialState
+                                                -- Array.repeat 1 {index = 0,searchFilterCustomType = SalesStatus, userAction = True} 
+                                                -- |> Array.push {index = 1,searchFilterCustomType = Year, userAction = False}
+                                                -- |> Array.push {index = 2,searchFilterCustomType = Make, userAction = True}
+                                                -- |> Array.push {index = 3,searchFilterCustomType = MakeModel, userAction = False}
+                                                -- |> Array.push {index = 4,searchFilterCustomType = SleeperRoof, userAction = False}
+                                                -- |> Array.push {index = 5,searchFilterCustomType = SleeperBunk, userAction = False}
+                                                -- |> Array.push {index = 6,searchFilterCustomType = Price, userAction = False}
+                                                -- |> Array.push {index = 7,searchFilterCustomType = EngineHP, userAction = False},
+        ,expandCollapseAllChecked = False,
         showDropdown = False,
         currentSortBy = MakeAtoZ
     }
