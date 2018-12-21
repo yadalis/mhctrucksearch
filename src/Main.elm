@@ -422,9 +422,14 @@ view (model, uiModel) =
                                     }
                                 ]
                                 ,column[wf, spy 5, bc 240 240 240, bw 0 ]
-                                    <| loaderIconElement :: List.map 
+                                    <| (
+                                        if List.length model.filteredTruckList == 0 then
+                                            [loaderIconElement]
+                                        else 
+                                            List.map 
                                                 (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
                                                 allFilterTypesMasterListWithItsInitialState
+                                    )
                                 --[
                                     --loaderIconElement
 
