@@ -114,8 +114,7 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 sfArray
                     )                
                 
-        SleeperBunk -> 
-            --List.map (\t -> t.sleeperBunk) trucks
+        SleeperBunk ->             
             List.map .sleeperBunk trucks
                 |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
@@ -123,8 +122,99 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                                 SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperBunk == sf) trucks )) searchFilterCustomType
                                 )
                                 sfArray
-                    )
+                    ) 
+                
+        EngineMake ->             
+            List.map .engineMake trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.engineMake == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                                
+                
+        TransType ->             
+            List.map .transType trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.transType == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                                               
+                
+        Suspension ->             
+            List.map .suspension trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.suspension == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                                                              
+                
+        BodyType ->             
+            List.map .bodyType trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.bodyType == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                        
+                
+        RearAxleType ->             
+            List.map .rearAxleType trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.rearAxleType == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                
+                
+        FleetCode ->        
+            List.map .fleetCode trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.fleetCode == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                
+                
+        TruckStatus ->        
+            List.map .truckStatus trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.truckStatus == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                
+                
+        SpecialFinancing ->        
+            List.map .specialFinancing trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.specialFinancing == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                
+                
+        OwningBranch ->        
+            List.map .owningBranch trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.owningBranch == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )      
 
+------------------Range filters 
         Price ->            
                 createRangeFilters  searchFilterTypes
                                     searchFilterCustomType 
@@ -137,6 +227,48 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                     searchFilterCustomType 
                                     (\minValue maxValue ->
                                             (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) 
+                                    )
+
+        SleeperInches ->
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.sleeperInches >= minValue && t.sleeperInches <= maxValue) trucks) 
+                                    )
+
+        WheelBase ->
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.wheelBase >= minValue && t.wheelBase <= maxValue) trucks) 
+                                    )
+
+        Mileage ->
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.mileage >= minValue && t.mileage <= maxValue) trucks) 
+                                    )
+
+        FrontAxleWeight ->
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.frontAxleWeight >= minValue && t.frontAxleWeight <= maxValue) trucks) 
+                                    )
+
+        RearAxleWeight ->
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.rearAxleWeight >= minValue && t.rearAxleWeight <= maxValue) trucks) 
+                                    )
+
+        InventoryAge ->
+                createRangeFilters  searchFilterTypes 
+                                    searchFilterCustomType 
+                                    (\minValue maxValue ->
+                                            (List.length <| List.filter (\t -> t.inventoryAge >= minValue && t.inventoryAge <= maxValue) trucks) 
                                     )
 
 createRangeFilters searchFilterTypes searchFilterCustomType filterCompareCheckFunc = 
@@ -185,12 +317,57 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 
                             SleeperBunk -> 
                                 (uiModel.sleeperBunkFilters, "Sleeper Bunk", FilterCheckBoxClicked)
+                                
+                            EngineMake -> 
+                                (uiModel.engineMakeFilters, "Engine", FilterCheckBoxClicked)
+                                
+                            TransType -> 
+                                (uiModel.transTypeFilters, "Trans Type", FilterCheckBoxClicked)
+                                
+                            Suspension -> 
+                                (uiModel.suspensionFilters, "Suspension", FilterCheckBoxClicked)
+                                
+                            BodyType -> 
+                                (uiModel.bodyTypeFilters, "Body Type", FilterCheckBoxClicked)
+                                
+                            RearAxleType -> 
+                                (uiModel.rearAxleTypeFilters, "Rear Axle Type", FilterCheckBoxClicked)
+                            
+                            FleetCode -> 
+                                (uiModel.fleetCodeFilters, "Fleet Code", FilterCheckBoxClicked)
+                            
+                            TruckStatus -> 
+                                (uiModel.truckStatusFilters, "Truck Status", FilterCheckBoxClicked)
+                            
+                            SpecialFinancing -> 
+                                (uiModel.specialFinancingFilters, "Special Financing", FilterCheckBoxClicked)
+                            
+                            OwningBranch -> 
+                                (uiModel.owningBranchFilters, "Owning Branch", FilterCheckBoxClicked)
                             
                             Price -> 
                                 (uiModel.priceFilters, "Price", FilterCheckBoxClicked)
                             
                             EngineHP -> 
                                 (uiModel.engineHPFilters, "HP", FilterCheckBoxClicked)
+                            
+                            SleeperInches -> 
+                                (uiModel.sleeperInchesFilters, "Sleeper Size", FilterCheckBoxClicked)
+                            
+                            WheelBase -> 
+                                (uiModel.wheelBaseFilters, "Wheel Base Filters", FilterCheckBoxClicked)
+                            
+                            Mileage -> 
+                                (uiModel.mileageFilters, "Mileage", FilterCheckBoxClicked)
+                            
+                            FrontAxleWeight -> 
+                                (uiModel.frontAxleWeightFilters, "Front Axle Weight", FilterCheckBoxClicked)
+                            
+                            RearAxleWeight -> 
+                                (uiModel.rearAxleWeightFilters, "Rear Axle Weight", FilterCheckBoxClicked)
+                            
+                            InventoryAge -> 
+                                (uiModel.inventoryAgeFilters, "Inventory Age", FilterCheckBoxClicked)
 
             searchFilterState = 
                     uiModel.expandCollapseSearchFilterStates

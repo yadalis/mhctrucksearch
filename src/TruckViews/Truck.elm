@@ -25,21 +25,21 @@ truckView index truck =
         formatImageLink = truck.primaryImageLink
                             |> String.isEmpty
                             |> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else truck.primaryImageLink)
-                            |> String.replace "&h=16" "&h=200"
-                            |> String.replace "&w=16" "&w=200" 
+                            |> String.replace "&h=16" "&h=225"
+                            |> String.replace "&w=16" "&w=225" 
                             |> String.replace "&thn=1" "&thn=2"
     in
     
         row[bwb 0, wf, pd 5, bc 240 240 240, hf ]
         [
-            column[  bw 0, hf, pdt 0]
+            column[wpx 225, hpx 225,  bw 0, hf, pdt 0]
             [
                 image [ bwl 0, pdl 0, bw 0, bc 250 250 250
                     ,
 
                     inFront (
                         if isTruckSold then
-                            ( el[alignBottom, fc 250 250 250, bc 234 67 82, wf, alpha 0.55, feb] <| textValue "SOLD" )
+                            ( el[alignBottom, fc 250 250 250, bc 234 67 82, wf, alpha 0.55, feb, fac] <| textValue "SOLD" )
                         else
                             none
                     )
@@ -87,10 +87,10 @@ truckView index truck =
                         ,dataFieldView "Stock#:" <| if truck.stockNumber == 0 then "N/A" else String.fromInt truck.stockNumber
                         ,dataFieldView "Chassis#:" truck.chassisNumber
                         ,dataFieldView "Mileage:" <|  format "0,0" <|  truck.mileage
-                        ,dataFieldView "Sleeper Size:" 
-                                                        <| case String.toInt truck.sleeperInches of
-                                                                    Just num -> String.fromInt num ++ " Inch"
-                                                                    Nothing -> truck.sleeperInches
+                        ,dataFieldView "Sleeper Size:" <| String.fromFloat <| truck.sleeperInches
+                                                        -- <| case truck.sleeperInches of
+                                                        --             Just num -> String.fromInt num ++ " Inch"
+                                                        --             Nothing -> truck.sleeperInches
                     ]
                     ,column[bw 0,  wf, hf, pd 0, spy 5]
                     [

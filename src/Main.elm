@@ -42,7 +42,7 @@ update msg (model, uiModel) =
     case msg of
         OnFetchSearchFilterRanges response ->
             let
-                --x =  Debug.log "raw json response" response
+                x =  Debug.log "raw json response" response
 
                 rangeSearchFilters = 
                             case response of
@@ -77,18 +77,25 @@ update msg (model, uiModel) =
                                     allRangeSearchFiltersWithCountsWithItsFilterType) of
                                 Just item -> Tuple.second item
                                 Nothing -> Array.empty
+                
+                --x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts Price
             in
             
                 ( ( model , {uiModel | 
                                         priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
-                                        engineHPFilters = fetchRangeFiltersPoplulatedWithCounts EngineHP
-                                        
-                            
-                            
+                                        engineHPFilters = fetchRangeFiltersPoplulatedWithCounts EngineHP,
+                                        sleeperInchesFilters = fetchRangeFiltersPoplulatedWithCounts SleeperInches,
+                                        wheelBaseFilters = fetchRangeFiltersPoplulatedWithCounts WheelBase,
+                                        mileageFilters = fetchRangeFiltersPoplulatedWithCounts Mileage,
+                                        frontAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts FrontAxleWeight,
+                                        rearAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts RearAxleWeight,
+                                        inventoryAgeFilters = fetchRangeFiltersPoplulatedWithCounts InventoryAge
                             } ), Cmd.none)
 
         OnFetchTrucks response ->
             let
+                
+                x =  Debug.log "raw json response" response
                 trucks = case response of
                             Ok truckList ->
                                     truckList
@@ -103,6 +110,17 @@ update msg (model, uiModel) =
                 modelFilters = buildSearchFilterValueRecordList MakeModel uiModel.modelFilters trucks
                 sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
                 sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
+                engineMakeFilters = buildSearchFilterValueRecordList EngineMake uiModel.engineMakeFilters trucks
+                transTypeFilters = buildSearchFilterValueRecordList TransType uiModel.transTypeFilters trucks
+                suspensionFilters = buildSearchFilterValueRecordList Suspension uiModel.suspensionFilters trucks
+                bodyTypeFilters = buildSearchFilterValueRecordList BodyType uiModel.bodyTypeFilters trucks
+                rearAxleTypeFilters = buildSearchFilterValueRecordList RearAxleType uiModel.rearAxleTypeFilters trucks
+                fleetCodeFilters = buildSearchFilterValueRecordList FleetCode uiModel.fleetCodeFilters trucks
+                truckStatusFilters = buildSearchFilterValueRecordList TruckStatus uiModel.truckStatusFilters trucks
+                specialFinancingFilters = buildSearchFilterValueRecordList SpecialFinancing uiModel.specialFinancingFilters trucks
+                owningBranchFilters = buildSearchFilterValueRecordList OwningBranch uiModel.owningBranchFilters trucks
+
+                -- x =  Debug.log "raw json response" sleeperBunkFilters
 
                 pagedTruckList = List.take 100 trucks
             in
@@ -116,7 +134,16 @@ update msg (model, uiModel) =
                                         modelFilters = modelFilters, 
                                         salesStatusFilters = salesStatusFilters, 
                                         sleeperRoofFilters = sleeperRoofFilters, 
-                                        sleeperBunkFilters = sleeperBunkFilters 
+                                        sleeperBunkFilters = sleeperBunkFilters, 
+                                        engineMakeFilters = engineMakeFilters,
+                                        transTypeFilters = transTypeFilters,
+                                        suspensionFilters = suspensionFilters,
+                                        bodyTypeFilters = bodyTypeFilters,
+                                        rearAxleTypeFilters = rearAxleTypeFilters,
+                                        fleetCodeFilters = fleetCodeFilters,
+                                        truckStatusFilters = truckStatusFilters,
+                                        specialFinancingFilters = specialFinancingFilters,
+                                        owningBranchFilters = owningBranchFilters 
                         }
                     )
                     --, Cmd.none
@@ -148,11 +175,41 @@ update msg (model, uiModel) =
                         SleeperRoof -> 
                             (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
                         SleeperBunk -> 
-                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})    
+                            (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
+                        EngineMake -> 
+                            (uiModel.engineMakeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | engineMakeFilters = mfArr})    
+                        TransType -> 
+                            (uiModel.transTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | transTypeFilters = mfArr})    
+                        Suspension -> 
+                            (uiModel.suspensionFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | suspensionFilters = mfArr})  
+                        BodyType -> 
+                            (uiModel.bodyTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | bodyTypeFilters = mfArr})    
+                        RearAxleType -> 
+                            (uiModel.rearAxleTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | rearAxleTypeFilters = mfArr})
+                        FleetCode -> 
+                            (uiModel.fleetCodeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | fleetCodeFilters = mfArr})    
+                        TruckStatus -> 
+                            (uiModel.truckStatusFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | truckStatusFilters = mfArr})
+                        SpecialFinancing -> 
+                            (uiModel.specialFinancingFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | specialFinancingFilters = mfArr})                            
+                        OwningBranch -> 
+                            (uiModel.owningBranchFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | owningBranchFilters = mfArr})       
                         Price -> 
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
                         EngineHP -> 
                             (uiModel.engineHPFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | engineHPFilters = mfArr})    
+                        SleeperInches -> 
+                            (uiModel.sleeperInchesFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperInchesFilters = mfArr})    
+                        WheelBase -> 
+                            (uiModel.wheelBaseFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | wheelBaseFilters = mfArr})        
+                        Mileage -> 
+                            (uiModel.mileageFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | mileageFilters = mfArr})        
+                        FrontAxleWeight -> 
+                            (uiModel.frontAxleWeightFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | frontAxleWeightFilters = mfArr})        
+                        RearAxleWeight -> 
+                            (uiModel.rearAxleWeightFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | rearAxleWeightFilters = mfArr})
+                        InventoryAge -> 
+                            (uiModel.inventoryAgeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | inventoryAgeFilters = mfArr})    
 
                 newSortedFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
@@ -365,40 +422,106 @@ view (model, uiModel) =
                                     }
                                 ]
                                 ,column[wf, spy 5, bc 240 240 240, bw 0 ]
-                                [
-                                    if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
-                                    else
-                                        loaderIconElement
-                                    ,if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup Year model uiModel
-                                    else
-                                        none
-                                    ,if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup Make model uiModel
-                                    else
-                                        none    
-                                    , if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup MakeModel model uiModel
-                                    else
-                                        none
-                                    , if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup SleeperRoof model uiModel
-                                    else
-                                        none
-                                    , if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup SleeperBunk model uiModel
-                                    else
-                                        none
-                                    , if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup Price model uiModel
-                                    else
-                                        none                                                        
-                                    , if List.length model.filteredTruckList > 0 then
-                                        lazy3 buildSearchFilterValuesGroup EngineHP model uiModel
-                                    else
-                                        none    
-                                ]
+                                    <| loaderIconElement :: List.map 
+                                                (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
+                                                allFilterTypesMasterListWithItsInitialState
+                                --[
+                                    --loaderIconElement
+
+                                    -- ,if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
+                                    --     ,lazy3 buildSearchFilterValuesGroup Year model uiModel
+                                    -- else
+                                    --     none
+                                    -- ,if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup Year model uiModel
+                                    -- else
+                                    --     none
+                                    -- ,if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup Make model uiModel
+                                    -- else
+                                    --     none    
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup MakeModel model uiModel
+                                    -- else
+                                    --     none
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup SleeperRoof model uiModel
+                                    -- else
+                                    --     none
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup SleeperBunk model uiModel
+                                    -- else
+                                    --     none                                                            
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup EngineMake model uiModel
+                                    -- else
+                                    --     none                                                            
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup TransType model uiModel
+                                    -- else
+                                    --     none                                                            
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup Suspension model uiModel
+                                    -- else
+                                    --     none                                                            
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup BodyType model uiModel
+                                    -- else
+                                    --     none
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup RearAxleType model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup FleetCode model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup TruckStatus model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup SpecialFinancing model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup OwningBranch model uiModel
+                                    -- else
+                                    --     none      
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup Price model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup EngineHP model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup SleeperInches model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup WheelBase model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup Mileage model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup FrontAxleWeight model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup RearAxleWeight model uiModel
+                                    -- else
+                                    --     none                                                        
+                                    -- , if List.length model.filteredTruckList > 0 then
+                                    --     lazy3 buildSearchFilterValuesGroup InventoryAge model uiModel
+                                    -- else
+                                    --     none
+                                --]
                             ]
                             
                             -- Trucks Search Result List Panel 
@@ -451,8 +574,23 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.modelFilters,
                                                                                     Array.toList uiModel.sleeperRoofFilters,
                                                                                     Array.toList uiModel.sleeperBunkFilters,
+                                                                                    Array.toList uiModel.engineMakeFilters,
+                                                                                    Array.toList uiModel.transTypeFilters,
+                                                                                    Array.toList uiModel.suspensionFilters,
+                                                                                    Array.toList uiModel.bodyTypeFilters,
+                                                                                    Array.toList uiModel.rearAxleTypeFilters,
                                                                                     Array.toList uiModel.priceFilters,
-                                                                                    Array.toList uiModel.engineHPFilters
+                                                                                    Array.toList uiModel.engineHPFilters,
+                                                                                    Array.toList uiModel.sleeperInchesFilters,
+                                                                                    Array.toList uiModel.wheelBaseFilters,
+                                                                                    Array.toList uiModel.mileageFilters,
+                                                                                    Array.toList uiModel.frontAxleWeightFilters,
+                                                                                    Array.toList uiModel.rearAxleWeightFilters,
+                                                                                    Array.toList uiModel.fleetCodeFilters,
+                                                                                    Array.toList uiModel.truckStatusFilters,
+                                                                                    Array.toList uiModel.specialFinancingFilters,
+                                                                                    Array.toList uiModel.inventoryAgeFilters,
+                                                                                    Array.toList uiModel.owningBranchFilters
                                                                                 ]
                                 ]
                                 ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]

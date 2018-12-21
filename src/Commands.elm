@@ -1,5 +1,6 @@
 module Commands exposing (..)
 
+import Model exposing (..)
 import Http exposing (..)
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (..)
@@ -31,16 +32,16 @@ fetchTrucksUrl : String -> String
 fetchTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-            -- if String.isEmpty searchText then
-            --     "http://localhost:50977/api/mhc/gettrucks"
-            -- else
-            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
+            if String.isEmpty searchText then
+                "http://localhost:50977/api/mhc/gettrucks"
+            else
+                crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
 
             -- if String.isEmpty searchText then
             --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"
             -- else
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks" [searchText] []
-        "http://localhost:3333/trks"
+        --"http://localhost:3333/trks"
 
 
 fetchSearchFilterRangesUrl: String
@@ -73,17 +74,27 @@ trucksDecoder  =
         |> required "engineHP" Decode.float
         |> required "apu" Decode.string
         |> required "cdl" Decode.string
-        |> required "year" Decode.string
-        --|> hardcoded "2000"
+        |> required "year" Decode.string        
         |> required "primaryImageLink" Decode.string
         |> required "truckType" Decode.string
+        |> required "suspension" Decode.string
+        |> required "bodyType" Decode.string
+        |> required "sleeperBunk" Decode.string
         |> required "salesStatus" Decode.string
         |> required "sleeperRoof" Decode.string
-        |> required "sleeperBunk" Decode.string
-        |> required "sleeperInches" Decode.string
+        |> required "rearAxleType" Decode.string        
+        |> required "sleeperInches" Decode.float
+        |> required "wheelBase" Decode.float
         |> required "chassisNumber" Decode.string
         |> required "transType" Decode.string
         |> required "mileage" Decode.float
+        |> required "frontAxleWeight" Decode.float
+        |> required "rearAxleWeight" Decode.float
+        |> required "fleetCode" Decode.string
+        |> required "truckStatus" Decode.string
+        |> required "specialFinancing" Decode.string
+        |> required "inventoryAge" Decode.float
+        |> required "owningBranch" Decode.string
         |> required "locationNumber" Decode.string
         |> required "locationName" Decode.string
         |> required "salesStatusFlag" Decode.string
@@ -102,18 +113,17 @@ searchFilterRangeDecoder  =
         |> required "searchFilterExtraData" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
         -- |> required "searchFilterMinValue" Decode.int
         -- |> required "searchFilterMaxValue" Decode.int
-        --|> required "userAction" stringBoolDecoder
-        |> required "userAction" Decode.bool
+        |> required "userAction" stringBoolDecoder --Decode.bool
         |> hardcoded 0
         |> required "filterCategory" searchFilterRangeUnionTypeDecoder
 
--- stringBoolDecoder : Decode.Decoder Bool
--- stringBoolDecoder =
---   Decode.string |> Decode.andThen (\val ->
---     case val of
---       "True" -> Decode.succeed True
---       "False" -> Decode.succeed False
---       _ -> Decode.fail <| "Expecting \"true\" or \"false\" but found " ++ val )
+stringBoolDecoder : Decode.Decoder Bool
+stringBoolDecoder =
+  Decode.string |> Decode.andThen (\val ->
+    case val of
+      "True" -> Decode.succeed True
+      "False" -> Decode.succeed False
+      _ -> Decode.fail <| "Expecting \"true\" or \"false\" but found " ++ val )
 
 -- the commented code is good as well
 -- searchFilterCustomTypeDecoder : Decode.Decoder SearchFilterCustomType
@@ -144,12 +154,33 @@ searchFilterRangeUnionTypeDecoder =
     Decode.string |> Decode.andThen searchFilterRangeUnionTypeString
 
 searchFilterRangeUnionTypeString : String -> Decode.Decoder SearchFilterCustomType
-searchFilterRangeUnionTypeString string =
-            case string of
-                "Price" ->
-                    Decode.succeed Price
-                "EngineHP" ->
-                    Decode.succeed EngineHP
+searchFilterRangeUnionTypeString str =
+    Decode.succeed <| convertStringToRangeSearchFilter str
+            -- case string of
+            --     "Price" ->
+            --         Decode.succeed Price
+            --     "EngineHP" ->
+            --         Decode.succeed EngineHP
+            --     "SleeperInches" ->
+            --         Decode.succeed SleeperInches
+            --     "WheelBase" ->
+            --         Decode.succeed WheelBase
+            --     "Mileage" ->
+            --         Decode.succeed Mileage
+            --     "FrontAxleWeight" ->
+            --         Decode.succeed FrontAxleWeight
+            --     "RearAxleWeight" ->
+            --         Decode.succeed RearAxleWeight
+            --     "InventoryAge" ->
+            --         Decode.succeed InventoryAge
                 
-                _ ->
-                    Decode.succeed Price
+            --     _ ->
+            --         Decode.succeed Price
+
+
+convertStringToRangeSearchFilter rangeFilterStr =
+    allRangeFilterTypesKeyValueParis
+        |> List.filter(\(k, v) -> k == rangeFilterStr)
+        |> List.head
+        |> Maybe.map (\(k, v) -> v)
+        |> Maybe.withDefault Price --introduce noValue filter type to handle this situation

@@ -89,6 +89,195 @@
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "EngineHP"
+    },    
+    {
+        "searchFilterKey" : "< 36 inches"
+        ,"searchFilterExtraData" : "0-35"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "SleeperInches"
+    },
+    {
+        "searchFilterKey" : "36 - 51"
+        ,"searchFilterExtraData" : "36-51"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "SleeperInches"
+    },
+    {
+        "searchFilterKey" : "52 - 69"
+        ,"searchFilterExtraData" : "52-69"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "SleeperInches"
+    },
+    {
+        "searchFilterKey" : "70 - 79"
+        ,"searchFilterExtraData" : "70-79"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "SleeperInches"
+    },
+    {
+        "searchFilterKey" : "> 80"
+        ,"searchFilterExtraData" : "80-999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "SleeperInches"
+    },
+    {
+        "searchFilterKey" : "< 299,999"
+        ,"searchFilterExtraData" : "0-299999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {    
+        "searchFilterKey" : "300,000 - 399,999"
+        ,"searchFilterExtraData" : "300000-399999"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {             
+        "searchFilterKey" : "400,000 - 499,999"
+        ,"searchFilterExtraData" : "400000-499999"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {                
+        "searchFilterKey" : "500,000 - 599,999"
+        ,"searchFilterExtraData" : "500000-599999"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {                
+        "searchFilterKey" : "600,000 - 699,999"
+        ,"searchFilterExtraData" : "600000-699999"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },
+    {
+        "searchFilterKey" : "> 700,000"
+        ,"searchFilterExtraData" : "700000-9999999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "Mileage"
+    },    
+    {
+        "searchFilterKey" : "< 200"
+        ,"searchFilterExtraData" : "0-199"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "WheelBase"
+    },
+    {
+        "searchFilterKey" : "201 - 260"
+        ,"searchFilterExtraData" : "200-260"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "WheelBase"
+    },
+    {
+        "searchFilterKey" : "261 - 272"
+        ,"searchFilterExtraData" : "261-272"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "WheelBase"
+    },
+    {
+        "searchFilterKey" : "> 272"
+        ,"searchFilterExtraData" : "272-999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "WheelBase"
+    },
+    {    
+        "searchFilterKey" : "0 - 30 days"
+        ,"searchFilterExtraData" : "0-30"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "InventoryAge"
+    },
+    {             
+        "searchFilterKey" : "30 - 60 days"
+        ,"searchFilterExtraData" : "31-60"       
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "InventoryAge"
+    },
+    {                
+        "searchFilterKey" : "60 - 90 days"
+        ,"searchFilterExtraData" : "61-90"          
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "InventoryAge"
+    },
+    {                
+        "searchFilterKey" : "90 - 120 days"
+        ,"searchFilterExtraData" : "91-120"          
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "InventoryAge"
+    },
+    {
+        "searchFilterKey" : "120+ days"
+        ,"searchFilterExtraData" : "121-999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "InventoryAge"
+    },
+    {
+        "searchFilterKey" : "< 12,000"
+        ,"searchFilterExtraData" : "0-11999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontAxleWeight"
+    },
+    {    
+        "searchFilterKey" : "12,000 - 13,200"
+        ,"searchFilterExtraData" : "12200-13200"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontAxleWeight"
+    },    
+    {
+        "searchFilterKey" : "> 13,300"
+        ,"searchFilterExtraData" : "13301-99999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontAxleWeight"
+    },
+    {
+        "searchFilterKey" : "< 20,000"
+        ,"searchFilterExtraData" : "0-19999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },
+    {    
+        "searchFilterKey" : "20,000 - 23,000"
+        ,"searchFilterExtraData" : "20000-23000"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },
+    {    
+        "searchFilterKey" : "34,000 - 40,000"
+        ,"searchFilterExtraData" : "34000-40000"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
+    },     
+    {
+        "searchFilterKey" : "> 40,000"
+        ,"searchFilterExtraData" : "40001-99999"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleWeight"
     }
     ]
 }
