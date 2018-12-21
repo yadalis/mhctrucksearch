@@ -156,7 +156,7 @@ type alias FilterSelectionsModel =
     }
 
 allFilterTypesMasterListWithItsInitialState = 
-                        [ {filterName = SalesStatus, expandByDefault = False}
+                        [ {filterName = SalesStatus, expandByDefault = True}
                         , {filterName = Year, expandByDefault = True}
                         , {filterName = Make, expandByDefault = False}
                         , {filterName = MakeModel, expandByDefault = False}

@@ -65,7 +65,10 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                 |> applyExtraOnSearchFilters SortASC
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
-                                               SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) searchFilterCustomType
+                                               SearchFilterType index sf "EXD" 
+                                               (if String.toLower sf == "available" then True else False)
+                                               --False
+                                               (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) searchFilterCustomType
                                 )
                                 sfArray
                     ) 

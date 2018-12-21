@@ -22,6 +22,7 @@ import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
 import Element.Events exposing (..)
+import Helpers.Utils exposing (..)
 
 ---- INIT ----
 
@@ -79,9 +80,8 @@ update msg (model, uiModel) =
                                 Nothing -> Array.empty
                 
                 --x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts Price
-            in
-            
-                ( ( model , {uiModel | 
+
+                newUIModel = {uiModel | 
                                         priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
                                         engineHPFilters = fetchRangeFiltersPoplulatedWithCounts EngineHP,
                                         sleeperInchesFilters = fetchRangeFiltersPoplulatedWithCounts SleeperInches,
@@ -90,7 +90,19 @@ update msg (model, uiModel) =
                                         frontAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts FrontAxleWeight,
                                         rearAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts RearAxleWeight,
                                         inventoryAgeFilters = fetchRangeFiltersPoplulatedWithCounts InventoryAge
-                            } ), Cmd.none)
+                            } 
+                
+                newSortedFilteredTruckList = applySearchFilters model newUIModel
+                                            |> sortTruckList uiModel.currentSortBy
+
+                newModel = {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1}
+
+                uiModelUpdatedWithLatestSearchFilters =
+                        rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
+
+            in
+                --( ( model , newUIModel), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
+                ( ( newModel , uiModelUpdatedWithLatestSearchFilters), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
 
         OnFetchTrucks response ->
             let
@@ -300,22 +312,23 @@ update msg (model, uiModel) =
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
         
         ShowTrucksWithPhotoOnly ->
-            let
-                photoOnlyTrucks =
-                    model.truckList
-                        |> List.filter (\t -> t.primaryImageLink /= "")
-                        |> (\list -> 
-                                    if List.length list > 0 then
-                                        list
-                                    else 
-                                        model.filteredTruckList)
+            ( (model, uiModel), Cmd.none )
+            -- let
+            --     photoOnlyTrucks =
+            --         model.filteredTruckList
+            --             |> List.filter (\t -> t.primaryImageLink /= "")
+            --             |> (\list -> 
+            --                         if List.length list > 0 then
+            --                             list
+            --                         else 
+            --                             model.filteredTruckList)
                 
-                newModel = {model | truckList=photoOnlyTrucks,  filteredTruckList=photoOnlyTrucks, pagedTruckList = List.take 100 photoOnlyTrucks}
+            --     newModel = {model | truckList=photoOnlyTrucks,  filteredTruckList=photoOnlyTrucks, pagedTruckList = List.take 100 photoOnlyTrucks}
 
-                uiModelUpdatedWithLatestSearchFilters =
-                         rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel uiModel
-            in        
-                ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+            --     uiModelUpdatedWithLatestSearchFilters =
+            --              rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel uiModel
+            -- in        
+            --     ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
 ---- VIEW ----
 
