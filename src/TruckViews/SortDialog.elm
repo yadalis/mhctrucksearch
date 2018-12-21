@@ -21,7 +21,7 @@ showSortOptionsDialog show currentSortByOption =
                                         }
             ],
 
-            row[wf, pdt 0]
+            row[wf, pdt 10]
             [
                 column[spy 3, wf]
                     <|

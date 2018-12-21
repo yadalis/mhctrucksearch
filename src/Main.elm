@@ -430,103 +430,6 @@ view (model, uiModel) =
                                                 (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
                                                 allFilterTypesMasterListWithItsInitialState
                                     )
-                                --[
-                                    --loaderIconElement
-
-                                    -- ,if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup SalesStatus model uiModel
-                                    --     ,lazy3 buildSearchFilterValuesGroup Year model uiModel
-                                    -- else
-                                    --     none
-                                    -- ,if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup Year model uiModel
-                                    -- else
-                                    --     none
-                                    -- ,if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup Make model uiModel
-                                    -- else
-                                    --     none    
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup MakeModel model uiModel
-                                    -- else
-                                    --     none
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup SleeperRoof model uiModel
-                                    -- else
-                                    --     none
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup SleeperBunk model uiModel
-                                    -- else
-                                    --     none                                                            
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup EngineMake model uiModel
-                                    -- else
-                                    --     none                                                            
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup TransType model uiModel
-                                    -- else
-                                    --     none                                                            
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup Suspension model uiModel
-                                    -- else
-                                    --     none                                                            
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup BodyType model uiModel
-                                    -- else
-                                    --     none
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup RearAxleType model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup FleetCode model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup TruckStatus model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup SpecialFinancing model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup OwningBranch model uiModel
-                                    -- else
-                                    --     none      
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup Price model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup EngineHP model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup SleeperInches model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup WheelBase model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup Mileage model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup FrontAxleWeight model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup RearAxleWeight model uiModel
-                                    -- else
-                                    --     none                                                        
-                                    -- , if List.length model.filteredTruckList > 0 then
-                                    --     lazy3 buildSearchFilterValuesGroup InventoryAge model uiModel
-                                    -- else
-                                    --     none
-                                --]
                             ]
                             
                             -- Trucks Search Result List Panel 
@@ -534,13 +437,13 @@ view (model, uiModel) =
                             [
                                 row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215, bw 0]
                                 [ 
-                                    column[wf , hf, bw 0]
+                                    column[wfp 3 , hf, bw 0]
                                     [
-                                        wrappedRow [wf,  bw 0, pdl 5 , eat]
+                                        wrappedRow [wf,  bw 0, pd 10 , eat, spx 5, spy 5]
                                             -- using <| u can avoid parans around the below func and its params
                                             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                     ]
-                                    ,row[hf, bw 0, pdb 3,  bc 215 215 215,wpx 500]
+                                    ,row[hf, bw 0, pdb 3,  bc 215 215 215, wfp 2]
                                     [
                                         column[wf, hf]
                                         [
@@ -549,19 +452,19 @@ view (model, uiModel) =
                                                         el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                                                 ]
                                             
-                                             ,  row[bw 0, spaceEvenly, eab]
+                                             ,  row[bw 0, eab, wf]
                                                 [
-                                                    el [ pdr 15,bw 0,  fc 97 97 97,eal
+                                                    el [ pdr 15,bw 0,  fc 97 97 97,eal, wf
                                                         , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
                                                     ]
-                                                        <| Input.button [pdl 5, wf,    fb, fh, bwb 1  ]  
+                                                        <| Input.button [pdl 5, wf,    fb, fh, bwb 0  ]  
                                                             { 
                                                                 onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                                ,label = textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                                                ,label = el[bwb 1] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
                                                             }
-                                                    ,column[bw 0, bwl 2, pdl 15, wf, ear]
+                                                    ,column[bw 0, bwl 1, pdl 15, wf, ear]
                                                     [
-                                                        el [ear, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                                        el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
                                                     ]
                                                 ]
                                                 
@@ -584,6 +487,10 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.suspensionFilters,
                                                                                     Array.toList uiModel.bodyTypeFilters,
                                                                                     Array.toList uiModel.rearAxleTypeFilters,
+                                                                                    Array.toList uiModel.fleetCodeFilters,
+                                                                                    Array.toList uiModel.truckStatusFilters,
+                                                                                    Array.toList uiModel.specialFinancingFilters,
+                                                                                    Array.toList uiModel.owningBranchFilters,
                                                                                     Array.toList uiModel.priceFilters,
                                                                                     Array.toList uiModel.engineHPFilters,
                                                                                     Array.toList uiModel.sleeperInchesFilters,
@@ -591,11 +498,7 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.mileageFilters,
                                                                                     Array.toList uiModel.frontAxleWeightFilters,
                                                                                     Array.toList uiModel.rearAxleWeightFilters,
-                                                                                    Array.toList uiModel.fleetCodeFilters,
-                                                                                    Array.toList uiModel.truckStatusFilters,
-                                                                                    Array.toList uiModel.specialFinancingFilters,
-                                                                                    Array.toList uiModel.inventoryAgeFilters,
-                                                                                    Array.toList uiModel.owningBranchFilters
+                                                                                    Array.toList uiModel.inventoryAgeFilters
                                                                                 ]
                                 ]
                                 ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
@@ -624,7 +527,7 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
     
         if List.length pageNumbers > 1 then
             List.map (\num -> 
-                           row[pd 0, bw 0,wpx 30, hpx 30, pdt 10]
+                           row[wpx 35, hpx 30]
                                     [
                                         Input.button ([
                                                         if currentPageNumber /= num then
@@ -632,10 +535,10 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
                                                         else
                                                             mouseOver [ bc  175 175 175 ]
                                                         ,
-                                                        pd 5, wf,    fb ] ++ (searchStringBtnStyle num))
+                                                        pd 0, wf, hf,    fb ] ++ (searchStringBtnStyle num))
                                             { 
                                                 onPress = Just (PageNumberClicked num )
-                                                ,label = textValue <| String.fromInt num
+                                                ,label =  el[eacx,eacy] <| textValue <| String.fromInt num
                                             }
                                     ]
 

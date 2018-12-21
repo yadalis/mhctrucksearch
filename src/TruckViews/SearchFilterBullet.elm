@@ -22,7 +22,7 @@ searchFilterBulletView filterList =
                                         Input.button ( [ bw 0, brc 97 97 97,  bc 231 231 231 ,pd 6])
                                         { 
                                             onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory False )                                                       
-                                            ,label = (el [wpx 15, hpx 15, fs 14,centerX, centerY, fc 300 300 300, bc 150 150 150] <| textValue <| "x")
+                                            ,label = (el [wpx 15, hpx 15, fs 14,fac, fc 300 300 300, bc 150 150 150] <| textValue <| "x")
                                         }
                                     ]
                                 ]
