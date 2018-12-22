@@ -176,7 +176,7 @@
     },
     {
         "searchFilterKey" : "201 - 260"
-        ,"searchFilterExtraData" : "200-260"
+        ,"searchFilterExtraData" : "201-260"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "WheelBase"
@@ -190,7 +190,7 @@
     },
     {
         "searchFilterKey" : "> 272"
-        ,"searchFilterExtraData" : "272-999"
+        ,"searchFilterExtraData" : "273-999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "WheelBase"
@@ -239,14 +239,14 @@
     },
     {    
         "searchFilterKey" : "12K - 13.2K"
-        ,"searchFilterExtraData" : "12-13"        
+        ,"searchFilterExtraData" : "12-13.2"        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "FrontAxleWeight"
     },    
     {
         "searchFilterKey" : "> 13.3K"
-        ,"searchFilterExtraData" : "14-99999"
+        ,"searchFilterExtraData" : "13.3-99999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "FrontAxleWeight"
