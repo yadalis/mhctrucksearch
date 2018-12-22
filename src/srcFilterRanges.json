@@ -231,50 +231,50 @@
         ,"filterCategory" : "InventoryAge"
     },
     {
-        "searchFilterKey" : "< 12,000"
-        ,"searchFilterExtraData" : "0-11999"
+        "searchFilterKey" : "< 12K"
+        ,"searchFilterExtraData" : "0-11"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "FrontAxleWeight"
     },
     {    
-        "searchFilterKey" : "12,000 - 13,200"
-        ,"searchFilterExtraData" : "12200-13200"        
+        "searchFilterKey" : "12K - 13.2K"
+        ,"searchFilterExtraData" : "12-13"        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "FrontAxleWeight"
     },    
     {
-        "searchFilterKey" : "> 13,300"
-        ,"searchFilterExtraData" : "13301-99999"
+        "searchFilterKey" : "> 13.3K"
+        ,"searchFilterExtraData" : "14-99999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "FrontAxleWeight"
     },
     {
-        "searchFilterKey" : "< 20,000"
-        ,"searchFilterExtraData" : "0-19999"
+        "searchFilterKey" : "< 20"
+        ,"searchFilterExtraData" : "0-19"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "RearAxleWeight"
     },
     {    
-        "searchFilterKey" : "20,000 - 23,000"
-        ,"searchFilterExtraData" : "20000-23000"        
+        "searchFilterKey" : "20 - 23"
+        ,"searchFilterExtraData" : "20-23"        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "RearAxleWeight"
     },
     {    
-        "searchFilterKey" : "34,000 - 40,000"
-        ,"searchFilterExtraData" : "34000-40000"        
+        "searchFilterKey" : "34 - 40"
+        ,"searchFilterExtraData" : "34-40"        
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "RearAxleWeight"
     },     
     {
-        "searchFilterKey" : "> 40,000"
-        ,"searchFilterExtraData" : "40001-99999"
+        "searchFilterKey" : "> 40"
+        ,"searchFilterExtraData" : "41-99999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "RearAxleWeight"

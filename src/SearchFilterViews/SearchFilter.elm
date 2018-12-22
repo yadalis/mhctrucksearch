@@ -66,8 +66,8 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                 |> (\sfArray -> 
                                 Array.indexedMap (\index sf -> 
                                                SearchFilterType index sf "EXD" 
-                                               (if String.toLower sf == "available" then True else False)
-                                               --False
+                                               --(if String.toLower sf == "available" then True else False)
+                                               False
                                                (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) searchFilterCustomType
                                 )
                                 sfArray
@@ -217,6 +217,36 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 sfArray
                     )      
 
+        APU ->        
+            List.map .apu trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.apu == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )  
+
+        CDL ->        
+            List.map .cdl trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.cdl == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )  
+
+        Photo ->        
+            List.map .hasPhoto trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.hasPhoto == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )  
+
 ------------------Range filters 
         Price ->            
                 createRangeFilters  searchFilterTypes
@@ -348,6 +378,15 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             OwningBranch -> 
                                 (uiModel.owningBranchFilters, "Owning Branch", FilterCheckBoxClicked)
                             
+                            APU -> 
+                                (uiModel.apuFilters, "APU", FilterCheckBoxClicked)
+
+                            CDL -> 
+                                (uiModel.cdlFilters, "CDL", FilterCheckBoxClicked)
+
+                            Photo -> 
+                                (uiModel.photoFilters, "Show With Photos", FilterCheckBoxClicked)
+
                             Price -> 
                                 (uiModel.priceFilters, "Price", FilterCheckBoxClicked)
                             

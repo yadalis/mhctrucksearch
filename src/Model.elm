@@ -44,6 +44,7 @@ type alias Truck =
         , location          : String
         , locationName      : String
         , salesStatusFlag   : String
+        , hasPhoto          : String
     }
 
 type alias Model =
@@ -85,6 +86,9 @@ type alias UIModel =
         ,specialFinancingFilters : Array SearchFilterType
         ,inventoryAgeFilters : Array SearchFilterType        
         ,owningBranchFilters : Array SearchFilterType
+        ,apuFilters : Array SearchFilterType
+        ,cdlFilters : Array SearchFilterType
+        ,photoFilters : Array SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         ,expandCollapseAllChecked : Bool
         ,showDropdown : Bool
@@ -114,6 +118,9 @@ type SearchFilterCustomType
     | TruckStatus
     | SpecialFinancing
     | OwningBranch
+    | APU
+    | CDL
+    | Photo
     -- range filters
     | Price
     | EngineHP
@@ -178,7 +185,11 @@ allFilterTypesMasterListWithItsInitialState =
                         , {filterName = TruckStatus, expandByDefault = False}
                         , {filterName = SpecialFinancing, expandByDefault = False}
                         , {filterName = InventoryAge, expandByDefault = False}
-                        , {filterName = OwningBranch, expandByDefault = False}] 
+                        , {filterName = OwningBranch, expandByDefault = False}
+                        , {filterName = APU, expandByDefault = False}
+                        , {filterName = CDL, expandByDefault = False}
+                        , {filterName = Photo, expandByDefault = False}] 
+
 
 allRangeFilterTypesMasterList = 
                         [ Price
@@ -244,6 +255,9 @@ initalUIModel jsFlag =
         specialFinancingFilters = Array.empty,
         inventoryAgeFilters = Array.empty,
         owningBranchFilters = Array.empty,
+        apuFilters = Array.empty,
+        cdlFilters = Array.empty,
+        photoFilters = Array.empty,
         expandCollapseSearchFilterStates = 
                         Array.indexedMap 
                                         (

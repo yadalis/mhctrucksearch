@@ -38,7 +38,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Eligible",
     "inventoryAge": 20,
-    "owningBranch": "Abilene"
+    "owningBranch": "Abilene",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "e89d0ec8-a568-4554-9a22-003b49f32d84",
@@ -79,7 +80,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Eligible",
     "inventoryAge": 20,
-    "owningBranch": "Abilene"
+    "owningBranch": "Abilene",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "a2145fbf-6ba6-494c-b04e-004e2c9279ff",
@@ -120,7 +122,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Eligible",
     "inventoryAge": 20,
-    "owningBranch": "Abilene"
+    "owningBranch": "Abilene",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "764281c5-f778-414c-96cf-008ba58fb2bb",
@@ -161,7 +164,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Eligible",
     "inventoryAge": 25,
-    "owningBranch": "Admore"
+    "owningBranch": "Admore",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "c5f0ef4b-784f-4c30-9b40-00b3a137c5b0",
@@ -202,7 +206,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Eligible",
     "inventoryAge": 50,
-    "owningBranch": "Abilene"
+    "owningBranch": "Abilene",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "39a71d7d-1a24-48e6-a986-00b723ee34da",
@@ -243,7 +248,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Eligible",
     "inventoryAge": 60,
-    "owningBranch": "Atlanta"
+    "owningBranch": "Atlanta",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "05610157-99d5-4da1-8aed-00cf05f83bdc",
@@ -284,7 +290,8 @@
     "truckStatus": "Appraisal",
     "specialFinancing": "Eligible",
     "inventoryAge": 80,
-    "owningBranch": "Atlanta"
+    "owningBranch": "Atlanta",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "ab118f01-7767-49b5-b37c-00d12f51c117",
@@ -297,7 +304,7 @@
     "condition": "Used",
     "make": "PETERBILT",
     "model": "587",
-    "apu": "",
+    "apu": "Carrier",
     "cdl": "Yes",
     "year": "2012",
     "primaryImageLink": "https://az832863.vo.msecnd.net/~/media/2e3b13a550f74460acf6715bf2ed6314.ashx?_=324864657&h=16&thn=1&w=16",
@@ -325,7 +332,8 @@
     "truckStatus": "Appraisal",
     "specialFinancing": "Eligible",
     "inventoryAge": 100,
-    "owningBranch": "Dallas"
+    "owningBranch": "Dallas",
+    "hasPhoto" : "No"
     },
     {
     "id": "9b0970a4-44e5-49d9-a45d-00d6fa69dde9",
@@ -366,7 +374,8 @@
     "truckStatus": "Appraisal",
     "specialFinancing": "Not Eligible",
     "inventoryAge": 120,
-    "owningBranch": "Abilene"
+    "owningBranch": "Abilene",
+    "hasPhoto" : "Yes"
     },
     {
     "id": "bc815ce7-fff9-4d50-a58e-00df21b06bc3",
@@ -407,7 +416,8 @@
     "truckStatus": "Inventory",
     "specialFinancing": "Not Eligible",
     "inventoryAge": 150,
-    "owningBranch": "Abilene"
+    "owningBranch": "Abilene",
+    "hasPhoto" : "No"
     }
     ]
 }

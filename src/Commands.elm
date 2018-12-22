@@ -98,6 +98,8 @@ trucksDecoder  =
         |> required "locationNumber" Decode.string
         |> required "locationName" Decode.string
         |> required "salesStatusFlag" Decode.string
+        |> required "hasPhoto" Decode.string
+        
     
 
 onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterType)

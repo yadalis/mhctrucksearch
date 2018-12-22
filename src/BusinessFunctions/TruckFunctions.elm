@@ -101,6 +101,18 @@ filterByRearAxleType rearAxleFilters trucksList =
         List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType rearAxleFilters) trucksList
                 |> returnListWithValues trucksList
 
+filterByAPU apuFilters trucksList =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.apu apuFilters) trucksList
+                |> returnListWithValues trucksList
+
+filterByCDL cdlFilters trucksList =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.cdl cdlFilters) trucksList
+                |> returnListWithValues trucksList
+
+filterByPhoto photoFilters trucksList =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.hasPhoto photoFilters) trucksList
+                |> returnListWithValues trucksList
+
 ----------Range filters
 
 filterByPrice priceFilters trucksList =
@@ -197,6 +209,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -229,6 +244,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -261,6 +279,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -293,6 +314,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -325,6 +349,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -357,6 +384,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -389,6 +419,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -423,6 +456,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -455,6 +491,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -487,6 +526,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -519,6 +561,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -551,6 +596,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -583,6 +631,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -615,6 +666,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -647,6 +701,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -662,6 +719,110 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                         (\sf ->
                                                 findMatchAndSetUserAction uiModel.owningBranchFilters sf 
                                         )
+
+                updatedAPUFilterList =
+                        model.truckList
+                                |> filterBySalesStatus uiModel.salesStatusFilters
+                                |> filterByYear uiModel.yearFilters
+                                |> filterByMake uiModel.makeFilters
+                                |> filterByModel uiModel.modelFilters
+                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
+                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
+                                |> filterByEngineMake uiModel.engineMakeFilters
+                                |> filterByTransType uiModel.transTypeFilters
+                                |> filterBySuspension uiModel.suspensionFilters
+                                |> filterByBodyType uiModel.bodyTypeFilters
+                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByFleetCode uiModel.fleetCodeFilters
+                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
+                                --range filters
+                                |> filterByPrice uiModel.priceFilters
+                                |> filterByEngineHP uiModel.engineHPFilters
+                                |> filterBySleeperInches uiModel.sleeperInchesFilters
+                                |> filterByWheelBase uiModel.wheelBaseFilters
+                                |> filterByMileage uiModel.mileageFilters
+                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
+                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
+                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+
+                                >> buildSearchFilterValueRecordList APU uiModel.apuFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.apuFilters sf 
+                                        )
+
+                updatedCDLFilterList =
+                        model.truckList
+                                |> filterBySalesStatus uiModel.salesStatusFilters
+                                |> filterByYear uiModel.yearFilters
+                                |> filterByMake uiModel.makeFilters
+                                |> filterByModel uiModel.modelFilters
+                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
+                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
+                                |> filterByEngineMake uiModel.engineMakeFilters
+                                |> filterByTransType uiModel.transTypeFilters
+                                |> filterBySuspension uiModel.suspensionFilters
+                                |> filterByBodyType uiModel.bodyTypeFilters
+                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByFleetCode uiModel.fleetCodeFilters
+                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByPhoto uiModel.photoFilters
+                                --range filters
+                                |> filterByPrice uiModel.priceFilters
+                                |> filterByEngineHP uiModel.engineHPFilters
+                                |> filterBySleeperInches uiModel.sleeperInchesFilters
+                                |> filterByWheelBase uiModel.wheelBaseFilters
+                                |> filterByMileage uiModel.mileageFilters
+                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
+                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
+                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+
+                                >> buildSearchFilterValueRecordList CDL uiModel.cdlFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.cdlFilters sf 
+                                        )
+
+                updatedPhotoFilterList =
+                        model.truckList
+                                |> filterBySalesStatus uiModel.salesStatusFilters
+                                |> filterByYear uiModel.yearFilters
+                                |> filterByMake uiModel.makeFilters
+                                |> filterByModel uiModel.modelFilters
+                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
+                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
+                                |> filterByEngineMake uiModel.engineMakeFilters
+                                |> filterByTransType uiModel.transTypeFilters
+                                |> filterBySuspension uiModel.suspensionFilters
+                                |> filterByBodyType uiModel.bodyTypeFilters
+                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByFleetCode uiModel.fleetCodeFilters
+                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                --range filters
+                                |> filterByPrice uiModel.priceFilters
+                                |> filterByEngineHP uiModel.engineHPFilters
+                                |> filterBySleeperInches uiModel.sleeperInchesFilters
+                                |> filterByWheelBase uiModel.wheelBaseFilters
+                                |> filterByMileage uiModel.mileageFilters
+                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
+                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
+                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+
+                                >> buildSearchFilterValueRecordList Photo uiModel.photoFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.photoFilters sf
+                                        )                                        
+
+
 -- range filters
                 updatedPriceFitlerList =
                         model.truckList
@@ -680,6 +841,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByEngineHP uiModel.engineHPFilters
                                 |> filterBySleeperInches uiModel.sleeperInchesFilters
@@ -712,6 +876,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterBySleeperInches uiModel.sleeperInchesFilters
@@ -745,6 +912,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -777,6 +947,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -809,6 +982,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -841,6 +1017,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -873,6 +1052,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -907,6 +1089,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
                                 --range filters
                                 |> filterByPrice uiModel.priceFilters
                                 |> filterByEngineHP uiModel.engineHPFilters
@@ -951,6 +1136,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 , specialFinancingFilters = updatedSpecialFinancingFitlerList
                                                 , inventoryAgeFilters = updatedInventoryAgeFitlerList
                                                 , owningBranchFilters = updatedOwningBranchFitlerList
+                                                , apuFilters = updatedAPUFilterList
+                                                , cdlFilters = updatedCDLFilterList
+                                                , photoFilters = updatedPhotoFilterList
                         }
         in
                 newUIModel
@@ -978,6 +1166,9 @@ applySearchFilters model uiModel =
                         |> filterByTruckStatus uiModel.truckStatusFilters
                         |> filterBySpecialFinancing uiModel.specialFinancingFilters
                         |> filterByOwningBranch uiModel.owningBranchFilters
+                        |> filterByAPU uiModel.apuFilters
+                        |> filterByCDL uiModel.cdlFilters
+                        |> filterByPhoto uiModel.photoFilters
                         -- range filters
                         |> filterByPrice uiModel.priceFilters
                         |> filterByEngineHP uiModel.engineHPFilters                      

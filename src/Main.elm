@@ -92,17 +92,17 @@ update msg (model, uiModel) =
                                         inventoryAgeFilters = fetchRangeFiltersPoplulatedWithCounts InventoryAge
                             } 
                 
-                newSortedFilteredTruckList = applySearchFilters model newUIModel
-                                            |> sortTruckList uiModel.currentSortBy
+                -- newSortedFilteredTruckList = applySearchFilters model newUIModel
+                --                             |> sortTruckList uiModel.currentSortBy
 
-                newModel = {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1}
+                -- newModel = {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1}
 
-                uiModelUpdatedWithLatestSearchFilters =
-                        rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
+                -- uiModelUpdatedWithLatestSearchFilters =
+                --         rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
 
             in
-                --( ( model , newUIModel), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
-                ( ( newModel , uiModelUpdatedWithLatestSearchFilters), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
+                ( ( model , newUIModel), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
+                --( ( newModel , uiModelUpdatedWithLatestSearchFilters), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
 
         OnFetchTrucks response ->
             let
@@ -131,6 +131,9 @@ update msg (model, uiModel) =
                 truckStatusFilters = buildSearchFilterValueRecordList TruckStatus uiModel.truckStatusFilters trucks
                 specialFinancingFilters = buildSearchFilterValueRecordList SpecialFinancing uiModel.specialFinancingFilters trucks
                 owningBranchFilters = buildSearchFilterValueRecordList OwningBranch uiModel.owningBranchFilters trucks
+                apuFilters = buildSearchFilterValueRecordList APU uiModel.apuFilters trucks
+                cdlFilters = buildSearchFilterValueRecordList CDL uiModel.apuFilters trucks
+                photoFilters = buildSearchFilterValueRecordList Photo uiModel.apuFilters trucks
 
                 -- x =  Debug.log "raw json response" sleeperBunkFilters
 
@@ -155,7 +158,10 @@ update msg (model, uiModel) =
                                         fleetCodeFilters = fleetCodeFilters,
                                         truckStatusFilters = truckStatusFilters,
                                         specialFinancingFilters = specialFinancingFilters,
-                                        owningBranchFilters = owningBranchFilters 
+                                        owningBranchFilters = owningBranchFilters,
+                                        apuFilters = apuFilters,
+                                        cdlFilters = cdlFilters,
+                                        photoFilters = photoFilters
                         }
                     )
                     --, Cmd.none
@@ -206,6 +212,12 @@ update msg (model, uiModel) =
                             (uiModel.specialFinancingFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | specialFinancingFilters = mfArr})                            
                         OwningBranch -> 
                             (uiModel.owningBranchFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | owningBranchFilters = mfArr})       
+                        APU -> 
+                            (uiModel.apuFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | apuFilters = mfArr})
+                        CDL -> 
+                            (uiModel.cdlFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | cdlFilters = mfArr})
+                        Photo -> 
+                            (uiModel.photoFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | photoFilters = mfArr})
                         Price -> 
                             (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
                         EngineHP -> 
@@ -460,12 +472,13 @@ view (model, uiModel) =
                                     [
                                         column[wf, hf]
                                         [
-                                                row[wf]
-                                                [   
-                                                        el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                                ]
+                                            --     row[wf]
+                                            --     [   
+                                            --             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                            --     ]
                                             
-                                             ,  row[bw 0, eab, wf]
+                                            --  ,  
+                                             row[bw 0, eab, wf]
                                                 [
                                                     el [ pdr 15,bw 0,  fc 97 97 97,eal, wf
                                                         , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
@@ -475,9 +488,10 @@ view (model, uiModel) =
                                                                 onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
                                                                 ,label = el[bwb 1] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
                                                             }
-                                                    ,column[bw 0, bwl 1, pdl 15, wf, ear]
+                                                    ,column[bw 0, bwl 0, pdl 15, wf, ear]
                                                     [
-                                                        el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                                        --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                                             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                                                     ]
                                                 ]
                                                 
@@ -504,6 +518,9 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.truckStatusFilters,
                                                                                     Array.toList uiModel.specialFinancingFilters,
                                                                                     Array.toList uiModel.owningBranchFilters,
+                                                                                    Array.toList uiModel.apuFilters,
+                                                                                    Array.toList uiModel.cdlFilters,
+                                                                                    Array.toList uiModel.photoFilters,
                                                                                     Array.toList uiModel.priceFilters,
                                                                                     Array.toList uiModel.engineHPFilters,
                                                                                     Array.toList uiModel.sleeperInchesFilters,
