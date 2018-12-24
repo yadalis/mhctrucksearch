@@ -397,7 +397,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 (uiModel.sleeperInchesFilters, "Sleeper Size", FilterCheckBoxClicked)
                             
                             WheelBase -> 
-                                (uiModel.wheelBaseFilters, "Wheel Base Filters", FilterCheckBoxClicked)
+                                (uiModel.wheelBaseFilters, "Wheel Base", FilterCheckBoxClicked)
                             
                             Mileage -> 
                                 (uiModel.mileageFilters, "Mileage", FilterCheckBoxClicked)
