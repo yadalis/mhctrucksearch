@@ -424,19 +424,26 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
 
             buildCheckboxes :  Int -> SearchFilterType -> Element Msg
             buildCheckboxes index searchFilter =
-                if searchFilter.resultCount > 0 then
-                    row[bw two, size 14]
-                    [
-                        checkbox [bw one, pdr 0 ] {
-                            onChange = msg index searchFilterCustomType
-                            ,icon = buildChkBoxImage
-                            , label = labelRight [centerY] (el [] <| textValue searchFilter.searchFilterKey )
-                            , checked = searchFilter.userAction
-                        }
-                        , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
-                    ]
-                else
-                    none
+                let
+                    chkBoxStyle =
+                                    if searchFilter.userAction then 
+                                        [fc  190 5 30, fb ]
+                                    else
+                                        [fc 0 0 0     ]
+                in
+                    if searchFilter.resultCount > 0 then
+                        row[bw two, size 14]
+                        [
+                            checkbox [bw one, pdr 0 ] {
+                                onChange = msg index searchFilterCustomType
+                                ,icon = buildChkBoxImage
+                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue searchFilter.searchFilterKey )
+                                , checked = searchFilter.userAction
+                            }
+                            , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
+                        ]
+                    else
+                        none
     in
         row[ wf, bw 0]
         [

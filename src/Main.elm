@@ -346,7 +346,7 @@ update msg (model, uiModel) =
 
 textBox uiModel=
 
-    Input.text [wfp 3,  bw 0
+    Input.text [ wpx 300,   bw 0, pd 8
                 --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
                 , Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
             ]
@@ -364,9 +364,9 @@ view (model, uiModel) =
         let
             (searchStringBtnStyle, searchBtnIcon) = 
                         if String.length (String.trim <| uiModel.searchString) > 0 then 
-                            ([ bc 226 63 63, fc 250 250 250], image [hpx 32, bw one] {src = "srch_white.ico", description ="Logo" })
+                            ([ bc 226 63 63, fc 250 250 250], image [hf,wf, bw one] {src = "srch_white.ico", description ="Logo" })
                         else
-                            ([ bc 198 201 206, fc 245 245 245], image [hpx 32, bw one] {src = "srch_grey.ico", description ="Logo" })
+                            ([ bc 198 201 206, fc 245 245 245], image [hf, wf, bw one] {src = "srch_grey.ico", description ="Logo" })
 
             loaderIconElement = 
                     if List.length model.filteredTruckList > 0 then
@@ -383,12 +383,33 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[wf,  hpx 50,  alpha  1.99, brc 97 97 97 , bw 0, pde 0 3 0 3
+                    row[wf,  hpx 50,  alpha  1.99, brc 97 97 97 , bw 0, pd 0
                      , htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
                     ]
                     [
-                             column[bc 250 250 250, wfp 2, hf, bwb 1, brc 97 97 97][
+                             column[bc 245 245 245, wpx 315, hf, bwb 1, brc 97 97 97, bw 0][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
+                            ]
+                            ,row[hf, pd 5, bc 245 245 245, spx 15, bw 0, wf]
+                            [ 
+                                row[bw 1]
+                                [
+                                    lazy textBox uiModel
+                                    ,
+                                    Input.button ( [pd 10, wpx 45, hpx 45, eId "submitSrch"] ++ searchStringBtnStyle)
+                                        { 
+                                            onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
+                                            ,label = searchBtnIcon
+                                        }
+                                ]
+                                ,column[  hpx 45, bw 0][
+                                    Input.button ( [  eal, hf, pdl 0, fs 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                        { 
+                                            onPress = Just ClearSearchStringResults
+                                            ,label = el[pd 5] <| textValue "Clear Results"
+                                        }
+                                ]
+                                    
                             ]
                             -- ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
                             --         column[ bwl 2, pdl 3, brc 255 94 94, centerY]
@@ -416,33 +437,41 @@ view (model, uiModel) =
                     column[hf, wfmax 1920]
                     [
                         navBar,
-                        row[hf,wf, pde 50 3 100 3]
+                        row[hf,wf, pde 55 3 100 3]
                         [     
                             -- Search Filter Panel
-                            column [wpx 300,  spy 15,  bc 215 215 215, eat] 
+                            column [wpx 300,  spy 15,  bc 215 215 215, eat, pdt 5] 
                             [
-                                row[wf, pd 3, bw 0]
-                                [ 
-                                    lazy textBox uiModel
-                                    ,Input.button ( [hf, wf, eId "submitSrch"] ++ searchStringBtnStyle)
-                                        { 
-                                            onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
-                                            ,label = searchBtnIcon
-                                        }
-                                ]
-                                ,row[centerY, bw 0,  pde 0 5 0 5, spx 75, wf ]
+                                row[centerY, bw 0,  pde 0 5 0 5, spaceEvenly, wf ]
                                 [
-                                    Input.button ( [  eal, hf, pdl 3, fs 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
-                                        { 
-                                            onPress = Just ClearSearchStringResults
-                                            ,label = el[pd 5] <| textValue "Clear Results"
-                                        }
-                                    ,
+
+                                    --  checkbox [fs 16, bw 1,  hf, ear] {
+                                    --     onChange = CollapseAllClicked
+                                    --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
+                                    --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Expand All" )
+                                    --     , checked = uiModel.expandCollapseAllChecked
+                                    -- }
+                                    --,
                                     --centerX, centerY , brc 215 23 89, bw 2
+                                    -- Input.radio
+                                    --     [ padding 10
+                                    --     , spacing 20
+                                    --     ]
+                                    --     { onChange = CollapseAllClicked
+                                    --     , selected = True
+                                    --     , label = Input.labelAbove (textValue "Lunch")
+                                    --     , options =
+                                    --         [ Input.option PriceHighToLow (textValue "asdf!")
+                                               
+                                    --         , Input.option PriceLowToHigh (textValue "Taco!")
+                                    --         , Input.option YearNewToOld (textValue "Gyro")
+                                    --         ]
+                                    --     }
+                                    --     ,
                                     checkbox [fs 16, bw 1,  hf, ear] {
                                         onChange = CollapseAllClicked
                                         ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                        , label = labelLeft [centerX] (el [] <| textValue <| if uiModel.expandCollapseAllChecked then "Collapse All" else "Expand All" )
+                                        , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
                                         , checked = uiModel.expandCollapseAllChecked
                                     }
                                 ]
@@ -468,7 +497,7 @@ view (model, uiModel) =
                                             -- using <| u can avoid parans around the below func and its params
                                             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                     ]
-                                    ,row[hf, bwl 2, pdb 3,  bc 215 215 215, wfp 2]
+                                    ,row[hf, bwl 1, pdb 3,  bc 215 215 215, wfp 2]
                                     [
                                         column[wf, hf]
                                         [
@@ -478,15 +507,15 @@ view (model, uiModel) =
                                             --     ]
                                             
                                             --  ,  
-                                             row[bw 0, eacx, eacy, wf, eab]
+                                             row[bw 0,  wf, eab]
                                                 [
-                                                    column[bw 0, pdl 0, wf]
+                                                    column[bw 0, pdl 15, wpx 475]
                                                     [
                                                         --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
-                                                             el [eacx, eacy, bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                                             el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                                                     ]
                                                     ,
-                                                    column [ pdl 15,bw 0,  fc 97 97 97, wfp 2
+                                                    column [ pdl 15,bw 0,  fc 97 97 97, wf
                                                         , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
                                                     ][
                                                          Input.button [pdl 5, fb, fh, bwb 0 ]  
