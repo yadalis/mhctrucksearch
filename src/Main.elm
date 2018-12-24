@@ -383,19 +383,19 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[wf,  hpx 75,  alpha  1.99, brc 97 97 97 , bw 0, pde 0 3 0 3
+                    row[wf,  hpx 50,  alpha  1.99, brc 97 97 97 , bw 0, pde 0 3 0 3
                      , htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
                     ]
                     [
                              column[bc 250 250 250, wfp 2, hf, bwb 1, brc 97 97 97][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                             ]
-                            ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
-                                    column[ bwl 2, pdl 3, brc 255 94 94, centerY]
-                                        [el [fs 26 ] <| textValue "Suresh Yadali"
-                                        ,el [fs 18, pdt 15 ] <| textValue "Kansas City, MO"
-                                ]
-                            ]
+                            -- ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
+                            --         column[ bwl 2, pdl 3, brc 255 94 94, centerY]
+                            --             [el [fs 26 ] <| textValue "Suresh Yadali"
+                            --             ,el [fs 18, pdt 15 ] <| textValue "Kansas City, MO"
+                            --     ]
+                            -- ]
                     ] 
         in
             
@@ -416,15 +416,15 @@ view (model, uiModel) =
                     column[hf, wfmax 1920]
                     [
                         navBar,
-                        row[hf,wf, pde 75 3 100 3]
+                        row[hf,wf, pde 50 3 100 3]
                         [     
                             -- Search Filter Panel
-                            column [wf,  spy 15,  bc 215 215 215, eat] 
+                            column [wpx 300,  spy 15,  bc 215 215 215, eat] 
                             [
                                 row[wf, pd 3, bw 0]
                                 [ 
                                     lazy textBox uiModel
-                                    ,Input.button ( [hf, wpx 50, eId "submitSrch"] ++ searchStringBtnStyle)
+                                    ,Input.button ( [hf, wf, eId "submitSrch"] ++ searchStringBtnStyle)
                                         { 
                                             onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
                                             ,label = searchBtnIcon
@@ -458,17 +458,17 @@ view (model, uiModel) =
                             ]
                             
                             -- Trucks Search Result List Panel 
-                            ,column[  wfp 5,  bw 0 ,pdl 15,  eat]
+                            ,column[  wf,  bw 0 ,pdl 15,  eat]
                             [
-                                row[wf, bwb 0, hfRange 65 150 , pd 0,  bc 215 215 215, bw 0]
+                                row[wf, bwb 0, hf , pd 0,  bc 215 215 215, bw 0]
                                 [ 
-                                    column[wfp 3 , hf, bw 0]
+                                    column[wf, hpx 35, bw 0]
                                     [
-                                        wrappedRow [wf,  bw 0, pd 10 , eat, spx 5, spy 5]
+                                        wrappedRow [wf,  bw 0, pd 6 , eat, spx 5, spy 5]
                                             -- using <| u can avoid parans around the below func and its params
                                             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                     ]
-                                    ,row[hf, bw 0, pdb 3,  bc 215 215 215, wfp 2]
+                                    ,row[hf, bwl 2, pdb 3,  bc 215 215 215, wfp 2]
                                     [
                                         column[wf, hf]
                                         [
@@ -478,20 +478,22 @@ view (model, uiModel) =
                                             --     ]
                                             
                                             --  ,  
-                                             row[bw 0, eab, wf]
+                                             row[bw 0, eacx, eacy, wf, eab]
                                                 [
-                                                    el [ pdr 15,bw 0,  fc 97 97 97,eal, wf
-                                                        , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
-                                                    ]
-                                                        <| Input.button [pdl 5, wf,    fb, fh, bwb 0  ]  
-                                                            { 
-                                                                onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                                ,label = el[bwb 1] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
-                                                            }
-                                                    ,column[bw 0, bwl 0, pdl 15, wf, ear]
+                                                    column[bw 0, pdl 0, wf]
                                                     [
                                                         --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
-                                                             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                                             el [eacx, eacy, bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                                    ]
+                                                    ,
+                                                    column [ pdl 15,bw 0,  fc 97 97 97, wfp 2
+                                                        , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
+                                                    ][
+                                                         Input.button [pdl 5, fb, fh, bwb 0 ]  
+                                                            { 
+                                                                onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                                                ,label = el[bwb 1, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                                            }
                                                     ]
                                                 ]
                                                 
@@ -557,7 +559,7 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
     
         if List.length pageNumbers > 1 then
             List.map (\num -> 
-                           row[wpx 35, hpx 30]
+                           row[wpx 25, hpx 20]
                                     [
                                         Input.button ([
                                                         if currentPageNumber /= num then
