@@ -20,6 +20,14 @@ fetchTrucks searchText =
         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }
 
+fetchAppraisedTrucks : String -> Cmd Msg
+fetchAppraisedTrucks searchText =
+    Http.get
+        { url = fetchAppraisedTrucksUrl searchText
+        --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+        , expect = expectJson OnFetchTrucks fetchTrucksDecoder
+        }
+
 fetchSearchFilterRanges: Cmd Msg
 fetchSearchFilterRanges =
     Http.get
@@ -36,6 +44,21 @@ fetchTrucksUrl searchText =
                 "http://localhost:50977/api/mhc/gettrucks"
             else
                 crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
+
+            -- if String.isEmpty searchText then
+            --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"
+            -- else
+            --     crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks" [searchText] []
+        --"http://localhost:3333/trks"
+
+fetchAppraisedTrucksUrl : String -> String
+fetchAppraisedTrucksUrl searchText =
+        --"http://localhost:13627/api/repairorder/gettrucks"
+        --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
+            if String.isEmpty searchText then
+                "http://localhost:50977/api/mhc/getappraisedtrucks"
+            else
+                crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks" [searchText] []
 
             -- if String.isEmpty searchText then
             --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"

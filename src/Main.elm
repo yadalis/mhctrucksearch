@@ -294,8 +294,7 @@ update msg (model, uiModel) =
                         |> Array.map (\item -> {item | userAction = userAction})
 
             in
-                ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates, 
-                                        expandCollapseAllChecked = userAction}), Cmd.none )
+                ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates}), Cmd.none )
 
         PageNumberClicked pageNumber ->
             let              
@@ -322,7 +321,14 @@ update msg (model, uiModel) =
 
             in
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
-        
+
+        ShowAppraisedTrucks ->
+            ( ( {model |
+                            filteredTruckList = [],
+                            truckList = [],
+                            pagedTruckList = []} , {uiModel | searchString = ""}), fetchAppraisedTrucks "")
+
+
         ShowTrucksWithPhotoOnly ->
             ( (model, uiModel), Cmd.none )
             -- let
@@ -409,6 +415,13 @@ view (model, uiModel) =
                                             ,label = el[pd 5] <| textValue "Clear Results"
                                         }
                                 ]
+                                ,column[  hpx 45, bw 0][
+                                    Input.button ( [  eal, hf, pdl 0, fs 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                        { 
+                                            onPress = Just ShowAppraisedTrucks
+                                            ,label = el[pd 5] <| textValue "Show Appraised"
+                                        }
+                                ]
                                     
                             ]
                             -- ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
@@ -442,9 +455,19 @@ view (model, uiModel) =
                             -- Search Filter Panel
                             column [wpx 300,  spy 15,  bc 215 215 215, eat, pdt 5] 
                             [
-                                row[centerY, bw 0,  pde 0 5 0 5, spaceEvenly, wf ]
+                                row[centerY, bw 1,  pde 0 5 0 5, spaceEvenly, wf, spx 3 ]
                                 [
-
+                                    Input.button ( [wf,   hf, pdl 0, fs 16, bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                    { 
+                                        onPress = Just <| CollapseAllClicked True
+                                        ,label = el[pd 5, bw 0, eacx] <| textValue "Expand All"
+                                    }
+                                    ,
+                                    Input.button ( [ wf,   hf, pdl 0, fs 16, bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                    { 
+                                        onPress = Just <| CollapseAllClicked False
+                                        ,label = el[pd 5, eacx] <| textValue "Collapse All"
+                                    }
                                     --  checkbox [fs 16, bw 1,  hf, ear] {
                                     --     onChange = CollapseAllClicked
                                     --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
@@ -468,12 +491,12 @@ view (model, uiModel) =
                                     --         ]
                                     --     }
                                     --     ,
-                                    checkbox [fs 16, bw 1,  hf, ear] {
-                                        onChange = CollapseAllClicked
-                                        ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                        , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
-                                        , checked = uiModel.expandCollapseAllChecked
-                                    }
+                                    -- checkbox [fs 16, bw 1,  hf, ear] {
+                                    --     onChange = CollapseAllClicked
+                                    --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
+                                    --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
+                                    --     , checked = uiModel.collapseAllChecked
+                                    -- }
                                 ]
                                 ,column[wf, spy 5, bc 240 240 240, bw 0 ]
                                     <| (

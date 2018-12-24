@@ -90,7 +90,7 @@ type alias UIModel =
         ,cdlFilters : Array SearchFilterType
         ,photoFilters : Array SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
-        ,expandCollapseAllChecked : Bool
+        --,collapseAllChecked : Bool
         ,showDropdown : Bool
         ,currentSortBy : SortBy
     }
@@ -264,9 +264,9 @@ initalUIModel jsFlag =
                                             \index searchFilterTypeRecord ->
                                                     {index = index,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
                                         )
-                        <| Array.fromList allFilterTypesMasterListWithItsInitialState
+                        <| Array.fromList allFilterTypesMasterListWithItsInitialState,
 
-        ,expandCollapseAllChecked = False,
+        --,expandCollapseAllChecked = False,
         showDropdown = False,
         currentSortBy = MakeAtoZ
     }
