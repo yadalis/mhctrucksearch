@@ -13,9 +13,9 @@ textValue stringValue
 
 buildCollapseAllImage userAction =
     if userAction == True then 
-        image [hpx 18, bw one] {src = "collapse.png", description ="Logo" }
+        image [hpx 14, bw one] {src = "collapse.png", description ="Logo" }
     else 
-        image [hpx 18, bw one] {src = "expand.png", description ="Logo" }
+        image [hpx 14, bw one] {src = "expand.png", description ="Logo" }
 
 expandCollapseAll state =
     

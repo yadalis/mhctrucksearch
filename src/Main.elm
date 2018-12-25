@@ -396,7 +396,7 @@ view (model, uiModel) =
                              column[bc 245 245 245, wpx 315, hf, bwb 1, brc 97 97 97, bw 0][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                             ]
-                            ,row[hf, pd 5, bc 245 245 245, spx 15, bw 0, wf]
+                            ,row[hf, pd 5, bc 245 245 245, spx 47, bw 0, wf]
                             [ 
                                 row[bw 1]
                                 [
@@ -408,21 +408,23 @@ view (model, uiModel) =
                                             ,label = searchBtnIcon
                                         }
                                 ]
-                                ,column[  hpx 45, bw 0][
-                                    Input.button ( [  eal, hf, pdl 0, fs 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
-                                        { 
-                                            onPress = Just ClearSearchStringResults
-                                            ,label = el[pd 5] <| textValue "Clear Results"
-                                        }
-                                ]
-                                ,column[  hpx 45, bw 0][
-                                    Input.button ( [  eal, hf, pdl 0, fs 16, eId "clearSrch", bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
-                                        { 
-                                            onPress = Just ShowAppraisedTrucks
-                                            ,label = el[pd 5] <| textValue "Show Appraised"
-                                        }
-                                ]
-                                    
+                                ,row[][
+                                    -- column[  hpx 50, bw 0][
+                                    --     Input.button ( [  eal, hf, pdl 0, fs 16, eId "clearSrch", bwe 0 1 0 1, mouseOver [fc 217 98 69] , fc 0 0 0, bc 235 235 235])
+                                    --         { 
+                                    --             onPress = Just ClearSearchStringResults
+                                    --             ,label = el[pd 5] <| textValue "Refresh"
+                                    --         }
+                                    -- ]
+                                    -- ,
+                                    column[  hpx 50, bw 0][
+                                        -- Input.button ( [  eal, hf, pdl 0, fs 16, eId "showAppraised", bwe 0 0 0 0, mouseOver [fc 217 98 69] , fc 0 0 0, bc 235 235 235])
+                                        --     { 
+                                        --         onPress = Just ShowAppraisedTrucks
+                                        --         ,label = el[pd 5] <| textValue "Show Appraised"
+                                        --     }
+                                    ]
+                                ]   
                             ]
                             -- ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
                             --         column[ bwl 2, pdl 3, brc 255 94 94, centerY]
@@ -455,19 +457,26 @@ view (model, uiModel) =
                             -- Search Filter Panel
                             column [wpx 300,  spy 15,  bc 215 215 215, eat, pdt 5] 
                             [
-                                row[centerY, bw 1,  pde 0 5 0 5, spaceEvenly, wf, spx 3 ]
+                                row[centerY, bw 0, wf,  pde 0 5 0 5, spaceEvenly, spx 15 ]
                                 [
-                                    Input.button ( [wf,   hf, pdl 0, fs 16, bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                    Input.button ( [wf,   hf, pdl 0, fs 16, mouseOver [fc 217 98 69] , fc  190 5 30])
                                     { 
                                         onPress = Just <| CollapseAllClicked True
-                                        ,label = el[pd 5, bw 0, eacx] <| textValue "Expand All"
+                                        ,label = el[eacx, bwb 1] <| textValue "Expand All"
                                     }
                                     ,
-                                    Input.button ( [ wf,   hf, pdl 0, fs 16, bw 1, mouseOver [fc 217 98 69] , fc 0 0 0])
+                                    Input.button ( [ wf,   hf, pdl 0, fs 16,  mouseOver [fc 217 98 69] , fc  190 5 30])
                                     { 
                                         onPress = Just <| CollapseAllClicked False
-                                        ,label = el[pd 5, eacx] <| textValue "Collapse All"
+                                        ,label = el[eacx, bwb 1] <| textValue "Collapse All"
                                     }
+                                    ,
+                                    Input.button ([ wf,  fac, hf, pdl 0, fs 16,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                            { 
+                                                onPress = Just ClearSearchStringResults
+                                                ,label = el[eacx, bwb 1] <| textValue "Refresh"
+                                            }
+                                   
                                     --  checkbox [fs 16, bw 1,  hf, ear] {
                                     --     onChange = CollapseAllClicked
                                     --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
@@ -497,6 +506,14 @@ view (model, uiModel) =
                                     --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
                                     --     , checked = uiModel.collapseAllChecked
                                     -- }
+                                ]
+                                ,row[bw 0, wf,  pdl 8 ]
+                                [
+                                    Input.button ([ wf,  fac, hf, pdl 0, fs 16,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                            { 
+                                                onPress = Just ShowAppraisedTrucks
+                                                ,label = el[eal, bwb 1] <| textValue "Search Appraised Trucks"
+                                            }
                                 ]
                                 ,column[wf, spy 5, bc 240 240 240, bw 0 ]
                                     <| (

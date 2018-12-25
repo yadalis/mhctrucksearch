@@ -411,6 +411,16 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             InventoryAge -> 
                                 (uiModel.inventoryAgeFilters, "Inventory Age", FilterCheckBoxClicked)
 
+            showLabelRed = searchFilters
+                                |> Array.toList
+                                |> List.any (\sf -> sf.userAction)
+                                |> (\isAnyFilterChecked -> 
+                                            if isAnyFilterChecked then
+                                                fc 190 5 30
+                                            else
+                                                fc 0 0 0 
+                                    )
+            
             searchFilterState = 
                     uiModel.expandCollapseSearchFilterStates
                             |> Array.filter (\mf -> mf.searchFilterCustomType == searchFilterCustomType)
@@ -432,7 +442,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                         [fc 0 0 0     ]
                 in
                     if searchFilter.resultCount > 0 then
-                        row[bw two, size 14]
+                        row[bw two, size 14, pdl 25]
                         [
                             checkbox [bw one, pdr 0 ] {
                                 onChange = msg index searchFilterCustomType
@@ -445,28 +455,35 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                     else
                         none
     in
-        row[ wf, bw 0]
-        [
-            column[spy 0, wf,  bw one]
+        if Array.length searchFilters > 0 then
+            row[ wf, bw 0, pdt 5]
             [
-                row[bw 0,  bwb 0, wf, pdb 1, bc 227 227 227]
+                column[spy 0, wf,  bw one]
                 [
-                    column[wf, hf][
-                        paragraph [bw one, fal, wf, hpx 25, pd 5, centerY][textValue <| filterLabel]
-                    ]
-                    ,column[pdr 5][
-                        checkbox [bw one,   far , bw 0] {
+                    row[bw 0,  bwb 0, wf, pdb 1,pdt 0, brc 195 195 195]
+                    [
+                        
+                        checkbox [wf, far , bw 0] {
                                     onChange = CollapseClicked searchFilterState
                                     ,icon = buildCollapseAllImage
-                                    , label = labelLeft [] <| none
+                                    , label = labelRight [fs 14, bwb 0, wf, fal, showLabelRed] <|  textValue <| filterLabel
                                     , checked =
-                                             searchFilterState.userAction
+                                                searchFilterState.userAction
                                 }
+                        
+                        --,
+                        -- column[wf, hf,  bw 0][
+                        --     paragraph [eacx, eacy,bw one, fal, wf, hpx 25, pd 5][textValue <| filterLabel]
+                        -- ]
+                        -- ,column[pdr 5][
+                            
+                        -- ]
                     ]
+                    ,column ( [spy 8, wf] ++ expandCollapseAll searchFilterState.userAction)
+                    (
+                        Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion
+                    )
                 ]
-                ,column ( [spy 10, wf] ++ expandCollapseAll searchFilterState.userAction)
-                (
-                    Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion
-                )
             ]
-        ]
+        else
+            none
