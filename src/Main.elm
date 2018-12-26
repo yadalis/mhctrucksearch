@@ -396,7 +396,7 @@ view (model, uiModel) =
                              column[bc 245 245 245, wpx 315, hf, bwb 1, brc 97 97 97, bw 0][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
                             ]
-                            ,row[hf, pd 5, bc 245 245 245, spx 47, bw 0, wf]
+                            ,row[hf, pd 5, bc 245 245 245, spx 0, bw 0, wf]
                             [ 
                                 row[bw 1]
                                 [
@@ -407,6 +407,23 @@ view (model, uiModel) =
                                             onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
                                             ,label = searchBtnIcon
                                         }
+                                ]
+                                 ,row[bw 0,ear,   pde 0 5 0 5, spx 15, fs 18 ]
+                                [
+                                    
+                                    Input.button ([   fac, hf, pdl 0,    mouseOver [fc 217 98 69] , fc  190 5 30])
+                                            { 
+                                                onPress = Just ShowAppraisedTrucks
+                                                ,label = el[eal, bwb 1] <| textValue "Browse Appraised Trucks"
+                                            }
+                                            ,
+                                    Input.button ([    fac, hf, pdl 0,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                            { 
+                                                onPress = Just ClearSearchStringResults
+                                                ,label = el[  bwb 1] <| textValue "Browse all other trucks"
+                                            }
+                                    
+                                             
                                 ]
                                 ,row[][
                                     -- column[  hpx 50, bw 0][
@@ -457,25 +474,20 @@ view (model, uiModel) =
                             -- Search Filter Panel
                             column [wpx 300,  spy 15,  bc 215 215 215, eat, pdt 5] 
                             [
-                                row[centerY, bw 0, wf,  pde 0 5 0 5, spaceEvenly, spx 15 ]
+                                row[centerY, bw 0, wf,  pde 0 5 0 5, spx 15]
                                 [
-                                    Input.button ( [wf,   hf, pdl 0, fs 16, mouseOver [fc 217 98 69] , fc  190 5 30])
+                                    Input.button ( [    hf, pdl 0, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
                                     { 
                                         onPress = Just <| CollapseAllClicked True
-                                        ,label = el[eacx, bwb 1] <| textValue "Expand All"
+                                        ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
                                     }
                                     ,
-                                    Input.button ( [ wf,   hf, pdl 0, fs 16,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                    Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
                                     { 
                                         onPress = Just <| CollapseAllClicked False
-                                        ,label = el[eacx, bwb 1] <| textValue "Collapse All"
+                                        ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
                                     }
-                                    ,
-                                    Input.button ([ wf,  fac, hf, pdl 0, fs 16,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                            { 
-                                                onPress = Just ClearSearchStringResults
-                                                ,label = el[eacx, bwb 1] <| textValue "Refresh"
-                                            }
+                                   
                                    
                                     --  checkbox [fs 16, bw 1,  hf, ear] {
                                     --     onChange = CollapseAllClicked
@@ -507,14 +519,7 @@ view (model, uiModel) =
                                     --     , checked = uiModel.collapseAllChecked
                                     -- }
                                 ]
-                                ,row[bw 0, wf,  pdl 8 ]
-                                [
-                                    Input.button ([ wf,  fac, hf, pdl 0, fs 16,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                            { 
-                                                onPress = Just ShowAppraisedTrucks
-                                                ,label = el[eal, bwb 1] <| textValue "Search Appraised Trucks"
-                                            }
-                                ]
+                               
                                 ,column[wf, spy 5, bc 240 240 240, bw 0 ]
                                     <| (
                                         if List.length model.filteredTruckList == 0 then
@@ -531,7 +536,7 @@ view (model, uiModel) =
                             [
                                 row[wf, bwb 0, hf , pd 0,  bc 215 215 215, bw 0]
                                 [ 
-                                    column[wf, hpx 35, bw 0]
+                                    column[wf, hfRange 35 55, bw 0]
                                     [
                                         wrappedRow [wf,  bw 0, pd 6 , eat, spx 5, spy 5]
                                             -- using <| u can avoid parans around the below func and its params
@@ -549,13 +554,13 @@ view (model, uiModel) =
                                             --  ,  
                                              row[bw 0,  wf, eab]
                                                 [
-                                                    column[bw 0, pdl 15, wpx 475]
+                                                    column[bw 0, pdl 15, wpx 370]
                                                     [
                                                         --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
                                                              el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                                                     ]
                                                     ,
-                                                    column [ pdl 15,bw 0,  fc 97 97 97, wf
+                                                    column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
                                                         , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
                                                     ][
                                                          Input.button [pdl 5, fb, fh, bwb 0 ]  
