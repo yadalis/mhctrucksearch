@@ -43,7 +43,7 @@ update msg (model, uiModel) =
     case msg of
         OnFetchSearchFilterRanges response ->
             let
-                x =  Debug.log "raw json response" response
+                -- x =  Debug.log "raw json response" response
 
                 rangeSearchFilters = 
                             case response of
@@ -107,7 +107,7 @@ update msg (model, uiModel) =
         OnFetchTrucks response ->
             let
                 
-                x =  Debug.log "raw json response" response
+                --x =  Debug.log "raw json response" response
                 trucks = case response of
                             Ok truckList ->
                                     truckList
@@ -127,6 +127,7 @@ update msg (model, uiModel) =
                 suspensionFilters = buildSearchFilterValueRecordList Suspension uiModel.suspensionFilters trucks
                 bodyTypeFilters = buildSearchFilterValueRecordList BodyType uiModel.bodyTypeFilters trucks
                 rearAxleTypeFilters = buildSearchFilterValueRecordList RearAxleType uiModel.rearAxleTypeFilters trucks
+                truckTypeFilters = buildSearchFilterValueRecordList TruckType uiModel.truckTypeFilters trucks
                 fleetCodeFilters = buildSearchFilterValueRecordList FleetCode uiModel.fleetCodeFilters trucks
                 truckStatusFilters = buildSearchFilterValueRecordList TruckStatus uiModel.truckStatusFilters trucks
                 specialFinancingFilters = buildSearchFilterValueRecordList SpecialFinancing uiModel.specialFinancingFilters trucks
@@ -135,7 +136,7 @@ update msg (model, uiModel) =
                 cdlFilters = buildSearchFilterValueRecordList CDL uiModel.apuFilters trucks
                 photoFilters = buildSearchFilterValueRecordList Photo uiModel.apuFilters trucks
 
-                -- x =  Debug.log "raw json response" sleeperBunkFilters
+                x =  Debug.log "raw json response" truckTypeFilters
 
                 pagedTruckList = List.take 100 trucks
             in
@@ -155,6 +156,7 @@ update msg (model, uiModel) =
                                         suspensionFilters = suspensionFilters,
                                         bodyTypeFilters = bodyTypeFilters,
                                         rearAxleTypeFilters = rearAxleTypeFilters,
+                                        truckTypeFilters = truckTypeFilters,
                                         fleetCodeFilters = fleetCodeFilters,
                                         truckStatusFilters = truckStatusFilters,
                                         specialFinancingFilters = specialFinancingFilters,
@@ -204,6 +206,8 @@ update msg (model, uiModel) =
                             (uiModel.bodyTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | bodyTypeFilters = mfArr})    
                         RearAxleType -> 
                             (uiModel.rearAxleTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | rearAxleTypeFilters = mfArr})
+                        TruckType -> 
+                            (uiModel.truckTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | truckTypeFilters = mfArr})
                         FleetCode -> 
                             (uiModel.fleetCodeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | fleetCodeFilters = mfArr})    
                         TruckStatus -> 
@@ -590,6 +594,7 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.suspensionFilters,
                                                                                     Array.toList uiModel.bodyTypeFilters,
                                                                                     Array.toList uiModel.rearAxleTypeFilters,
+                                                                                    Array.toList uiModel.truckTypeFilters,
                                                                                     Array.toList uiModel.fleetCodeFilters,
                                                                                     Array.toList uiModel.truckStatusFilters,
                                                                                     Array.toList uiModel.specialFinancingFilters,

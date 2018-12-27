@@ -12,7 +12,12 @@ import List.Extra exposing (..)
 getSelectedSearchFilterKeys searchFilters =
         searchFilters 
                 |> Array.filter (\sf -> sf.userAction == True)
-                |> Array.map (\sf -> sf.searchFilterKey) 
+                |> Array.map (\sf -> 
+                                --     if sf.filterCategory == TruckType then
+                                --         sf.searchFilterExtraData
+                                --     else
+                                        sf.searchFilterKey
+                        ) 
                 |> Array.toList
 
 getSelectedSearchFilterExtraData searchFilters =
@@ -22,7 +27,7 @@ getSelectedSearchFilterExtraData searchFilters =
                 |> Array.toList
 
 isGivenValueMatchesWithSelectedFilters value searchFilters  = 
-        not <| notMember value <| getSelectedSearchFilterKeys searchFilters
+        not <| notMember (String.trim value) <| getSelectedSearchFilterKeys searchFilters
 
 isGivenValueMatchesWithSelectedRangeFilters value searchFilters  = 
         (getSelectedSearchFilterExtraData searchFilters)
@@ -99,6 +104,10 @@ filterByOwningBranch owningBranchFilters trucksList =
                 
 filterByRearAxleType rearAxleFilters trucksList =
         List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType rearAxleFilters) trucksList
+                |> returnListWithValues trucksList
+
+filterByTruckType truckTypeFilters trucksList =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.truckType truckTypeFilters) trucksList
                 |> returnListWithValues trucksList
 
 filterByAPU apuFilters trucksList =
@@ -205,6 +214,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -240,6 +250,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -275,6 +286,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -310,6 +322,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -345,6 +358,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -380,6 +394,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -415,6 +430,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -452,6 +468,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -487,6 +504,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTransType uiModel.transTypeFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -522,6 +540,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTransType uiModel.transTypeFilters
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -557,6 +576,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByTransType uiModel.transTypeFilters
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -593,6 +613,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
@@ -628,6 +649,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
@@ -663,6 +685,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
@@ -698,6 +721,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -733,6 +757,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -767,6 +792,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -801,6 +827,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -837,6 +864,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -872,6 +900,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -908,6 +937,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -943,6 +973,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -978,6 +1009,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -1013,6 +1045,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -1048,6 +1081,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -1085,6 +1119,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterBySuspension uiModel.suspensionFilters
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 |> filterByTruckStatus uiModel.truckStatusFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
@@ -1107,6 +1142,40 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 findMatchAndSetUserAction uiModel.inventoryAgeFilters sf 
                                         )
                 
+                updatedTruckTypeFitlerList =
+                        model.truckList
+                                |> filterBySalesStatus uiModel.salesStatusFilters
+                                |> filterByYear uiModel.yearFilters
+                                |> filterByMake uiModel.makeFilters
+                                |> filterByModel uiModel.modelFilters
+                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
+                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
+                                |> filterByEngineMake uiModel.engineMakeFilters
+                                |> filterByTransType uiModel.transTypeFilters
+                                |> filterBySuspension uiModel.suspensionFilters
+                                |> filterByBodyType uiModel.bodyTypeFilters
+                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByFleetCode uiModel.fleetCodeFilters
+                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
+                                --range filters
+                                |> filterByPrice uiModel.priceFilters
+                                |> filterByEngineHP uiModel.engineHPFilters
+                                |> filterBySleeperInches uiModel.sleeperInchesFilters
+                                |> filterByWheelBase uiModel.wheelBaseFilters
+                                |> filterByMileage uiModel.mileageFilters
+                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
+                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
+
+                                >> buildSearchFilterValueRecordList TruckType uiModel.truckTypeFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.truckTypeFilters sf 
+                                        )
 
 
                 
@@ -1131,6 +1200,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 , mileageFilters = updatedMileageFilterList
                                                 , frontAxleWeightFilters = updatedFrontAxleWeightFitlerList
                                                 , rearAxleWeightFilters = updatedRearAxleWeightFitlerList
+                                                , truckTypeFilters = updatedTruckTypeFitlerList
                                                 , fleetCodeFilters = updatedFleetCodeFitlerList
                                                 , truckStatusFilters = updatedTruckStatusFitlerList
                                                 , specialFinancingFilters = updatedSpecialFinancingFitlerList
@@ -1162,6 +1232,7 @@ applySearchFilters model uiModel =
                         |> filterBySuspension uiModel.suspensionFilters
                         |> filterByBodyType uiModel.bodyTypeFilters
                         |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                        |> filterByTruckType uiModel.truckTypeFilters  
                         |> filterByFleetCode uiModel.fleetCodeFilters
                         |> filterByTruckStatus uiModel.truckStatusFilters
                         |> filterBySpecialFinancing uiModel.specialFinancingFilters

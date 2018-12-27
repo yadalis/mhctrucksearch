@@ -225,14 +225,14 @@
     },
     {
         "searchFilterKey" : "120+ days"
-        ,"searchFilterExtraData" : "121-999"
+        ,"searchFilterExtraData" : "121-9999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "InventoryAge"
     },
     {
         "searchFilterKey" : "< 12K"
-        ,"searchFilterExtraData" : "0-11"
+        ,"searchFilterExtraData" : "0-11.9999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "FrontAxleWeight"

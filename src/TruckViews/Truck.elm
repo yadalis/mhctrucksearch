@@ -22,19 +22,20 @@ truckView index truck =
         isTruckSold  =
             truck.salesStatusFlag == "I" || truck.salesStatusFlag == "S"
 
-        formatImageLink = truck.primaryImageLink
-                            |> String.isEmpty
-                            |> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else truck.primaryImageLink)
-                            |> String.replace "&h=16" "&h=225"
-                            |> String.replace "&w=16" "&w=225" 
-                            |> String.replace "&thn=1" "&thn=2"
+        formatImageLink = -- "https://az832863.vo.msecnd.net/~/media/images/trucks/i0412861/i0412861_1.jpg?_=-1254660955&mw=2048&thn=0&w=225"
+                            truck.primaryImageLink
+                                                |> String.isEmpty
+                                                |> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else truck.primaryImageLink)
+                                                |> String.replace "&h=16" ""
+                                                |> String.replace "&w=16" "&w=225" 
+                                                |> String.replace "&thn=1" "&thn=2"
     in
     
         row[bwb 0, wf, pd 5, bc 240 240 240, hf ]
         [
-            column[wpx 225, hpx 225,  bw 0, hf, pdt 0]
+            column[  bw 0,  pdt 0, hf]
             [
-                image [ bwl 0, pdl 0, bw 0, bc 250 250 250
+                image [ hpx 150,wpx 175, bw 0, pdl 0,  bc 250 250 250
                     ,
 
                     inFront (
@@ -55,13 +56,13 @@ truckView index truck =
                             crossOrigin "https://www.mhc.com/trucks/used" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
                             , label = paragraph [fs 28, fb, fc  190 5 30] [textValue <| truck.title]
                         }
-                    ,
+                    -- ,
                     -- link [wf,  Element.htmlAttribute (target "_blank"), fal ]
                     --     { url = 
                     --         formatImageLink
                     --         , label = paragraph [fs 28, fb, fc  190 5 30] [textValue <| formatImageLink]
                     --     }
-                    -- ,
+                    ,
                         if truck.stockNumber == 0 then
                             paragraph [fs 22, fc  167 167 167, pdt 5, bw 0, fal] 
                                 [textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber]

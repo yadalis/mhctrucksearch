@@ -74,6 +74,7 @@ type alias UIModel =
         ,suspensionFilters : Array SearchFilterType
         ,bodyTypeFilters : Array SearchFilterType
         ,rearAxleTypeFilters : Array SearchFilterType
+        ,truckTypeFilters : Array SearchFilterType
         ,priceFilters : Array SearchFilterType
         ,engineHPFilters : Array SearchFilterType
         ,sleeperInchesFilters : Array SearchFilterType
@@ -114,6 +115,7 @@ type SearchFilterCustomType
     | Suspension
     | BodyType
     | RearAxleType
+    | TruckType
     | FleetCode
     | TruckStatus
     | SpecialFinancing
@@ -163,8 +165,8 @@ type alias FilterSelectionsModel =
     }
 
 allFilterTypesMasterListWithItsInitialState = 
-                        [ {filterName = SalesStatus, expandByDefault = True}
-                        , {filterName = Year, expandByDefault = True}
+                        [ {filterName = SalesStatus, expandByDefault = False}
+                        , {filterName = Year, expandByDefault = False}
                         , {filterName = Make, expandByDefault = False}
                         , {filterName = MakeModel, expandByDefault = False}
                         , {filterName = SleeperRoof, expandByDefault = False}
@@ -174,6 +176,7 @@ allFilterTypesMasterListWithItsInitialState =
                         , {filterName = Suspension, expandByDefault = False}
                         , {filterName = BodyType, expandByDefault = False}
                         , {filterName = RearAxleType, expandByDefault = False}
+                        , {filterName = TruckType, expandByDefault = False}
                         , {filterName = Price, expandByDefault = False}
                         , {filterName = EngineHP, expandByDefault = False}
                         , {filterName = SleeperInches, expandByDefault = False}
@@ -250,6 +253,7 @@ initalUIModel jsFlag =
         mileageFilters = Array.empty,
         frontAxleWeightFilters = Array.empty,
         rearAxleWeightFilters = Array.empty,
+        truckTypeFilters = Array.empty,
         fleetCodeFilters = Array.empty,
         truckStatusFilters = Array.empty,
         specialFinancingFilters = Array.empty,

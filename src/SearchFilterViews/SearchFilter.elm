@@ -177,6 +177,21 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 sfArray
                     )                
                 
+        TruckType ->             
+            List.map .truckType trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                let
+                                                    trimmedsfValue = String.trim sf
+                                                    displayValue = if trimmedsfValue == "I" then "Inventory" else "Appraisal"
+                                                in
+                                                
+                                                SearchFilterType index trimmedsfValue displayValue False (List.length <| (List.filter (\t -> String.trim t.truckType == trimmedsfValue) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )                
+
         FleetCode ->        
             List.map .fleetCode trucks
                 |> applyExtraOnSearchFilters SortASC
@@ -366,6 +381,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             RearAxleType -> 
                                 (uiModel.rearAxleTypeFilters, "Rear Axle Type", FilterCheckBoxClicked)
                             
+                            TruckType -> 
+                                (uiModel.truckTypeFilters, "Truck Type", FilterCheckBoxClicked)
+
                             FleetCode -> 
                                 (uiModel.fleetCodeFilters, "Fleet Code", FilterCheckBoxClicked)
                             
@@ -440,6 +458,11 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                         [fc  190 5 30, fb ]
                                     else
                                         [fc 0 0 0     ]
+                    displayValue = 
+                                    if searchFilter.filterCategory == TruckType then
+                                        searchFilter.searchFilterExtraData
+                                    else
+                                        searchFilter.searchFilterKey
                 in
                     if searchFilter.resultCount > 0 then
                         row[bw two, size 14, pdl 25]
@@ -447,7 +470,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             checkbox [bw one, pdr 0 ] {
                                 onChange = msg index searchFilterCustomType
                                 ,icon = buildChkBoxImage
-                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue searchFilter.searchFilterKey )
+                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue displayValue )
                                 , checked = searchFilter.userAction
                             }
                             , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"

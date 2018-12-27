@@ -16,7 +16,12 @@ searchFilterBulletView filterList =
                                 row[ bw 0, pd 3 ]
                                 [
                                     column[][
-                                        el [bw 0, fs 15, brc 97 97 97, fc  190 5 30,  bc 231 231 231 ,pd 6, fl, hf] (textValue <| sf.searchFilterKey)
+                                        el [bw 0, fs 15, brc 97 97 97, fc  190 5 30,  bc 231 231 231 ,pd 6, fl, hf] (textValue <| 
+                                                                                if sf.filterCategory == TruckType then
+                                                                                    sf.searchFilterExtraData
+                                                                                else
+                                                                                    sf.searchFilterKey
+                                                                            )
                                     ]
                                     ,column[][
                                         Input.button ( [ bw 0, brc 97 97 97,  bc 231 231 231 ,pd 6])

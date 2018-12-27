@@ -40,15 +40,15 @@ fetchTrucksUrl : String -> String
 fetchTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-            -- if String.isEmpty searchText then
-            --     "http://localhost:50977/api/mhc/gettrucks"
-            -- else
-            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
-
             if String.isEmpty searchText then
-                "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"
+                "http://localhost:50977/api/mhc/gettrucks"
             else
-                crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks" [searchText] []
+                crossOrigin "http://localhost:50977/api/mhc/gettrucks" [searchText] []
+
+            -- if String.isEmpty searchText then
+            --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks"
+            -- else
+            --     crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks" [searchText] []
         --"http://localhost:3333/trks"
 
 fetchAppraisedTrucksUrl : String -> String
@@ -60,19 +60,19 @@ fetchAppraisedTrucksUrl searchText =
             -- else
             --     crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks" [searchText] []
 
-            if String.isEmpty searchText then
-                "http://172.21.123.180/NewMHCtruckSync/api/mhc/getappraisedtrucks"
-            else
-                crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/getappraisedtrucks" [searchText] []
-        --"http://localhost:3333/trks"
+            -- if String.isEmpty searchText then
+            --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/getappraisedtrucks"
+            -- else
+            --     crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/getappraisedtrucks" [searchText] []
+        "http://localhost:3333/trks"
 
 
 fetchSearchFilterRangesUrl: String
 fetchSearchFilterRangesUrl =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --"http://localhost:50977/api/repairorder/gettrucks"
-        "http://localhost:4444/srchRanges"
-        --"http://localhost:50977/api/mhc/getrangefilters"
+        --"http://localhost:4444/srchRanges"
+        "http://localhost:50977/api/mhc/getrangefilters"
         --"http://172.21.123.180/NewMHCtruckSync/api/mhc/getrangefilters"
         
 fetchTrucksDecoder: Decode.Decoder (List Truck)
@@ -145,9 +145,9 @@ searchFilterRangeDecoder  =
 stringBoolDecoder : Decode.Decoder Bool
 stringBoolDecoder =
   Decode.string |> Decode.andThen (\val ->
-    case val of
-      "True" -> Decode.succeed True
-      "False" -> Decode.succeed False
+    case String.toLower val of
+      "true" -> Decode.succeed True
+      "false" -> Decode.succeed False
       _ -> Decode.fail <| "Expecting \"true\" or \"false\" but found " ++ val )
 
 -- the commented code is good as well
