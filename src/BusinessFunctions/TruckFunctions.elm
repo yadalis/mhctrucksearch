@@ -101,7 +101,11 @@ filterBySpecialFinancing specialFinancingFilters trucksList =
 filterByOwningBranch owningBranchFilters trucksList =
         List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.owningBranch owningBranchFilters) trucksList
                 |> returnListWithValues trucksList
-                
+
+filterByLocationName locationNameFilters trucksList =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.locationName locationNameFilters) trucksList
+                |> returnListWithValues trucksList
+
 filterByRearAxleType rearAxleFilters trucksList =
         List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType rearAxleFilters) trucksList
                 |> returnListWithValues trucksList
@@ -219,6 +223,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -254,7 +259,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters 
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -291,6 +297,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -326,7 +333,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters 
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -363,6 +371,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -399,6 +408,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -434,7 +444,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters 
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -472,7 +483,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters    
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -509,6 +521,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -545,6 +558,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -581,6 +595,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -617,6 +632,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -653,6 +669,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFleetCode uiModel.fleetCodeFilters
                                 
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -687,7 +704,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
@@ -708,6 +725,42 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 findMatchAndSetUserAction uiModel.owningBranchFilters sf 
                                         )
 
+                updatedLocationNameFitlerList =
+                        model.truckList
+                                |> filterBySalesStatus uiModel.salesStatusFilters
+                                |> filterByYear uiModel.yearFilters
+                                |> filterByMake uiModel.makeFilters
+                                |> filterByModel uiModel.modelFilters
+                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
+                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
+                                |> filterByEngineMake uiModel.engineMakeFilters
+                                |> filterByTransType uiModel.transTypeFilters
+                                |> filterBySuspension uiModel.suspensionFilters
+                                |> filterByBodyType uiModel.bodyTypeFilters
+                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
+                                |> filterByTruckType uiModel.truckTypeFilters
+                                |> filterByFleetCode uiModel.fleetCodeFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
+                                |> filterByAPU uiModel.apuFilters
+                                |> filterByCDL uiModel.cdlFilters
+                                |> filterByPhoto uiModel.photoFilters
+                                --range filters
+                                |> filterByPrice uiModel.priceFilters
+                                |> filterByEngineHP uiModel.engineHPFilters
+                                |> filterBySleeperInches uiModel.sleeperInchesFilters
+                                |> filterByWheelBase uiModel.wheelBaseFilters
+                                |> filterByMileage uiModel.mileageFilters
+                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
+                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
+                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+
+                                >> buildSearchFilterValueRecordList LocationName uiModel.locationNameFilters
+                                >> Array.map
+                                        (\sf ->
+                                                findMatchAndSetUserAction uiModel.locationNameFilters sf 
+                                        )
+
                 updatedAPUFilterList =
                         model.truckList
                                 |> filterBySalesStatus uiModel.salesStatusFilters
@@ -723,7 +776,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                
+                                |> filterByLocationName  uiModel.locationNameFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -758,7 +812,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                
+                                |> filterByLocationName  uiModel.locationNameFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -793,7 +848,8 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                
+                                |> filterByLocationName  uiModel.locationNameFilters
+                                |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
@@ -830,9 +886,9 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -869,6 +925,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -906,6 +963,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -942,6 +1000,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -978,6 +1037,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -1014,6 +1074,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -1050,6 +1111,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -1088,6 +1150,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -1123,6 +1186,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
+                                |> filterByLocationName  uiModel.locationNameFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -1134,6 +1198,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByMileage uiModel.mileageFilters
                                 |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
                                 |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
+                                |> filterByInventoryAge uiModel.inventoryAgeFilters
 
                                 >> buildSearchFilterValueRecordList TruckType uiModel.truckTypeFilters
                                 >> Array.map
@@ -1169,6 +1234,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 , specialFinancingFilters = updatedSpecialFinancingFitlerList
                                                 , inventoryAgeFilters = updatedInventoryAgeFitlerList
                                                 , owningBranchFilters = updatedOwningBranchFitlerList
+                                                , locationNameFilters = updatedLocationNameFitlerList
                                                 , apuFilters = updatedAPUFilterList
                                                 , cdlFilters = updatedCDLFilterList
                                                 , photoFilters = updatedPhotoFilterList
@@ -1200,6 +1266,7 @@ applySearchFilters model uiModel =
                         
                         |> filterBySpecialFinancing uiModel.specialFinancingFilters
                         |> filterByOwningBranch uiModel.owningBranchFilters
+                        |> filterByLocationName  uiModel.locationNameFilters
                         |> filterByAPU uiModel.apuFilters
                         |> filterByCDL uiModel.cdlFilters
                         |> filterByPhoto uiModel.photoFilters

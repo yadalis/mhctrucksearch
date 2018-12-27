@@ -91,36 +91,43 @@
         ,"filterCategory" : "EngineHP"
     },    
     {
-        "searchFilterKey" : "< 36 inches"
-        ,"searchFilterExtraData" : "0-35"
+        "searchFilterKey" : "Non-Sleeper"
+        ,"searchFilterExtraData" : "0-0"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "SleeperInches"
     },
     {
-        "searchFilterKey" : "36 - 51"
+        "searchFilterKey" : "< 36 inches"
+        ,"searchFilterExtraData" : "1-35"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "SleeperInches"
+    },
+    {
+        "searchFilterKey" : "36 - 51 inches"
         ,"searchFilterExtraData" : "36-51"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "SleeperInches"
     },
     {
-        "searchFilterKey" : "52 - 69"
+        "searchFilterKey" : "52 - 69 inches"
         ,"searchFilterExtraData" : "52-69"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "SleeperInches"
     },
     {
-        "searchFilterKey" : "70 - 79"
+        "searchFilterKey" : "70 - 79 inches"
         ,"searchFilterExtraData" : "70-79"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "SleeperInches"
     },
     {
-        "searchFilterKey" : "> 80"
-        ,"searchFilterExtraData" : "80-999"
+        "searchFilterKey" : "> 80 inches"
+        ,"searchFilterExtraData" : "80-9999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "SleeperInches"
@@ -225,7 +232,7 @@
     },
     {
         "searchFilterKey" : "120+ days"
-        ,"searchFilterExtraData" : "121-9999"
+        ,"searchFilterExtraData" : "121-999"
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "InventoryAge"

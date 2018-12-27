@@ -88,6 +88,7 @@ type alias UIModel =
         ,apuFilters : Array SearchFilterType
         ,cdlFilters : Array SearchFilterType
         ,photoFilters : Array SearchFilterType
+        ,locationNameFilters : Array SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         --,collapseAllChecked : Bool
         ,showDropdown : Bool
@@ -129,6 +130,7 @@ type SearchFilterCustomType
     | FrontAxleWeight
     | RearAxleWeight
     | InventoryAge
+    | LocationName
 
 type SortOrder
     = SortASC
@@ -183,6 +185,7 @@ allFilterTypesMasterListWithItsInitialState =
                         , {filterName = RearAxleType, expandByDefault = False}
                         , {filterName = RearAxleWeight, expandByDefault = False}
                         , {filterName = InventoryAge, expandByDefault = False}
+                        , {filterName = LocationName, expandByDefault = False}
                         , {filterName = OwningBranch, expandByDefault = False}
                         , {filterName = Mileage, expandByDefault = False}
 
@@ -260,6 +263,7 @@ initalUIModel jsFlag =
         apuFilters = Array.empty,
         cdlFilters = Array.empty,
         photoFilters = Array.empty,
+        locationNameFilters = Array.empty,
         expandCollapseSearchFilterStates = 
                         Array.indexedMap 
                                         (

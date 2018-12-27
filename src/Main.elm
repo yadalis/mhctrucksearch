@@ -79,7 +79,7 @@ update msg (model, uiModel) =
                                 Just item -> Tuple.second item
                                 Nothing -> Array.empty
                 
-                --x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts Price
+                x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts SleeperInches
 
                 newUIModel = {uiModel | 
                                         priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
@@ -134,8 +134,9 @@ update msg (model, uiModel) =
                 apuFilters = buildSearchFilterValueRecordList APU uiModel.apuFilters trucks
                 cdlFilters = buildSearchFilterValueRecordList CDL uiModel.apuFilters trucks
                 photoFilters = buildSearchFilterValueRecordList Photo uiModel.apuFilters trucks
+                locationNameFilters = buildSearchFilterValueRecordList LocationName uiModel.locationNameFilters trucks
 
-                x =  Debug.log "raw json response" truckTypeFilters
+                --x =  Debug.log "raw json response" truckTypeFilters
 
                 pagedTruckList = List.take 100 trucks
             in
@@ -161,7 +162,9 @@ update msg (model, uiModel) =
                                         owningBranchFilters = owningBranchFilters,
                                         apuFilters = apuFilters,
                                         cdlFilters = cdlFilters,
-                                        photoFilters = photoFilters
+                                        photoFilters = photoFilters,
+                                        locationNameFilters = locationNameFilters
+
                         }
                     )
                     --, Cmd.none
@@ -210,6 +213,8 @@ update msg (model, uiModel) =
                             (uiModel.fleetCodeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | fleetCodeFilters = mfArr})    
                         SpecialFinancing -> 
                             (uiModel.specialFinancingFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | specialFinancingFilters = mfArr})                            
+                        LocationName -> 
+                            (uiModel.locationNameFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | locationNameFilters = mfArr})  
                         OwningBranch -> 
                             (uiModel.owningBranchFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | owningBranchFilters = mfArr})       
                         APU -> 
@@ -604,7 +609,8 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.mileageFilters,
                                                                                     Array.toList uiModel.frontAxleWeightFilters,
                                                                                     Array.toList uiModel.rearAxleWeightFilters,
-                                                                                    Array.toList uiModel.inventoryAgeFilters
+                                                                                    Array.toList uiModel.inventoryAgeFilters,
+                                                                                    Array.toList uiModel.locationNameFilters
                                                                                 ]
                                 ]
                                 ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]

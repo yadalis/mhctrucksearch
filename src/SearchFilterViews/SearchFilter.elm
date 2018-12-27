@@ -222,6 +222,16 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 sfArray
                     )      
 
+        LocationName ->        
+            List.map .locationName trucks
+                |> applyExtraOnSearchFilters SortASC
+                |> (\sfArray -> 
+                                Array.indexedMap (\index sf -> 
+                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.locationName == sf) trucks )) searchFilterCustomType
+                                )
+                                sfArray
+                    )
+
         APU ->        
             List.map .apu trucks
                 |> applyExtraOnSearchFilters SortASC
@@ -271,6 +281,10 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                 createRangeFilters  searchFilterTypes 
                                     searchFilterCustomType 
                                     (\minValue maxValue ->
+                                        -- let
+                                        --     y = Debug.log "minmax" [minValue, maxValue]
+                                        -- in
+
                                             (List.length <| List.filter (\t -> t.sleeperInches >= minValue && t.sleeperInches <= maxValue) trucks) 
                                     )
 
@@ -360,7 +374,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 (uiModel.engineMakeFilters, "Engine", FilterCheckBoxClicked)
                                 
                             TransType -> 
-                                (uiModel.transTypeFilters, "Trans Type", FilterCheckBoxClicked)
+                                (uiModel.transTypeFilters, "Transmission", FilterCheckBoxClicked)
                                 
                             Suspension -> 
                                 (uiModel.suspensionFilters, "Suspension", FilterCheckBoxClicked)
@@ -383,6 +397,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             OwningBranch -> 
                                 (uiModel.owningBranchFilters, "Owning Branch", FilterCheckBoxClicked)
                             
+                            LocationName -> 
+                                (uiModel.locationNameFilters, "Location", FilterCheckBoxClicked)
+
                             APU -> 
                                 (uiModel.apuFilters, "APU", FilterCheckBoxClicked)
 
