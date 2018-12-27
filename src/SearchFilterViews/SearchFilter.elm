@@ -202,16 +202,6 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 sfArray
                     )                
                 
-        TruckStatus ->        
-            List.map .truckStatus trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.truckStatus == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
-                
         SpecialFinancing ->        
             List.map .specialFinancing trucks
                 |> applyExtraOnSearchFilters SortASC
@@ -382,13 +372,10 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 (uiModel.rearAxleTypeFilters, "Rear Axle Type", FilterCheckBoxClicked)
                             
                             TruckType -> 
-                                (uiModel.truckTypeFilters, "Truck Type", FilterCheckBoxClicked)
+                                (uiModel.truckTypeFilters, "Truck Status", FilterCheckBoxClicked)
 
                             FleetCode -> 
                                 (uiModel.fleetCodeFilters, "Fleet Code", FilterCheckBoxClicked)
-                            
-                            TruckStatus -> 
-                                (uiModel.truckStatusFilters, "Truck Status", FilterCheckBoxClicked)
                             
                             SpecialFinancing -> 
                                 (uiModel.specialFinancingFilters, "Special Financing", FilterCheckBoxClicked)

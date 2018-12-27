@@ -36,8 +36,7 @@ type alias Truck =
         , mileage           : Float
         , frontAxleWeight   : Float        
         , rearAxleWeight    : Float        
-        , fleetCode         : String  
-        , truckStatus       : String
+        , fleetCode         : String
         , specialFinancing  : String
         , inventoryAge      : Float
         , owningBranch      : String
@@ -83,7 +82,6 @@ type alias UIModel =
         ,frontAxleWeightFilters : Array SearchFilterType
         ,rearAxleWeightFilters : Array SearchFilterType
         ,fleetCodeFilters : Array SearchFilterType
-        ,truckStatusFilters : Array SearchFilterType
         ,specialFinancingFilters : Array SearchFilterType
         ,inventoryAgeFilters : Array SearchFilterType        
         ,owningBranchFilters : Array SearchFilterType
@@ -117,7 +115,6 @@ type SearchFilterCustomType
     | RearAxleType
     | TruckType
     | FleetCode
-    | TruckStatus
     | SpecialFinancing
     | OwningBranch
     | APU
@@ -165,30 +162,32 @@ type alias FilterSelectionsModel =
     }
 
 allFilterTypesMasterListWithItsInitialState = 
-                        [ {filterName = SalesStatus, expandByDefault = False}
+                        [ {filterName = FleetCode, expandByDefault = False}
+                        , {filterName = SalesStatus, expandByDefault = False}
+                        , {filterName = TruckType, expandByDefault = False}
+                        , {filterName = SpecialFinancing, expandByDefault = False}
                         , {filterName = Year, expandByDefault = False}
                         , {filterName = Make, expandByDefault = False}
                         , {filterName = MakeModel, expandByDefault = False}
+                        , {filterName = Price, expandByDefault = False}
+                        , {filterName = SleeperInches, expandByDefault = False}
                         , {filterName = SleeperRoof, expandByDefault = False}
                         , {filterName = SleeperBunk, expandByDefault = False}
                         , {filterName = EngineMake, expandByDefault = False}
+                        , {filterName = EngineHP, expandByDefault = False}
+
                         , {filterName = TransType, expandByDefault = False}
                         , {filterName = Suspension, expandByDefault = False}
-                        , {filterName = BodyType, expandByDefault = False}
-                        , {filterName = RearAxleType, expandByDefault = False}
-                        , {filterName = TruckType, expandByDefault = False}
-                        , {filterName = Price, expandByDefault = False}
-                        , {filterName = EngineHP, expandByDefault = False}
-                        , {filterName = SleeperInches, expandByDefault = False}
                         , {filterName = WheelBase, expandByDefault = False}
-                        , {filterName = Mileage, expandByDefault = False}
                         , {filterName = FrontAxleWeight, expandByDefault = False}
+                        , {filterName = RearAxleType, expandByDefault = False}
                         , {filterName = RearAxleWeight, expandByDefault = False}
-                        , {filterName = FleetCode, expandByDefault = False}
-                        , {filterName = TruckStatus, expandByDefault = False}
-                        , {filterName = SpecialFinancing, expandByDefault = False}
                         , {filterName = InventoryAge, expandByDefault = False}
                         , {filterName = OwningBranch, expandByDefault = False}
+                        , {filterName = Mileage, expandByDefault = False}
+
+                        , {filterName = BodyType, expandByDefault = False}
+                        
                         , {filterName = APU, expandByDefault = False}
                         , {filterName = CDL, expandByDefault = False}
                         , {filterName = Photo, expandByDefault = False}] 
@@ -255,7 +254,6 @@ initalUIModel jsFlag =
         rearAxleWeightFilters = Array.empty,
         truckTypeFilters = Array.empty,
         fleetCodeFilters = Array.empty,
-        truckStatusFilters = Array.empty,
         specialFinancingFilters = Array.empty,
         inventoryAgeFilters = Array.empty,
         owningBranchFilters = Array.empty,

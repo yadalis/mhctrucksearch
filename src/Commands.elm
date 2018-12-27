@@ -55,16 +55,16 @@ fetchAppraisedTrucksUrl : String -> String
 fetchAppraisedTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-            -- if String.isEmpty searchText then
-            --     "http://localhost:50977/api/mhc/getappraisedtrucks"
-            -- else
-            --     crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks" [searchText] []
+            if String.isEmpty searchText then
+                "http://localhost:50977/api/mhc/getappraisedtrucks"
+            else
+                crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks" [searchText] []
 
             -- if String.isEmpty searchText then
             --     "http://172.21.123.180/NewMHCtruckSync/api/mhc/getappraisedtrucks"
             -- else
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSync/api/mhc/getappraisedtrucks" [searchText] []
-        "http://localhost:3333/trks"
+        --"http://localhost:3333/trks"
 
 
 fetchSearchFilterRangesUrl: String
@@ -114,7 +114,6 @@ trucksDecoder  =
         |> required "frontAxleWeight" Decode.float
         |> required "rearAxleWeight" Decode.float
         |> required "fleetCode" Decode.string
-        |> required "truckStatus" Decode.string
         |> required "specialFinancing" Decode.string
         |> required "inventoryAge" Decode.float
         |> required "owningBranch" Decode.string

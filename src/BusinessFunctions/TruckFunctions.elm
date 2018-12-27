@@ -216,7 +216,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -252,7 +252,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -288,7 +288,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -324,7 +324,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -360,7 +360,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -396,7 +396,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -432,7 +432,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -470,7 +470,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -506,7 +506,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -542,7 +542,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -578,7 +578,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -614,7 +614,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -636,42 +636,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 findMatchAndSetUserAction uiModel.fleetCodeFilters sf 
                                         )
                 
-                updatedTruckStatusFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
-                                --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList TruckStatus uiModel.truckStatusFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.truckStatusFilters sf 
-                                        )
-                
                 updatedSpecialFinancingFitlerList =
                         model.truckList
                                 |> filterBySalesStatus uiModel.salesStatusFilters
@@ -687,7 +651,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
@@ -723,7 +687,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
@@ -759,7 +723,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByCDL uiModel.cdlFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -794,7 +758,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByPhoto uiModel.photoFilters
@@ -829,7 +793,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByAPU uiModel.apuFilters
                                 |> filterByCDL uiModel.cdlFilters
@@ -866,7 +830,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -902,7 +866,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -939,7 +903,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -975,7 +939,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -1011,7 +975,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -1047,7 +1011,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -1083,7 +1047,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -1121,7 +1085,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -1156,7 +1120,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByBodyType uiModel.bodyTypeFilters
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByTruckStatus uiModel.truckStatusFilters
+                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByAPU uiModel.apuFilters
@@ -1202,7 +1166,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 , rearAxleWeightFilters = updatedRearAxleWeightFitlerList
                                                 , truckTypeFilters = updatedTruckTypeFitlerList
                                                 , fleetCodeFilters = updatedFleetCodeFitlerList
-                                                , truckStatusFilters = updatedTruckStatusFitlerList
                                                 , specialFinancingFilters = updatedSpecialFinancingFitlerList
                                                 , inventoryAgeFilters = updatedInventoryAgeFitlerList
                                                 , owningBranchFilters = updatedOwningBranchFitlerList
@@ -1234,7 +1197,7 @@ applySearchFilters model uiModel =
                         |> filterByRearAxleType uiModel.rearAxleTypeFilters
                         |> filterByTruckType uiModel.truckTypeFilters  
                         |> filterByFleetCode uiModel.fleetCodeFilters
-                        |> filterByTruckStatus uiModel.truckStatusFilters
+                        
                         |> filterBySpecialFinancing uiModel.specialFinancingFilters
                         |> filterByOwningBranch uiModel.owningBranchFilters
                         |> filterByAPU uiModel.apuFilters

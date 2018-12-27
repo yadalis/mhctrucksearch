@@ -129,7 +129,6 @@ update msg (model, uiModel) =
                 rearAxleTypeFilters = buildSearchFilterValueRecordList RearAxleType uiModel.rearAxleTypeFilters trucks
                 truckTypeFilters = buildSearchFilterValueRecordList TruckType uiModel.truckTypeFilters trucks
                 fleetCodeFilters = buildSearchFilterValueRecordList FleetCode uiModel.fleetCodeFilters trucks
-                truckStatusFilters = buildSearchFilterValueRecordList TruckStatus uiModel.truckStatusFilters trucks
                 specialFinancingFilters = buildSearchFilterValueRecordList SpecialFinancing uiModel.specialFinancingFilters trucks
                 owningBranchFilters = buildSearchFilterValueRecordList OwningBranch uiModel.owningBranchFilters trucks
                 apuFilters = buildSearchFilterValueRecordList APU uiModel.apuFilters trucks
@@ -158,7 +157,6 @@ update msg (model, uiModel) =
                                         rearAxleTypeFilters = rearAxleTypeFilters,
                                         truckTypeFilters = truckTypeFilters,
                                         fleetCodeFilters = fleetCodeFilters,
-                                        truckStatusFilters = truckStatusFilters,
                                         specialFinancingFilters = specialFinancingFilters,
                                         owningBranchFilters = owningBranchFilters,
                                         apuFilters = apuFilters,
@@ -210,8 +208,6 @@ update msg (model, uiModel) =
                             (uiModel.truckTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | truckTypeFilters = mfArr})
                         FleetCode -> 
                             (uiModel.fleetCodeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | fleetCodeFilters = mfArr})    
-                        TruckStatus -> 
-                            (uiModel.truckStatusFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | truckStatusFilters = mfArr})
                         SpecialFinancing -> 
                             (uiModel.specialFinancingFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | specialFinancingFilters = mfArr})                            
                         OwningBranch -> 
@@ -596,7 +592,6 @@ view (model, uiModel) =
                                                                                     Array.toList uiModel.rearAxleTypeFilters,
                                                                                     Array.toList uiModel.truckTypeFilters,
                                                                                     Array.toList uiModel.fleetCodeFilters,
-                                                                                    Array.toList uiModel.truckStatusFilters,
                                                                                     Array.toList uiModel.specialFinancingFilters,
                                                                                     Array.toList uiModel.owningBranchFilters,
                                                                                     Array.toList uiModel.apuFilters,
