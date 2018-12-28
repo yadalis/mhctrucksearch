@@ -23,6 +23,7 @@ import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
 import Element.Events exposing (..)
 import Helpers.Utils exposing (..)
+import Browser.Dom exposing (..)
 
 ---- INIT ----
 
@@ -43,7 +44,7 @@ update msg (model, uiModel) =
     case msg of
         OnFetchSearchFilterRanges response ->
             let
-                -- x =  Debug.log "raw json response" response
+                --x =  Debug.log "raw json response" response
 
                 rangeSearchFilters = 
                             case response of
@@ -79,7 +80,7 @@ update msg (model, uiModel) =
                                 Just item -> Tuple.second item
                                 Nothing -> Array.empty
                 
-                x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts SleeperInches
+                --x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts SleeperInches
 
                 newUIModel = {uiModel | 
                                         priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
@@ -242,6 +243,12 @@ update msg (model, uiModel) =
 
                 newSortedFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
+
+
+                --vv = Debug.log "REdcue list " [newUIModel]
+                --v = Debug.log "REdcue list " [x]
+
+
 
                 uiModelUpdatedWithLatestSearchFilters =
                         rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel

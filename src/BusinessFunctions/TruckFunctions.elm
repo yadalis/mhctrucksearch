@@ -8,6 +8,7 @@ import Model exposing (..)
 import Array exposing (..)
 import SearchFilterViews.SearchFilter exposing (..)
 import List.Extra exposing (..)
+import List.Unique exposing (..)
 
 getSelectedSearchFilterKeys searchFilters =
         searchFilters 
@@ -191,9 +192,106 @@ buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckP
         else
                 trucks
 
+funcList uiModel= [
+                        (SalesStatus, filterBySalesStatus uiModel.salesStatusFilters)
+                        , (Year,filterByYear uiModel.yearFilters)
+                        , (Make,filterByMake uiModel.makeFilters)
+                        , (MakeModel,filterByModel uiModel.modelFilters)
+                        , (SleeperRoof,filterBySleeperRoof uiModel.sleeperRoofFilters)
+                        , (SleeperBunk,filterBySleeperBunk uiModel.sleeperBunkFilters)
+                        , (EngineMake,filterByEngineMake uiModel.engineMakeFilters)
+                        , (TransType,filterByTransType uiModel.transTypeFilters)
+                        , (Suspension,filterBySuspension uiModel.suspensionFilters)
+                        , (BodyType,filterByBodyType uiModel.bodyTypeFilters)
+                        , (RearAxleType,filterByRearAxleType uiModel.rearAxleTypeFilters)
+                        , (TruckType,filterByTruckType uiModel.truckTypeFilters)
+                        , (FleetCode,filterByFleetCode uiModel.fleetCodeFilters)
+                        , (SpecialFinancing,filterBySpecialFinancing uiModel.specialFinancingFilters)
+                        , (OwningBranch,filterByOwningBranch uiModel.owningBranchFilters)
+                        , (LocationName,filterByLocationName  uiModel.locationNameFilters)
+                        , (APU,filterByAPU uiModel.apuFilters)
+                        , (CDL,filterByCDL uiModel.cdlFilters)
+                        , (Photo,filterByPhoto uiModel.photoFilters)
+                                --range filters
+                        , (Price,filterByPrice uiModel.priceFilters)
+                        , (EngineHP,filterByEngineHP uiModel.engineHPFilters)
+                        , (SleeperInches,filterBySleeperInches uiModel.sleeperInchesFilters)
+                        , (WheelBase,filterByWheelBase uiModel.wheelBaseFilters)
+                        , (Mileage,filterByMileage uiModel.mileageFilters)
+                        , (FrontAxleWeight,filterByFrontAxleWeight uiModel.frontAxleWeightFilters)
+                        , (RearAxleWeight,filterByRearAxleWeight uiModel.rearAxleWeightFilters)
+                        , (InventoryAge,filterByInventoryAge uiModel.inventoryAgeFilters)
+                ]
+
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
         let 
+                
+                --yv = Debug.log "REdcue list no dups" [ filterDuplicates x]
+
+                -- lst = foldr (\lstx fn -> 
+
+                --                     lstx
+                --                         |> fn
+
+                --                         ) model.truckList funcList
+                
+
+                -- funcT trks func stop   = 
+
+                --         -- let
+                --         --         trks
+                --         --                 |> func        
+                --         -- in
+                --         --         List.map (funcT model.truckList) funcList  
+                                
+
+                -- lst = List.map (\func -> 
+                --                         model.truckList
+                --                                 |> func        
+                --                 ) funcList
+
+                
+
+                reduceList filterType =
+                        List.map (\(typ, fn) -> 
+                                        
+                                        let
+                                               filteredList = model.truckList
+                                                                |> fn
+     
+                                        in
+                                                List.map (\t -> t.name) filteredList
+                                                
+                                                -- if List.length filteredList == List.length model.truckList then
+                                                --         List.map (\t -> t.name) filteredList
+                                                -- else
+                                                --         List.map (\t -> t.name) filteredList
+                                        
+                                ) <| List.filter (\(typ, fn) -> typ /= filterType) <| funcList uiModel
+
+                -- x = List.map (\lst -> 
+                                
+                --                 List.map (\t -> t.name) lst
+                                
+                --                 )reduceList
+
+
+
+                --yu = transpose x
+
+                --strlst = List.map (\lst )
+
+                yu = List.sort <| List.concat <| reduceList SalesStatus
+
+                hh = List.filter(\stnum -> 
+                                        let
+                                                cnt = count (\x -> x == stnum ) yu    
+                                        in
+                                                cnt == 26
+                                ) yu
+
+                v = Debug.log "REdcue list " [ filterDuplicates hh ]
 
                 findMatchAndSetUserAction filters sf =
                         filters
@@ -207,7 +305,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> (\headItem -> {sf | userAction = headItem.userAction} )
 
                 updatedSalesStatusFitlerList =
-                        model.truckList
+                         model.truckList
                                 |> filterByYear uiModel.yearFilters
                                 |> filterByMake uiModel.makeFilters
                                 |> filterByModel uiModel.modelFilters
