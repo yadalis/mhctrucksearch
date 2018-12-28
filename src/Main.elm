@@ -334,12 +334,22 @@ update msg (model, uiModel) =
             in
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
 
-        ShowAppraisedTrucks ->
-            ( ( {model |
+        -- ShowAppraisedTrucks userAction ->
+        --     ( ( {model |
+        --                     filteredTruckList = [],
+        --                     truckList = [],
+        --                     pagedTruckList = []} , {uiModel | searchString = ""}), fetchAppraisedTrucks "")
+
+        WorkWithAppraisedTrucks userAction ->
+                        ( ( {model |
                             filteredTruckList = [],
                             truckList = [],
-                            pagedTruckList = []} , {uiModel | searchString = ""}), fetchAppraisedTrucks "")
-
+                            pagedTruckList = []} , {uiModel | searchString = "", workWithAppraisedTrucks = userAction}), 
+                                                    
+                                                    if userAction then
+                                                         fetchAppraisedTrucks ""
+                                                    else
+                                                         fetchTrucks "")
 
         ShowTrucksWithPhotoOnly ->
             ( (model, uiModel), Cmd.none )
@@ -422,20 +432,39 @@ view (model, uiModel) =
                                 ]
                                  ,row[bw 0,ear,   pde 0 5 0 5, spx 15, fs 18 ]
                                 [
+
+                                   
+                                    checkbox [wf, far , bw 1, pd 3] {
+                                                onChange = WorkWithAppraisedTrucks
+                                                ,icon = buildWorkWithAppraisedTrucksToggleImage
+                                                , label = labelRight [bwl 0,pdl 5, eacy] <| 
+                                                        if  uiModel.workWithAppraisedTrucks then 
+                                                            textValue <| "Stop Browsing Appraised Trucks"
+                                                        else
+                                                            textValue <| "Browse Appraised Trucks"
+                                                , checked =
+                                                            uiModel.workWithAppraisedTrucks
+                                            } 
+                                    -- ,
                                     
-                                    Input.button ([   fac, hf, pdl 0,    mouseOver [fc 217 98 69] , fc  190 5 30])
-                                            { 
-                                                onPress = Just ShowAppraisedTrucks
-                                                ,label = el[eal, bwb 1] <| textValue "Browse Appraised Trucks"
-                                            }
-                                            ,
-                                    Input.button ([    fac, hf, pdl 0,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                            { 
-                                                onPress = Just ClearSearchStringResults
-                                                ,label = el[  bwb 1] <| textValue "Browse all other trucks"
-                                            }
-                                    
-                                             
+                                    -- checkbox [wf, far , bw 0] {
+                                    --             onChange = ExcludeAppraisedTrucks
+                                    --             ,icon = buildCollapseAllImage
+                                    --             , label = labelRight [] <|  textValue <| "Browse All Other Trucks"
+                                    --             , checked =
+                                    --                         model.excludeAppraisedTrucks
+                                    --         } 
+                                    -- Input.button ([   fac, hf, pdl 0,    mouseOver [fc 217 98 69] , fc  190 5 30])
+                                    --         { 
+                                    --             onPress = Just ShowAppraisedTrucks
+                                    --             ,label = el[eal, bwb 1] <| textValue "Browse Appraised Trucks"
+                                    --         }
+                                    --         ,
+                                    -- Input.button ([    fac, hf, pdl 0,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                    --         { 
+                                    --             onPress = Just ClearSearchStringResults
+                                    --             ,label = el[  bwb 1] <| textValue "Browse all other trucks"
+                                    --         }
                                 ]
                                 ,row[][
                                     -- column[  hpx 50, bw 0][

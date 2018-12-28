@@ -310,7 +310,6 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByRearAxleType uiModel.rearAxleTypeFilters
                                 |> filterByTruckType uiModel.truckTypeFilters
                                 |> filterByFleetCode uiModel.fleetCodeFilters
-                                
                                 |> filterBySpecialFinancing uiModel.specialFinancingFilters
                                 |> filterByOwningBranch uiModel.owningBranchFilters
                                 |> filterByLocationName  uiModel.locationNameFilters

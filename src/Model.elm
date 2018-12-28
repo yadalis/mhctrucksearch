@@ -93,6 +93,8 @@ type alias UIModel =
         --,collapseAllChecked : Bool
         ,showDropdown : Bool
         ,currentSortBy : SortBy
+        --,showAppraisedTrucks : Bool
+        ,workWithAppraisedTrucks : Bool
     }
 
 type alias SearchFilterState =
@@ -274,5 +276,7 @@ initalUIModel jsFlag =
 
         --,expandCollapseAllChecked = False,
         showDropdown = False,
-        currentSortBy = MakeAtoZ
+        currentSortBy = MakeAtoZ,
+        --showAppraisedTrucks = False,
+        workWithAppraisedTrucks = False
     }

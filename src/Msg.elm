@@ -24,5 +24,6 @@ type Msg
     | PageNumberClicked Int
     | OperateSortDialog Bool
     | SortTrucks SortBy
-    | ShowAppraisedTrucks
+    --| ShowAppraisedTrucks Bool
+    | WorkWithAppraisedTrucks  Bool
     | ShowTrucksWithPhotoOnly
