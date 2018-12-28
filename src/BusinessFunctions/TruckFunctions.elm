@@ -9,6 +9,7 @@ import Array exposing (..)
 import SearchFilterViews.SearchFilter exposing (..)
 import List.Extra exposing (..)
 import List.Unique exposing (..)
+import Maybe.Extra exposing (..)
 
 getSelectedSearchFilterKeys searchFilters =
         searchFilters 
@@ -223,76 +224,67 @@ funcList uiModel= [
                         , (InventoryAge,filterByInventoryAge uiModel.inventoryAgeFilters)
                 ]
 
+-- applyFilterList excludeFilterType trucks uiModel all =
+--         let
+--                 reducedList = List.map (\(typ, fn) ->                 
+--                                                         let
+--                                                                 filteredList = trucks
+--                                                                                         |> fn
+--                                                         in
+--                                                                 List.map (\t -> t.name) filteredList
+                                                                
+--                                                                 -- if List.length filteredList == List.length model.truckList then
+--                                                                 --         List.map (\t -> t.name) filteredList
+--                                                                 -- else
+--                                                                 --         List.map (\t -> t.name) filteredList
+                                                        
+--                                                 ) <|
+--                                                         -- if all then
+--                                                         --         funcList uiModel
+                                                                
+--                                                         -- else
+--                                                                 List.filter (\(typ, fn) -> typ /= excludeFilterType) <| funcList uiModel
+
+--                 --yu = List.sort <| List.concat <| reducedList
+
+--                 yu = List.concat <| reducedList
+
+--                 jkv = Debug.log "REdcue list " [ yu ]
+
+--                 hh = List.filter(\stnum -> 
+--                                 --let
+--                                         --cnt = 
+--                                         count (\x -> x == stnum ) yu    ==  26
+--                                 --in
+--                                   --      cnt == 26
+--                         ) yu
+
+--                 fr = filterDuplicates hh
+--                 --v = Debug.log "REdcue list " [ filterDuplicates hh ]
+
+--                 filteredTruckList = List.map (\stnum ->
+--                                                         --let
+--                                                                find (\t -> t.name == stnum ) trucks    
+                                                               
+                                                                
+--                                                         --in
+--                                                               -- case trk of
+--                                                                 --        Just val -> val
+--                                                                 --        Nothing -> Truck         
+                                                        
+--                                                 ) fr
+    
+--                 --vj = Debug.log "REdcue list " [ filteredTruckList ]
+
+                
+--         in
+--                 --filterDuplicates hh 
+--                 values filteredTruckList
+
+
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
         let 
-                
-                --yv = Debug.log "REdcue list no dups" [ filterDuplicates x]
-
-                -- lst = foldr (\lstx fn -> 
-
-                --                     lstx
-                --                         |> fn
-
-                --                         ) model.truckList funcList
-                
-
-                -- funcT trks func stop   = 
-
-                --         -- let
-                --         --         trks
-                --         --                 |> func        
-                --         -- in
-                --         --         List.map (funcT model.truckList) funcList  
-                                
-
-                -- lst = List.map (\func -> 
-                --                         model.truckList
-                --                                 |> func        
-                --                 ) funcList
-
-                
-
-                reduceList filterType =
-                        List.map (\(typ, fn) -> 
-                                        
-                                        let
-                                               filteredList = model.truckList
-                                                                |> fn
-     
-                                        in
-                                                List.map (\t -> t.name) filteredList
-                                                
-                                                -- if List.length filteredList == List.length model.truckList then
-                                                --         List.map (\t -> t.name) filteredList
-                                                -- else
-                                                --         List.map (\t -> t.name) filteredList
-                                        
-                                ) <| List.filter (\(typ, fn) -> typ /= filterType) <| funcList uiModel
-
-                -- x = List.map (\lst -> 
-                                
-                --                 List.map (\t -> t.name) lst
-                                
-                --                 )reduceList
-
-
-
-                --yu = transpose x
-
-                --strlst = List.map (\lst )
-
-                yu = List.sort <| List.concat <| reduceList SalesStatus
-
-                hh = List.filter(\stnum -> 
-                                        let
-                                                cnt = count (\x -> x == stnum ) yu    
-                                        in
-                                                cnt == 26
-                                ) yu
-
-                v = Debug.log "REdcue list " [ filterDuplicates hh ]
-
                 findMatchAndSetUserAction filters sf =
                         filters
                                 |> Array.filter(\uiSF -> uiSF.searchFilterKey == sf.searchFilterKey)

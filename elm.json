@@ -19,6 +19,7 @@
             "elm-community/html-extra": "3.0.0",
             "elm-community/json-extra": "4.0.0",
             "elm-community/list-extra": "8.1.0",
+            "elm-community/maybe-extra": "5.0.0",
             "ggb/numeral-elm": "1.4.3",
             "mdgriffith/elm-ui": "1.1.0"
         },
