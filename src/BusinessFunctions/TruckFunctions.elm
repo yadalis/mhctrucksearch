@@ -21,6 +21,10 @@ selectedFiltersCount filters =
         count (\sf -> sf.userAction == True) <| Array.toList filters
         --Array.length <| Array.filter (\sf -> sf.userAction == True) filters
 
+anyFilterApplied uiModel =
+        (selectedFiltersCount <| Array.fromList <| concatAllFilters uiModel)
+                |> (\res -> res > 0)
+
 concatAllFilters uiModel =
         List.concat
         [ 

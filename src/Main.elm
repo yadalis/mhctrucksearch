@@ -383,12 +383,16 @@ update msg (model, uiModel) =
                                 ,rearAxleWeightFilters = resetFilters uiModel.rearAxleWeightFilters
                                 ,inventoryAgeFilters = resetFilters uiModel.inventoryAgeFilters
                                 ,locationNameFilters = resetFilters uiModel.locationNameFilters
+                                
                     }
                 
+                sortedTrkList = model.truckList |> sortTruckList uiModel.currentSortBy
+
                 newModel = 
                     {model |
-                            filteredTruckList = model.truckList,
-                            pagedTruckList =List.take 100 model.truckList}
+                            filteredTruckList = sortedTrkList,
+                            pagedTruckList =List.take 100 sortedTrkList
+                            ,currentPageNumber = 1}
 
                 
                 uiModelUpdatedWithLatestSearchFilters =
@@ -553,7 +557,7 @@ view (model, uiModel) =
                             ,
                             Input.button ( [  bw 0,   hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
                             { 
-                                onPress = Just <| ClearAllFilters
+                                onPress =  if anyFilterApplied uiModel then Just <| ClearAllFilters else  Nothing
                                 ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
                             }
                         ]

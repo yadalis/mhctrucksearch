@@ -13,7 +13,7 @@ showSortOptionsDialog show currentSortByOption =
     if show then 
         column[bc 245 245 245, pd 15, br 5, bw 2, spy 0, wpx 300]
         [
-            row[ear, bw 2, fac, bc 200 200 200  ][
+            row[ear, bw 2, fac, bc 228 228 228  ][
                      Input.button ( [hf, bwb 0, fal, pdb 0])
                                         { 
                                             onPress = Just <| OperateSortDialog False
