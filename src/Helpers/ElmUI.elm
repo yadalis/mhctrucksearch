@@ -20,10 +20,11 @@ buildCollapseAllImage userAction =
 
 buildWorkWithAppraisedTrucksToggleImage userAction =
     if userAction /= True then 
-        --image [hpx 18, bwr 0, eacy] {src = "yes.png", description ="Logo" }
-        none
+        image [hpx 18, bwr 0 ] {src = "rightarrow.png", description ="Logo" }
+        --none
+        --textValue "----->"
     else 
-        image [hpx 18, bw one, eacy] {src = "no.png", description ="Logo" }
+        image [hpx 18, bw one ] {src = "no.png", description ="Logo" }
 
 
 expandCollapseAll state =

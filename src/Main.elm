@@ -419,7 +419,7 @@ update msg (model, uiModel) =
 
 textBox uiModel=
 
-    Input.text [ wpx 300,   bw 0, pd 8
+    Input.text [ wpx 300,   bw 0, pd 5
                 --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
                 , Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
             ]
@@ -456,9 +456,9 @@ view (model, uiModel) =
                     }
         
             navBar =
-                    row[wf,  hpx 50,  alpha  1.99, brc 97 97 97 , bw 0, pd 0
-                     , htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
-                    ]
+                column[wf,  htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
+                 ,  alpha  1.99, brc 97 97 97 , bw 0, pd 0, hpx 50][
+                    row[wf, hpx 40]
                     [
                              column[bc 245 245 245, wpx 315, hf, bwb 1, brc 97 97 97, bw 0][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
@@ -469,7 +469,7 @@ view (model, uiModel) =
                                 [
                                     lazy textBox uiModel
                                     ,
-                                    Input.button ( [pd 10, wpx 45, hpx 45, eId "submitSrch"] ++ searchStringBtnStyle)
+                                    Input.button ( [pd 10, wpx 35, hpx 35, eId "submitSrch"] ++ searchStringBtnStyle)
                                         { 
                                             onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
                                             ,label = searchBtnIcon
@@ -536,6 +536,104 @@ view (model, uiModel) =
                             --     ]
                             -- ]
                     ] 
+                    ,row[centerY, bw 0, wf,  pde 0 0 0 0, spx 5,  bc 235 235 235, hf]
+                    [
+                        row[wf, bw 0, spx 15, hf][
+                            Input.button ( [ bw 0,   hf, pdl 5, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
+                            { 
+                                onPress = Just <| CollapseAllClicked True
+                                ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
+                            }
+                            ,
+                            Input.button ( [ bw 0,    hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                            { 
+                                onPress = Just <| CollapseAllClicked False
+                                ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
+                            }
+                            ,
+                            Input.button ( [  bw 0,   hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                            { 
+                                onPress = Just <| ClearAllFilters
+                                ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
+                            }
+                        ]
+                        ,
+                        row[wfp 4, bwb 0, hf , pdl 5, bw 0]
+                            [ 
+                                column[wf, hfRange 35 55, bwr 0]
+                                [
+                                    wrappedRow [wf,  bw 0, pd 8 , eat, spx 5, spy 5]
+                                        -- using <| u can avoid parans around the below func and its params
+                                        <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
+                                ]
+                                ,row[hf, bwl 1, pdb 3, wfp 2]
+                                [
+                                    column[wf, hf]
+                                    [
+                                        --     row[wf]
+                                        --     [   
+                                        --             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                        --     ]
+                                        
+                                        --  ,  
+                                            row[bw 0,  wf, eab]
+                                            [
+                                                column[bw 0, pdl 15, wpx 370]
+                                                [
+                                                    --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                                            el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                                ]
+                                                ,
+                                                column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
+                                                    , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
+                                                ][
+                                                        Input.button [pdl 5, fb, fh, bwb 0 ]  
+                                                        { 
+                                                            onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                                            ,label = el[bwb 0, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                                        }
+                                                ]
+                                            ]
+                                            
+                                        
+                                    ]
+                                ]
+                            ]
+                                
+                        --  checkbox [fs 16, bw 1,  hf, ear] {
+                        --     onChange = CollapseAllClicked
+                        --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
+                        --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Expand All" )
+                        --     , checked = uiModel.expandCollapseAllChecked
+                        -- }
+                        --,
+                        --centerX, centerY , brc 215 23 89, bw 2
+                        -- Input.radio
+                        --     [ padding 10
+                        --     , spacing 20
+                        --     ]
+                        --     { onChange = CollapseAllClicked
+                        --     , selected = True
+                        --     , label = Input.labelAbove (textValue "Lunch")
+                        --     , options =
+                        --         [ Input.option PriceHighToLow (textValue "asdf!")
+                                    
+                        --         , Input.option PriceLowToHigh (textValue "Taco!")
+                        --         , Input.option YearNewToOld (textValue "Gyro")
+                        --         ]
+                        --     }
+                        --     ,
+                        -- checkbox [fs 16, bw 1,  hf, ear] {
+                        --     onChange = CollapseAllClicked
+                        --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
+                        --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
+                        --     , checked = uiModel.collapseAllChecked
+                        -- }
+                    ]
+                    ,
+                        row[wf, bw 0, hf,  bc 97 97 97][el [ hpx 1] <|  textValue ""]
+
+                ]
         in
             
                 --layoutWith {options = [focusStyle]}  [pde 83 10 10 10 
@@ -555,63 +653,65 @@ view (model, uiModel) =
                     column[hf, wfmax 1920]
                     [
                         navBar,
-                        row[hf,wf, pde 55 3 100 3]
+                        
+                        row[hf,wf, pde 85 3 0 3, spx 16]
                         [     
                             -- Search Filter Panel
-                            column [wpx 300,  spy 15,  bc 215 215 215, eat, pdt 5] 
+                            column [wpx 300,  spy 0,   eat, pdt 3] 
                             [
-                                row[centerY, bw 0, wf,  pde 0 5 0 5, spx 15]
-                                [
-                                    Input.button ( [    hf, pdl 0, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
-                                    { 
-                                        onPress = Just <| CollapseAllClicked True
-                                        ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
-                                    }
-                                    ,
-                                    Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                    { 
-                                        onPress = Just <| CollapseAllClicked False
-                                        ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
-                                    }
-                                   ,
-                                    Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                    { 
-                                        onPress = Just <| ClearAllFilters
-                                        ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
-                                    }
+                                -- row[centerY, bw 0, wf,  pde 0 5 0 5, spx 15]
+                                -- [
+                                --     Input.button ( [    hf, pdl 0, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
+                                --     { 
+                                --         onPress = Just <| CollapseAllClicked True
+                                --         ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
+                                --     }
+                                --     ,
+                                --     Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                --     { 
+                                --         onPress = Just <| CollapseAllClicked False
+                                --         ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
+                                --     }
+                                --    ,
+                                --     Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                --     { 
+                                --         onPress = Just <| ClearAllFilters
+                                --         ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
+                                --     }
                                    
-                                    --  checkbox [fs 16, bw 1,  hf, ear] {
-                                    --     onChange = CollapseAllClicked
-                                    --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                    --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Expand All" )
-                                    --     , checked = uiModel.expandCollapseAllChecked
-                                    -- }
-                                    --,
-                                    --centerX, centerY , brc 215 23 89, bw 2
-                                    -- Input.radio
-                                    --     [ padding 10
-                                    --     , spacing 20
-                                    --     ]
-                                    --     { onChange = CollapseAllClicked
-                                    --     , selected = True
-                                    --     , label = Input.labelAbove (textValue "Lunch")
-                                    --     , options =
-                                    --         [ Input.option PriceHighToLow (textValue "asdf!")
+                                --     --  checkbox [fs 16, bw 1,  hf, ear] {
+                                --     --     onChange = CollapseAllClicked
+                                --     --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
+                                --     --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Expand All" )
+                                --     --     , checked = uiModel.expandCollapseAllChecked
+                                --     -- }
+                                --     --,
+                                --     --centerX, centerY , brc 215 23 89, bw 2
+                                --     -- Input.radio
+                                --     --     [ padding 10
+                                --     --     , spacing 20
+                                --     --     ]
+                                --     --     { onChange = CollapseAllClicked
+                                --     --     , selected = True
+                                --     --     , label = Input.labelAbove (textValue "Lunch")
+                                --     --     , options =
+                                --     --         [ Input.option PriceHighToLow (textValue "asdf!")
                                                
-                                    --         , Input.option PriceLowToHigh (textValue "Taco!")
-                                    --         , Input.option YearNewToOld (textValue "Gyro")
-                                    --         ]
-                                    --     }
-                                    --     ,
-                                    -- checkbox [fs 16, bw 1,  hf, ear] {
-                                    --     onChange = CollapseAllClicked
-                                    --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                    --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
-                                    --     , checked = uiModel.collapseAllChecked
-                                    -- }
-                                ]
+                                --     --         , Input.option PriceLowToHigh (textValue "Taco!")
+                                --     --         , Input.option YearNewToOld (textValue "Gyro")
+                                --     --         ]
+                                --     --     }
+                                --     --     ,
+                                --     -- checkbox [fs 16, bw 1,  hf, ear] {
+                                --     --     onChange = CollapseAllClicked
+                                --     --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
+                                --     --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
+                                --     --     , checked = uiModel.collapseAllChecked
+                                --     -- }
+                                -- ]
                                
-                                ,column[wf, spy 5, bc 240 240 240, bw 0 ]
+                                -- ,
+                                column[wf, spy 5, bc 240 240 240, bwr 0 ]
                                     <| (
                                         if List.length model.filteredTruckList == 0 then
                                             [loaderIconElement]
@@ -622,55 +722,60 @@ view (model, uiModel) =
                                     )
                             ]
                             
+                                
                             -- Trucks Search Result List Panel 
-                            ,column[  wf,  bw 0 ,pdl 15,  eat]
+                            ,column[  wf,  bw 0 ,  eat, bwl 0 , eat, pdt 3]
                             [
-                                row[wf, bwb 0, hf , pd 0,  bc 215 215 215, bw 0]
-                                [ 
-                                    column[wf, hfRange 35 55, bw 0]
-                                    [
-                                        wrappedRow [wf,  bw 0, pd 6 , eat, spx 5, spy 5]
-                                            -- using <| u can avoid parans around the below func and its params
-                                            <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
-                                    ]
-                                    ,row[hf, bwl 1, pdb 3,  bc 215 215 215, wfp 2]
-                                    [
-                                        column[wf, hf]
-                                        [
-                                            --     row[wf]
-                                            --     [   
-                                            --             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                            --     ]
+                                -- row[wf, bwb 0, hf , pd 0,  bc 215 215 215, bw 0]
+                                -- [ 
+                                --     column[wf, hfRange 35 55, bw 0]
+                                --     [
+                                --         wrappedRow [wf,  bw 0, pd 6 , eat, spx 5, spy 5]
+                                --             -- using <| u can avoid parans around the below func and its params
+                                --             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
+                                --     ]
+                                --     ,row[hf, bwl 1, pdb 3,  bc 215 215 215, wfp 2]
+                                --     [
+                                --         column[wf, hf]
+                                --         [
+                                --             --     row[wf]
+                                --             --     [   
+                                --             --             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                --             --     ]
                                             
-                                            --  ,  
-                                             row[bw 0,  wf, eab]
-                                                [
-                                                    column[bw 0, pdl 15, wpx 370]
-                                                    [
-                                                        --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
-                                                             el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                                    ]
-                                                    ,
-                                                    column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
-                                                        , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
-                                                    ][
-                                                         Input.button [pdl 5, fb, fh, bwb 0 ]  
-                                                            { 
-                                                                onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                                ,label = el[bwb 1, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
-                                                            }
-                                                    ]
-                                                ]
+                                --             --  ,  
+                                --              row[bw 0,  wf, eab]
+                                --                 [
+                                --                     column[bw 0, pdl 15, wpx 370]
+                                --                     [
+                                --                         --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
+                                --                              el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                                --                     ]
+                                --                     ,
+                                --                     column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
+                                --                         , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
+                                --                     ][
+                                --                          Input.button [pdl 5, fb, fh, bwb 0 ]  
+                                --                             { 
+                                --                                 onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                --                                 ,label = el[bwb 1, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                --                             }
+                                --                     ]
+                                --                 ]
                                                 
                                             
-                                        ]
-                                    ]
-                                ]
-                                ,row[ wf, bwb 0, pde 5 0 5 0][
+                                --         ]
+                                --     ]
+                                -- ]
+                                -- ,
+
+                                
+                                row[ wf, bwb 0, pde 0 0 0 0][
                                         lazy searchFilterBulletView 
                                                 << Array.fromList <| concatAllFilters uiModel
                                 ]
-                                ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
+                                ,
+                                column[ scrollbarY, wf,  bw 0, pde 0 0 0 0   ]
                                 [
                                         lazy trucksView model.pagedTruckList -- model.filteredTruckList
                                 ]         
