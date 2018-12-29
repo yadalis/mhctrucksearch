@@ -33,7 +33,7 @@ type alias OnLoadSearchFilter =
 init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
     ( (initialModel,initalUIModel jsflg)
-        , Cmd.batch [fetchTrucks ""]
+        , Cmd.batch [getFetchURL "" False]
         --, Cmd.batch [fetchTrucks, fetchSearchFilterRanges] -- this executes all commands in async manner, it seems ?
     )
 
@@ -255,11 +255,11 @@ update msg (model, uiModel) =
             in
                 ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
-        ClearSearchStringResults ->
-            ( ( {model |
-                            filteredTruckList = [],
-                            truckList = [],
-                            pagedTruckList = []} , {uiModel | searchString = ""}), fetchTrucks "")
+        -- ClearSearchStringResults ->
+        --     ( ( {model |
+        --                     filteredTruckList = [],
+        --                     truckList = [],
+        --                     pagedTruckList = []} , {uiModel | searchString = ""}), fetchTrucks "")
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -274,7 +274,7 @@ update msg (model, uiModel) =
                     ,uiModel
 
                 )
-                , fetchTrucks uiModel.searchString
+                , getFetchURL uiModel.searchString uiModel.workWithAppraisedTrucks
             )
             
         HandleKeyboardEvent ->
@@ -287,7 +287,8 @@ update msg (model, uiModel) =
                     ,uiModel
 
                 )
-                , fetchTrucks uiModel.searchString
+                , 
+                    getFetchURL uiModel.searchString uiModel.workWithAppraisedTrucks
             )
         
         CollapseClicked searchFilterState userAction->
@@ -345,12 +346,56 @@ update msg (model, uiModel) =
                             filteredTruckList = [],
                             truckList = [],
                             pagedTruckList = []} , {uiModel | searchString = "", workWithAppraisedTrucks = userAction}), 
-                                                    
-                                                    if userAction then
-                                                         fetchAppraisedTrucks ""
-                                                    else
-                                                         fetchTrucks "")
+                                                    getFetchURL "" userAction
+                                                )
 
+        ClearAllFilters ->
+            let
+                -- allFilters = Array.fromList <| concatAllFilters uiModel
+                -- clearedFilters = Array.map (\sf -> {sf | userAction = False }) allFilters
+                newUIModel = 
+                    {
+                        uiModel |
+                                salesStatusFilters = resetFilters uiModel.salesStatusFilters
+                                ,yearFilters = resetFilters uiModel.yearFilters
+                                ,makeFilters = resetFilters uiModel.makeFilters
+                                ,modelFilters = resetFilters uiModel.modelFilters
+                                ,sleeperRoofFilters = resetFilters uiModel.sleeperRoofFilters
+                                ,sleeperBunkFilters = resetFilters uiModel.sleeperBunkFilters
+                                ,engineMakeFilters = resetFilters uiModel.engineMakeFilters
+                                ,transTypeFilters = resetFilters uiModel.transTypeFilters
+                                ,suspensionFilters = resetFilters uiModel.suspensionFilters
+                                ,bodyTypeFilters = resetFilters uiModel.bodyTypeFilters
+                                ,rearAxleTypeFilters = resetFilters uiModel.rearAxleTypeFilters
+                                ,truckTypeFilters = resetFilters uiModel.truckTypeFilters
+                                ,fleetCodeFilters = resetFilters uiModel.fleetCodeFilters
+                                ,specialFinancingFilters = resetFilters uiModel.specialFinancingFilters
+                                ,owningBranchFilters = resetFilters uiModel.owningBranchFilters
+                                ,apuFilters = resetFilters uiModel.apuFilters
+                                ,cdlFilters = resetFilters uiModel.cdlFilters
+                                ,photoFilters = resetFilters uiModel.photoFilters
+                                ,priceFilters = resetFilters uiModel.priceFilters
+                                ,engineHPFilters = resetFilters uiModel.engineHPFilters
+                                ,sleeperInchesFilters = resetFilters uiModel.sleeperInchesFilters
+                                ,wheelBaseFilters = resetFilters uiModel.wheelBaseFilters
+                                ,mileageFilters = resetFilters uiModel.mileageFilters
+                                ,frontAxleWeightFilters = resetFilters uiModel.frontAxleWeightFilters
+                                ,rearAxleWeightFilters = resetFilters uiModel.rearAxleWeightFilters
+                                ,inventoryAgeFilters = resetFilters uiModel.inventoryAgeFilters
+                                ,locationNameFilters = resetFilters uiModel.locationNameFilters
+                    }
+                
+                newModel = 
+                    {model |
+                            filteredTruckList = model.truckList,
+                            pagedTruckList =List.take 100 model.truckList}
+
+                
+                uiModelUpdatedWithLatestSearchFilters =
+                        rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel newUIModel
+            in
+                ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+            
         ShowTrucksWithPhotoOnly ->
             ( (model, uiModel), Cmd.none )
             -- let
@@ -528,7 +573,12 @@ view (model, uiModel) =
                                         onPress = Just <| CollapseAllClicked False
                                         ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
                                     }
-                                   
+                                   ,
+                                    Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                                    { 
+                                        onPress = Just <| ClearAllFilters
+                                        ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
+                                    }
                                    
                                     --  checkbox [fs 16, bw 1,  hf, ear] {
                                     --     onChange = CollapseAllClicked
@@ -618,36 +668,7 @@ view (model, uiModel) =
                                 ]
                                 ,row[ wf, bwb 0, pde 5 0 5 0][
                                         lazy searchFilterBulletView 
-                                                << Array.fromList <| List.concat
-                                                                                [ 
-                                                                                    Array.toList uiModel.salesStatusFilters,
-                                                                                    Array.toList uiModel.yearFilters,
-                                                                                    Array.toList uiModel.makeFilters,
-                                                                                    Array.toList uiModel.modelFilters,
-                                                                                    Array.toList uiModel.sleeperRoofFilters,
-                                                                                    Array.toList uiModel.sleeperBunkFilters,
-                                                                                    Array.toList uiModel.engineMakeFilters,
-                                                                                    Array.toList uiModel.transTypeFilters,
-                                                                                    Array.toList uiModel.suspensionFilters,
-                                                                                    Array.toList uiModel.bodyTypeFilters,
-                                                                                    Array.toList uiModel.rearAxleTypeFilters,
-                                                                                    Array.toList uiModel.truckTypeFilters,
-                                                                                    Array.toList uiModel.fleetCodeFilters,
-                                                                                    Array.toList uiModel.specialFinancingFilters,
-                                                                                    Array.toList uiModel.owningBranchFilters,
-                                                                                    Array.toList uiModel.apuFilters,
-                                                                                    Array.toList uiModel.cdlFilters,
-                                                                                    Array.toList uiModel.photoFilters,
-                                                                                    Array.toList uiModel.priceFilters,
-                                                                                    Array.toList uiModel.engineHPFilters,
-                                                                                    Array.toList uiModel.sleeperInchesFilters,
-                                                                                    Array.toList uiModel.wheelBaseFilters,
-                                                                                    Array.toList uiModel.mileageFilters,
-                                                                                    Array.toList uiModel.frontAxleWeightFilters,
-                                                                                    Array.toList uiModel.rearAxleWeightFilters,
-                                                                                    Array.toList uiModel.inventoryAgeFilters,
-                                                                                    Array.toList uiModel.locationNameFilters
-                                                                                ]
+                                                << Array.fromList <| concatAllFilters uiModel
                                 ]
                                 ,column[ scrollbarY, wf,  bw 0, pde 5 0 0 0   ]
                                 [

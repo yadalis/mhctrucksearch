@@ -88,7 +88,11 @@ truckView index truck =
                         ,dataFieldView "Stock#:" <| if truck.stockNumber == 0 then "N/A" else String.fromInt truck.stockNumber
                         ,dataFieldView "Chassis#:" truck.chassisNumber
                         ,dataFieldView "Mileage:" <|  format "0,0" <|  truck.mileage
-                        ,dataFieldView "Sleeper Size:" <| String.fromFloat <| truck.sleeperInches
+                        ,dataFieldView "Sleeper Size:" <| 
+                                                        if truck.sleeperInches ==  0 then
+                                                            "Non-Sleeper"
+                                                        else
+                                                            String.fromFloat <| truck.sleeperInches
                                                         -- <| case truck.sleeperInches of
                                                         --             Just num -> String.fromInt num ++ " Inch"
                                                         --             Nothing -> truck.sleeperInches

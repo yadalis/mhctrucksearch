@@ -11,6 +11,48 @@ import List.Extra exposing (..)
 import List.Unique exposing (..)
 import Maybe.Extra exposing (..)
 
+resetFilters filters = 
+        if selectedFiltersCount filters > 0 then
+                Array.map(\sf -> {sf | userAction = False } ) filters
+        else
+                filters
+
+selectedFiltersCount filters = 
+        count (\sf -> sf.userAction == True) <| Array.toList filters
+        --Array.length <| Array.filter (\sf -> sf.userAction == True) filters
+
+concatAllFilters uiModel =
+        List.concat
+        [ 
+                Array.toList uiModel.salesStatusFilters,
+                Array.toList uiModel.yearFilters,
+                Array.toList uiModel.makeFilters,
+                Array.toList uiModel.modelFilters,
+                Array.toList uiModel.sleeperRoofFilters,
+                Array.toList uiModel.sleeperBunkFilters,
+                Array.toList uiModel.engineMakeFilters,
+                Array.toList uiModel.transTypeFilters,
+                Array.toList uiModel.suspensionFilters,
+                Array.toList uiModel.bodyTypeFilters,
+                Array.toList uiModel.rearAxleTypeFilters,
+                Array.toList uiModel.truckTypeFilters,
+                Array.toList uiModel.fleetCodeFilters,
+                Array.toList uiModel.specialFinancingFilters,
+                Array.toList uiModel.owningBranchFilters,
+                Array.toList uiModel.apuFilters,
+                Array.toList uiModel.cdlFilters,
+                Array.toList uiModel.photoFilters,
+                Array.toList uiModel.priceFilters,
+                Array.toList uiModel.engineHPFilters,
+                Array.toList uiModel.sleeperInchesFilters,
+                Array.toList uiModel.wheelBaseFilters,
+                Array.toList uiModel.mileageFilters,
+                Array.toList uiModel.frontAxleWeightFilters,
+                Array.toList uiModel.rearAxleWeightFilters,
+                Array.toList uiModel.inventoryAgeFilters,
+                Array.toList uiModel.locationNameFilters
+        ]
+
 getSelectedSearchFilterKeys searchFilters =
         searchFilters 
                 |> Array.filter (\sf -> sf.userAction == True)
