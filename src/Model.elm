@@ -273,10 +273,7 @@ initalUIModel jsFlag =
                                                     {index = index,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
                                         )
                         <| Array.fromList allFilterTypesMasterListWithItsInitialState,
-
-        --,expandCollapseAllChecked = False,
         showDropdown = False,
         currentSortBy = MakeAtoZ,
-        --showAppraisedTrucks = False,
         workWithAppraisedTrucks = False
     }

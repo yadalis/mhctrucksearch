@@ -489,7 +489,6 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 [
                     row[bw 0,  bwb 0, wf, pdb 1,pdt 0, brc 195 195 195]
                     [
-                        
                         checkbox [wf, far , bw 0] {
                                     onChange = CollapseClicked searchFilterState
                                     ,icon = buildCollapseAllImage
@@ -497,14 +496,6 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                     , checked =
                                                 searchFilterState.userAction
                                 }
-                        
-                        --,
-                        -- column[wf, hf,  bw 0][
-                        --     paragraph [eacx, eacy,bw one, fal, wf, hpx 25, pd 5][textValue <| filterLabel]
-                        -- ]
-                        -- ,column[pdr 5][
-                            
-                        -- ]
                     ]
                     ,column ( [spy 8, wf] ++ expandCollapseAll searchFilterState.userAction)
                     (

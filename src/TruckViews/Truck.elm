@@ -35,9 +35,8 @@ truckView index truck =
         [
             column[  bw 0,  pdt 0, hf]
             [
-                image [ hpx 150,wpx 175, bw 0, pdl 0,  bc 250 250 250
+                image [ hpx 110,wpx 125, bw 0, pdl 0,  bc 250 250 250
                     ,
-
                     inFront (
                         if isTruckSold then
                             ( el[alignBottom, fc 250 250 250, bc 234 67 82, wf, alpha 0.55, feb, fac] <| textValue "SOLD" )
@@ -47,14 +46,14 @@ truckView index truck =
                         ] {src = formatImageLink, description ="Logo" }
             ]
             ,
-            column[wf, hf, pde 5 5 5 15, spy 15]
+            column[wf, hf, pde 3 3 3 15, spy 10]
             [
-                column[]
+                row[spx 15, bwb 0, pdb 2, wf]
                 [
-                    link [wf,  Element.htmlAttribute (target "_blank"), fal ]
+                    link [ Element.htmlAttribute (target "_blank"), fal ]
                         { url = 
                             crossOrigin "https://www.mhc.com/trucks/used" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
-                            , label = paragraph [fs 28, fb, fc  190 5 30] [textValue <| truck.title]
+                            , label = paragraph [fs 24, fb, fc  190 5 30, wpx 550] [textValue <| truck.title]
                         }
                     -- ,
                     -- link [wf,  Element.htmlAttribute (target "_blank"), fal ]
@@ -62,22 +61,20 @@ truckView index truck =
                     --         formatImageLink
                     --         , label = paragraph [fs 28, fb, fc  190 5 30] [textValue <| formatImageLink]
                     --     }
+
+                ]
+                ,row[bw 0, spx 15]
+                [
+                    el [fs 24, fb, fc 68 68 68] <| textValue <| buildPriceValue truck.price                        
                     ,
-                        if truck.stockNumber == 0 then
-                            paragraph [fs 22, fc  167 167 167, pdt 5, bw 0, fal] 
-                                [textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber]
-                        else
-                            none
+                    if truck.stockNumber == 0 then
+                        el [fs 22, fc  167 167 167,  bw 0] <| textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber
+                    else
+                        none
                 ]
-                ,row[]
+                ,row[hf, wf, fs 16, bw 0]
                 [
-                    paragraph [fs 26, fb, fc 68 68 68] [textValue <| 
-                        buildPriceValue truck.price                        
-                    ]
-                ]
-                ,row[hf, wf, fs 16]
-                [
-                    column[bw 0, wfmax 350, hf, pd 0, spy 5]
+                    column[bw 0, wfmax 300, hf, pd 0, spy 5]
                     [
                         dataFieldView "Location:" <| 
                                                     if String.isEmpty truck.locationName then
@@ -86,22 +83,22 @@ truckView index truck =
                                                         truck.locationName
 
                         ,dataFieldView "Stock#:" <| if truck.stockNumber == 0 then "N/A" else String.fromInt truck.stockNumber
-                        ,dataFieldView "Chassis#:" truck.chassisNumber
-                        ,dataFieldView "Mileage:" <|  format "0,0" <|  truck.mileage
+                        ,dataFieldView "Chassis#:" <| String.dropLeft 9 truck.chassisNumber
+                    ]
+                    ,column[bw 0,   wfmax 250, hf, pd 0, spy 5]
+                    [
+                        dataFieldView "Mileage:" <|  format "0,0" <|  truck.mileage
                         ,dataFieldView "Sleeper Size:" <| 
                                                         if truck.sleeperInches ==  0 then
                                                             "Non-Sleeper"
                                                         else
                                                             String.fromFloat <| truck.sleeperInches
-                                                        -- <| case truck.sleeperInches of
-                                                        --             Just num -> String.fromInt num ++ " Inch"
-                                                        --             Nothing -> truck.sleeperInches
+                        ,dataFieldView  "Horsepower:" <| String.fromFloat truck.engineHP
                     ]
-                    ,column[bw 0,  wf, hf, pd 0, spy 5]
+                    ,column[bw 0,wf, hf, pd 0, spy 5]
                     [
                         dataFieldView  "Engine Make:"   truck.engineMake
                         ,dataFieldView  "Engine Model:"   truck.engineModel
-                        ,dataFieldView  "Horsepower:" <| String.fromFloat truck.engineHP
                         ,dataFieldView  "Transmission:"    truck.transType
                     ]
                 ]

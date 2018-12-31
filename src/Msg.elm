@@ -26,5 +26,5 @@ type Msg
     | SortTrucks SortBy
     --| ShowAppraisedTrucks Bool
     | WorkWithAppraisedTrucks  Bool
-    | ShowTrucksWithPhotoOnly
+    --| ShowTrucksWithPhotoOnly
     | ClearAllFilters

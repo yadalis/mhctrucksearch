@@ -24,7 +24,7 @@ import TruckViews.SortDialog exposing (..)
 import Element.Events exposing (..)
 import Helpers.Utils exposing (..)
 import Browser.Dom exposing (..)
-
+import BusinessFunctions.Pager exposing (..)
 ---- INIT ----
 
 type alias OnLoadSearchFilter =
@@ -44,8 +44,6 @@ update msg (model, uiModel) =
     case msg of
         OnFetchSearchFilterRanges response ->
             let
-                --x =  Debug.log "raw json response" response
-
                 rangeSearchFilters = 
                             case response of
                                     Ok rangeFltrs ->
@@ -79,8 +77,6 @@ update msg (model, uiModel) =
                                     allRangeSearchFiltersWithCountsWithItsFilterType) of
                                 Just item -> Tuple.second item
                                 Nothing -> Array.empty
-                
-                --x =  Debug.log "raw json response" <| fetchRangeFiltersPoplulatedWithCounts SleeperInches
 
                 newUIModel = {uiModel | 
                                         priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
@@ -92,28 +88,16 @@ update msg (model, uiModel) =
                                         rearAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts RearAxleWeight,
                                         inventoryAgeFilters = fetchRangeFiltersPoplulatedWithCounts InventoryAge
                             } 
-                
-                -- newSortedFilteredTruckList = applySearchFilters model newUIModel
-                --                             |> sortTruckList uiModel.currentSortBy
-
-                -- newModel = {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1}
-
-                -- uiModelUpdatedWithLatestSearchFilters =
-                --         rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
 
             in
                 ( ( model , newUIModel), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
-                --( ( newModel , uiModelUpdatedWithLatestSearchFilters), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
 
         OnFetchTrucks response ->
             let
-                
-                --x =  Debug.log "raw json response" response
                 trucks = case response of
                             Ok truckList ->
                                     truckList
                                         |> sortTruckList uiModel.currentSortBy
-                                        --|> List.take 100
                             Err err ->
                                     []
 
@@ -136,8 +120,6 @@ update msg (model, uiModel) =
                 cdlFilters = buildSearchFilterValueRecordList CDL uiModel.apuFilters trucks
                 photoFilters = buildSearchFilterValueRecordList Photo uiModel.apuFilters trucks
                 locationNameFilters = buildSearchFilterValueRecordList LocationName uiModel.locationNameFilters trucks
-
-                --x =  Debug.log "raw json response" truckTypeFilters
 
                 pagedTruckList = List.take 100 trucks
             in
@@ -168,7 +150,6 @@ update msg (model, uiModel) =
 
                         }
                     )
-                    --, Cmd.none
                     , fetchSearchFilterRanges   -- change this, otherwise it will bring all json based range filters data again and again, you should only rebuild the range filter counts
                                                 -- but not regenrate the filters completely
                 ) 
@@ -244,22 +225,10 @@ update msg (model, uiModel) =
                 newSortedFilteredTruckList = applySearchFilters model newUIModel
                                             |> sortTruckList uiModel.currentSortBy
 
-
-                --vv = Debug.log "REdcue list " [newUIModel]
-                --v = Debug.log "REdcue list " [x]
-
-
-
                 uiModelUpdatedWithLatestSearchFilters =
                         rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel
             in
                 ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
-
-        -- ClearSearchStringResults ->
-        --     ( ( {model |
-        --                     filteredTruckList = [],
-        --                     truckList = [],
-        --                     pagedTruckList = []} , {uiModel | searchString = ""}), fetchTrucks "")
 
         SearchString searchString ->
                 ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -335,12 +304,6 @@ update msg (model, uiModel) =
             in
                 ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
 
-        -- ShowAppraisedTrucks userAction ->
-        --     ( ( {model |
-        --                     filteredTruckList = [],
-        --                     truckList = [],
-        --                     pagedTruckList = []} , {uiModel | searchString = ""}), fetchAppraisedTrucks "")
-
         WorkWithAppraisedTrucks userAction ->
                         ( ( {model |
                             filteredTruckList = [],
@@ -351,8 +314,6 @@ update msg (model, uiModel) =
 
         ClearAllFilters ->
             let
-                -- allFilters = Array.fromList <| concatAllFilters uiModel
-                -- clearedFilters = Array.map (\sf -> {sf | userAction = False }) allFilters
                 newUIModel = 
                     {
                         uiModel |
@@ -394,30 +355,10 @@ update msg (model, uiModel) =
                             pagedTruckList =List.take 100 sortedTrkList
                             ,currentPageNumber = 1}
 
-                
                 uiModelUpdatedWithLatestSearchFilters =
                         rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel newUIModel
             in
                 ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
-            
-        ShowTrucksWithPhotoOnly ->
-            ( (model, uiModel), Cmd.none )
-            -- let
-            --     photoOnlyTrucks =
-            --         model.filteredTruckList
-            --             |> List.filter (\t -> t.primaryImageLink /= "")
-            --             |> (\list -> 
-            --                         if List.length list > 0 then
-            --                             list
-            --                         else 
-            --                             model.filteredTruckList)
-                
-            --     newModel = {model | truckList=photoOnlyTrucks,  filteredTruckList=photoOnlyTrucks, pagedTruckList = List.take 100 photoOnlyTrucks}
-
-            --     uiModelUpdatedWithLatestSearchFilters =
-            --              rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel uiModel
-            -- in        
-            --     ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
 ---- VIEW ----
 
@@ -461,8 +402,9 @@ view (model, uiModel) =
         
             navBar =
                 column[wf,  htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
-                 ,  alpha  1.99, brc 97 97 97 , bw 0, pd 0, hpx 50][
-                    row[wf, hpx 40]
+                 ,  alpha  1.99, brc 97 97 97 ,  spy 0][
+                     -- logo row
+                    row[wf, hpx 45] 
                     [
                              column[bc 245 245 245, wpx 315, hf, bwb 1, brc 97 97 97, bw 0][
                                     image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
@@ -494,53 +436,19 @@ view (model, uiModel) =
                                                 , checked =
                                                             uiModel.workWithAppraisedTrucks
                                             } 
-                                    -- ,
                                     
-                                    -- checkbox [wf, far , bw 0] {
-                                    --             onChange = ExcludeAppraisedTrucks
-                                    --             ,icon = buildCollapseAllImage
-                                    --             , label = labelRight [] <|  textValue <| "Browse All Other Trucks"
-                                    --             , checked =
-                                    --                         model.excludeAppraisedTrucks
-                                    --         } 
-                                    -- Input.button ([   fac, hf, pdl 0,    mouseOver [fc 217 98 69] , fc  190 5 30])
-                                    --         { 
-                                    --             onPress = Just ShowAppraisedTrucks
-                                    --             ,label = el[eal, bwb 1] <| textValue "Browse Appraised Trucks"
-                                    --         }
-                                    --         ,
-                                    -- Input.button ([    fac, hf, pdl 0,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                    --         { 
-                                    --             onPress = Just ClearSearchStringResults
-                                    --             ,label = el[  bwb 1] <| textValue "Browse all other trucks"
-                                    --         }
                                 ]
                                 ,row[][
-                                    -- column[  hpx 50, bw 0][
-                                    --     Input.button ( [  eal, hf, pdl 0, fs 16, eId "clearSrch", bwe 0 1 0 1, mouseOver [fc 217 98 69] , fc 0 0 0, bc 235 235 235])
-                                    --         { 
-                                    --             onPress = Just ClearSearchStringResults
-                                    --             ,label = el[pd 5] <| textValue "Refresh"
-                                    --         }
-                                    -- ]
-                                    -- ,
+                                     
                                     column[  hpx 50, bw 0][
-                                        -- Input.button ( [  eal, hf, pdl 0, fs 16, eId "showAppraised", bwe 0 0 0 0, mouseOver [fc 217 98 69] , fc 0 0 0, bc 235 235 235])
-                                        --     { 
-                                        --         onPress = Just ShowAppraisedTrucks
-                                        --         ,label = el[pd 5] <| textValue "Show Appraised"
-                                        --     }
+                                      
                                     ]
                                 ]   
                             ]
-                            -- ,column[pdl 25, bc 248 248 248, wf, hf, bwb 1, brc 97 97 97, fc 97 97 97][
-                            --         column[ bwl 2, pdl 3, brc 255 94 94, centerY]
-                            --             [el [fs 26 ] <| textValue "Suresh Yadali"
-                            --             ,el [fs 18, pdt 15 ] <| textValue "Kansas City, MO"
-                            --     ]
-                            -- ]
+                      
                     ] 
-                    ,row[centerY, bw 0, wf,  pde 0 0 0 0, spx 5,  bc 235 235 235, hf]
+                    -- exp/col/totaltrucks/sort row
+                    ,row[centerY, bwt 1, wf,  pde 0 0 0 0, spx 5,  bc 235 235 235, hf]
                     [
                         row[wf, bw 0, spx 15, hf][
                             Input.button ( [ bw 0,   hf, pdl 5, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
@@ -570,77 +478,36 @@ view (model, uiModel) =
                                         -- using <| u can avoid parans around the below func and its params
                                         <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                                 ]
-                                ,row[hf, bwl 1, pdb 3, wfp 2]
+                                ,row[hf, bwl 1, pdb 0, wfp 2]
                                 [
                                     column[wf, hf]
                                     [
-                                        --     row[wf]
-                                        --     [   
-                                        --             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                        --     ]
-                                        
-                                        --  ,  
-                                            row[bw 0,  wf, eab]
+                                        row[bw 0,  wf, eacy]
+                                        [
+                                            column[bw 0, pdl 15, wpx 370]
                                             [
-                                                column[bw 0, pdl 15, wpx 370]
-                                                [
-                                                    --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
-                                                            el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                                ]
-                                                ,
-                                                column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
-                                                    , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
-                                                ][
-                                                        Input.button [pdl 5, fb, fh, bwb 0 ]  
-                                                        { 
-                                                            onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                            ,label = el[bwb 0, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
-                                                        }
-                                                ]
+                                                el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                                             ]
-                                            
-                                        
+                                            ,
+                                            column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
+                                                , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
+                                            ][
+                                                    Input.button [pdl 5, fb, fh, bwb 0 ]  
+                                                    { 
+                                                        onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                                        ,label = el[bwb 0, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                                    }
+                                            ]
+                                        ]                                        
                                     ]
                                 ]
                             ]
-                                
-                        --  checkbox [fs 16, bw 1,  hf, ear] {
-                        --     onChange = CollapseAllClicked
-                        --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                        --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Expand All" )
-                        --     , checked = uiModel.expandCollapseAllChecked
-                        -- }
-                        --,
-                        --centerX, centerY , brc 215 23 89, bw 2
-                        -- Input.radio
-                        --     [ padding 10
-                        --     , spacing 20
-                        --     ]
-                        --     { onChange = CollapseAllClicked
-                        --     , selected = True
-                        --     , label = Input.labelAbove (textValue "Lunch")
-                        --     , options =
-                        --         [ Input.option PriceHighToLow (textValue "asdf!")
-                                    
-                        --         , Input.option PriceLowToHigh (textValue "Taco!")
-                        --         , Input.option YearNewToOld (textValue "Gyro")
-                        --         ]
-                        --     }
-                        --     ,
-                        -- checkbox [fs 16, bw 1,  hf, ear] {
-                        --     onChange = CollapseAllClicked
-                        --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                        --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
-                        --     , checked = uiModel.collapseAllChecked
-                        -- }
                     ]
                     ,
-                        row[wf, bw 0, hf,  bc 97 97 97][el [ hpx 1] <|  textValue ""]
-
+                    -- an empty row
+                    row[wf, bw 0, hf,  bc 97 97 97][el [ hpx 1] <|  textValue ""] 
                 ]
         in
-            
-                --layoutWith {options = [focusStyle]}  [pde 83 10 10 10 
                 layoutWith {options = [focusStyle]}  [ 
                                             Font.family
                                                 [ Font.external
@@ -653,7 +520,6 @@ view (model, uiModel) =
                 -- [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
-                    --row[hf,wf, spx 25, wfmax 1920]
                     column[hf, wfmax 1920]
                     [
                         navBar,
@@ -663,58 +529,6 @@ view (model, uiModel) =
                             -- Search Filter Panel
                             column [wpx 300,  spy 0,   eat, pdt 3] 
                             [
-                                -- row[centerY, bw 0, wf,  pde 0 5 0 5, spx 15]
-                                -- [
-                                --     Input.button ( [    hf, pdl 0, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
-                                --     { 
-                                --         onPress = Just <| CollapseAllClicked True
-                                --         ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
-                                --     }
-                                --     ,
-                                --     Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                --     { 
-                                --         onPress = Just <| CollapseAllClicked False
-                                --         ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
-                                --     }
-                                --    ,
-                                --     Input.button ( [     hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
-                                --     { 
-                                --         onPress = Just <| ClearAllFilters
-                                --         ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
-                                --     }
-                                   
-                                --     --  checkbox [fs 16, bw 1,  hf, ear] {
-                                --     --     onChange = CollapseAllClicked
-                                --     --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                --     --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Expand All" )
-                                --     --     , checked = uiModel.expandCollapseAllChecked
-                                --     -- }
-                                --     --,
-                                --     --centerX, centerY , brc 215 23 89, bw 2
-                                --     -- Input.radio
-                                --     --     [ padding 10
-                                --     --     , spacing 20
-                                --     --     ]
-                                --     --     { onChange = CollapseAllClicked
-                                --     --     , selected = True
-                                --     --     , label = Input.labelAbove (textValue "Lunch")
-                                --     --     , options =
-                                --     --         [ Input.option PriceHighToLow (textValue "asdf!")
-                                               
-                                --     --         , Input.option PriceLowToHigh (textValue "Taco!")
-                                --     --         , Input.option YearNewToOld (textValue "Gyro")
-                                --     --         ]
-                                --     --     }
-                                --     --     ,
-                                --     -- checkbox [fs 16, bw 1,  hf, ear] {
-                                --     --     onChange = CollapseAllClicked
-                                --     --     ,icon =  (\chkVal -> Element.none) -- buildCollapseAllImage
-                                --     --     , label = labelLeft [centerX, pd 5] (el [] <| textValue <| "Collapse All" )
-                                --     --     , checked = uiModel.collapseAllChecked
-                                --     -- }
-                                -- ]
-                               
-                                -- ,
                                 column[wf, spy 5, bc 240 240 240, bwr 0 ]
                                     <| (
                                         if List.length model.filteredTruckList == 0 then
@@ -725,55 +539,10 @@ view (model, uiModel) =
                                                 allFilterTypesMasterListWithItsInitialState
                                     )
                             ]
-                            
                                 
-                            -- Trucks Search Result List Panel 
+                            -- Trucks search Filter Bullets & Search Result List Panel 
                             ,column[  wf,  bw 0 ,  eat, bwl 0 , eat, pdt 3]
                             [
-                                -- row[wf, bwb 0, hf , pd 0,  bc 215 215 215, bw 0]
-                                -- [ 
-                                --     column[wf, hfRange 35 55, bw 0]
-                                --     [
-                                --         wrappedRow [wf,  bw 0, pd 6 , eat, spx 5, spy 5]
-                                --             -- using <| u can avoid parans around the below func and its params
-                                --             <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
-                                --     ]
-                                --     ,row[hf, bwl 1, pdb 3,  bc 215 215 215, wfp 2]
-                                --     [
-                                --         column[wf, hf]
-                                --         [
-                                --             --     row[wf]
-                                --             --     [   
-                                --             --             el [eat,ear, pdb 0, pdr 5,bw 0,  fc 219 108 98] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                --             --     ]
-                                            
-                                --             --  ,  
-                                --              row[bw 0,  wf, eab]
-                                --                 [
-                                --                     column[bw 0, pdl 15, wpx 370]
-                                --                     [
-                                --                         --el [eal, pdb 0, pdr 5,bwb 1, fc 97 97 97, onClick (ShowTrucksWithPhotoOnly), pointer] <| textValue <| "Photos only "
-                                --                              el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                --                     ]
-                                --                     ,
-                                --                     column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
-                                --                         , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
-                                --                     ][
-                                --                          Input.button [pdl 5, fb, fh, bwb 0 ]  
-                                --                             { 
-                                --                                 onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                --                                 ,label = el[bwb 1, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
-                                --                             }
-                                --                     ]
-                                --                 ]
-                                                
-                                            
-                                --         ]
-                                --     ]
-                                -- ]
-                                -- ,
-
-                                
                                 row[ wf, bwb 0, pde 0 0 0 0][
                                         lazy searchFilterBulletView 
                                                 << Array.fromList <| concatAllFilters uiModel
@@ -789,41 +558,6 @@ view (model, uiModel) =
                             --     getPageNumbersList
                         ]                        
                     ]
-
-
-buildPageNumbersView  filteredTruckList currentPageNumber = 
-    let
-        grps = greedyGroupsOf 100 filteredTruckList
-        pageNumbers = (List.range 1  <| List.length grps)
-
-        searchStringBtnStyle num = 
-                    if currentPageNumber == num then 
-                        [  bwb 0, bc 185 185 185, fc 57 57 57 , fs 16]
-                    else
-                        [   bwb 0, fc 244 66 95  , fs 12]
-    in
-    
-        if List.length pageNumbers > 1 then
-            List.map (\num -> 
-                           row[wpx 25, hpx 20]
-                                    [
-                                        Input.button ([
-                                                        if currentPageNumber /= num then
-                                                            mouseOver [ bc  0 0 0, fc 250 250 250  ]
-                                                        else
-                                                            mouseOver [ bc  175 175 175 ]
-                                                        ,
-                                                        pd 0, wf, hf,    fb ] ++ (searchStringBtnStyle num))
-                                            { 
-                                                onPress = Just (PageNumberClicked num )
-                                                ,label =  el[eacx,eacy] <| textValue <| String.fromInt num
-                                            }
-                                    ]
-
-                    ) pageNumbers
-        else
-            [none]
-
 
 ---- PROGRAM ----
 
