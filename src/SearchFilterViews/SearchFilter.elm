@@ -185,7 +185,13 @@ buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
                                 Array.indexedMap (\index sf -> 
                                                 let
                                                     trimmedsfValue = String.trim sf
-                                                    displayValue = if trimmedsfValue == "I" then "Inventory" else "Appraisal"
+                                                    displayValue = 
+                                                                    if trimmedsfValue == "I" then
+                                                                         "Inventory"
+                                                                    else if trimmedsfValue == "A" then 
+                                                                        "Appraisal"
+                                                                    else
+                                                                        "Purchase Order"
                                                 in
                                                 
                                                 SearchFilterType index trimmedsfValue displayValue False (List.length <| (List.filter (\t -> String.trim t.truckType == trimmedsfValue) trucks )) searchFilterCustomType

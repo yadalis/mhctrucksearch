@@ -14,7 +14,7 @@ searchFilterBulletView filterList =
     filterList
         |> Array.map (\sf ->
                             if sf.userAction then 
-                                row[pd 3 ]
+                                row[pde 3 3 3 0 ]
                                 [
                                     column[][
                                         el [fs 15, greyBorder 97, mhcRed,  greyBg 231 ,pd 6, fl, hf] (textValue <| 

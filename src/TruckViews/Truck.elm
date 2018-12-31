@@ -32,11 +32,11 @@ truckView index truck =
                                                 |> String.replace "&thn=1" "&thn=2"
     in
     
-        row[bwb 0, wf, pd 5, greyBg 240, hf ]
+        row[wf, pd 5, greyBg 240 ]
         [
-            column[  bw 0,  pdt 0, hf]
+            column[hf]
             [
-                image [ hpx 110,wpx 125, bw 0, pdl 0,  greyBg 250
+                image [ hpx 110,wpx 125, greyBg 250
                     ,
                     inFront (
                         if isTruckSold then
@@ -49,12 +49,12 @@ truckView index truck =
             ,
             column[wf, hf, pde 3 3 3 15, spy 10]
             [
-                row[spx 15, bwb 0, pdb 2, wf]
+                row[wf]
                 [
-                    link [ Element.htmlAttribute (target "_blank"), fal ]
+                    link [ Element.htmlAttribute (target "_blank")]
                         { url = 
                             crossOrigin "https://www.mhc.com/trucks/used" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
-                            , label = paragraph [fs 24, fb, mhcRed, wpx 550] [textValue <| truck.title]
+                            , label = el [fs 24, fb, mhcRed] <| textValue <| truck.title
                         }
                     -- ,
                     -- link [wf,  Element.htmlAttribute (target "_blank"), fal ]
@@ -66,9 +66,9 @@ truckView index truck =
                 ]
                 ,row[bw 0, spx 15]
                 [
-                    el [fs 24, fb, greyFont 68] <| textValue <| buildPriceValue truck.price                        
+                    el [fs 24, fb, greyFont 68, wpx 155] <| textValue <| buildPriceValue truck.price                        
                     ,
-                    if truck.stockNumber == 0 then
+                    if truck.stockNumber == 0 && String.trim truck.truckType /= "P" then
                         el [fs 22, greyFont 167,  bw 0] <| textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber
                     else
                         none

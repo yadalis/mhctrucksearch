@@ -484,8 +484,10 @@ view (model, uiModel) =
                         ]
                         ,
                         -- pager/totaltrucks-found
-                        row[wf]
+                        row[wf, spx 50, pdl 5]
                         [ 
+                            el [mhcRed] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                            ,
                             row[wfp 2] --clipY cuts the content of pager number if it goes beyond 65 height, this could happen
                             --if user resize the browser to a smaller width/height
                             [
@@ -493,8 +495,6 @@ view (model, uiModel) =
                                     -- using <| u can avoid parans around the below func and its params
                                     <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                             ]
-                            ,
-                            el [wf, mhcRed] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                         ]
                     ]
                 ]
@@ -531,7 +531,7 @@ view (model, uiModel) =
                                     )
                             ]
                             -- Trucks search Filter Bullets & Search Result List Panel 
-                            ,column[wf]
+                            ,column[wf, hf]
                             [
                                 lazy searchFilterBulletView 
                                         << Array.fromList <| concatAllFilters uiModel
