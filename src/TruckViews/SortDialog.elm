@@ -2,6 +2,7 @@ module TruckViews.SortDialog exposing (..)
 
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
+import Helpers.Colors exposing (..)
 import Element exposing (..)
 import Element.Input as Input exposing (..)
 import Msg exposing (..)
@@ -11,16 +12,16 @@ import BusinessFunctions.TruckFunctions exposing (..)
 showSortOptionsDialog : Bool -> SortBy -> Element Msg
 showSortOptionsDialog show currentSortByOption =
     if show then 
-        column[bc 245 245 245, pd 15, br 5, bw 2, spy 0, wpx 300]
+        column[greyBg 245, pd 15, br 5, bw 2, wpx 300]
         [
-            row[ear, bw 2, fac, bc 228 228 228  ][
-                     Input.button ( [hf, bwb 0, fal, pdb 0])
+            row[ear, bw 1, greyBg 228  ][
+                     Input.button ( [])
                                         { 
                                             onPress = Just <| OperateSortDialog False
                                             ,label = textValue " x "
                                         }
-            ],
-
+            ]
+            ,
             row[wf, pdt 10]
             [
                 column[spy 3, wf]
@@ -36,13 +37,13 @@ buildSortOption key label msg currentSortByOption =
     let
         (rowStyle, mouseOverStyle) =
             if key == convertSortByToKey currentSortByOption then
-                ([bc 175 175 175], [])
+                ([greyBg 175], [])
             else
-                ([bc 245 245 245], [bc 225 225 225])
+                ([greyBg 245], [greyBg 225])
     in
         row ([wf, mouseOver mouseOverStyle ] ++ rowStyle)
         [
-            Input.button ( [hf, bwb 0, fal, pdb 0, wf
+            Input.button ( [hf, fal, wf
                             ])
                             { 
                                 onPress = Just <| SortTrucks msg

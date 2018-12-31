@@ -25,6 +25,8 @@ import Element.Events exposing (..)
 import Helpers.Utils exposing (..)
 import Browser.Dom exposing (..)
 import BusinessFunctions.Pager exposing (..)
+import Helpers.Colors exposing (..)
+
 ---- INIT ----
 
 type alias OnLoadSearchFilter =
@@ -364,27 +366,26 @@ update msg (model, uiModel) =
 
 textBox uiModel=
 
-    Input.text [ wpx 300,   bw 0, pd 5
+    Input.text
+    [ wpx 300
                 --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
                 , Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
-            ]
+    ]
     {
         onChange = SearchString
         ,text  = uiModel.searchString
         ,label = labelLeft [] none
         ,placeholder = Just (Input.placeholder [fs 14] (el [centerY] <| textValue "Fluid truck Search"))
-
     }
-
 
 view : (Model, UIModel) -> Html Msg
 view (model, uiModel) =
         let
             (searchStringBtnStyle, searchBtnIcon) = 
                         if String.length (String.trim <| uiModel.searchString) > 0 then 
-                            ([ bc 226 63 63, fc 250 250 250], image [hf,wf, bw one] {src = "srch_white.ico", description ="Logo" })
+                            ([ bc 226 63 63, fc 250 250 250],  image [] {src = "srch_white.ico", description ="Logo" })
                         else
-                            ([ bc 198 201 206, fc 245 245 245], image [hf, wf, bw one] {src = "srch_grey.ico", description ="Logo" })
+                            ([ bc 198 201 206, fc 245 245 245], image [ ] {src = "srch_grey.ico", description ="Logo" })
 
             loaderIconElement = 
                     if List.length model.filteredTruckList > 0 then
@@ -401,111 +402,101 @@ view (model, uiModel) =
                     }
         
             navBar =
-                column[wf,  htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed"
-                 ,  alpha  1.99, brc 97 97 97 ,  spy 0][
+                column[wf,  htmlAttribute <|  style "z-index" "40", htmlAttribute <|  style "position" "fixed", alpha  1.95, spy 0]
+                [
                      -- logo row
-                    row[wf, hpx 45] 
+                    row[wf, spx 15, greyBg 245]
                     [
-                             column[bc 245 245 245, wpx 315, hf, bwb 1, brc 97 97 97, bw 0][
-                                    image [hpx 32, bw one, centerY] {src = "https://az832863.vo.msecnd.net/~/media/images/components/pagelogos/mhclogo.png?_=-381616326&h=61", description ="Logo" }
+                        row[wpx 305]
+                        [
+                            image [hpx 35] {src = "mhclogo.png", description ="Logo" }
+                        ]
+                        ,row[wf]
+                        [
+                            row[wpx 350, bw 1, greyBorder 200]
+                            [   
+                                -- you need bw 0 here to remove the border around textbox to make it blend with search button
+                                Input.text[bw 0, Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)]
+                                {
+                                    onChange = SearchString
+                                    ,text  = uiModel.searchString
+                                    ,label = labelLeft [] none
+                                    ,placeholder = Just (Input.placeholder [fs 14] (el [eacy] <| textValue "Fluid truck Search"))
+                                }
+                                ,
+                                Input.button ([hf] ++ searchStringBtnStyle)
+                                { 
+                                    onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
+                                    ,label = el[pde 0 5 0 5] <| textValue "SEARCH"-- searchBtnIcon
+                                }
                             ]
-                            ,row[hf, pd 5, bc 245 245 245, spx 0, bw 0, wf]
-                            [ 
-                                row[bw 1]
-                                [
-                                    lazy textBox uiModel
-                                    ,
-                                    Input.button ( [pd 10, wpx 35, hpx 35, eId "submitSrch"] ++ searchStringBtnStyle)
-                                        { 
-                                            onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
-                                            ,label = searchBtnIcon
-                                        }
-                                ]
-                                 ,row[bw 0,ear,   pde 0 5 0 5, spx 15, fs 18 ]
-                                [
+                            ,row[ear, spx 15, fs 18]
+                            [
 
-                                   
-                                    checkbox [wf, far , bw 1, pd 3] {
-                                                onChange = WorkWithAppraisedTrucks
-                                                ,icon = buildWorkWithAppraisedTrucksToggleImage
-                                                , label = labelRight [bwl 0,pdl 5, eacy] <| 
-                                                        if  uiModel.workWithAppraisedTrucks then 
-                                                            textValue <| "Stop Browsing Appraised Trucks"
-                                                        else
-                                                            textValue <| "Browse Appraised Trucks"
-                                                , checked =
-                                                            uiModel.workWithAppraisedTrucks
-                                            } 
-                                    
-                                ]
-                                ,row[][
-                                     
-                                    column[  hpx 50, bw 0][
-                                      
-                                    ]
-                                ]   
+                                checkbox [] 
+                                {
+                                    onChange = WorkWithAppraisedTrucks
+                                    ,icon = buildWorkWithAppraisedTrucksToggleImage
+                                    , label = labelRight [] <| 
+                                                                if  uiModel.workWithAppraisedTrucks then 
+                                                                    textValue <| "Stop Browsing Appraised Trucks"
+                                                                else
+                                                                    textValue <| "Browse Appraised Trucks"
+                                    , checked =
+                                                uiModel.workWithAppraisedTrucks
+                                }
+                                ,
+                                row[bwl 1, hpx 30][]    
+                                ,
+                                row [wpx 325, fc 97 97 97, below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)]
+                                [
+                                    Input.button []  
+                                    { 
+                                        onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
+                                        ,label = el[bwb 1] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                    }
+                                ]                         
                             ]
-                      
-                    ] 
-                    -- exp/col/totaltrucks/sort row
-                    ,row[centerY, bwt 1, wf,  pde 0 0 0 0, spx 5,  bc 235 235 235, hf]
+                        ]
+                    ]
+                    -- exp/col/clearfitlers/totaltrucks/sort row
+                    ,row[wf, spx 15, greyBg 235, bwb 1, hfRange 40 65, clipY]
                     [
-                        row[wf, bw 0, spx 15, hf][
-                            Input.button ( [ bw 0,   hf, pdl 5, fs 12, mouseOver [fc 217 98 69] , fc  190 5 30])
+                        --exp/coll/clearfitlers
+                        row[wpx 300, spx 15, fs 12, mhcRed, pdl 15][
+                            Input.button ( [ mouseOver [fc 217 98 69] ])
                             { 
                                 onPress = Just <| CollapseAllClicked True
                                 ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
                             }
                             ,
-                            Input.button ( [ bw 0,    hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                            Input.button ( [ mouseOver [fc 217 98 69]])
                             { 
                                 onPress = Just <| CollapseAllClicked False
                                 ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
                             }
                             ,
-                            Input.button ( [  bw 0,   hf, pdl 0, fs 12,  mouseOver [fc 217 98 69] , fc  190 5 30])
+                            Input.button ( [ mouseOver [fc 217 98 69] ])
                             { 
                                 onPress =  if anyFilterApplied uiModel then Just <| ClearAllFilters else  Nothing
                                 ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
                             }
                         ]
                         ,
-                        row[wfp 4, bwb 0, hf , pdl 5, bw 0]
-                            [ 
-                                column[wf, hfRange 35 55, bwr 0]
-                                [
-                                    wrappedRow [wf,  bw 0, pd 8 , eat, spx 5, spy 5]
-                                        -- using <| u can avoid parans around the below func and its params
-                                        <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
-                                ]
-                                ,row[hf, bwl 1, pdb 0, wfp 2]
-                                [
-                                    column[wf, hf]
-                                    [
-                                        row[bw 0,  wf, eacy]
-                                        [
-                                            column[bw 0, pdl 15, wpx 370]
-                                            [
-                                                el [eal, eacy, bw 0,  fc  190 5 30] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
-                                            ]
-                                            ,
-                                            column [ pdl 15,bw 0,  fc 97 97 97, wfp 1
-                                                , below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)
-                                            ][
-                                                    Input.button [pdl 5, fb, fh, bwb 0 ]  
-                                                    { 
-                                                        onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                                        ,label = el[bwb 0, fac] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
-                                                    }
-                                            ]
-                                        ]                                        
-                                    ]
-                                ]
+                        -- pager/totaltrucks-found
+                        row[wf]
+                        [ 
+                            row[wfp 2] --clipY cuts the content of pager number if it goes beyond 65 height, this could happen
+                            --if user resize the browser to a smaller width/height
+                            [
+                                wrappedRow [wf, pd 8 , spx 5, spy 5]
+                                    -- using <| u can avoid parans around the below func and its params
+                                    <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
                             ]
+                            ,
+                            el [wf, mhcRed] <| textValue <| "Total trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                        ]
                     ]
-                    ,
-                    -- an empty row
-                    row[wf, bw 0, hf,  bc 97 97 97][el [ hpx 1] <|  textValue ""] 
                 ]
         in
                 layoutWith {options = [focusStyle]}  [ 
@@ -520,16 +511,16 @@ view (model, uiModel) =
                 -- [ hf, inFront navBar ] use must put hf in the array to make the scrollbarY work, otherwise screen just exaands
                 -- in mormal web style and user has to scroll up and down the page
                 <|
-                    column[hf, wfmax 1920]
+                    column[wfmax 1920]
                     [
                         navBar,
                         
-                        row[hf,wf, pde 85 3 0 3, spx 16]
+                        row[wf, pde 90 3 0 3, spx 16]
                         [     
                             -- Search Filter Panel
-                            column [wpx 300,  spy 0,   eat, pdt 3] 
+                            column [wpx 300, eat] 
                             [
-                                column[wf, spy 5, bc 240 240 240, bwr 0 ]
+                                column[wf, spy 5, greyBg 240, pd 10]
                                     <| (
                                         if List.length model.filteredTruckList == 0 then
                                             [loaderIconElement]
@@ -539,16 +530,13 @@ view (model, uiModel) =
                                                 allFilterTypesMasterListWithItsInitialState
                                     )
                             ]
-                                
                             -- Trucks search Filter Bullets & Search Result List Panel 
-                            ,column[  wf,  bw 0 ,  eat, bwl 0 , eat, pdt 3]
+                            ,column[wf]
                             [
-                                row[ wf, bwb 0, pde 0 0 0 0][
-                                        lazy searchFilterBulletView 
-                                                << Array.fromList <| concatAllFilters uiModel
-                                ]
+                                lazy searchFilterBulletView 
+                                        << Array.fromList <| concatAllFilters uiModel
                                 ,
-                                column[ scrollbarY, wf,  bw 0, pde 0 0 0 0   ]
+                                column[wf]
                                 [
                                         lazy trucksView model.pagedTruckList -- model.filteredTruckList
                                 ]         

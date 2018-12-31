@@ -9,6 +9,7 @@ import Model exposing (..)
 import Msg exposing (..)
 import List.Unique exposing (..)
 import Array exposing (..)
+import Helpers.Colors exposing (..)
 
 getMinMaxValue rangeString =
         let
@@ -438,9 +439,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 |> List.any (\sf -> sf.userAction)
                                 |> (\isAnyFilterChecked -> 
                                             if isAnyFilterChecked then
-                                                fc 190 5 30
+                                                mhcRed
                                             else
-                                                fc 0 0 0 
+                                                greyFont 0
                                     )
             
             searchFilterState = 
@@ -459,9 +460,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                 let
                     chkBoxStyle =
                                     if searchFilter.userAction then 
-                                        [fc  190 5 30, fb ]
+                                        [mhcRed, fb ]
                                     else
-                                        [fc 0 0 0     ]
+                                        [greyFont 0]
                     displayValue = 
                                     if searchFilter.filterCategory == TruckType then
                                         searchFilter.searchFilterExtraData
@@ -469,34 +470,31 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                         searchFilter.searchFilterKey
                 in
                     if searchFilter.resultCount > 0 then
-                        row[bw two, size 14, pdl 25]
+                        row[wf, size 14, pdl 25]
                         [
-                            checkbox [bw one, pdr 0 ] {
+                            checkbox [bwb 1, wf, pdb 5, greyBorder 175 ] {
                                 onChange = msg index searchFilterCustomType
                                 ,icon = buildChkBoxImage
-                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue displayValue )
+                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue (displayValue ++ " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"))
                                 , checked = searchFilter.userAction
                             }
-                            , textValue <| " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"
                         ]
                     else
                         none
     in
         if Array.length searchFilters > 0 then
-            row[ wf, bw 0, pdt 5]
+            row[ wf, pdt 5]
             [
-                column[spy 0, wf,  bw one]
+                column[wf]
                 [
-                    row[bw 0,  bwb 0, wf, pdb 1,pdt 0, brc 195 195 195]
-                    [
-                        checkbox [wf, far , bw 0] {
-                                    onChange = CollapseClicked searchFilterState
-                                    ,icon = buildCollapseAllImage
-                                    , label = labelRight [fs 14, bwb 0, wf, fal, showLabelRed] <|  textValue <| filterLabel
-                                    , checked =
-                                                searchFilterState.userAction
-                                }
-                    ]
+                    checkbox [] 
+                    {
+                        onChange = CollapseClicked searchFilterState
+                        ,icon = buildCollapseAllImage
+                        , label = labelRight [fs 14, showLabelRed] <|  textValue <| filterLabel
+                        , checked =
+                                    searchFilterState.userAction
+                    }
                     ,column ( [spy 8, wf] ++ expandCollapseAll searchFilterState.userAction)
                     (
                         Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion

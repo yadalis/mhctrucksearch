@@ -9,6 +9,7 @@ import Helpers.ElmUI exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
 import Numeral exposing(format, formatWithLanguage)
 import Url.Builder exposing (..)
+import Helpers.Colors exposing (..)
 
 trucksView  : List Truck -> Element Msg
 trucksView trucks =
@@ -31,15 +32,15 @@ truckView index truck =
                                                 |> String.replace "&thn=1" "&thn=2"
     in
     
-        row[bwb 0, wf, pd 5, bc 240 240 240, hf ]
+        row[bwb 0, wf, pd 5, greyBg 240, hf ]
         [
             column[  bw 0,  pdt 0, hf]
             [
-                image [ hpx 110,wpx 125, bw 0, pdl 0,  bc 250 250 250
+                image [ hpx 110,wpx 125, bw 0, pdl 0,  greyBg 250
                     ,
                     inFront (
                         if isTruckSold then
-                            ( el[alignBottom, fc 250 250 250, bc 234 67 82, wf, alpha 0.55, feb, fac] <| textValue "SOLD" )
+                            ( el[alignBottom, greyFont 250, bc 234 67 82, wf, alpha 0.55, feb, fac] <| textValue "SOLD" )
                         else
                             none
                     )
@@ -53,22 +54,22 @@ truckView index truck =
                     link [ Element.htmlAttribute (target "_blank"), fal ]
                         { url = 
                             crossOrigin "https://www.mhc.com/trucks/used" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
-                            , label = paragraph [fs 24, fb, fc  190 5 30, wpx 550] [textValue <| truck.title]
+                            , label = paragraph [fs 24, fb, mhcRed, wpx 550] [textValue <| truck.title]
                         }
                     -- ,
                     -- link [wf,  Element.htmlAttribute (target "_blank"), fal ]
                     --     { url = 
                     --         formatImageLink
-                    --         , label = paragraph [fs 28, fb, fc  190 5 30] [textValue <| formatImageLink]
+                    --         , label = paragraph [fs 28, fb, mhcRed] [textValue <| formatImageLink]
                     --     }
 
                 ]
                 ,row[bw 0, spx 15]
                 [
-                    el [fs 24, fb, fc 68 68 68] <| textValue <| buildPriceValue truck.price                        
+                    el [fs 24, fb, greyFont 68] <| textValue <| buildPriceValue truck.price                        
                     ,
                     if truck.stockNumber == 0 then
-                        el [fs 22, fc  167 167 167,  bw 0] <| textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber
+                        el [fs 22, greyFont 167,  bw 0] <| textValue <| "Appraisal# - " ++ String.fromInt truck.appraisalNumber
                     else
                         none
                 ]
@@ -111,10 +112,10 @@ truckView index truck =
 dataFieldView fieldName fieldValue =
     row[bw 0, wf]
     [
-        paragraph[fal,spy 1, fs 18,  fc 105 105 105]
+        paragraph[fal,spy 1, fs 18,  greyFont 105]
         [
             el[fb ] <| textValue <| fieldName
-            , el[pdl 5, fs 16, fc 97 97 97] <| textValue <| fieldValue
+            , el[pdl 5, fs 16, greyFont 97] <| textValue <| fieldValue
         ]   
     ]
 

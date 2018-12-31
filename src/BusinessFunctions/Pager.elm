@@ -6,6 +6,7 @@ import Element exposing (..)
 import Element.Input as Input exposing (..) 
 import Msg exposing (..)
 import Helpers.ElmUI exposing (..)
+import Helpers.Colors exposing (..)
 
 buildPageNumbersView  filteredTruckList currentPageNumber = 
     let
@@ -14,22 +15,21 @@ buildPageNumbersView  filteredTruckList currentPageNumber =
 
         searchStringBtnStyle num = 
                     if currentPageNumber == num then 
-                        [  bwb 0, bc 185 185 185, fc 57 57 57 , fs 16]
+                        [  greyBg 185, greyFont 57 , fs 16]
                     else
-                        [   bwb 0, fc 244 66 95  , fs 12]
+                        [  mhcMediumRed  , fs 12]
     in
-    
         if List.length pageNumbers > 1 then
             List.map (\num -> 
                            row[wpx 25, hpx 20]
                                     [
                                         Input.button ([
                                                         if currentPageNumber /= num then
-                                                            mouseOver [ bc  0 0 0, fc 250 250 250  ]
+                                                            mouseOver [ greyBg 0, greyFont 250]
                                                         else
-                                                            mouseOver [ bc  175 175 175 ]
+                                                            mouseOver [ greyBg 175 ]
                                                         ,
-                                                        pd 0, wf, hf,    fb ] ++ (searchStringBtnStyle num))
+                                                        wf, hf, fb ] ++ (searchStringBtnStyle num))
                                             { 
                                                 onPress = Just (PageNumberClicked num )
                                                 ,label =  el[eacx,eacy] <| textValue <| String.fromInt num
