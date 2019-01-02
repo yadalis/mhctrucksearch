@@ -190,46 +190,6 @@ update msg (model, uiModel) =
                                     |> Maybe.withDefault uiModel
                         else
                             uiModel
-                
-
-                    -- Array.toList filterList
-                    --     |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
-                    --     |> (\idx -> case idx of 
-                    --                     Just val -> val
-                    --                     Nothing -> 0
-                    --     )
-                    --     |> (\idx -> if idx > 0 then
-                    --                     setAt  idx uiModel.selectedFilterBullets
-                    --                 else
-                    --                     uiModel.selectedFilterBullets
-                    --         )
-                    --     |> Maybe.map (\mf -> Array.set index mf uiModel.selectedFilterBullets)
-                    --     |> Maybe.map (\mfArr -> mfArr)
-                    -- Array.toList filterList
-                    --     |> find (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
-                    --     |> Maybe.map (\sf -> {sf | userAction = userAction})
-                    --     |> Maybe.map (\sf -> Array.set index sf filterList)
-                    --     |> Maybe.map pushModifiedFilterListBackInToUIModel
-                    --     |> Maybe.withDefault uiModel
-                        
-                    -- filterList
-                    --     |> Array.get index
-                    --     |> Maybe.map (\sf -> { sf | userAction = userAction} )
-                    --     |> Maybe.map (\sf -> Array.set index sf filterList)
-                    --     |> Maybe.map pushModifiedFilterListBackInToUIModel
-                    --     |> Maybe.withDefault uiModel
-
-                            -- |> (\idx -> case idx of 
-                                                            --                 Just val -> val
-                                                            --                 Nothing -> 0
-                                                            -- )
-                                                            -- |> (\idx -> if idx > 0 then
-                                                            --                 removeAt idx uiModel.selectedFilterBullets
-                                                            --             else
-                                                            --                 uiModel.selectedFilterBullets
-                                                            --     )
-                                                            --|> Maybe.map (\mf -> Array.set index mf uiModel.selectedFilterBullets)
-                                                            --|> Maybe.map (\mfArr -> mfArr)
 
                 newUIModel = 
                     case searchFilterCustomType of
@@ -316,17 +276,6 @@ update msg (model, uiModel) =
                                                         newUIModel.selectedFilterBullets
                                                             |> find (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
                                                             |> Maybe.map (\sf -> remove sf  newUIModel.selectedFilterBullets)
-                                                            -- |> (\idx -> case idx of 
-                                                            --                 Just val -> val
-                                                            --                 Nothing -> 0
-                                                            -- )
-                                                            -- |> (\idx -> if idx > 0 then
-                                                            --                 removeAt idx uiModel.selectedFilterBullets
-                                                            --             else
-                                                            --                 uiModel.selectedFilterBullets
-                                                            --     )
-                                                            --|> Maybe.map (\mf -> Array.set index mf uiModel.selectedFilterBullets)
-                                                            --|> Maybe.map (\mfArr -> mfArr)
                                                             |> Maybe.withDefault newUIModel.selectedFilterBullets
                                 }
 
