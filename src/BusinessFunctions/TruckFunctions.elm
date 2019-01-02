@@ -368,7 +368,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
         let 
                 findMatchAndSetUserAction filters sf =
                         filters
-                                |> Array.filter(\uiSF -> uiSF.searchFilterKey == sf.searchFilterKey)
+                                |> Array.filter(\uiSF -> uiSF.searchFilterKey == sf.searchFilterKey && uiSF.filterCategory == sf.filterCategory)
                                 |> Array.toList
                                 |> List.head
                                 |> (\headItem -> 
@@ -381,7 +381,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                         buildSearchFilterValueRecordList filterCategory filters finalFilteredTrucks     
                         |> Array.map
                                         (\sf ->
-                                                findMatchAndSetUserAction (Array.fromList selectedFilterBullets) sf 
+                                                findMatchAndSetUserAction (Array.fromList selectedFilterBullets) sf
                                         )
 
                 updatedSalesStatusFitlerList =
