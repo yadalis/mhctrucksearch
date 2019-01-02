@@ -9,10 +9,10 @@ import Helpers.ElmUI exposing (..)
 import Array  as Array exposing (..)
 import Helpers.Colors exposing (..)
 
-searchFilterBulletView : Array SearchFilterType -> Element Msg
+searchFilterBulletView : List SearchFilterType -> Element Msg
 searchFilterBulletView filterList =
     filterList
-        |> Array.map (\sf ->
+        |> List.map (\sf ->
                             if sf.userAction then 
                                 row[pde 3 3 3 0 ]
                                 [
@@ -27,7 +27,7 @@ searchFilterBulletView filterList =
                                     ,column[][
                                         Input.button ( [greyBorder 97,  greyBg 231  ,pd 6])
                                         { 
-                                            onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory False )                                                       
+                                            onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory sf.searchFilterKey False  )                                                       
                                             ,label = (el [wpx 15, hpx 15, fs 14,fac, greyFont 300, greyBg 150] <| textValue <| "x")
                                         }
                                     ]
@@ -35,7 +35,7 @@ searchFilterBulletView filterList =
                             else
                                 none    
                     )
-        |> Array.toList
+        --|> Array.toList
         |> wrappedRow [wf]
 
 -- anySearchFilterBulletsApplied : Array SearchFilterType -> Bool

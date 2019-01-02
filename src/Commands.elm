@@ -160,25 +160,6 @@ stringBoolDecoder =
 -- searchFilterCustomTypeDecoder = 
 --     Decode.string |> Decode.andThen (fromResult << parseSearchFilterRangeTypeString)
 
--- parseSearchFilterRangeTypeString : String -> Result String SearchFilterCustomType
--- parseSearchFilterRangeTypeString string =
-
---             case string of
---                 "Price" ->
---                     Ok Year
-                        
-
---                 "RearAxleWeight" ->
---                     Ok Make
-                        
-
---                 "FrontAxleWeight" ->
---                     Ok MakeModel
-                            
-
---                 _ ->
---                     Ok Year
-
 searchFilterRangeUnionTypeDecoder : Decode.Decoder SearchFilterCustomType
 searchFilterRangeUnionTypeDecoder = 
     Decode.string |> Decode.andThen searchFilterRangeUnionTypeString
@@ -186,27 +167,6 @@ searchFilterRangeUnionTypeDecoder =
 searchFilterRangeUnionTypeString : String -> Decode.Decoder SearchFilterCustomType
 searchFilterRangeUnionTypeString str =
     Decode.succeed <| convertStringToRangeSearchFilter str
-            -- case string of
-            --     "Price" ->
-            --         Decode.succeed Price
-            --     "EngineHP" ->
-            --         Decode.succeed EngineHP
-            --     "SleeperInches" ->
-            --         Decode.succeed SleeperInches
-            --     "WheelBase" ->
-            --         Decode.succeed WheelBase
-            --     "Mileage" ->
-            --         Decode.succeed Mileage
-            --     "FrontAxleWeight" ->
-            --         Decode.succeed FrontAxleWeight
-            --     "RearAxleWeight" ->
-            --         Decode.succeed RearAxleWeight
-            --     "InventoryAge" ->
-            --         Decode.succeed InventoryAge
-                
-            --     _ ->
-            --         Decode.succeed Price
-
 
 convertStringToRangeSearchFilter rangeFilterStr =
     allRangeFilterTypesKeyValueParis

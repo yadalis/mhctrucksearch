@@ -62,9 +62,20 @@ getSelectedSearchFilterKeys searchFilters =
                 |> Array.filter (\sf -> sf.userAction == True)
                 |> Array.map (\sf -> 
                                 --     if sf.filterCategory == TruckType then
-                                --         sf.searchFilterExtraData
+                                --         let
+                                --                 trimmedsfValue = String.trim sf.searchFilterKey
+                                --                 v = Debug.log "asdfdddddddddddddddddddd" trimmedsfValue
+                                --                 displayValue = 
+                                --                                                 if trimmedsfValue == "I" then
+                                --                                                         "Inventory"
+                                --                                                 else if trimmedsfValue == "A" then 
+                                --                                                         "Appraisal"
+                                --                                                 else
+                                --                                                         "Purchase Order"
+                                --         in
+                                --                 displayValue
                                 --     else
-                                        sf.searchFilterKey
+                                        sf.searchFilterKey      
                         ) 
                 |> Array.toList
 
@@ -94,120 +105,142 @@ returnListWithValues prevFilterdTruckList currentFilteredTruckList =
         else
                 prevFilterdTruckList
 
-filterBySalesStatus salesStatusFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.salesStatus salesStatusFilters) trucksList
+filterBySalesStatus (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.salesStatus (getSelectedFilterBulletsByFilterCategory SalesStatus selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByYear yearFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.year yearFilters) trucksList
+filterByYear (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.year (getSelectedFilterBulletsByFilterCategory Year selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByMake makeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.make makeFilters) trucksList
+filterByMake (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.make (getSelectedFilterBulletsByFilterCategory Make selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))                
 
-filterByModel modelFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.model modelFilters) trucksList
+filterByModel (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.model (getSelectedFilterBulletsByFilterCategory MakeModel selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterBySleeperRoof sleeperRoofFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperRoof sleeperRoofFilters) trucksList
+filterBySleeperRoof (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperRoof (getSelectedFilterBulletsByFilterCategory SleeperRoof selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterBySleeperBunk sleeperBunkFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperBunk sleeperBunkFilters) trucksList
+filterBySleeperBunk (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperBunk (getSelectedFilterBulletsByFilterCategory SleeperBunk selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByEngineMake engineMakeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.engineMake engineMakeFilters) trucksList
+filterByEngineMake (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.engineMake (getSelectedFilterBulletsByFilterCategory EngineMake selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByTransType transTypeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.transType transTypeFilters) trucksList
+filterByTransType (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.transType (getSelectedFilterBulletsByFilterCategory TransType selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterBySuspension suspensionFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.suspension suspensionFilters) trucksList
+filterBySuspension (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.suspension (getSelectedFilterBulletsByFilterCategory Suspension selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByBodyType bodyTypeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.bodyType bodyTypeFilters) trucksList
+filterByBodyType (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.bodyType (getSelectedFilterBulletsByFilterCategory BodyType selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByFleetCode fleetCodeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.fleetCode fleetCodeFilters) trucksList
+filterByFleetCode (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.fleetCode (getSelectedFilterBulletsByFilterCategory FleetCode selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByTruckStatus truckStatusFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.truckStatus truckStatusFilters) trucksList
+filterBySpecialFinancing (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.specialFinancing (getSelectedFilterBulletsByFilterCategory SpecialFinancing selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterBySpecialFinancing specialFinancingFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.specialFinancing specialFinancingFilters) trucksList
+filterByOwningBranch (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.owningBranch (getSelectedFilterBulletsByFilterCategory OwningBranch selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByOwningBranch owningBranchFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.owningBranch owningBranchFilters) trucksList
+filterByLocationName (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.locationName (getSelectedFilterBulletsByFilterCategory LocationName selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByLocationName locationNameFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.locationName locationNameFilters) trucksList
+filterByRearAxleType (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType (getSelectedFilterBulletsByFilterCategory RearAxleType selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByRearAxleType rearAxleFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType rearAxleFilters) trucksList
+filterByTruckType (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.truckType (getSelectedFilterBulletsByFilterCategory TruckType selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByTruckType truckTypeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.truckType truckTypeFilters) trucksList
+filterByAPU (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.apu (getSelectedFilterBulletsByFilterCategory APU selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByAPU apuFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.apu apuFilters) trucksList
+filterByCDL (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.cdl (getSelectedFilterBulletsByFilterCategory CDL selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByCDL cdlFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.cdl cdlFilters) trucksList
+filterByPhoto (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.hasPhoto (getSelectedFilterBulletsByFilterCategory Photo selectedFilters)) trucksList
                 |> returnListWithValues trucksList
-
-filterByPhoto photoFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.hasPhoto photoFilters) trucksList
-                |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
 ----------Range filters
 
-filterByPrice priceFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.price priceFilters) trucksList
+filterByPrice (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.price (getSelectedFilterBulletsByFilterCategory Price selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByEngineHP engineHPFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.engineHP engineHPFilters) trucksList
+filterByEngineHP (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.engineHP (getSelectedFilterBulletsByFilterCategory EngineHP selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterBySleeperInches sleeperInchesFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.sleeperInches sleeperInchesFilters) trucksList
+filterBySleeperInches (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.sleeperInches (getSelectedFilterBulletsByFilterCategory SleeperInches selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByWheelBase wheelBaseFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.wheelBase wheelBaseFilters) trucksList
+filterByWheelBase (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.wheelBase (getSelectedFilterBulletsByFilterCategory WheelBase selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByMileage mileageFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.mileage mileageFilters) trucksList
+filterByMileage (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.mileage (getSelectedFilterBulletsByFilterCategory Mileage selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByFrontAxleWeight frontAxleWeightFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.frontAxleWeight frontAxleWeightFilters) trucksList
+filterByFrontAxleWeight (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.frontAxleWeight (getSelectedFilterBulletsByFilterCategory FrontAxleWeight selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByRearAxleWeight rearAxleWeightFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.rearAxleWeight rearAxleWeightFilters) trucksList
+filterByRearAxleWeight (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.rearAxleWeight (getSelectedFilterBulletsByFilterCategory RearAxleWeight selectedFilters)) trucksList
                 |> returnListWithValues trucksList
+                |> (\trks -> (selectedFilters, trks))
 
-filterByInventoryAge inventoryAgeFilters trucksList =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.inventoryAge inventoryAgeFilters) trucksList
+filterByInventoryAge (selectedFilters, trucksList) =
+        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.inventoryAge (getSelectedFilterBulletsByFilterCategory InventoryAge selectedFilters)) trucksList
                 |> returnListWithValues trucksList
-
+                |> (\trks -> (selectedFilters, trks))
                         
 buildTruckIdNumber : Truck -> (String, String)
 buildTruckIdNumber truck =
@@ -239,36 +272,36 @@ buildFilteredSearchResultBySearchType filterList comparefilterKeyValueWithTruckP
         else
                 trucks
 
-funcList uiModel= [
-                        (SalesStatus, filterBySalesStatus uiModel.salesStatusFilters)
-                        , (Year,filterByYear uiModel.yearFilters)
-                        , (Make,filterByMake uiModel.makeFilters)
-                        , (MakeModel,filterByModel uiModel.modelFilters)
-                        , (SleeperRoof,filterBySleeperRoof uiModel.sleeperRoofFilters)
-                        , (SleeperBunk,filterBySleeperBunk uiModel.sleeperBunkFilters)
-                        , (EngineMake,filterByEngineMake uiModel.engineMakeFilters)
-                        , (TransType,filterByTransType uiModel.transTypeFilters)
-                        , (Suspension,filterBySuspension uiModel.suspensionFilters)
-                        , (BodyType,filterByBodyType uiModel.bodyTypeFilters)
-                        , (RearAxleType,filterByRearAxleType uiModel.rearAxleTypeFilters)
-                        , (TruckType,filterByTruckType uiModel.truckTypeFilters)
-                        , (FleetCode,filterByFleetCode uiModel.fleetCodeFilters)
-                        , (SpecialFinancing,filterBySpecialFinancing uiModel.specialFinancingFilters)
-                        , (OwningBranch,filterByOwningBranch uiModel.owningBranchFilters)
-                        , (LocationName,filterByLocationName  uiModel.locationNameFilters)
-                        , (APU,filterByAPU uiModel.apuFilters)
-                        , (CDL,filterByCDL uiModel.cdlFilters)
-                        , (Photo,filterByPhoto uiModel.photoFilters)
-                                --range filters
-                        , (Price,filterByPrice uiModel.priceFilters)
-                        , (EngineHP,filterByEngineHP uiModel.engineHPFilters)
-                        , (SleeperInches,filterBySleeperInches uiModel.sleeperInchesFilters)
-                        , (WheelBase,filterByWheelBase uiModel.wheelBaseFilters)
-                        , (Mileage,filterByMileage uiModel.mileageFilters)
-                        , (FrontAxleWeight,filterByFrontAxleWeight uiModel.frontAxleWeightFilters)
-                        , (RearAxleWeight,filterByRearAxleWeight uiModel.rearAxleWeightFilters)
-                        , (InventoryAge,filterByInventoryAge uiModel.inventoryAgeFilters)
-                ]
+-- funcList uiModel= [
+--                         (SalesStatus, filterBySalesStatus uiModel.salesStatusFilters)
+--                         , (Year,filterByYear uiModel.yearFilters)
+--                         , (Make,filterByMake uiModel.makeFilters)
+--                         , (MakeModel,filterByModel uiModel.modelFilters)
+--                         , (SleeperRoof,filterBySleeperRoof uiModel.sleeperRoofFilters)
+--                         , (SleeperBunk,filterBySleeperBunk uiModel.sleeperBunkFilters)
+--                         , (EngineMake,filterByEngineMake uiModel.engineMakeFilters)
+--                         , (TransType,filterByTransType uiModel.transTypeFilters)
+--                         , (Suspension,filterBySuspension uiModel.suspensionFilters)
+--                         , (BodyType,filterByBodyType uiModel.bodyTypeFilters)
+--                         , (RearAxleType,filterByRearAxleType uiModel.rearAxleTypeFilters)
+--                         , (TruckType,filterByTruckType uiModel.truckTypeFilters)
+--                         , (FleetCode,filterByFleetCode uiModel.fleetCodeFilters)
+--                         , (SpecialFinancing,filterBySpecialFinancing uiModel.specialFinancingFilters)
+--                         , (OwningBranch,filterByOwningBranch uiModel.owningBranchFilters)
+--                         , (LocationName,filterByLocationName  uiModel.locationNameFilters)
+--                         , (APU,filterByAPU uiModel.apuFilters)
+--                         , (CDL,filterByCDL uiModel.cdlFilters)
+--                         , (Photo,filterByPhoto uiModel.photoFilters)
+--                                 --range filters
+--                         , (Price,filterByPrice uiModel.priceFilters)
+--                         , (EngineHP,filterByEngineHP uiModel.engineHPFilters)
+--                         , (SleeperInches,filterBySleeperInches uiModel.sleeperInchesFilters)
+--                         , (WheelBase,filterByWheelBase uiModel.wheelBaseFilters)
+--                         , (Mileage,filterByMileage uiModel.mileageFilters)
+--                         , (FrontAxleWeight,filterByFrontAxleWeight uiModel.frontAxleWeightFilters)
+--                         , (RearAxleWeight,filterByRearAxleWeight uiModel.rearAxleWeightFilters)
+--                         , (InventoryAge,filterByInventoryAge uiModel.inventoryAgeFilters)
+--                 ]
 
 -- applyFilterList excludeFilterType trucks uiModel all =
 --         let
@@ -327,6 +360,8 @@ funcList uiModel= [
 --                 --filterDuplicates hh 
 --                 values filteredTruckList
 
+getSelectedFilterBulletsByFilterCategory filterCategory selectedFilterList =
+        (Array.fromList <| List.filter (\sf -> sf.filterCategory == filterCategory)  selectedFilterList)
 
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
@@ -342,1008 +377,852 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 Nothing -> sf)
                                 |> (\headItem -> {sf | userAction = headItem.userAction} )
 
-                updatedSalesStatusFitlerList =
-                         model.truckList
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
-                                --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters
-                                >> Array.map
+                rebuildFilters filterCategory filters (selectedFilterBullets, finalFilteredTrucks) =
+                        buildSearchFilterValueRecordList filterCategory filters finalFilteredTrucks     
+                        |> Array.map
                                         (\sf ->
-                                                findMatchAndSetUserAction uiModel.salesStatusFilters sf 
+                                                findMatchAndSetUserAction (Array.fromList selectedFilterBullets) sf 
                                         )
+
+                updatedSalesStatusFitlerList =
+                         (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName 
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
+                                --range filters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters SalesStatus uiModel.salesStatusFilters
+
+                updatedTruckTypeFitlerList =
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
+                                --range filters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters  TruckType uiModel.truckTypeFilters
 
                 updatedYearFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters 
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch 
+                                |> filterByLocationName 
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList Year uiModel.yearFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.yearFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters Year uiModel.yearFilters
                 
                 updatedMakeFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList Make uiModel.makeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.makeFilters sf 
-                                        )
-                
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters Make uiModel.makeFilters
+                 
                 updatedModelFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters 
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch 
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList MakeModel uiModel.modelFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.modelFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters MakeModel uiModel.modelFilters
 
                 updatedSleeperRoofFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.sleeperRoofFilters sf 
-                                        )
-
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters SleeperRoof uiModel.sleeperRoofFilters
+ 
                 updatedSleeperBunkFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.sleeperBunkFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters SleeperBunk uiModel.sleeperBunkFilters
 
                 updatedEngineMakeFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters 
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch 
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList EngineMake uiModel.engineMakeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.engineMakeFilters sf 
-                                        )
-
-                
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters EngineMake uiModel.engineMakeFilters
                 
                 updatedTransTypeFitlerList =
-                        model.truckList
-                               |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters    
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch    
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList TransType uiModel.transTypeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.transTypeFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters TransType uiModel.transTypeFilters
                 
                 updatedSuspensionFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList Suspension uiModel.suspensionFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.suspensionFilters sf 
-                                        )
-                
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters Suspension uiModel.suspensionFilters
+                 
                 updatedBodyTypeFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList BodyType uiModel.bodyTypeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.bodyTypeFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters BodyType uiModel.bodyTypeFilters
 
                 updatedRearAxleFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList RearAxleType uiModel.rearAxleTypeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.rearAxleTypeFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters RearAxleType uiModel.rearAxleTypeFilters
 
                 updatedFleetCodeFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters FleetCode uiModel.fleetCodeFilters
 
-                                >> buildSearchFilterValueRecordList FleetCode uiModel.fleetCodeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.fleetCodeFilters sf 
-                                        )
-                
                 updatedSpecialFinancingFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters SpecialFinancing uiModel.specialFinancingFilters
 
-                                >> buildSearchFilterValueRecordList SpecialFinancing uiModel.specialFinancingFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.specialFinancingFilters sf 
-                                        )
-                                        
                 updatedOwningBranchFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterByLocationName
+                                |> filterBySpecialFinancing
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList OwningBranch uiModel.owningBranchFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.owningBranchFilters sf 
-                                        )
-
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters OwningBranch uiModel.owningBranchFilters
+                                
                 updatedLocationNameFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterByOwningBranch
+                                |> filterBySpecialFinancing
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList LocationName uiModel.locationNameFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.locationNameFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters LocationName uiModel.locationNameFilters
 
                 updatedAPUFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterByLocationName
+                                |> filterByOwningBranch
+                                |> filterBySpecialFinancing
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList APU uiModel.apuFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.apuFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters APU uiModel.apuFilters
 
                 updatedCDLFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterByLocationName
+                                |> filterByOwningBranch
+                                |> filterBySpecialFinancing
+                                |> filterByAPU
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList CDL uiModel.cdlFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.cdlFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters CDL uiModel.cdlFilters
 
                 updatedPhotoFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterByLocationName
+                                |> filterByOwningBranch
+                                |> filterBySpecialFinancing
+                                |> filterByAPU
+                                |> filterByCDL
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList Photo uiModel.photoFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.photoFilters sf
-                                        )                                        
-
-
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters Photo uiModel.photoFilters
+                                
 -- range filters
                 updatedPriceFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-                                
-                                >> buildSearchFilterValueRecordList Price uiModel.priceFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.priceFilters sf 
-                                        )
-                
-                updatedEngineHPFitlerList =
-                        model.truckList
-                               |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
-                                --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters Price uiModel.priceFilters
 
-                                >> buildSearchFilterValueRecordList EngineHP uiModel.engineHPFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.engineHPFilters sf 
-                                        )
-                
+                updatedEngineHPFitlerList =
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
+                                --range filters
+                                |> filterByPrice
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters EngineHP uiModel.engineHPFilters
 
                 updatedSleeperInchesFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters SleeperInches uiModel.sleeperInchesFilters
 
-                                >> buildSearchFilterValueRecordList SleeperInches uiModel.sleeperInchesFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.sleeperInchesFilters sf 
-                                        )
-                
                 updatedWheelBaseFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters WheelBase uiModel.wheelBaseFilters
 
-                                >> buildSearchFilterValueRecordList WheelBase uiModel.wheelBaseFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.wheelBaseFilters sf 
-                                        )
-                
                 updatedMileageFilterList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters Mileage uiModel.mileageFilters
 
-                                >> buildSearchFilterValueRecordList Mileage uiModel.mileageFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.mileageFilters sf 
-                                        )
-                
                 updatedFrontAxleWeightFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByRearAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters FrontAxleWeight uiModel.frontAxleWeightFilters
 
-                                >> buildSearchFilterValueRecordList FrontAxleWeight uiModel.frontAxleWeightFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.frontAxleWeightFilters sf 
-                                        )
-                
                 updatedRearAxleWeightFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByInventoryAge
+                                |> rebuildFilters RearAxleWeight uiModel.rearAxleWeightFilters
 
-                                >> buildSearchFilterValueRecordList RearAxleWeight uiModel.rearAxleWeightFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.rearAxleWeightFilters sf 
-                                        )
-                
-                
-                
                 updatedInventoryAgeFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByTruckType uiModel.truckTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
+                        (uiModel.selectedFilterBullets, model.truckList)
+                                |> filterBySalesStatus
+                                |> filterByYear
+                                |> filterByMake
+                                |> filterByModel
+                                |> filterBySleeperRoof
+                                |> filterBySleeperBunk
+                                |> filterByEngineMake
+                                |> filterByTransType
+                                |> filterBySuspension
+                                |> filterByBodyType
+                                |> filterByRearAxleType
+                                |> filterByTruckType
+                                |> filterByFleetCode
+                                |> filterBySpecialFinancing
+                                |> filterByOwningBranch
+                                |> filterByLocationName
+                                |> filterByAPU
+                                |> filterByCDL
+                                |> filterByPhoto
                                 --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-
-                                >> buildSearchFilterValueRecordList InventoryAge uiModel.inventoryAgeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.inventoryAgeFilters sf 
-                                        )
+                                |> filterByPrice
+                                |> filterByEngineHP
+                                |> filterBySleeperInches
+                                |> filterByWheelBase
+                                |> filterByMileage
+                                |> filterByFrontAxleWeight
+                                |> filterByRearAxleWeight
+                                |> rebuildFilters InventoryAge uiModel.inventoryAgeFilters
                 
-                updatedTruckTypeFitlerList =
-                        model.truckList
-                                |> filterBySalesStatus uiModel.salesStatusFilters
-                                |> filterByYear uiModel.yearFilters
-                                |> filterByMake uiModel.makeFilters
-                                |> filterByModel uiModel.modelFilters
-                                |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                                |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                                |> filterByEngineMake uiModel.engineMakeFilters
-                                |> filterByTransType uiModel.transTypeFilters
-                                |> filterBySuspension uiModel.suspensionFilters
-                                |> filterByBodyType uiModel.bodyTypeFilters
-                                |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                                |> filterByFleetCode uiModel.fleetCodeFilters
-                                
-                                |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                                |> filterByOwningBranch uiModel.owningBranchFilters
-                                |> filterByLocationName  uiModel.locationNameFilters
-                                |> filterByAPU uiModel.apuFilters
-                                |> filterByCDL uiModel.cdlFilters
-                                |> filterByPhoto uiModel.photoFilters
-                                --range filters
-                                |> filterByPrice uiModel.priceFilters
-                                |> filterByEngineHP uiModel.engineHPFilters
-                                |> filterBySleeperInches uiModel.sleeperInchesFilters
-                                |> filterByWheelBase uiModel.wheelBaseFilters
-                                |> filterByMileage uiModel.mileageFilters
-                                |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                                |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                                |> filterByInventoryAge uiModel.inventoryAgeFilters
-
-                                >> buildSearchFilterValueRecordList TruckType uiModel.truckTypeFilters
-                                >> Array.map
-                                        (\sf ->
-                                                findMatchAndSetUserAction uiModel.truckTypeFilters sf 
-                                        )
-
-
-                
-                newUIModel = 
+                newUIModel =  
                         {
                                 uiModel |
                                                 yearFilters = updatedYearFitlerList
@@ -1382,38 +1261,36 @@ applySearchFilters model uiModel =
     let
         
         filterdTruckList  = 
-                model.truckList 
-                        -- truckList gets passed as a last arg automatically from the previous |> pipe
-                        -- the result from the above function gets feed in to the below function and so on until it ends
-                        |> filterBySalesStatus uiModel.salesStatusFilters
-                        |> filterByYear uiModel.yearFilters
-                        |> filterByMake uiModel.makeFilters
-                        |> filterByModel uiModel.modelFilters
-                        |> filterBySleeperRoof uiModel.sleeperRoofFilters
-                        |> filterBySleeperBunk uiModel.sleeperBunkFilters
-                        |> filterByEngineMake uiModel.engineMakeFilters
-                        |> filterByTransType uiModel.transTypeFilters  
-                        |> filterBySuspension uiModel.suspensionFilters
-                        |> filterByBodyType uiModel.bodyTypeFilters
-                        |> filterByRearAxleType uiModel.rearAxleTypeFilters
-                        |> filterByTruckType uiModel.truckTypeFilters  
-                        |> filterByFleetCode uiModel.fleetCodeFilters
-                        
-                        |> filterBySpecialFinancing uiModel.specialFinancingFilters
-                        |> filterByOwningBranch uiModel.owningBranchFilters
-                        |> filterByLocationName  uiModel.locationNameFilters
-                        |> filterByAPU uiModel.apuFilters
-                        |> filterByCDL uiModel.cdlFilters
-                        |> filterByPhoto uiModel.photoFilters
+                 (uiModel.selectedFilterBullets, model.truckList) 
+                        |> filterBySalesStatus 
+                        |> filterByYear 
+                        |> filterByMake 
+                        |> filterByModel 
+                        |> filterBySleeperRoof
+                        |> filterBySleeperBunk
+                        |> filterByEngineMake
+                        |> filterByTransType  
+                        |> filterBySuspension
+                        |> filterByBodyType
+                        |> filterByRearAxleType
+                        |> filterByTruckType  
+                        |> filterByFleetCode
+                        |> filterBySpecialFinancing 
+                        |> filterByOwningBranch 
+                        |> filterByLocationName
+                        |> filterByAPU
+                        |> filterByCDL
+                        |> filterByPhoto
                         -- range filters
-                        |> filterByPrice uiModel.priceFilters
-                        |> filterByEngineHP uiModel.engineHPFilters                      
-                        |> filterBySleeperInches uiModel.sleeperInchesFilters
-                        |> filterByWheelBase uiModel.wheelBaseFilters
-                        |> filterByMileage uiModel.mileageFilters
-                        |> filterByFrontAxleWeight uiModel.frontAxleWeightFilters
-                        |> filterByRearAxleWeight uiModel.rearAxleWeightFilters
-                        |> filterByInventoryAge uiModel.inventoryAgeFilters
+                        |> filterByPrice
+                        |> filterByEngineHP                      
+                        |> filterBySleeperInches
+                        |> filterByWheelBase
+                        |> filterByMileage
+                        |> filterByFrontAxleWeight
+                        |> filterByRearAxleWeight
+                        |> filterByInventoryAge
+                        |> \(_, finalFilteredTrucks) -> finalFilteredTrucks
 
         sortedFilterdTruckList =
             filterdTruckList

@@ -479,7 +479,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                         row[wf, size 14, pdl 25]
                         [
                             checkbox [bwb 1, wf, pdb 5, greyBorder 175 ] {
-                                onChange = msg index searchFilterCustomType
+                                onChange = msg index searchFilterCustomType searchFilter.searchFilterKey--(String.trim displayValue)
                                 ,icon = buildChkBoxImage
                                 , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue (displayValue ++ " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"))
                                 , checked = searchFilter.userAction

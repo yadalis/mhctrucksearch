@@ -89,6 +89,7 @@ type alias UIModel =
         ,cdlFilters : Array SearchFilterType
         ,photoFilters : Array SearchFilterType
         ,locationNameFilters : Array SearchFilterType
+        ,selectedFilterBullets : List SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         --,collapseAllChecked : Bool
         ,showDropdown : Bool
@@ -103,6 +104,14 @@ type alias SearchFilterState =
         ,searchFilterCustomType : SearchFilterCustomType
         ,userAction : Bool
     }
+
+-- type alias SearchFilterBulletState =
+--     {
+--         index : Int
+--         ,searchFilterCustomType : SearchFilterCustomType
+--         ,userAction : Bool
+--         ,realtedFilterIndex : Int
+--     }
 
 type SearchFilterCustomType
     = SalesStatus
@@ -159,6 +168,16 @@ type alias SearchFilterType =
         ,filterCategory : SearchFilterCustomType
     }
 
+type alias SelectedSearchFilterBulletType =
+    {   
+        index : Int
+        ,searchFilterKey : String
+        ,searchFilterExtraData : String
+        ,userAction : Bool
+        ,resultCount : Int
+        ,filterCategory : SearchFilterCustomType
+    }
+
 type alias FilterSelectionsModel =
     {   
         filterCDLNoSelected : Bool
@@ -167,11 +186,11 @@ type alias FilterSelectionsModel =
 
 allFilterTypesMasterListWithItsInitialState = 
                         [ {filterName = FleetCode, expandByDefault = False}
-                        , {filterName = SalesStatus, expandByDefault = False}
-                        , {filterName = TruckType, expandByDefault = False}
+                        , {filterName = SalesStatus, expandByDefault = True}
+                        , {filterName = TruckType, expandByDefault = True}
                         , {filterName = SpecialFinancing, expandByDefault = False}
                         , {filterName = Year, expandByDefault = False}
-                        , {filterName = Make, expandByDefault = False}
+                        , {filterName = Make, expandByDefault = True}
                         , {filterName = MakeModel, expandByDefault = False}
                         , {filterName = Price, expandByDefault = False}
                         , {filterName = SleeperInches, expandByDefault = False}
@@ -266,6 +285,7 @@ initalUIModel jsFlag =
         cdlFilters = Array.empty,
         photoFilters = Array.empty,
         locationNameFilters = Array.empty,
+        selectedFilterBullets = [],
         expandCollapseSearchFilterStates = 
                         Array.indexedMap 
                                         (
