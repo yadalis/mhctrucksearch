@@ -96,6 +96,7 @@ type alias UIModel =
         ,currentSortBy : SortBy
         --,showAppraisedTrucks : Bool
         ,workWithAppraisedTrucks : Bool
+        ,workWithNewTrucks : Bool
     }
 
 type alias SearchFilterState =
@@ -295,5 +296,6 @@ initalUIModel jsFlag =
                         <| Array.fromList allFilterTypesMasterListWithItsInitialState,
         showDropdown = False,
         currentSortBy = MakeAtoZ,
-        workWithAppraisedTrucks = False
+        workWithAppraisedTrucks = False,
+        workWithNewTrucks = False
     }
