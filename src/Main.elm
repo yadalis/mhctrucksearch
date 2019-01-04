@@ -49,6 +49,24 @@ update msg (model, uiModel) =
                             "new"
                         else
                             "used"
+        
+        buildTrucksHttpCmd =
+                let
+                    trucksHttpCmd = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
+                    --y = Debug.log "url " [x]
+                in
+                    (
+                        (
+                            {model |
+                                    filteredTruckList = [],
+                                    truckList = [],
+                                    pagedTruckList = []}
+                            ,uiModel
+
+                        )
+                        , trucksHttpCmd
+                    )
+
     in
         case msg of
             OnFetchSearchFilterRanges response ->
@@ -163,29 +181,36 @@ update msg (model, uiModel) =
                                                     -- but not regenrate the filters completely
                     ) 
 
-            FilterCheckBoxClicked index searchFilterCustomType keyValue userAction ->
+            --FilterCheckBoxClicked index searchFilterCustomType keyValue extraData userAction ->
+            FilterCheckBoxClicked selectedSearchFilter userAction->
                 let
 
                     -- vv1 = Debug.log "selected searchFilterCustomType " [searchFilterCustomType]
                     -- vv = Debug.log "selected bullet value " [String.fromInt index, keyValue, if userAction then "True" else "False"]
 
                     --vv2 = Debug.log "selected searchFilterCustomType " [uiModel.truckTypeFilters]
+                    convertMaybeInt intValue =
+                         case intValue of 
+                                Just val -> val
+                                Nothing -> 0
+
                     updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
                     updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
                         let
                             -- vv2 = Debug.log "selected filterList " [filterList]
                             sfIndex =
                                 Array.toList filterList
-                                    |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
-                                    |> (\idx -> case idx of 
-                                                        Just val -> val
-                                                        Nothing -> 0
-                                    )
+                                    |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
+                                    |> convertMaybeInt
+                                    -- |> (\idx -> case idx of 
+                                    --                     Just val -> val
+                                    --                     Nothing -> 0
+                                    -- )
                             -- vv23 = Debug.log "selected searchFilterCustomType " [sfIndex]
                         in
                             if sfIndex > 0 then
                                 Array.toList filterList
-                                        |> find (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
+                                        |> find (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey  && sf.filterCategory == selectedSearchFilter.filterCategory)
                                         |> Maybe.map (\sf -> {sf | userAction = userAction})
                                         |> Maybe.map (\sf -> 
                                                             -- let
@@ -199,7 +224,7 @@ update msg (model, uiModel) =
                                 uiModel
 
                     newUIModel = 
-                        case searchFilterCustomType of
+                        case selectedSearchFilter.filterCategory of
                             SalesStatus -> 
                                 (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters) (\mfArr -> {uiModel | salesStatusFilters = mfArr}) 
                             Year -> 
@@ -256,42 +281,55 @@ update msg (model, uiModel) =
                                 (uiModel.inventoryAgeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | inventoryAgeFilters = mfArr})    
 
                     displayValue = 
-                            if keyValue == "I" then
+                            if selectedSearchFilter.searchFilterKey == "I" then
                                     "Inventory"
-                            else if keyValue == "A" then 
+                            else if selectedSearchFilter.searchFilterKey == "A" then 
                                     "Appraisal"
                             else
                                     "Purchase Order"
-                    newUIModel1 = 
+
+                    newUIModelUpdatedWithSearchFilterBullets = 
                                     {newUIModel |
                                                     selectedFilterBullets = 
                                                         if userAction then
                                                             -- do not insert if the combo sf exists
                                                             newUIModel.selectedFilterBullets
-                                                                |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
-                                                                |> (\idx -> case idx of 
-                                                                                Just val -> val
-                                                                                Nothing -> 0
-                                                                )
+                                                                |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
+                                                                |> convertMaybeInt
+                                                                -- |> (\idx -> case idx of 
+                                                                --                 Just val -> val
+                                                                --                 Nothing -> 0
+                                                                -- )
                                                                 |> (\idx -> if idx > 0 then
                                                                                 newUIModel.selectedFilterBullets 
                                                                             else
-                                                                                ( SearchFilterType index keyValue displayValue userAction 0 searchFilterCustomType ) :: (newUIModel.selectedFilterBullets)
+                                                                                ( SearchFilterType 
+                                                                                        selectedSearchFilter.index selectedSearchFilter.searchFilterKey 
+                                                                                        (
+                                                                                            if selectedSearchFilter.filterCategory == TruckType then 
+                                                                                                displayValue
+                                                                                            else
+                                                                                                selectedSearchFilter.searchFilterExtraData
+                                                                                        )
+                                                                                        userAction
+                                                                                        0
+                                                                                        selectedSearchFilter.filterCategory 
+                                                                                ) :: (newUIModel.selectedFilterBullets)
                                                                                 
                                                                     )
                                                         else
                                                             newUIModel.selectedFilterBullets
-                                                                |> find (\sf -> String.trim sf.searchFilterKey == String.trim keyValue && sf.filterCategory == searchFilterCustomType)
+                                                                |> find (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
                                                                 |> Maybe.map (\sf -> remove sf  newUIModel.selectedFilterBullets)
                                                                 |> Maybe.withDefault newUIModel.selectedFilterBullets
                                     }
 
-                    -- v = Debug.log "selected bullets " [newUIModel1.selectedFilterBullets]
-                    newSortedFilteredTruckList = applySearchFilters model newUIModel1
+                    --v = Debug.log "selected bullets " [newUIModel1.selectedFilterBullets]
+                    newSortedFilteredTruckList = applySearchFilters model newUIModelUpdatedWithSearchFilterBullets
                                                     |> sortTruckList uiModel.currentSortBy
 
                     uiModelUpdatedWithLatestSearchFilters =
-                            rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModel1
+                            rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModelUpdatedWithSearchFilterBullets
                 in
                     ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
@@ -299,40 +337,10 @@ update msg (model, uiModel) =
                     ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
             SearchPressed ->
-                let
-                    x = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
-                    --y = Debug.log "url " [x]
-                in
-                
-                (
-                    (
-                        {model |
-                                filteredTruckList = [],
-                                truckList = [],
-                                pagedTruckList = []}
-                        ,uiModel
-
-                    )
-                    , x
-                )
+                buildTrucksHttpCmd
                 
             HandleKeyboardEvent ->
-                let
-                    x = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
-                    --y = Debug.log "url " [x]
-                in
-                
-                (
-                    (
-                        {model |
-                                filteredTruckList = [],
-                                truckList = [],
-                                pagedTruckList = []}
-                        ,uiModel
-
-                    )
-                    , x
-                )
+                buildTrucksHttpCmd
             
             CollapseClicked searchFilterState userAction->
                 let
@@ -487,9 +495,11 @@ view (model, uiModel) =
                      -- logo row
                     row[wf, spx 15, greyBg 245]
                     [
-                        row[wpx 305]
+                        row[wpx 305, bw 0]
                         [
                             image [hpx 35] {src = "mhclogo.png", description ="Logo" }
+                            ,
+                            el[pdl 5, fs 18, eab] <| textValue "v1.0.1"
                         ]
                         ,row[wf]
                         [
@@ -510,7 +520,7 @@ view (model, uiModel) =
                                     ,label = el[pde 0 5 0 5] <| textValue "SEARCH"-- searchBtnIcon
                                 }
                             ]
-                            ,row[ear, spx 15, fs 18]
+                            ,row[ear, spx 15, fs 18, pdl 15]
                             [
 
                                 checkbox [] 
@@ -587,7 +597,7 @@ view (model, uiModel) =
                         -- pager/totaltrucks-found
                         row[wf, spx 50, pdl 5]
                         [ 
-                            el [mhcRed] <| textValue <| "Total " ++ (if uiModel.workWithNewTrucks  then "(NEW)" else  "(USED)") ++  " trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
+                            el [mhcRed] <| textValue <| "Total " ++ (if uiModel.workWithNewTrucks  then "(NEW)"  else  "(USED)") ++  " trucks found : " ++ (String.fromInt <| (List.length model.filteredTruckList))   
                             ,
                             row[wfp 2] --clipY cuts the content of pager number if it goes beyond 65 height, this could happen
                             --if user resize the browser to a smaller width/height

@@ -461,8 +461,9 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                             Nothing -> SearchFilterState -1 SalesStatus False -- Nothing case will never happen, but elm forces to handle all possibel cases
                                 )
 
-            buildCheckboxes :  Int -> SearchFilterType -> Element Msg
-            buildCheckboxes index searchFilter =
+            --buildCheckbox :  Int -> SearchFilterType -> Element Msg
+            buildCheckbox :  SearchFilterType -> Element Msg
+            buildCheckbox searchFilter =
                 let
                     chkBoxStyle =
                                     if searchFilter.userAction then 
@@ -474,12 +475,15 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                         searchFilter.searchFilterExtraData
                                     else
                                         searchFilter.searchFilterKey
+                    
+                    --updatedSearchFilter = {searchFilter | index = index, filterCategory = searchFilterCustomType }
                 in
                     if searchFilter.resultCount > 0 then
                         row[wf, size 14, pdl 25]
                         [
                             checkbox [bwb 1, wf, pdb 5, greyBorder 175 ] {
-                                onChange = msg index searchFilterCustomType searchFilter.searchFilterKey--(String.trim displayValue)
+                                --onChange = msg index searchFilterCustomType searchFilter.searchFilterKey searchFilter.searchFilterExtraData --(String.trim displayValue)
+                                onChange = msg searchFilter --updatedSearchFilter
                                 ,icon = buildChkBoxImage
                                 , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue (displayValue ++ " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"))
                                 , checked = searchFilter.userAction
@@ -503,7 +507,8 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                     }
                     ,column ( [spy 8, wf] ++ expandCollapseAll searchFilterState.userAction)
                     (
-                        Array.toList <| Array.indexedMap buildCheckboxes searchFilters -- column function needs List of item and not Array of items, so need conversion
+                        --Array.toList <| Array.indexedMap buildCheckbox searchFilters -- column function needs List of item and not Array of items, so need conversion
+                        Array.toList <| Array.map buildCheckbox searchFilters -- column function needs List of item and not Array of items, so need conversion
                     )
                 ]
             ]

@@ -53,9 +53,9 @@ fetchTrucksUrl truckCondition searchText =
             --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition, searchText] []
 
             if String.isEmpty searchText then
-                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPIDemo/api/mhc/gettrucks"  [truckCondition] []
+                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks"  [truckCondition] []
             else
-                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPIDemo/api/mhc/gettrucks" [truckCondition, searchText] []
+                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks" [truckCondition, searchText] []
         --"http://localhost:3333/trks"
 
 fetchAppraisedTrucksUrl : String -> String
@@ -68,9 +68,9 @@ fetchAppraisedTrucksUrl searchText =
             --     crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks"  [searchText] []
 
             if String.isEmpty searchText then
-                "http://172.21.123.180/NewMHCtruckSyncAPIDemo/api/mhc/getappraisedtrucks"
+                "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks"
             else
-                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPIDemo/api/mhc/getappraisedtrucks" [searchText] []
+                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks" [searchText] []
         --"http://localhost:3333/trks"
 
 
@@ -80,7 +80,7 @@ fetchSearchFilterRangesUrl =
         --"http://localhost:50977/api/repairorder/gettrucks"
         --"http://localhost:4444/srchRanges"
         --"http://localhost:50977/api/mhc/getrangefilters"
-        "http://172.21.123.180/NewMHCtruckSyncAPIDemo/api/mhc/getrangefilters"
+        "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
         
 fetchTrucksDecoder: Decode.Decoder (List Truck)
 fetchTrucksDecoder = 

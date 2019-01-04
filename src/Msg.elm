@@ -12,7 +12,8 @@ type Msg
     = OnFetchTrucks (Result Error (List Truck) )
     | OnFetchSearchFilterRanges (Result Error (List SearchFilterType) )
     --| OnFetchSearchFilterRanges (Result Error (List SearchFilterRangeType) )
-    | FilterCheckBoxClicked Int SearchFilterCustomType String Bool  -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
+    --| FilterCheckBoxClicked Int SearchFilterCustomType String String Bool  -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
+    | FilterCheckBoxClicked SearchFilterType Bool  -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
     --| FilterRangeCheckBoxClicked Int SearchFilterRangeUnionType Bool -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
     | SearchString String
     --| ClearSearchStringResults

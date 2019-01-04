@@ -27,7 +27,8 @@ searchFilterBulletView filterList =
                                     ,column[][
                                         Input.button ( [greyBorder 97,  greyBg 231  ,pd 6])
                                         { 
-                                            onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory sf.searchFilterKey False  )                                                       
+                                            --onPress = Just (FilterCheckBoxClicked sf.index sf.filterCategory sf.searchFilterKey sf.searchFilterExtraData False  )                                                       
+                                            onPress = Just (FilterCheckBoxClicked sf False)
                                             ,label = (el [wpx 15, hpx 15, fs 14,fac, greyFont 300, greyBg 150] <| textValue <| "x")
                                         }
                                     ]
