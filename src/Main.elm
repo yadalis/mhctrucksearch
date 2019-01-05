@@ -10,6 +10,7 @@ import Commands exposing (..)
 import Element exposing (..)
 import Element.Input as Input exposing (..) 
 import Element.Font as Font exposing (..)
+import Element.Border as Border exposing (..)
 import TruckViews.Truck exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
@@ -577,7 +578,13 @@ view (model, uiModel) =
                         ]
                     ]
                     -- exp/col/clearfitlers/totaltrucks/sort row
-                    ,row[wf, spx 15, greyBg 235, bwb 1, hfRange 40 65, clipY]
+                    ,row[wf, spx 15, greyBg 235,
+                        Border.shadow  { offset = ( 0, 3 )
+                                , size = 1
+                                , blur = 15.0
+                                , color = rgb255 185 185 185
+                                }
+                    , hfRange 40 65, clipY]
                     [
                         --exp/coll/clearfitlers
                         row[wpx 300, spx 15, fs 12, mhcRed, pdl 15][
