@@ -28,5 +28,6 @@ type Msg
     --| ShowAppraisedTrucks Bool
     | WorkWithAppraisedTrucks  Bool
     | WorkWithNewTrucks Bool
+    | ShowLoader Bool
     --| ShowTrucksWithPhotoOnly
     | ClearAllFilters

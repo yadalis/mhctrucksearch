@@ -26,6 +26,9 @@ import Helpers.Utils exposing (..)
 import Browser.Dom exposing (..)
 import BusinessFunctions.Pager exposing (..)
 import Helpers.Colors exposing (..)
+import Task
+import Process
+
 
 ---- INIT ----
 
@@ -202,10 +205,6 @@ update msg (model, uiModel) =
                                 Array.toList filterList
                                     |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
                                     |> convertMaybeInt
-                                    -- |> (\idx -> case idx of 
-                                    --                     Just val -> val
-                                    --                     Nothing -> 0
-                                    -- )
                             -- vv23 = Debug.log "selected searchFilterCustomType " [sfIndex]
                         in
                             if sfIndex > 0 then
@@ -281,12 +280,16 @@ update msg (model, uiModel) =
                                 (uiModel.inventoryAgeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | inventoryAgeFilters = mfArr})    
 
                     displayValue = 
-                            if selectedSearchFilter.searchFilterKey == "I" then
-                                    "Inventory"
-                            else if selectedSearchFilter.searchFilterKey == "A" then 
-                                    "Appraisal"
-                            else
-                                    "Purchase Order"
+
+                        if selectedSearchFilter.filterCategory == TruckType then 
+                                if selectedSearchFilter.searchFilterKey == "I" then
+                                        "Inventory"
+                                else if selectedSearchFilter.searchFilterKey == "A" then 
+                                        "Appraisal"
+                                else
+                                        "Purchase Order"
+                        else
+                            selectedSearchFilter.searchFilterExtraData
 
                     newUIModelUpdatedWithSearchFilterBullets = 
                                     {newUIModel |
@@ -296,21 +299,13 @@ update msg (model, uiModel) =
                                                             newUIModel.selectedFilterBullets
                                                                 |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
                                                                 |> convertMaybeInt
-                                                                -- |> (\idx -> case idx of 
-                                                                --                 Just val -> val
-                                                                --                 Nothing -> 0
-                                                                -- )
                                                                 |> (\idx -> if idx > 0 then
                                                                                 newUIModel.selectedFilterBullets 
                                                                             else
                                                                                 ( SearchFilterType 
-                                                                                        selectedSearchFilter.index selectedSearchFilter.searchFilterKey 
-                                                                                        (
-                                                                                            if selectedSearchFilter.filterCategory == TruckType then 
-                                                                                                displayValue
-                                                                                            else
-                                                                                                selectedSearchFilter.searchFilterExtraData
-                                                                                        )
+                                                                                        selectedSearchFilter.index 
+                                                                                        selectedSearchFilter.searchFilterKey 
+                                                                                        displayValue
                                                                                         userAction
                                                                                         0
                                                                                         selectedSearchFilter.filterCategory 
@@ -401,6 +396,12 @@ update msg (model, uiModel) =
                                 pagedTruckList = []} , {uiModel | searchString = "", workWithAppraisedTrucks = False, workWithNewTrucks = userAction, selectedFilterBullets = []}), 
                                                         getFetchURL (getTruckCondition userAction) "" False
                                                     )
+
+            ShowLoader userAction ->
+                 ( (model, {uiModel | showLoader = userAction }), 
+ 
+                   Cmd.none
+                )
 
             ClearAllFilters ->
                 let
@@ -522,7 +523,11 @@ view (model, uiModel) =
                             ]
                             ,row[ear, spx 15, fs 18, pdl 15]
                             [
-
+                                if uiModel.showLoader then
+                                    image [hpx 18, bw one, wf, pdl 5, bwb 2, eat] {src = "loader.gif", description ="Logo" }
+                                else
+                                    none
+                                ,
                                 checkbox [] 
                                 {
                                     onChange = WorkWithNewTrucks
@@ -589,7 +594,7 @@ view (model, uiModel) =
                             ,
                             Input.button ( [ mouseOver [fc 217 98 69] ])
                             { 
-                                onPress =  if anyFilterApplied uiModel then Just <| ClearAllFilters else  Nothing
+                                onPress =  if anyFilterApplied uiModel then Just <| (ShowLoader True) else  Nothing ---- ClearAllFilters 
                                 ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
                             }
                         ]

@@ -93,6 +93,7 @@ type alias UIModel =
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         --,collapseAllChecked : Bool
         ,showDropdown : Bool
+        ,showLoader : Bool
         ,currentSortBy : SortBy
         --,showAppraisedTrucks : Bool
         ,workWithAppraisedTrucks : Bool
@@ -295,6 +296,7 @@ initalUIModel jsFlag =
                                         )
                         <| Array.fromList allFilterTypesMasterListWithItsInitialState,
         showDropdown = False,
+        showLoader = False,
         currentSortBy = MakeAtoZ,
         workWithAppraisedTrucks = False,
         workWithNewTrucks = False

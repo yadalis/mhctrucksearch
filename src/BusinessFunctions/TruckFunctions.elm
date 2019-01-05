@@ -384,36 +384,73 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                                 findMatchAndSetUserAction (Array.fromList selectedFilterBullets) sf
                                         )
 
-                updatedSalesStatusFitlerList =
-                         (uiModel.selectedFilterBullets, model.truckList)
-                                |> filterByYear
-                                |> filterByMake
-                                |> filterByModel
-                                |> filterBySleeperRoof
-                                |> filterBySleeperBunk
-                                |> filterByEngineMake
-                                |> filterByTransType
-                                |> filterBySuspension
-                                |> filterByBodyType
-                                |> filterByRearAxleType
-                                |> filterByTruckType
-                                |> filterByFleetCode
-                                |> filterBySpecialFinancing
-                                |> filterByOwningBranch
-                                |> filterByLocationName 
-                                |> filterByAPU
-                                |> filterByCDL
-                                |> filterByPhoto
-                                --range filters
-                                |> filterByPrice
-                                |> filterByEngineHP
-                                |> filterBySleeperInches
-                                |> filterByWheelBase
-                                |> filterByMileage
-                                |> filterByFrontAxleWeight
-                                |> filterByRearAxleWeight
-                                |> filterByInventoryAge
-                                |> rebuildFilters SalesStatus uiModel.salesStatusFilters
+                funcListx = [
+                                filterByYear
+                                ,filterByMake
+                                ,filterByModel
+                                ,filterBySleeperRoof
+                                ,filterBySleeperBunk
+                                ,filterByEngineMake
+                                ,filterByTransType
+                                ,filterBySuspension
+                                ,filterByBodyType
+                                ,filterByRearAxleType
+                                ,filterByTruckType
+                                ,filterByFleetCode
+                                ,filterBySpecialFinancing
+                                ,filterByOwningBranch
+                                ,filterByLocationName 
+                                ,filterByAPU
+                                ,filterByCDL
+                                ,filterByPhoto
+                                ,filterByPrice
+                                ,filterByEngineHP
+                                ,filterBySleeperInches
+                                ,filterByWheelBase
+                                ,filterByMileage
+                                ,filterByFrontAxleWeight
+                                ,filterByRearAxleWeight
+                                ,filterByInventoryAge
+                        ]
+
+                executeFilterFunc fn (sfBullets, trks) =
+                        fn (sfBullets, trks)
+                
+                fltrs = List.foldl executeFilterFunc (uiModel.selectedFilterBullets, model.truckList) funcListx
+
+                asdf = Debug.log "ppppppppppppppppppppppp " [fltrs]
+                
+                updatedSalesStatusFitlerList = rebuildFilters SalesStatus uiModel.salesStatusFilters fltrs
+                -- updatedSalesStatusFitlerList =
+                --          (uiModel.selectedFilterBullets, model.truckList)
+                --                 |> filterByYear
+                --                 |> filterByMake
+                --                 |> filterByModel
+                --                 |> filterBySleeperRoof
+                --                 |> filterBySleeperBunk
+                --                 |> filterByEngineMake
+                --                 |> filterByTransType
+                --                 |> filterBySuspension
+                --                 |> filterByBodyType
+                --                 |> filterByRearAxleType
+                --                 |> filterByTruckType
+                --                 |> filterByFleetCode
+                --                 |> filterBySpecialFinancing
+                --                 |> filterByOwningBranch
+                --                 |> filterByLocationName 
+                --                 |> filterByAPU
+                --                 |> filterByCDL
+                --                 |> filterByPhoto
+                --                 --range filters
+                --                 |> filterByPrice
+                --                 |> filterByEngineHP
+                --                 |> filterBySleeperInches
+                --                 |> filterByWheelBase
+                --                 |> filterByMileage
+                --                 |> filterByFrontAxleWeight
+                --                 |> filterByRearAxleWeight
+                --                 |> filterByInventoryAge
+                --                 |> rebuildFilters SalesStatus uiModel.salesStatusFilters
 
                 updatedTruckTypeFitlerList =
                         (uiModel.selectedFilterBullets, model.truckList)
@@ -1190,7 +1227,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 |> filterByFrontAxleWeight
                                 |> filterByInventoryAge
                                 |> rebuildFilters RearAxleWeight uiModel.rearAxleWeightFilters
-
+        
                 updatedInventoryAgeFitlerList =
                         (uiModel.selectedFilterBullets, model.truckList)
                                 |> filterBySalesStatus
