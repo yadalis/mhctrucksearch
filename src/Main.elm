@@ -14,6 +14,7 @@ import TruckViews.Truck exposing (..)
 import Helpers.ElmStyleShotcuts exposing (..)
 import Helpers.ElmUI exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
+import BusinessFunctions.SearchFilterFunctions exposing (..)
 import Array exposing(..)
 import Html.Events.Extra as ExtraHtmlEvents
 import SearchFilterViews.SearchFilter exposing (..)
