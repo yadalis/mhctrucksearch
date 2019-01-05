@@ -644,7 +644,7 @@ view (model, uiModel) =
                                         else 
                                             List.map 
                                                 (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
-                                                allFilterTypesMasterListWithItsInitialState
+                                                (partialSearchFiltersMetadata uiModel)
                                     )
                             ]
                             -- Trucks search Filter Bullets & Search Result List Panel 

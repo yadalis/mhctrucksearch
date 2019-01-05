@@ -186,38 +186,8 @@ type alias FilterSelectionsModel =
         ,filterCDLYesSelected : Bool
     }
 
-allFilterTypesMasterListWithItsInitialState = 
-                        [ {filterName = FleetCode, expandByDefault = False}
-                        , {filterName = SalesStatus, expandByDefault = True}
-                        , {filterName = TruckType, expandByDefault = True}
-                        , {filterName = SpecialFinancing, expandByDefault = False}
-                        , {filterName = Year, expandByDefault = False}
-                        , {filterName = Make, expandByDefault = True}
-                        , {filterName = MakeModel, expandByDefault = False}
-                        , {filterName = Price, expandByDefault = False}
-                        , {filterName = SleeperInches, expandByDefault = False}
-                        , {filterName = SleeperRoof, expandByDefault = False}
-                        , {filterName = SleeperBunk, expandByDefault = False}
-                        , {filterName = EngineMake, expandByDefault = False}
-                        , {filterName = EngineHP, expandByDefault = False}
 
-                        , {filterName = TransType, expandByDefault = False}
-                        , {filterName = Suspension, expandByDefault = False}
-                        , {filterName = WheelBase, expandByDefault = False}
-                        , {filterName = FrontAxleWeight, expandByDefault = False}
-                        , {filterName = RearAxleType, expandByDefault = False}
-                        , {filterName = RearAxleWeight, expandByDefault = False}
-                        , {filterName = InventoryAge, expandByDefault = False}
-                        , {filterName = LocationName, expandByDefault = False}
-                        , {filterName = OwningBranch, expandByDefault = False}
-                        , {filterName = Mileage, expandByDefault = False}
-
-                        , {filterName = BodyType, expandByDefault = False}
-                        
-                        , {filterName = APU, expandByDefault = False}
-                        , {filterName = CDL, expandByDefault = False}
-                        , {filterName = Photo, expandByDefault = False}] 
-
+defaultSearchFilterMetadata =  {filterName = FleetCode, displayText = "Default", filters = Array.empty, expandByDefault = False}
 
 allRangeFilterTypesMasterList = 
                         [ Price
@@ -252,6 +222,39 @@ initialModel =
         ,pagedTruckList = []
         ,currentPageNumber = 1
     }
+
+
+--searchFiltersMetadata : UIModel -> List  {filterName : SearchFilterCustomType, displayText : String, filters : Array SearchFilterType, expandByDefault : Bool }
+searchFiltersInitialExpandState = 
+    [
+          {filterName = FleetCode,        expandByDefault = False}
+        , {filterName = SalesStatus,      expandByDefault = False}
+        , {filterName = TruckType,        expandByDefault = False}
+        , {filterName = SpecialFinancing, expandByDefault = False}
+        , {filterName = Year,             expandByDefault = False}
+        , {filterName = Make,             expandByDefault = False}
+        , {filterName = MakeModel,        expandByDefault = False}
+        , {filterName = Price,            expandByDefault = False}
+        , {filterName = SleeperInches,    expandByDefault = False}
+        , {filterName = SleeperRoof,      expandByDefault = False}
+        , {filterName = SleeperBunk,      expandByDefault = False}
+        , {filterName = EngineMake,       expandByDefault = False}
+        , {filterName = EngineHP,         expandByDefault = False}
+        , {filterName = TransType,        expandByDefault = False}
+        , {filterName = Suspension,       expandByDefault = False}
+        , {filterName = WheelBase,        expandByDefault = False}
+        , {filterName = FrontAxleWeight,  expandByDefault = False}
+        , {filterName = RearAxleType,     expandByDefault = False}
+        , {filterName = RearAxleWeight,   expandByDefault = False}
+        , {filterName = InventoryAge,     expandByDefault = False}
+        , {filterName = LocationName,     expandByDefault = False}
+        , {filterName = OwningBranch,     expandByDefault = False}
+        , {filterName = Mileage,          expandByDefault = False}
+        , {filterName = BodyType,         expandByDefault = False}
+        , {filterName = APU,              expandByDefault = False}
+        , {filterName = CDL,              expandByDefault = False}
+        , {filterName = Photo,            expandByDefault = False}
+    ]
 
 initalUIModel : String -> UIModel
 initalUIModel jsFlag =
@@ -294,7 +297,7 @@ initalUIModel jsFlag =
                                             \index searchFilterTypeRecord ->
                                                     {index = index,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
                                         )
-                        <| Array.fromList allFilterTypesMasterListWithItsInitialState,
+                        <| Array.fromList searchFiltersInitialExpandState,
         showDropdown = False,
         showLoader = False,
         currentSortBy = MakeAtoZ,

@@ -2,7 +2,6 @@ module BusinessFunctions.SearchFilterFunctions exposing (..)
 
 import Model exposing (..)
 import Array exposing (..)
-import SearchFilterViews.SearchFilter exposing (..)
 import List.Extra exposing (..)
 import List.Unique exposing (..)
 import Maybe.Extra exposing (..)
@@ -46,6 +45,7 @@ returnPrevOrCurrentlyFilteredTrucks prevFilterdTruckList currentFilteredTruckLis
                 currentFilteredTruckList
         else
                 prevFilterdTruckList
+
 
 filterBySalesStatus (selectedFilters, trucksList) =
         List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.salesStatus (getSelectedFilterBulletsByFilterCategory SalesStatus selectedFilters)) trucksList
@@ -184,39 +184,39 @@ filterByInventoryAge (selectedFilters, trucksList) =
                 |> returnPrevOrCurrentlyFilteredTrucks trucksList
                 |> (\trks -> (selectedFilters, trks))
 
-filterFunctionsList = [
-                (SalesStatus, filterBySalesStatus)
-                , (Year,filterByYear)
-                , (Make,filterByMake)
-                , (MakeModel,filterByModel)
-                , (SleeperRoof,filterBySleeperRoof)
-                , (SleeperBunk,filterBySleeperBunk )
-                , (EngineMake,filterByEngineMake )
-                , (TransType,filterByTransType )
-                , (Suspension,filterBySuspension )
-                , (BodyType,filterByBodyType )
-                , (RearAxleType,filterByRearAxleType)
-                , (TruckType,filterByTruckType )
-                , (FleetCode,filterByFleetCode )
-                , (SpecialFinancing,filterBySpecialFinancing)
-                , (OwningBranch,filterByOwningBranch )
-                , (LocationName,filterByLocationName )
-                , (APU,filterByAPU )
-                , (CDL,filterByCDL )
-                , (Photo,filterByPhoto)
-                --range filters
-                , (Price,filterByPrice)
-                , (EngineHP,filterByEngineHP)
-                , (SleeperInches,filterBySleeperInches)
-                , (WheelBase,filterByWheelBase )
-                , (Mileage,filterByMileage )
-                , (FrontAxleWeight,filterByFrontAxleWeight)
-                , (RearAxleWeight,filterByRearAxleWeight )
-                , (InventoryAge,filterByInventoryAge )
-        ]
+partialSearchFiltersMetadata uiModel = 
+    [
+         {filterName = FleetCode,         displayText = "Fleet Code",         filterByFunction = filterByFleetCode,        filters = uiModel.fleetCodeFilters}       
+        ,{filterName = SalesStatus,       displayText = "Sales Status",       filterByFunction = filterBySalesStatus,      filters = uiModel.salesStatusFilters}     
+        ,{filterName = TruckType,         displayText = "Truck Status",       filterByFunction = filterByTruckType,        filters = uiModel.truckTypeFilters}       
+        ,{filterName = SpecialFinancing,  displayText = "Special Financing",  filterByFunction = filterBySpecialFinancing, filters = uiModel.specialFinancingFilters}
+        ,{filterName = Year,              displayText = "Year",               filterByFunction = filterByYear,             filters = uiModel.yearFilters}            
+        ,{filterName = Make,              displayText = "Make",               filterByFunction = filterByMake,             filters = uiModel.makeFilters}            
+        ,{filterName = MakeModel,         displayText = "Model",              filterByFunction = filterByModel,            filters = uiModel.modelFilters}           
+        ,{filterName = Price,             displayText = "Price",              filterByFunction = filterByPrice,            filters = uiModel.priceFilters}           
+        ,{filterName = SleeperInches,     displayText = "Sleeper Size",       filterByFunction = filterBySleeperInches,    filters = uiModel.sleeperInchesFilters}   
+        ,{filterName = SleeperRoof,       displayText = "Sleeper Roof",       filterByFunction = filterBySleeperRoof,      filters = uiModel.sleeperRoofFilters}     
+        ,{filterName = SleeperBunk,       displayText = "Sleeper Bunk",       filterByFunction = filterBySleeperBunk,      filters = uiModel.sleeperBunkFilters}     
+        ,{filterName = EngineMake,        displayText = "Engine",             filterByFunction = filterByEngineMake,       filters = uiModel.engineMakeFilters}      
+        ,{filterName = EngineHP,          displayText = "HP",                 filterByFunction = filterByEngineHP,         filters = uiModel.engineHPFilters}        
+        ,{filterName = TransType,         displayText = "Transmission",       filterByFunction = filterByTransType,        filters = uiModel.transTypeFilters}       
+        ,{filterName = Suspension,        displayText = "Suspension",         filterByFunction = filterBySuspension,       filters = uiModel.suspensionFilters}      
+        ,{filterName = WheelBase,         displayText = "Wheel Base",         filterByFunction = filterByWheelBase,        filters = uiModel.wheelBaseFilters}       
+        ,{filterName = FrontAxleWeight,   displayText = "Front Axle Weight",  filterByFunction = filterByFrontAxleWeight,  filters = uiModel.frontAxleWeightFilters} 
+        ,{filterName = RearAxleType,      displayText = "Rear Axle Type",     filterByFunction = filterByRearAxleType,     filters = uiModel.rearAxleTypeFilters}    
+        ,{filterName = RearAxleWeight,    displayText = "Rear Axle Weight",   filterByFunction = filterByRearAxleWeight,   filters = uiModel.rearAxleWeightFilters}  
+        ,{filterName = InventoryAge,      displayText = "Inventory Age",      filterByFunction = filterByInventoryAge,     filters = uiModel.inventoryAgeFilters}    
+        ,{filterName = LocationName,      displayText = "Location Name",      filterByFunction = filterByLocationName,     filters = uiModel.locationNameFilters}    
+        ,{filterName = OwningBranch,      displayText = "Owning Branch",      filterByFunction = filterByOwningBranch,     filters = uiModel.owningBranchFilters}    
+        ,{filterName = Mileage,           displayText = "Mileage",            filterByFunction = filterByMileage,          filters = uiModel.mileageFilters}         
+        ,{filterName = BodyType,          displayText = "Body Type",          filterByFunction = filterByBodyType,         filters = uiModel.bodyTypeFilters}        
+        ,{filterName = APU,               displayText = "APU",                filterByFunction = filterByAPU,              filters = uiModel.apuFilters}             
+        ,{filterName = CDL,               displayText = "CDL",                filterByFunction = filterByCDL,              filters = uiModel.cdlFilters}             
+        ,{filterName = Photo,             displayText = "Photo",              filterByFunction = filterByPhoto,            filters = uiModel.photoFilters}           
+    ]
 
-executeFilterFunc (fnCategory, fn) (sfBullets, trks) =
-        fn (sfBullets, trks)
+executeFilterFunc filterMetaData (sfBullets, trks) =
+        filterMetaData.filterByFunction (sfBullets, trks)
 
 rebuildFilters filterCategory filters (selectedFilterBullets, finalFilteredTrucks) =
         buildSearchFilterValueRecordList filterCategory filters finalFilteredTrucks     
@@ -239,12 +239,12 @@ findMatchAndSetUserAction filters sf =
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
         let 
-                
                 applyAllFiltersExcept filterCategory filters =
                         List.foldl
                                 executeFilterFunc 
                                 (uiModel.selectedFilterBullets, model.truckList) 
-                                (List.filter (\(fltrCategory, fn) -> fltrCategory /= filterCategory ) filterFunctionsList)
+                                --(List.filter (\(fltrCategory, _) -> fltrCategory /= filterCategory ) filterFunctionsList)
+                                (List.filter (\filterMetaData -> filterMetaData.filterName /= filterCategory ) (partialSearchFiltersMetadata uiModel) )
                                         |> rebuildFilters filterCategory filters
                     
                 newUIModel =  
@@ -288,7 +288,7 @@ applySearchFilters model uiModel =
                 List.foldl
                         executeFilterFunc 
                         (uiModel.selectedFilterBullets, model.truckList) 
-                        filterFunctionsList
+                        (partialSearchFiltersMetadata uiModel)
                                 |> \(_, finalFilteredTrucks) -> finalFilteredTrucks
     in
         filterdTruckList

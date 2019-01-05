@@ -10,92 +10,18 @@ import Msg exposing (..)
 import List.Unique exposing (..)
 import Array exposing (..)
 import Helpers.Colors exposing (..)
+import BusinessFunctions.SearchFilterFunctions exposing (..)
+import List.Extra exposing (..)
 
 buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> Element Msg
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
     let
-            (searchFilters, filterLabel, msg)
-                =   case searchFilterCustomType of
-                            SalesStatus -> 
-                                (uiModel.salesStatusFilters, "Sales Status", FilterCheckBoxClicked)
-
-                            Year -> 
-                                (uiModel.yearFilters, "Year", FilterCheckBoxClicked)
-
-                            Make -> 
-                                (uiModel.makeFilters, "Make", FilterCheckBoxClicked)
-
-                            MakeModel -> 
-                                (uiModel.modelFilters, "Model", FilterCheckBoxClicked)
-
-                            SleeperRoof -> 
-                                (uiModel.sleeperRoofFilters, "Sleeper Roof", FilterCheckBoxClicked)
-                                
-                            SleeperBunk -> 
-                                (uiModel.sleeperBunkFilters, "Sleeper Bunk", FilterCheckBoxClicked)
-                                
-                            EngineMake -> 
-                                (uiModel.engineMakeFilters, "Engine", FilterCheckBoxClicked)
-                                
-                            TransType -> 
-                                (uiModel.transTypeFilters, "Transmission", FilterCheckBoxClicked)
-                                
-                            Suspension -> 
-                                (uiModel.suspensionFilters, "Suspension", FilterCheckBoxClicked)
-                                
-                            BodyType -> 
-                                (uiModel.bodyTypeFilters, "Body Type", FilterCheckBoxClicked)
-                                
-                            RearAxleType -> 
-                                (uiModel.rearAxleTypeFilters, "Rear Axle Type", FilterCheckBoxClicked)
-                            
-                            TruckType -> 
-                                (uiModel.truckTypeFilters, "Truck Status", FilterCheckBoxClicked)
-
-                            FleetCode -> 
-                                (uiModel.fleetCodeFilters, "Fleet Code", FilterCheckBoxClicked)
-                            
-                            SpecialFinancing -> 
-                                (uiModel.specialFinancingFilters, "Special Financing", FilterCheckBoxClicked)
-                            
-                            OwningBranch -> 
-                                (uiModel.owningBranchFilters, "Owning Branch", FilterCheckBoxClicked)
-                            
-                            LocationName -> 
-                                (uiModel.locationNameFilters, "Location", FilterCheckBoxClicked)
-
-                            APU -> 
-                                (uiModel.apuFilters, "APU", FilterCheckBoxClicked)
-
-                            CDL -> 
-                                (uiModel.cdlFilters, "CDL", FilterCheckBoxClicked)
-
-                            Photo -> 
-                                (uiModel.photoFilters, "Show With Photos", FilterCheckBoxClicked)
-
-                            Price -> 
-                                (uiModel.priceFilters, "Price", FilterCheckBoxClicked)
-                            
-                            EngineHP -> 
-                                (uiModel.engineHPFilters, "HP", FilterCheckBoxClicked)
-                            
-                            SleeperInches -> 
-                                (uiModel.sleeperInchesFilters, "Sleeper Size", FilterCheckBoxClicked)
-                            
-                            WheelBase -> 
-                                (uiModel.wheelBaseFilters, "Wheel Base", FilterCheckBoxClicked)
-                            
-                            Mileage -> 
-                                (uiModel.mileageFilters, "Mileage", FilterCheckBoxClicked)
-                            
-                            FrontAxleWeight -> 
-                                (uiModel.frontAxleWeightFilters, "Front Axle Weight", FilterCheckBoxClicked)
-                            
-                            RearAxleWeight -> 
-                                (uiModel.rearAxleWeightFilters, "Rear Axle Weight", FilterCheckBoxClicked)
-                            
-                            InventoryAge -> 
-                                (uiModel.inventoryAgeFilters, "Inventory Age", FilterCheckBoxClicked)
+            (searchFilters, filterLabel, msg) = 
+                partialSearchFiltersMetadata uiModel
+                    |> find (\sfMeta -> sfMeta.filterName == searchFilterCustomType)
+                    |> Maybe.map (\sfMeta -> (sfMeta.filters, sfMeta.displayText, FilterCheckBoxClicked))
+                    -- the below condition should never happen unless you misspell in metadata list in model.elm file
+                    |> Maybe.withDefault (defaultSearchFilterMetadata.filters, defaultSearchFilterMetadata.displayText, FilterCheckBoxClicked) 
 
             showLabelRed = searchFilters
                                 |> Array.toList
@@ -115,7 +41,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                             |> (\possbileFirstItem ->
                                     case possbileFirstItem of
                                             Just val -> val
-                                            Nothing -> SearchFilterState -1 SalesStatus False -- Nothing case will never happen, but elm forces to handle all possibel cases
+                                            Nothing -> SearchFilterState -1 FleetCode False -- Nothing case will never happen, but elm forces to handle all possibel cases
                                 )
 
             --buildCheckbox :  Int -> SearchFilterType -> Element Msg
