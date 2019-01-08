@@ -17,11 +17,11 @@ buildSearchFilterValuesGroup : SearchFilterCustomType ->  Model -> UIModel -> El
 buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
     let
             (searchFilters, filterLabel, msg) = 
-                partialSearchFiltersMetadata uiModel
+                partialSearchFiltersMetadata
                     |> find (\sfMeta -> sfMeta.filterName == searchFilterCustomType)
-                    |> Maybe.map (\sfMeta -> (sfMeta.filters, sfMeta.displayText, FilterCheckBoxClicked))
+                    |> Maybe.map (\sfMeta -> (sfMeta.filters <| uiModel, sfMeta.displayText, FilterCheckBoxClicked))
                     -- the below condition should never happen unless you misspell in metadata list in model.elm file
-                    |> Maybe.withDefault (defaultSearchFilterMetadata.filters, defaultSearchFilterMetadata.displayText, FilterCheckBoxClicked) 
+                    |> Maybe.withDefault (defaultSearchFiltersMetadata.filters, defaultSearchFiltersMetadata.displayText, FilterCheckBoxClicked)
 
             showLabelRed = searchFilters
                                 |> Array.toList
@@ -53,11 +53,11 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                         [mhcRed, fb ]
                                     else
                                         [greyFont 0]
-                    displayValue = 
-                                    if searchFilter.filterCategory == TruckType then
-                                        searchFilter.searchFilterExtraData
-                                    else
-                                        searchFilter.searchFilterKey
+                    -- displayValue = 
+                    --                 -- if searchFilter.filterCategory == TruckType then
+                    --                 --     searchFilter.searchFilterExtraData
+                    --                 -- else
+                    --                     searchFilter.searchFilterKey
                     
                     --updatedSearchFilter = {searchFilter | index = index, filterCategory = searchFilterCustomType }
                 in
@@ -68,7 +68,7 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                 --onChange = msg index searchFilterCustomType searchFilter.searchFilterKey searchFilter.searchFilterExtraData --(String.trim displayValue)
                                 onChange = msg searchFilter --updatedSearchFilter
                                 ,icon = buildChkBoxImage
-                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue (displayValue ++ " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"))
+                                , label = labelRight ([centerY] ++ chkBoxStyle)  (el [] <| textValue (searchFilter.searchFilterKey ++ " (" ++  (String.fromInt <| searchFilter.resultCount)  ++ ")"))
                                 , checked = searchFilter.userAction
                             }
                         ]

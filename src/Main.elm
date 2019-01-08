@@ -58,7 +58,6 @@ update msg (model, uiModel) =
         buildTrucksHttpCmd =
                 let
                     trucksHttpCmd = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
-                    --y = Debug.log "url " [x]
                 in
                     (
                         (
@@ -90,208 +89,117 @@ update msg (model, uiModel) =
                                                             \eachRangeFilterType ->  
                                                                         (eachRangeFilterType, List.filter (\sf -> sf.filterCategory == eachRangeFilterType ) rangeSearchFilters)
                                                         ) 
-                                                allRangeFilterTypesMasterList -- make sure this list is up to date with all possible range filters, this is defined in model.elm
+                                                --allRangeFilterTypesMasterList -- make sure this list is up to date with all possible range filters, this is defined in model.elm
+                                                (List.map (\rangeFltrMeta -> rangeFltrMeta.filterName) rangeSearchFiltersInitialExpandState)
                     
                     allRangeSearchFiltersWithCountsWithItsFilterType = 
                                 List.map 
                                         (
                                             \(rangeFltrType, rangeFltrWithNoCountsList) ->  
-                                                    (rangeFltrType, (buildSearchFilterValueRecordList rangeFltrType (Array.fromList <| rangeFltrWithNoCountsList) model.truckList ))
+                                                    (rangeFltrType, (buildSearchFilterValueRecordList RangeValue rangeFltrType (Array.fromList <| rangeFltrWithNoCountsList) model.truckList ))
                                         ) 
                                 allRangeSearchFiltersWithNoCountsWithItsFilterType
 
+                    
                     fetchRangeFiltersPoplulatedWithCounts fltrType = 
-                                case    (find 
-                                                        (
-                                                            \(rangeFltrType,filtrArray)  -> 
-                                                                        rangeFltrType == fltrType 
-                                                        ) 
-                                        allRangeSearchFiltersWithCountsWithItsFilterType) of
+                                case    (find (\(rangeFltrType,filtrArray)  -> rangeFltrType == fltrType ) allRangeSearchFiltersWithCountsWithItsFilterType) of
                                     Just item -> Tuple.second item
                                     Nothing -> Array.empty
 
-                    newUIModel = {uiModel | 
-                                            priceFilters = fetchRangeFiltersPoplulatedWithCounts Price, 
-                                            engineHPFilters = fetchRangeFiltersPoplulatedWithCounts EngineHP,
-                                            sleeperInchesFilters = fetchRangeFiltersPoplulatedWithCounts SleeperInches,
-                                            wheelBaseFilters = fetchRangeFiltersPoplulatedWithCounts WheelBase,
-                                            mileageFilters = fetchRangeFiltersPoplulatedWithCounts Mileage,
-                                            frontAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts FrontAxleWeight,
-                                            rearAxleWeightFilters = fetchRangeFiltersPoplulatedWithCounts RearAxleWeight,
-                                            inventoryAgeFilters = fetchRangeFiltersPoplulatedWithCounts InventoryAge,
-                                            selectedFilterBullets = []
-                                }
+                    executeRangeFilterFunc rangeFilterMeta currentUIModel =
+                        rangeFilterMeta.pushModifiedFilterListBackInToUIModel currentUIModel (fetchRangeFiltersPoplulatedWithCounts rangeFilterMeta.filterName)
+
+                    newUIModel = 
+                        List.foldl
+                                executeRangeFilterFunc
+                                uiModel
+                                (List.filter (\fltrMeta -> fltrMeta.filterStyle == RangeValue) partialSearchFiltersMetadata)
+
                 in
-                    ( ( model , newUIModel), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
+                    ( ( model , {newUIModel | selectedFilterBullets = [] }), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
 
             OnFetchTrucks response ->
                 let
+                    --vx = Debug.log "asdfasfasd" [response]
+
                     trucks = case response of
                                 Ok truckList ->
                                         truckList
                                             |> sortTruckList uiModel.currentSortBy
                                 Err err ->
                                         []
-
-                    salesStatusFilters = buildSearchFilterValueRecordList SalesStatus uiModel.salesStatusFilters trucks
-                    yearFilters = buildSearchFilterValueRecordList Year uiModel.yearFilters trucks
-                    makeFilters = buildSearchFilterValueRecordList Make uiModel.makeFilters trucks
-                    modelFilters = buildSearchFilterValueRecordList MakeModel uiModel.modelFilters trucks
-                    sleeperRoofFilters = buildSearchFilterValueRecordList SleeperRoof uiModel.sleeperRoofFilters trucks
-                    sleeperBunkFilters = buildSearchFilterValueRecordList SleeperBunk uiModel.sleeperBunkFilters trucks
-                    engineMakeFilters = buildSearchFilterValueRecordList EngineMake uiModel.engineMakeFilters trucks
-                    transTypeFilters = buildSearchFilterValueRecordList TransType uiModel.transTypeFilters trucks
-                    suspensionFilters = buildSearchFilterValueRecordList Suspension uiModel.suspensionFilters trucks
-                    bodyTypeFilters = buildSearchFilterValueRecordList BodyType uiModel.bodyTypeFilters trucks
-                    rearAxleTypeFilters = buildSearchFilterValueRecordList RearAxleType uiModel.rearAxleTypeFilters trucks
-                    truckTypeFilters = buildSearchFilterValueRecordList TruckType uiModel.truckTypeFilters trucks
-                    fleetCodeFilters = buildSearchFilterValueRecordList FleetCode uiModel.fleetCodeFilters trucks
-                    specialFinancingFilters = buildSearchFilterValueRecordList SpecialFinancing uiModel.specialFinancingFilters trucks
-                    owningBranchFilters = buildSearchFilterValueRecordList OwningBranch uiModel.owningBranchFilters trucks
-                    apuFilters = buildSearchFilterValueRecordList APU uiModel.apuFilters trucks
-                    cdlFilters = buildSearchFilterValueRecordList CDL uiModel.apuFilters trucks
-                    photoFilters = buildSearchFilterValueRecordList Photo uiModel.apuFilters trucks
-                    locationNameFilters = buildSearchFilterValueRecordList LocationName uiModel.locationNameFilters trucks
+                    
+                    --vx = Debug.log "asdfasfasd" [trucks]
 
                     pagedTruckList = List.take 100 trucks
+
+                    executeRegularFilterFunc regularFilterMeta currentUIModel =
+                         regularFilterMeta.pushModifiedFilterListBackInToUIModel 
+                                                    currentUIModel 
+                                                    (buildSearchFilterValueRecordList SingleValue regularFilterMeta.filterName (regularFilterMeta.filters currentUIModel)  trucks)
+
+                    newUIModel = 
+                        List.foldl
+                                executeRegularFilterFunc
+                                uiModel
+                                (List.filter (\fltrMeta -> fltrMeta.filterStyle == SingleValue) partialSearchFiltersMetadata)
+
                 in
                     ( 
                         (
-                            {   model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
-                            { 
-                                uiModel   | 
-                                            yearFilters = yearFilters, 
-                                            makeFilters = makeFilters, 
-                                            modelFilters = modelFilters, 
-                                            salesStatusFilters = salesStatusFilters, 
-                                            sleeperRoofFilters = sleeperRoofFilters, 
-                                            sleeperBunkFilters = sleeperBunkFilters, 
-                                            engineMakeFilters = engineMakeFilters,
-                                            transTypeFilters = transTypeFilters,
-                                            suspensionFilters = suspensionFilters,
-                                            bodyTypeFilters = bodyTypeFilters,
-                                            rearAxleTypeFilters = rearAxleTypeFilters,
-                                            truckTypeFilters = truckTypeFilters,
-                                            fleetCodeFilters = fleetCodeFilters,
-                                            specialFinancingFilters = specialFinancingFilters,
-                                            owningBranchFilters = owningBranchFilters,
-                                            apuFilters = apuFilters,
-                                            cdlFilters = cdlFilters,
-                                            photoFilters = photoFilters,
-                                            locationNameFilters = locationNameFilters,
-                                            selectedFilterBullets = []
-                            }
+                            {model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
+                            { newUIModel | selectedFilterBullets = [] }
                         )
                         , fetchSearchFilterRanges   -- change this, otherwise it will bring all json based range filters data again and again, you should only rebuild the range filter counts
                                                     -- but not regenrate the filters completely
                     ) 
 
-            --FilterCheckBoxClicked index searchFilterCustomType keyValue extraData userAction ->
             FilterCheckBoxClicked selectedSearchFilter userAction->
                 let
-
-                    -- vv1 = Debug.log "selected searchFilterCustomType " [searchFilterCustomType]
-                    -- vv = Debug.log "selected bullet value " [String.fromInt index, keyValue, if userAction then "True" else "False"]
-
-                    --vv2 = Debug.log "selected searchFilterCustomType " [uiModel.truckTypeFilters]
                     convertMaybeInt intValue =
                          case intValue of 
                                 Just val -> val
                                 Nothing -> 0
 
                     updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
-                    updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModel =
+                    updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModelFunc =
                         let
-                            -- vv2 = Debug.log "selected filterList " [filterList]
                             sfIndex =
                                 Array.toList filterList
                                     |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
                                     |> convertMaybeInt
-                            -- vv23 = Debug.log "selected searchFilterCustomType " [sfIndex]
                         in
                             if sfIndex > 0 then
                                 Array.toList filterList
                                         |> find (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey  && sf.filterCategory == selectedSearchFilter.filterCategory)
                                         |> Maybe.map (\sf -> {sf | userAction = userAction})
-                                        |> Maybe.map (\sf -> 
-                                                            -- let
-                                                            --     -- vv232 = Debug.log "updated sf value " [sf]
-                                                            -- in
-                                                                Array.set sfIndex sf filterList
-                                                        )
-                                        |> Maybe.map pushModifiedFilterListBackInToUIModel
+                                        |> Maybe.map (\sf -> Array.set sfIndex sf filterList)
+                                        |> Maybe.map pushModifiedFilterListBackInToUIModelFunc
                                         |> Maybe.withDefault uiModel
                             else
                                 uiModel
 
                     newUIModel = 
-                        case selectedSearchFilter.filterCategory of
-                            SalesStatus -> 
-                                (updateUserSelectedSearchFilter <| uiModel.salesStatusFilters) (\mfArr -> {uiModel | salesStatusFilters = mfArr}) 
-                            Year -> 
-                                (uiModel.yearFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | yearFilters = mfArr})                                
-                            Make -> 
-                                (uiModel.makeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | makeFilters = mfArr})
-                            MakeModel -> 
-                                (uiModel.modelFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | modelFilters = mfArr})
-                            SleeperRoof -> 
-                                (uiModel.sleeperRoofFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperRoofFilters = mfArr})
-                            SleeperBunk -> 
-                                (uiModel.sleeperBunkFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperBunkFilters = mfArr})
-                            EngineMake -> 
-                                (uiModel.engineMakeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | engineMakeFilters = mfArr})    
-                            TransType -> 
-                                (uiModel.transTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | transTypeFilters = mfArr})    
-                            Suspension -> 
-                                (uiModel.suspensionFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | suspensionFilters = mfArr})  
-                            BodyType -> 
-                                (uiModel.bodyTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | bodyTypeFilters = mfArr})    
-                            RearAxleType -> 
-                                (uiModel.rearAxleTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | rearAxleTypeFilters = mfArr})
-                            TruckType -> 
-                                (uiModel.truckTypeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | truckTypeFilters = mfArr})
-                            FleetCode -> 
-                                (uiModel.fleetCodeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | fleetCodeFilters = mfArr})    
-                            SpecialFinancing -> 
-                                (uiModel.specialFinancingFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | specialFinancingFilters = mfArr})                            
-                            LocationName -> 
-                                (uiModel.locationNameFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | locationNameFilters = mfArr})  
-                            OwningBranch -> 
-                                (uiModel.owningBranchFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | owningBranchFilters = mfArr})       
-                            APU -> 
-                                (uiModel.apuFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | apuFilters = mfArr})
-                            CDL -> 
-                                (uiModel.cdlFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | cdlFilters = mfArr})
-                            Photo -> 
-                                (uiModel.photoFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | photoFilters = mfArr})
-                            Price -> 
-                                (uiModel.priceFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | priceFilters = mfArr})    
-                            EngineHP -> 
-                                (uiModel.engineHPFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | engineHPFilters = mfArr})    
-                            SleeperInches -> 
-                                (uiModel.sleeperInchesFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | sleeperInchesFilters = mfArr})    
-                            WheelBase -> 
-                                (uiModel.wheelBaseFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | wheelBaseFilters = mfArr})        
-                            Mileage -> 
-                                (uiModel.mileageFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | mileageFilters = mfArr})        
-                            FrontAxleWeight -> 
-                                (uiModel.frontAxleWeightFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | frontAxleWeightFilters = mfArr})        
-                            RearAxleWeight -> 
-                                (uiModel.rearAxleWeightFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | rearAxleWeightFilters = mfArr})
-                            InventoryAge -> 
-                                (uiModel.inventoryAgeFilters |> updateUserSelectedSearchFilter) (\mfArr -> {uiModel | inventoryAgeFilters = mfArr})    
+                            (partialSearchFiltersMetadata)
+                                |> find (\sfMeta -> sfMeta.filterName == selectedSearchFilter.filterCategory)
+                                |> Maybe.map (
+                                                \sfMeta -> ( 
+                                                            (sfMeta.filters uiModel |> updateUserSelectedSearchFilter) (sfMeta.pushModifiedFilterListBackInToUIModel uiModel)
+                                                )
+                                            )
+                                -- the below condition should never happen unless you misspell in metadata list in model.elm file
+                                |> Maybe.withDefault uiModel
 
-                    displayValue = 
-
-                        if selectedSearchFilter.filterCategory == TruckType then 
-                                if selectedSearchFilter.searchFilterKey == "I" then
-                                        "Inventory"
-                                else if selectedSearchFilter.searchFilterKey == "A" then 
-                                        "Appraisal"
-                                else
-                                        "Purchase Order"
-                        else
-                            selectedSearchFilter.searchFilterExtraData
+                    -- displayValue = 
+                    --     if selectedSearchFilter.filterCategory == TruckType then 
+                    --             if selectedSearchFilter.searchFilterKey == "I" then
+                    --                     "Inventory"
+                    --             else if selectedSearchFilter.searchFilterKey == "A" then 
+                    --                     "Appraisal"
+                    --             else
+                    --                     "Purchase Order"
+                    --     else
+                    --         selectedSearchFilter.searchFilterExtraData
 
                     newUIModelUpdatedWithSearchFilterBullets = 
                                     {newUIModel |
@@ -301,18 +209,22 @@ update msg (model, uiModel) =
                                                             newUIModel.selectedFilterBullets
                                                                 |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
                                                                 |> convertMaybeInt
-                                                                |> (\idx -> if idx > 0 then
-                                                                                newUIModel.selectedFilterBullets 
-                                                                            else
-                                                                                ( SearchFilterType 
+                                                                |> (\idx -> 
+                                                                        let
+                                                                            yu =  SearchFilterType -- TODO change this variable name
                                                                                         selectedSearchFilter.index 
                                                                                         selectedSearchFilter.searchFilterKey 
-                                                                                        displayValue
+                                                                                        selectedSearchFilter.searchFilterExtraData
                                                                                         userAction
                                                                                         0
                                                                                         selectedSearchFilter.filterCategory 
+                                                                        in
+                                                                        
+                                                                            if idx > 0 then
+                                                                                newUIModel.selectedFilterBullets 
+                                                                            else
+                                                                                ( yu
                                                                                 ) :: (newUIModel.selectedFilterBullets)
-                                                                                
                                                                     )
                                                         else
                                                             newUIModel.selectedFilterBullets
@@ -321,7 +233,6 @@ update msg (model, uiModel) =
                                                                 |> Maybe.withDefault newUIModel.selectedFilterBullets
                                     }
 
-                    --v = Debug.log "selected bullets " [newUIModel1.selectedFilterBullets]
                     newSortedFilteredTruckList = applySearchFilters model newUIModelUpdatedWithSearchFilterBullets
                                                     |> sortTruckList uiModel.currentSortBy
 
@@ -407,38 +318,18 @@ update msg (model, uiModel) =
 
             ClearAllFilters ->
                 let
-                    newUIModel = 
-                        {
-                            uiModel |
-                                    salesStatusFilters = resetFilters uiModel.salesStatusFilters
-                                    ,yearFilters = resetFilters uiModel.yearFilters
-                                    ,makeFilters = resetFilters uiModel.makeFilters
-                                    ,modelFilters = resetFilters uiModel.modelFilters
-                                    ,sleeperRoofFilters = resetFilters uiModel.sleeperRoofFilters
-                                    ,sleeperBunkFilters = resetFilters uiModel.sleeperBunkFilters
-                                    ,engineMakeFilters = resetFilters uiModel.engineMakeFilters
-                                    ,transTypeFilters = resetFilters uiModel.transTypeFilters
-                                    ,suspensionFilters = resetFilters uiModel.suspensionFilters
-                                    ,bodyTypeFilters = resetFilters uiModel.bodyTypeFilters
-                                    ,rearAxleTypeFilters = resetFilters uiModel.rearAxleTypeFilters
-                                    ,truckTypeFilters = resetFilters uiModel.truckTypeFilters
-                                    ,fleetCodeFilters = resetFilters uiModel.fleetCodeFilters
-                                    ,specialFinancingFilters = resetFilters uiModel.specialFinancingFilters
-                                    ,owningBranchFilters = resetFilters uiModel.owningBranchFilters
-                                    ,apuFilters = resetFilters uiModel.apuFilters
-                                    ,cdlFilters = resetFilters uiModel.cdlFilters
-                                    ,photoFilters = resetFilters uiModel.photoFilters
-                                    ,priceFilters = resetFilters uiModel.priceFilters
-                                    ,engineHPFilters = resetFilters uiModel.engineHPFilters
-                                    ,sleeperInchesFilters = resetFilters uiModel.sleeperInchesFilters
-                                    ,wheelBaseFilters = resetFilters uiModel.wheelBaseFilters
-                                    ,mileageFilters = resetFilters uiModel.mileageFilters
-                                    ,frontAxleWeightFilters = resetFilters uiModel.frontAxleWeightFilters
-                                    ,rearAxleWeightFilters = resetFilters uiModel.rearAxleWeightFilters
-                                    ,inventoryAgeFilters = resetFilters uiModel.inventoryAgeFilters
-                                    ,locationNameFilters = resetFilters uiModel.locationNameFilters
-                                    ,selectedFilterBullets = []
-                        }
+                    executeRegularAndRangeFilterFunc filterMeta updatableUIModel =
+                        filterMeta.pushModifiedFilterListBackInToUIModel 
+                            updatableUIModel 
+                            (resetFilters (filterMeta.filters updatableUIModel))
+    
+                    newUIModelx = 
+                        List.foldl
+                                executeRegularAndRangeFilterFunc
+                                uiModel
+                                partialSearchFiltersMetadata
+
+                    newUIModel = {newUIModelx | selectedFilterBullets = []}
                     
                     sortedTrkList = model.truckList |> sortTruckList uiModel.currentSortBy
 
@@ -602,7 +493,7 @@ view (model, uiModel) =
                             ,
                             Input.button ( [ mouseOver [fc 217 98 69] ])
                             { 
-                                onPress =  if anyFilterApplied uiModel then Just <| (ShowLoader True) else  Nothing ---- ClearAllFilters 
+                                onPress =  if anyFilterApplied uiModel then Just <| ClearAllFilters  else Nothing ----  (ShowLoader True) 
                                 ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
                             }
                         ]
@@ -651,7 +542,7 @@ view (model, uiModel) =
                                         else 
                                             List.map 
                                                 (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
-                                                (partialSearchFiltersMetadata uiModel)
+                                                partialSearchFiltersMetadata
                                     )
                             ]
                             -- Trucks search Filter Bullets & Search Result List Panel 

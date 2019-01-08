@@ -285,6 +285,111 @@
         ,"userAction" : "False"
         ,"resultCount" : 0
         ,"filterCategory" : "RearAxleWeight"
+    },
+    {
+        "searchFilterKey" : "< 3.00"
+        ,"searchFilterExtraData" : "0-2.99"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleRatio"
+    },
+    {    
+        "searchFilterKey" : "3.00 - 3.19"
+        ,"searchFilterExtraData" : "3.00-3.19"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleRatio"
+    },   
+    {    
+        "searchFilterKey" : "3.20 - 3.39"
+        ,"searchFilterExtraData" : "3.20-3.39"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleRatio"
+    }, 
+    {    
+        "searchFilterKey" : "3.40 - 3.70"
+        ,"searchFilterExtraData" : "3.40-3.70"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleRatio"
+    },  
+    {
+        "searchFilterKey" : "> 3.70"
+        ,"searchFilterExtraData" : "3.71-10.0"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearAxleRatio"
+    },
+    {
+        "searchFilterKey" : "< 10 Inches"
+        ,"searchFilterExtraData" : "0-9"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearWheelSize"
+    },
+    {    
+        "searchFilterKey" : "10 - 19 Inches"
+        ,"searchFilterExtraData" : "10-19"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearWheelSize"
+    },  
+    {    
+        "searchFilterKey" : "20 - 29 Inches"
+        ,"searchFilterExtraData" : "20-29"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearWheelSize"
+    },    
+    {    
+        "searchFilterKey" : "30 - 39 Inches"
+        ,"searchFilterExtraData" : "30-39"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearWheelSize"
+    },     
+    {
+        "searchFilterKey" : "> 40 Inches"
+        ,"searchFilterExtraData" : "40-99"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "RearWheelSize"
+    },
+    {
+        "searchFilterKey" : "< 10 Inches"
+        ,"searchFilterExtraData" : "0-9"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontWheelSize"
+    },
+    {    
+        "searchFilterKey" : "10 - 19 Inches"
+        ,"searchFilterExtraData" : "10-19"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontWheelSize"
+    },  
+    {    
+        "searchFilterKey" : "20 - 29 Inches"
+        ,"searchFilterExtraData" : "20-29"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontWheelSize"
+    },    
+    {    
+        "searchFilterKey" : "30 - 39 Inches"
+        ,"searchFilterExtraData" : "30-39"        
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontWheelSize"
+    },      
+    {
+        "searchFilterKey" : "> 40 Inches"
+        ,"searchFilterExtraData" : "40-99"
+        ,"userAction" : "False"
+        ,"resultCount" : 0
+        ,"filterCategory" : "FrontWheelSize"
     }
     ]
 }

@@ -9,6 +9,7 @@ import Model  exposing (..)
 --import RemoteData  exposing (..)
 import Array exposing(..)
 import Url.Builder exposing (..)
+import List.Extra exposing (..)
 
 import Json.Decode.Extra exposing (fromResult)
 
@@ -56,7 +57,7 @@ fetchTrucksUrl truckCondition searchText =
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks"  [truckCondition] []
             -- else
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks" [truckCondition, searchText] []
-        -- "http://localhost:3333/trks"
+        --"http://localhost:3333/trks"
 
 fetchAppraisedTrucksUrl : String -> String
 fetchAppraisedTrucksUrl searchText =
@@ -80,7 +81,7 @@ fetchSearchFilterRangesUrl =
         --"http://localhost:50977/api/repairorder/gettrucks"
         --"http://localhost:4444/srchRanges"
         "http://localhost:50977/api/mhc/getrangefilters"
-        --"http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
+        --   "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
         
 fetchTrucksDecoder: Decode.Decoder (List Truck)
 fetchTrucksDecoder = 
@@ -106,7 +107,8 @@ trucksDecoder  =
         |> required "cdl" Decode.string
         |> required "year" Decode.string        
         |> required "primaryImageLink" Decode.string
-        |> required "truckType" Decode.string
+        --|> required "truckType" Decode.string
+        |> required "truckType" truckTypeDecoder
         |> required "suspension" Decode.string
         |> required "bodyType" Decode.string
         |> required "sleeperBunk" Decode.string
@@ -128,8 +130,22 @@ trucksDecoder  =
         |> required "locationName" Decode.string
         |> required "salesStatusFlag" Decode.string
         |> required "hasPhoto" Decode.string
-        
-    
+        |> required "brakeType" Decode.string
+        |> required "rearAxleRatio" Decode.float
+        |> required "exhaustType" Decode.string
+        |> required "rearWheelSize" Decode.float
+        |> required "frontWheelSize" Decode.float
+
+truckTypeDecoder : Decode.Decoder String
+truckTypeDecoder =
+  Decode.string |> Decode.andThen 
+    (
+        \truckTypeValue ->
+            case truckTypeValue of
+            "I"   -> Decode.succeed   "Inventory"
+            "A"   -> Decode.succeed   "Appraisal"
+            _     -> Decode.succeed   "Purchase Order"
+    )
 
 onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterType)
 onFetchSearchFilterRangesDecoder = 
@@ -170,8 +186,21 @@ searchFilterRangeUnionTypeString str =
     Decode.succeed <| convertStringToRangeSearchFilter str
 
 convertStringToRangeSearchFilter rangeFilterStr =
-    allRangeFilterTypesKeyValueParis
-        |> List.filter(\(k, v) -> k == rangeFilterStr)
-        |> List.head
-        |> Maybe.map (\(k, v) -> v)
-        |> Maybe.withDefault Price --introduce noValue filter type to handle this situation
+    
+    find (\sfRangeMeta -> sfRangeMeta.filterNameString == rangeFilterStr) rangeSearchFiltersInitialExpandState
+        |> Maybe.map (\sfRangeMeta -> sfRangeMeta.filterName)
+        -- the below condition should never happen unless you misspell in metadata list in model.elm file
+        |> Maybe.withDefault Price
+
+    -- rangeSearchFiltersInitialExpandState
+    --     |> List.filter(\(k, v) -> k == rangeFilterStr)
+    --     |> List.head
+    --     |> Maybe.map (\(k, v) -> v)
+    --     |> Maybe.withDefault Price --introduce noValue filter type to handle this situation
+
+-- convertStringToRangeSearchFilter rangeFilterStr =
+--     allRangeFilterTypesKeyValueParis
+--         |> List.filter(\(k, v) -> k == rangeFilterStr)
+--         |> List.head
+--         |> Maybe.map (\(k, v) -> v)
+--         |> Maybe.withDefault Price --introduce noValue filter type to handle this situation

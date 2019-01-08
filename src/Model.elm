@@ -44,6 +44,11 @@ type alias Truck =
         , locationName      : String
         , salesStatusFlag   : String
         , hasPhoto          : String
+        , brakeType         : String
+        , rearAxleRatio     : Float
+        , exhaustType       : String
+        , rearWheelSize     : Float
+        , frontWheelSize    : Float
     }
 
 type alias Model =
@@ -89,6 +94,11 @@ type alias UIModel =
         ,cdlFilters : Array SearchFilterType
         ,photoFilters : Array SearchFilterType
         ,locationNameFilters : Array SearchFilterType
+        ,brakeTypeFilters : Array SearchFilterType
+        ,exhaustTypeFilters : Array SearchFilterType
+        ,rearAxleRatioFilters : Array SearchFilterType
+        ,rearWheelSizeFilters : Array SearchFilterType
+        ,frontWheelSizeFilters : Array SearchFilterType
         ,selectedFilterBullets : List SearchFilterType
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         --,collapseAllChecked : Bool
@@ -134,6 +144,8 @@ type SearchFilterCustomType
     | APU
     | CDL
     | Photo
+    | BrakeType
+    | ExhaustType 
     -- range filters
     | Price
     | EngineHP
@@ -144,10 +156,17 @@ type SearchFilterCustomType
     | RearAxleWeight
     | InventoryAge
     | LocationName
+    | RearAxleRatio
+    | RearWheelSize
+    | FrontWheelSize
 
 type SortOrder
     = SortASC
     | SortDSC
+
+type SearchFilterStyle
+    = SingleValue
+    | RangeValue
 
 type SortBy
     = PriceLowToHigh
@@ -158,7 +177,6 @@ type SortBy
     | MakeZtoA
     | YearNewToOld
     | YearOldToNew
-
 
 type alias SearchFilterType =
     {   
@@ -180,37 +198,16 @@ type alias SelectedSearchFilterBulletType =
         ,filterCategory : SearchFilterCustomType
     }
 
-type alias FilterSelectionsModel =
-    {   
-        filterCDLNoSelected : Bool
-        ,filterCDLYesSelected : Bool
-    }
-
-
-defaultSearchFilterMetadata =  {filterName = FleetCode, displayText = "Default", filters = Array.empty, expandByDefault = False}
-
-allRangeFilterTypesMasterList = 
-                        [ Price
-                        , EngineHP
-                        , SleeperInches
-                        , WheelBase
-                        , Mileage
-                        , FrontAxleWeight
-                        , RearAxleWeight
-                        , InventoryAge
-                        ]
-
-allRangeFilterTypesKeyValueParis = 
-                        [ 
-                          ("Price",Price)
-                        , ("EngineHP",EngineHP)
-                        , ("SleeperInches",SleeperInches)
-                        , ("WheelBase", WheelBase)
-                        , ("Mileage",Mileage)
-                        , ("FrontAxleWeight", FrontAxleWeight)
-                        , ("RearAxleWeight", RearAxleWeight)
-                        , ("InventoryAge", InventoryAge)
-                        ]
+defaultSearchFiltersMetadata =  
+                            {
+                                    filterName = FleetCode,
+                                    displayText = "Default",
+                                    filters = Array.empty,
+                                    expandByDefault = False, 
+                                    truckFieldFunction = (List.map .fleetCode, \sf t -> String.trim t.fleetCode == sf),
+                                    truckRangeFieldFunction = (\minValue maxValue t -> t.price >= minValue && t.price <= maxValue),
+                                    filterNameString = "Price"
+                            }
 
 initialModel : Model
 initialModel =
@@ -225,35 +222,45 @@ initialModel =
 
 
 --searchFiltersMetadata : UIModel -> List  {filterName : SearchFilterCustomType, displayText : String, filters : Array SearchFilterType, expandByDefault : Bool }
-searchFiltersInitialExpandState = 
+regularSearchFiltersInitialExpandState = 
     [
-          {filterName = FleetCode,        expandByDefault = False}
-        , {filterName = SalesStatus,      expandByDefault = False}
-        , {filterName = TruckType,        expandByDefault = False}
-        , {filterName = SpecialFinancing, expandByDefault = False}
-        , {filterName = Year,             expandByDefault = False}
-        , {filterName = Make,             expandByDefault = False}
-        , {filterName = MakeModel,        expandByDefault = False}
-        , {filterName = Price,            expandByDefault = False}
-        , {filterName = SleeperInches,    expandByDefault = False}
-        , {filterName = SleeperRoof,      expandByDefault = False}
-        , {filterName = SleeperBunk,      expandByDefault = False}
-        , {filterName = EngineMake,       expandByDefault = False}
-        , {filterName = EngineHP,         expandByDefault = False}
-        , {filterName = TransType,        expandByDefault = False}
-        , {filterName = Suspension,       expandByDefault = False}
-        , {filterName = WheelBase,        expandByDefault = False}
-        , {filterName = FrontAxleWeight,  expandByDefault = False}
-        , {filterName = RearAxleType,     expandByDefault = False}
-        , {filterName = RearAxleWeight,   expandByDefault = False}
-        , {filterName = InventoryAge,     expandByDefault = False}
-        , {filterName = LocationName,     expandByDefault = False}
-        , {filterName = OwningBranch,     expandByDefault = False}
-        , {filterName = Mileage,          expandByDefault = False}
-        , {filterName = BodyType,         expandByDefault = False}
-        , {filterName = APU,              expandByDefault = False}
-        , {filterName = CDL,              expandByDefault = False}
-        , {filterName = Photo,            expandByDefault = False}
+          {filterName = FleetCode,          truckFieldFunction =  (List.map .fleetCode,        (\sf t -> String.trim t.fleetCode        == sf) )  ,expandByDefault = False}
+        , {filterName = SalesStatus,        truckFieldFunction =  (List.map .salesStatus,      (\sf t -> String.trim t.salesStatus      == sf) )  ,expandByDefault = True}
+        , {filterName = TruckType,          truckFieldFunction =  (List.map .truckType,        (\sf t -> String.trim t.truckType        == sf) )  ,expandByDefault = False}
+        , {filterName = SpecialFinancing,   truckFieldFunction =  (List.map .specialFinancing, (\sf t -> String.trim t.specialFinancing == sf) )  ,expandByDefault = False}
+        , {filterName = Year,               truckFieldFunction =  (List.map .year,             (\sf t -> String.trim t.year             == sf) )  ,expandByDefault = False}
+        , {filterName = Make,               truckFieldFunction =  (List.map .make,             (\sf t -> String.trim t.make             == sf) )  ,expandByDefault = True}
+        , {filterName = MakeModel,          truckFieldFunction =  (List.map .model,            (\sf t -> String.trim t.model            == sf) )  ,expandByDefault = False}         
+        , {filterName = SleeperRoof,        truckFieldFunction =  (List.map .sleeperRoof,      (\sf t -> String.trim t.sleeperRoof      == sf) )  ,expandByDefault = False}
+        , {filterName = SleeperBunk,        truckFieldFunction =  (List.map .sleeperBunk,      (\sf t -> String.trim t.sleeperBunk      == sf) )  ,expandByDefault = False}
+        , {filterName = EngineMake,         truckFieldFunction =  (List.map .engineMake,       (\sf t -> String.trim t.engineMake       == sf) )  ,expandByDefault = False}
+        , {filterName = TransType,          truckFieldFunction =  (List.map .transType,        (\sf t -> String.trim t.transType        == sf) )  ,expandByDefault = False}
+        , {filterName = Suspension,         truckFieldFunction =  (List.map .suspension,       (\sf t -> String.trim t.suspension       == sf) )  ,expandByDefault = False}
+        , {filterName = RearAxleType,       truckFieldFunction =  (List.map .rearAxleType,     (\sf t -> String.trim t.rearAxleType     == sf) )  ,expandByDefault = False}
+        , {filterName = LocationName,       truckFieldFunction =  (List.map .locationName,     (\sf t -> String.trim t.locationName     == sf) )  ,expandByDefault = False}
+        , {filterName = OwningBranch,       truckFieldFunction =  (List.map .owningBranch,     (\sf t -> String.trim t.owningBranch     == sf) )  ,expandByDefault = False}
+        , {filterName = BodyType,           truckFieldFunction =  (List.map .bodyType,         (\sf t -> String.trim t.bodyType         == sf) )  ,expandByDefault = False}
+        , {filterName = APU,                truckFieldFunction =  (List.map .apu,              (\sf t -> String.trim t.apu              == sf) )  ,expandByDefault = False}
+        , {filterName = CDL,                truckFieldFunction =  (List.map .cdl,              (\sf t -> String.trim t.cdl              == sf) )  ,expandByDefault = False}
+        , {filterName = Photo,              truckFieldFunction =  (List.map .hasPhoto,         (\sf t -> String.trim t.hasPhoto         == sf) )  ,expandByDefault = False}
+        , {filterName = BrakeType,          truckFieldFunction =  (List.map .brakeType,        (\sf t -> String.trim t.brakeType        == sf) )  ,expandByDefault = False}
+        , {filterName = ExhaustType,        truckFieldFunction =  (List.map .exhaustType,      (\sf t -> String.trim t.exhaustType      == sf) )  ,expandByDefault = False}
+
+    ]
+
+rangeSearchFiltersInitialExpandState = 
+    [
+          {filterName = Price,           filterNameString = "Price",            truckRangeFieldFunction = (\minValue maxValue t -> t.price >= minValue && t.price <= maxValue),                         expandByDefault = True}
+        , {filterName = SleeperInches,   filterNameString = "SleeperInches",    truckRangeFieldFunction = (\minValue maxValue t -> t.sleeperInches >= minValue && t.sleeperInches <= maxValue),         expandByDefault = False}
+        , {filterName = EngineHP,        filterNameString = "EngineHP",         truckRangeFieldFunction = (\minValue maxValue t -> t.engineHP >= minValue && t.engineHP <= maxValue),                   expandByDefault = False}
+        , {filterName = WheelBase,       filterNameString = "WheelBase",        truckRangeFieldFunction = (\minValue maxValue t -> t.wheelBase >= minValue && t.wheelBase <= maxValue),                 expandByDefault = False}
+        , {filterName = FrontAxleWeight, filterNameString = "FrontAxleWeight",  truckRangeFieldFunction = (\minValue maxValue t -> t.frontAxleWeight >= minValue && t.frontAxleWeight <= maxValue),     expandByDefault = False}
+        , {filterName = RearAxleWeight,  filterNameString = "RearAxleWeight",   truckRangeFieldFunction = (\minValue maxValue t -> t.rearAxleWeight >= minValue && t.rearAxleWeight <= maxValue),       expandByDefault = False}
+        , {filterName = InventoryAge,    filterNameString = "InventoryAge",     truckRangeFieldFunction = (\minValue maxValue t -> t.inventoryAge >= minValue && t.inventoryAge <= maxValue),           expandByDefault = False}
+        , {filterName = Mileage,         filterNameString = "Mileage",          truckRangeFieldFunction = (\minValue maxValue t -> t.mileage >= minValue && t.mileage <= maxValue),                     expandByDefault = False}
+        , {filterName = RearAxleRatio,   filterNameString = "RearAxleRatio",    truckRangeFieldFunction = (\minValue maxValue t -> t.rearAxleRatio >= minValue && t.rearAxleRatio <= maxValue),         expandByDefault = False}
+        , {filterName = RearWheelSize,   filterNameString = "RearWheelSize",    truckRangeFieldFunction = (\minValue maxValue t -> t.rearWheelSize >= minValue && t.rearWheelSize <= maxValue),         expandByDefault = False}
+        , {filterName = FrontWheelSize,  filterNameString = "FrontWheelSize",   truckRangeFieldFunction = (\minValue maxValue t -> t.frontWheelSize >= minValue && t.frontWheelSize <= maxValue),       expandByDefault = False}
     ]
 
 initalUIModel : String -> UIModel
@@ -290,14 +297,31 @@ initalUIModel jsFlag =
         cdlFilters = Array.empty,
         photoFilters = Array.empty,
         locationNameFilters = Array.empty,
+        brakeTypeFilters = Array.empty,
+        rearAxleRatioFilters = Array.empty,
+        exhaustTypeFilters = Array.empty,
+        rearWheelSizeFilters = Array.empty,        
+        frontWheelSizeFilters = Array.empty,
         selectedFilterBullets = [],
         expandCollapseSearchFilterStates = 
-                        Array.indexedMap 
+                Array.fromList <|
+                        List.concat
+                        [
+                            (List.indexedMap 
                                         (
                                             \index searchFilterTypeRecord ->
-                                                    {index = index,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
+                                                        {index = index,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
                                         )
-                        <| Array.fromList searchFiltersInitialExpandState,
+                            regularSearchFiltersInitialExpandState)
+                            ,
+                            (List.indexedMap 
+                                        (
+                                            \index searchFilterTypeRecord ->
+                                                        {index = index +  List.length regularSearchFiltersInitialExpandState,searchFilterCustomType = searchFilterTypeRecord.filterName, userAction = searchFilterTypeRecord.expandByDefault}
+                                        )
+                            rangeSearchFiltersInitialExpandState)
+                        ]
+                        ,
         showDropdown = False,
         showLoader = False,
         currentSortBy = MakeAtoZ,

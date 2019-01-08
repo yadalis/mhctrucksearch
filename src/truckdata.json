@@ -39,7 +39,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 20,
     "owningBranch": "Abilene",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "AIR",
+    "rearAxleRatio": 1.70,
+    "exhaustType" : "Single",
+    "rearWheelSize": 1.1,
+    "frontWheelSize": 1.1
     },
     {
     "id": "e89d0ec8-a568-4554-9a22-003b49f32d84",
@@ -81,7 +86,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 20,
     "owningBranch": "Abilene",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "DISC/DRUM",
+    "rearAxleRatio": 1.80,
+    "exhaustType" : "Single",
+    "rearWheelSize": 1.6,
+    "frontWheelSize": 1.6
     },
     {
     "id": "a2145fbf-6ba6-494c-b04e-004e2c9279ff",
@@ -123,7 +133,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 20,
     "owningBranch": "Abilene",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "DRUM/DRUM",
+    "rearAxleRatio": 2.28,
+    "exhaustType" : "Single",
+    "rearWheelSize": 16.5,
+    "frontWheelSize": 16.5
     },
     {
     "id": "764281c5-f778-414c-96cf-008ba58fb2bb",
@@ -165,7 +180,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 25,
     "owningBranch": "Admore",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "AIR",
+    "rearAxleRatio": 3.10,
+    "exhaustType" : "Single",
+    "rearWheelSize": 17.5,
+    "frontWheelSize": 17.5
     },
     {
     "id": "c5f0ef4b-784f-4c30-9b40-00b3a137c5b0",
@@ -207,7 +227,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 50,
     "owningBranch": "Abilene",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "AIR",
+    "rearAxleRatio": 3.21,
+    "exhaustType" : "Single",
+    "rearWheelSize": 29.2,
+    "frontWheelSize": 29.2
     },
     {
     "id": "39a71d7d-1a24-48e6-a986-00b723ee34da",
@@ -249,7 +274,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 60,
     "owningBranch": "Atlanta",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "HYDRA/HYDRO",
+    "rearAxleRatio": 3.45,
+    "exhaustType" : "Double",
+    "rearWheelSize": 39.1,
+    "frontWheelSize": 39.1
     },
     {
     "id": "05610157-99d5-4da1-8aed-00cf05f83bdc",
@@ -291,7 +321,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 80,
     "owningBranch": "Atlanta",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "AIR",
+    "rearAxleRatio": 3.50,
+    "exhaustType" : "Double",
+    "rearWheelSize": 38.2,
+    "frontWheelSize": 38.2
     },
     {
     "id": "ab118f01-7767-49b5-b37c-00d12f51c117",
@@ -333,7 +368,12 @@
     "specialFinancing": "Eligible",
     "inventoryAge": 100,
     "owningBranch": "Dallas",
-    "hasPhoto" : "No"
+    "hasPhoto" : "No",
+    "brakeType" : "DISC/DISC",
+    "rearAxleRatio": 3.75,
+    "exhaustType" : "Double",
+    "rearWheelSize": 44.1,
+    "frontWheelSize": 44.1
     },
     {
     "id": "9b0970a4-44e5-49d9-a45d-00d6fa69dde9",
@@ -375,7 +415,12 @@
     "specialFinancing": "Not Eligible",
     "inventoryAge": 120,
     "owningBranch": "Abilene",
-    "hasPhoto" : "Yes"
+    "hasPhoto" : "Yes",
+    "brakeType" : "DISC/DISC",
+    "rearAxleRatio": 3.85,
+    "exhaustType" : "H",
+    "rearWheelSize": 45.3,
+    "frontWheelSize": 45.3
     },
     {
     "id": "bc815ce7-fff9-4d50-a58e-00df21b06bc3",
@@ -417,7 +462,12 @@
     "specialFinancing": "Not Eligible",
     "inventoryAge": 150,
     "owningBranch": "Abilene",
-    "hasPhoto" : "No"
+    "hasPhoto" : "No",
+    "brakeType" : "DISC/DISC",
+    "rearAxleRatio": 3.15,
+    "exhaustType" : "H",
+    "rearWheelSize": 24.5,
+    "frontWheelSize": 24.5
     }
     ]
 }

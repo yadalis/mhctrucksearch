@@ -18,9 +18,9 @@ searchFilterBulletView filterList =
                                 [
                                     column[][
                                         el [fs 15, greyBorder 97, mhcRed,  greyBg 231 ,pd 6, fl, hf] (textValue <| 
-                                                                                if sf.filterCategory == TruckType then
-                                                                                    sf.searchFilterExtraData
-                                                                                else
+                                                                                -- if sf.filterCategory == TruckType then
+                                                                                --     sf.searchFilterExtraData
+                                                                                -- else
                                                                                     sf.searchFilterKey
                                                                             )
                                     ]

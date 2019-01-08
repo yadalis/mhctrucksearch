@@ -46,184 +46,68 @@ returnPrevOrCurrentlyFilteredTrucks prevFilterdTruckList currentFilteredTruckLis
         else
                 prevFilterdTruckList
 
+filterBySingleValue (selectedFilters, trucksList) filterCategory uiModel =
+        (find (\filterMetaData -> filterMetaData.filterName == filterCategory ) partialSearchFiltersMetadata )
+                |> Maybe.map 
+                        (\fltr -> 
+                                List.filter 
+                                        (
+                                                (\t -> fltr.searchTrucksFunction t
+                                                        (getSelectedFilterBulletsByFilterCategory filterCategory selectedFilters) )
+                                        ) 
+                                trucksList
+                                        |> returnPrevOrCurrentlyFilteredTrucks trucksList
+                                        |> (\trks -> (selectedFilters, trks, uiModel))
+                        )
+                |> Maybe.withDefault (selectedFilters, trucksList, uiModel)
 
-filterBySalesStatus (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.salesStatus (getSelectedFilterBulletsByFilterCategory SalesStatus selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByYear (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.year (getSelectedFilterBulletsByFilterCategory Year selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByMake (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.make (getSelectedFilterBulletsByFilterCategory Make selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))                
-
-filterByModel (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.model (getSelectedFilterBulletsByFilterCategory MakeModel selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterBySleeperRoof (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperRoof (getSelectedFilterBulletsByFilterCategory SleeperRoof selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterBySleeperBunk (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperBunk (getSelectedFilterBulletsByFilterCategory SleeperBunk selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByEngineMake (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.engineMake (getSelectedFilterBulletsByFilterCategory EngineMake selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByTransType (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.transType (getSelectedFilterBulletsByFilterCategory TransType selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterBySuspension (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.suspension (getSelectedFilterBulletsByFilterCategory Suspension selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByBodyType (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.bodyType (getSelectedFilterBulletsByFilterCategory BodyType selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByFleetCode (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.fleetCode (getSelectedFilterBulletsByFilterCategory FleetCode selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterBySpecialFinancing (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.specialFinancing (getSelectedFilterBulletsByFilterCategory SpecialFinancing selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByOwningBranch (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.owningBranch (getSelectedFilterBulletsByFilterCategory OwningBranch selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByLocationName (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.locationName (getSelectedFilterBulletsByFilterCategory LocationName selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByRearAxleType (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType (getSelectedFilterBulletsByFilterCategory RearAxleType selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByTruckType (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.truckType (getSelectedFilterBulletsByFilterCategory TruckType selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByAPU (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.apu (getSelectedFilterBulletsByFilterCategory APU selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByCDL (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.cdl (getSelectedFilterBulletsByFilterCategory CDL selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByPhoto (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedFilters t.hasPhoto (getSelectedFilterBulletsByFilterCategory Photo selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-----------Range filters
-
-filterByPrice (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.price (getSelectedFilterBulletsByFilterCategory Price selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByEngineHP (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.engineHP (getSelectedFilterBulletsByFilterCategory EngineHP selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterBySleeperInches (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.sleeperInches (getSelectedFilterBulletsByFilterCategory SleeperInches selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByWheelBase (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.wheelBase (getSelectedFilterBulletsByFilterCategory WheelBase selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByMileage (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.mileage (getSelectedFilterBulletsByFilterCategory Mileage selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByFrontAxleWeight (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.frontAxleWeight (getSelectedFilterBulletsByFilterCategory FrontAxleWeight selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByRearAxleWeight (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.rearAxleWeight (getSelectedFilterBulletsByFilterCategory RearAxleWeight selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-filterByInventoryAge (selectedFilters, trucksList) =
-        List.filter (\t -> isGivenValueMatchesWithSelectedRangeFilters t.inventoryAge (getSelectedFilterBulletsByFilterCategory InventoryAge selectedFilters)) trucksList
-                |> returnPrevOrCurrentlyFilteredTrucks trucksList
-                |> (\trks -> (selectedFilters, trks))
-
-partialSearchFiltersMetadata uiModel = 
+partialSearchFiltersMetadata = 
     [
-         {filterName = FleetCode,         displayText = "Fleet Code",         filterByFunction = filterByFleetCode,        filters = uiModel.fleetCodeFilters}       
-        ,{filterName = SalesStatus,       displayText = "Sales Status",       filterByFunction = filterBySalesStatus,      filters = uiModel.salesStatusFilters}     
-        ,{filterName = TruckType,         displayText = "Truck Status",       filterByFunction = filterByTruckType,        filters = uiModel.truckTypeFilters}       
-        ,{filterName = SpecialFinancing,  displayText = "Special Financing",  filterByFunction = filterBySpecialFinancing, filters = uiModel.specialFinancingFilters}
-        ,{filterName = Year,              displayText = "Year",               filterByFunction = filterByYear,             filters = uiModel.yearFilters}            
-        ,{filterName = Make,              displayText = "Make",               filterByFunction = filterByMake,             filters = uiModel.makeFilters}            
-        ,{filterName = MakeModel,         displayText = "Model",              filterByFunction = filterByModel,            filters = uiModel.modelFilters}           
-        ,{filterName = Price,             displayText = "Price",              filterByFunction = filterByPrice,            filters = uiModel.priceFilters}           
-        ,{filterName = SleeperInches,     displayText = "Sleeper Size",       filterByFunction = filterBySleeperInches,    filters = uiModel.sleeperInchesFilters}   
-        ,{filterName = SleeperRoof,       displayText = "Sleeper Roof",       filterByFunction = filterBySleeperRoof,      filters = uiModel.sleeperRoofFilters}     
-        ,{filterName = SleeperBunk,       displayText = "Sleeper Bunk",       filterByFunction = filterBySleeperBunk,      filters = uiModel.sleeperBunkFilters}     
-        ,{filterName = EngineMake,        displayText = "Engine",             filterByFunction = filterByEngineMake,       filters = uiModel.engineMakeFilters}      
-        ,{filterName = EngineHP,          displayText = "HP",                 filterByFunction = filterByEngineHP,         filters = uiModel.engineHPFilters}        
-        ,{filterName = TransType,         displayText = "Transmission",       filterByFunction = filterByTransType,        filters = uiModel.transTypeFilters}       
-        ,{filterName = Suspension,        displayText = "Suspension",         filterByFunction = filterBySuspension,       filters = uiModel.suspensionFilters}      
-        ,{filterName = WheelBase,         displayText = "Wheel Base",         filterByFunction = filterByWheelBase,        filters = uiModel.wheelBaseFilters}       
-        ,{filterName = FrontAxleWeight,   displayText = "Front Axle Weight",  filterByFunction = filterByFrontAxleWeight,  filters = uiModel.frontAxleWeightFilters} 
-        ,{filterName = RearAxleType,      displayText = "Rear Axle Type",     filterByFunction = filterByRearAxleType,     filters = uiModel.rearAxleTypeFilters}    
-        ,{filterName = RearAxleWeight,    displayText = "Rear Axle Weight",   filterByFunction = filterByRearAxleWeight,   filters = uiModel.rearAxleWeightFilters}  
-        ,{filterName = InventoryAge,      displayText = "Inventory Age",      filterByFunction = filterByInventoryAge,     filters = uiModel.inventoryAgeFilters}    
-        ,{filterName = LocationName,      displayText = "Location Name",      filterByFunction = filterByLocationName,     filters = uiModel.locationNameFilters}    
-        ,{filterName = OwningBranch,      displayText = "Owning Branch",      filterByFunction = filterByOwningBranch,     filters = uiModel.owningBranchFilters}    
-        ,{filterName = Mileage,           displayText = "Mileage",            filterByFunction = filterByMileage,          filters = uiModel.mileageFilters}         
-        ,{filterName = BodyType,          displayText = "Body Type",          filterByFunction = filterByBodyType,         filters = uiModel.bodyTypeFilters}        
-        ,{filterName = APU,               displayText = "APU",                filterByFunction = filterByAPU,              filters = uiModel.apuFilters}             
-        ,{filterName = CDL,               displayText = "CDL",                filterByFunction = filterByCDL,              filters = uiModel.cdlFilters}             
-        ,{filterName = Photo,             displayText = "Photo",              filterByFunction = filterByPhoto,            filters = uiModel.photoFilters}           
+         {filterName = FleetCode,        filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.fleetCode) ,                   displayText = "Fleet Code",        pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | fleetCodeFilters        = mfArr}),  filters = \uiModel -> uiModel.fleetCodeFilters}       
+        ,{filterName = SalesStatus,      filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.salesStatus) ,                 displayText = "Sales Status",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | salesStatusFilters      = mfArr}),  filters = \uiModel -> uiModel.salesStatusFilters}     
+        ,{filterName = TruckType,        filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.truckType) ,                   displayText = "Truck Status",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | truckTypeFilters        = mfArr}),  filters = \uiModel -> uiModel.truckTypeFilters}       
+        ,{filterName = SpecialFinancing, filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.specialFinancing) ,            displayText = "Special Financing", pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | specialFinancingFilters = mfArr}),  filters = \uiModel -> uiModel.specialFinancingFilters}
+        ,{filterName = Year,             filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.year) ,                        displayText = "Year",              pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | yearFilters             = mfArr}),  filters = \uiModel -> uiModel.yearFilters}            
+        ,{filterName = Make,             filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.make) ,                        displayText = "Make",              pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | makeFilters             = mfArr}),  filters = \uiModel -> uiModel.makeFilters}            
+        ,{filterName = MakeModel,        filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.model) ,                       displayText = "Model",             pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | modelFilters            = mfArr}),  filters = \uiModel -> uiModel.modelFilters}           
+        ,{filterName = SleeperRoof,      filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperRoof) ,                 displayText = "Sleeper Roof",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | sleeperRoofFilters      = mfArr}),  filters = \uiModel -> uiModel.sleeperRoofFilters}     
+        ,{filterName = SleeperBunk,      filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.sleeperBunk) ,                 displayText = "Sleeper Bunk",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | sleeperBunkFilters      = mfArr}),  filters = \uiModel -> uiModel.sleeperBunkFilters}     
+        ,{filterName = EngineMake,       filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.engineMake) ,                  displayText = "Engine",            pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | engineMakeFilters       = mfArr}),  filters = \uiModel -> uiModel.engineMakeFilters}      
+        ,{filterName = TransType,        filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.transType) ,                   displayText = "Transmission",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | transTypeFilters        = mfArr}),  filters = \uiModel -> uiModel.transTypeFilters}       
+        ,{filterName = Suspension,       filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.suspension) ,                  displayText = "Suspension",        pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | suspensionFilters       = mfArr}),  filters = \uiModel -> uiModel.suspensionFilters}      
+        ,{filterName = RearAxleType,     filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.rearAxleType) ,                displayText = "Rear Axle Type",    pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | rearAxleTypeFilters     = mfArr}),  filters = \uiModel -> uiModel.rearAxleTypeFilters}    
+        ,{filterName = LocationName,     filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.locationName) ,                displayText = "Location Name",     pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | locationNameFilters     = mfArr}),  filters = \uiModel -> uiModel.locationNameFilters}    
+        ,{filterName = OwningBranch,     filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.owningBranch) ,                displayText = "Owning Branch",     pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | owningBranchFilters     = mfArr}),  filters = \uiModel -> uiModel.owningBranchFilters}           
+        ,{filterName = BodyType,         filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.bodyType) ,                    displayText = "Body Type",         pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | bodyTypeFilters         = mfArr}),  filters = \uiModel -> uiModel.bodyTypeFilters}        
+        ,{filterName = APU,              filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.apu) ,                         displayText = "APU",               pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | apuFilters              = mfArr}),  filters = \uiModel -> uiModel.apuFilters}             
+        ,{filterName = CDL,              filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.cdl) ,                         displayText = "CDL",               pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | cdlFilters              = mfArr}),  filters = \uiModel -> uiModel.cdlFilters}             
+        ,{filterName = Photo,            filterStyle = SingleValue ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.hasPhoto) ,                    displayText = "Photo",             pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | photoFilters            = mfArr}),  filters = \uiModel -> uiModel.photoFilters}           
+        ,{filterName = BrakeType,        filterStyle = SingleValue  , searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.brakeType) ,                   displayText = "Brake Type",        pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | brakeTypeFilters        = mfArr}),  filters = \uiModel -> uiModel.brakeTypeFilters}  
+        ,{filterName = ExhaustType,      filterStyle = SingleValue  , searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedFilters t.exhaustType) ,                 displayText = "Exhaust Type",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | exhaustTypeFilters      = mfArr}),  filters = \uiModel -> uiModel.exhaustTypeFilters}  
+
+        ,{filterName = Price,            filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.price) ,                  displayText = "Price",             pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | priceFilters            = mfArr}),  filters = \uiModel -> uiModel.priceFilters}           
+        ,{filterName = SleeperInches,    filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.sleeperInches) ,          displayText = "Sleeper Size",      pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | sleeperInchesFilters    = mfArr}),  filters = \uiModel -> uiModel.sleeperInchesFilters}   
+        ,{filterName = EngineHP,         filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.engineHP) ,               displayText = "HP",                pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | engineHPFilters         = mfArr}),  filters = \uiModel -> uiModel.engineHPFilters}        
+        ,{filterName = WheelBase,        filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.wheelBase) ,              displayText = "Wheel Base",        pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | wheelBaseFilters        = mfArr}),  filters = \uiModel -> uiModel.wheelBaseFilters}       
+        ,{filterName = FrontAxleWeight,  filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.frontAxleWeight) ,        displayText = "Front Axle Weight", pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | frontAxleWeightFilters  = mfArr}),  filters = \uiModel -> uiModel.frontAxleWeightFilters} 
+        ,{filterName = RearAxleWeight,   filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.rearAxleWeight) ,         displayText = "Rear Axle Weight",  pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | rearAxleWeightFilters   = mfArr}),  filters = \uiModel -> uiModel.rearAxleWeightFilters}  
+        ,{filterName = InventoryAge,     filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.inventoryAge) ,           displayText = "Inventory Age",     pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | inventoryAgeFilters     = mfArr}),  filters = \uiModel -> uiModel.inventoryAgeFilters}    
+        ,{filterName = Mileage,          filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.mileage) ,                displayText = "Mileage",           pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | mileageFilters          = mfArr}),  filters = \uiModel -> uiModel.mileageFilters}         
+
+        ,{filterName = RearAxleRatio,    filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.rearAxleRatio) ,          displayText = "Rear Axle Ratio",   pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | rearAxleRatioFilters    = mfArr}),  filters = \uiModel -> uiModel.rearAxleRatioFilters}         
+        ,{filterName = RearWheelSize,    filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.rearWheelSize) ,          displayText = "Rear Wheel Size",   pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | rearWheelSizeFilters    = mfArr}),  filters = \uiModel -> uiModel.rearWheelSizeFilters}         
+        ,{filterName = FrontWheelSize,   filterStyle = RangeValue  ,  searchTrucksFunction = (\t -> isGivenValueMatchesWithSelectedRangeFilters t.frontWheelSize) ,         displayText = "Front Wheel Size",  pushModifiedFilterListBackInToUIModel = (\uiModel mfArr -> {uiModel | frontWheelSizeFilters   = mfArr}),  filters = \uiModel -> uiModel.frontWheelSizeFilters}         
     ]
 
-executeFilterFunc filterMetaData (sfBullets, trks) =
-        filterMetaData.filterByFunction (sfBullets, trks)
-
-rebuildFilters filterCategory filters (selectedFilterBullets, finalFilteredTrucks) =
-        buildSearchFilterValueRecordList filterCategory filters finalFilteredTrucks     
-        |> Array.map
-                    (\sf ->
-                            findMatchAndSetUserAction (Array.fromList selectedFilterBullets) sf
-                    )
+executeFilterFunc filterMetaData (sfBullets, trks, uiModel)  =
+        filterBySingleValue (sfBullets, trks) filterMetaData.filterName uiModel
+        
+rebuildFilters filterStyle filterCategory filters (selectedFilterBullets, finalFilteredTrucks, uiModel) =
+        buildSearchFilterValueRecordList filterStyle filterCategory filters finalFilteredTrucks
+                |> Array.map
+                        (\sf ->
+                                findMatchAndSetUserAction (Array.fromList selectedFilterBullets) sf
+                        )
 
 findMatchAndSetUserAction filters sf =
                         filters
@@ -239,45 +123,21 @@ findMatchAndSetUserAction filters sf =
 rebuildSearchFiltersBasedOnCurrentSearchCriteria : Model -> UIModel -> UIModel
 rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
         let 
-                applyAllFiltersExcept filterCategory filters =
+                applyAllFiltersExcept filterCategory filters  filterStyle =
                         List.foldl
-                                executeFilterFunc 
-                                (uiModel.selectedFilterBullets, model.truckList) 
-                                --(List.filter (\(fltrCategory, _) -> fltrCategory /= filterCategory ) filterFunctionsList)
-                                (List.filter (\filterMetaData -> filterMetaData.filterName /= filterCategory ) (partialSearchFiltersMetadata uiModel) )
-                                        |> rebuildFilters filterCategory filters
-                    
-                newUIModel =  
-                        {
-                                uiModel |
-                                                fleetCodeFilters = applyAllFiltersExcept FleetCode uiModel.fleetCodeFilters
-                                                , salesStatusFilters = applyAllFiltersExcept SalesStatus uiModel.salesStatusFilters
-                                                , truckTypeFilters = applyAllFiltersExcept TruckType uiModel.truckTypeFilters
-                                                , specialFinancingFilters = applyAllFiltersExcept SpecialFinancing uiModel.specialFinancingFilters
-                                                , yearFilters = applyAllFiltersExcept Year uiModel.yearFilters
-                                                , makeFilters = applyAllFiltersExcept Make uiModel.makeFilters
-                                                , modelFilters = applyAllFiltersExcept MakeModel uiModel.modelFilters
-                                                , priceFilters = applyAllFiltersExcept Price uiModel.priceFilters
-                                                , sleeperInchesFilters = applyAllFiltersExcept SleeperInches uiModel.sleeperInchesFilters
-                                                , sleeperRoofFilters = applyAllFiltersExcept SleeperRoof uiModel.sleeperRoofFilters
-                                                , sleeperBunkFilters = applyAllFiltersExcept SleeperBunk uiModel.sleeperBunkFilters
-                                                , engineMakeFilters = applyAllFiltersExcept EngineMake uiModel.engineMakeFilters
-                                                , engineHPFilters = applyAllFiltersExcept EngineHP uiModel.engineHPFilters
-                                                , transTypeFilters = applyAllFiltersExcept TransType uiModel.transTypeFilters
-                                                , suspensionFilters = applyAllFiltersExcept Suspension uiModel.suspensionFilters
-                                                , wheelBaseFilters = applyAllFiltersExcept WheelBase uiModel.wheelBaseFilters
-                                                , frontAxleWeightFilters = applyAllFiltersExcept FrontAxleWeight uiModel.frontAxleWeightFilters
-                                                , rearAxleTypeFilters = applyAllFiltersExcept RearAxleType uiModel.rearAxleTypeFilters
-                                                , rearAxleWeightFilters = applyAllFiltersExcept RearAxleWeight uiModel.rearAxleWeightFilters
-                                                , inventoryAgeFilters = applyAllFiltersExcept InventoryAge uiModel.inventoryAgeFilters
-                                                , locationNameFilters = applyAllFiltersExcept LocationName uiModel.locationNameFilters
-                                                , owningBranchFilters = applyAllFiltersExcept OwningBranch uiModel.owningBranchFilters
-                                                , mileageFilters = applyAllFiltersExcept Mileage uiModel.mileageFilters
-                                                , bodyTypeFilters = applyAllFiltersExcept BodyType uiModel.bodyTypeFilters
-                                                , apuFilters = applyAllFiltersExcept APU uiModel.apuFilters
-                                                , cdlFilters = applyAllFiltersExcept CDL uiModel.cdlFilters
-                                                , photoFilters = applyAllFiltersExcept Photo uiModel.photoFilters
-                        }
+                                executeFilterFunc
+                                (uiModel.selectedFilterBullets, model.truckList, uiModel) 
+                                (List.filter (\filterMetaData -> filterMetaData.filterName /= filterCategory ) partialSearchFiltersMetadata )
+                                        |> rebuildFilters filterStyle filterCategory filters
+                
+                executeRegularAndRangeFilterFunc filterMeta currentUIModel =
+                        filterMeta.pushModifiedFilterListBackInToUIModel currentUIModel (applyAllFiltersExcept  filterMeta.filterName (filterMeta.filters currentUIModel) filterMeta.filterStyle)
+
+                newUIModel = 
+                        List.foldl
+                                executeRegularAndRangeFilterFunc
+                                uiModel
+                                partialSearchFiltersMetadata
         in
                 newUIModel
 
@@ -287,12 +147,11 @@ applySearchFilters model uiModel =
         filterdTruckList  = 
                 List.foldl
                         executeFilterFunc 
-                        (uiModel.selectedFilterBullets, model.truckList) 
-                        (partialSearchFiltersMetadata uiModel)
-                                |> \(_, finalFilteredTrucks) -> finalFilteredTrucks
+                        (uiModel.selectedFilterBullets, model.truckList, uiModel) 
+                        partialSearchFiltersMetadata
+                                |> \(_, finalFilteredTrucks, _) -> finalFilteredTrucks
     in
         filterdTruckList
-
 
 getMinMaxValue rangeString =
         let
@@ -331,8 +190,8 @@ filterEmptyValuesFromList  searchFilterList =
                 searchFilterList
 
 applyExtraOnSearchFilters  : SortOrder -> List String -> Array String
-applyExtraOnSearchFilters sortOrder searchFilterKeyValue =
-    filterDuplicates searchFilterKeyValue
+applyExtraOnSearchFilters sortOrder searchFilterKeyValues =
+    filterDuplicates searchFilterKeyValues
         |> filterEmptyValuesFromList
         |> (if sortOrder == SortASC then 
                 List.sort 
@@ -340,278 +199,51 @@ applyExtraOnSearchFilters sortOrder searchFilterKeyValue =
                 List.sortWith desendingOrder)
         |> Array.fromList
 
-buildSearchFilterValueList : SearchFilterCustomType ->  Array SearchFilterType -> List Truck -> Array SearchFilterType
-buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks =
-    case searchFilterCustomType of
-        SalesStatus -> 
-            --List.map (\t -> t.salesStatus) trucks
-            List.map .salesStatus trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                               SearchFilterType index sf "EXD" 
-                                               --(if String.toLower sf == "available" then True else False)
-                                               False
-                                               (List.length <| (List.filter (\t -> String.trim t.salesStatus == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    ) 
-
-        Year -> 
-            --List.map (\t -> t.year) trucks
-            List.map .year trucks
-                |> applyExtraOnSearchFilters SortDSC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.year == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )
+buildSearchFilterValueList : SearchFilterStyle -> SearchFilterCustomType ->  Array SearchFilterType -> List Truck -> Array SearchFilterType
+buildSearchFilterValueList filterStyle searchFilterCustomType searchFilterTypes trucks =
+        if filterStyle == SingleValue then
+                let
                 
-        Make -> 
-            --List.map (\t -> t.make) trucks
-            List.map .make trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf ->  
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.make == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
+                        sfMetaData =  
+                                find (\sfMeta -> sfMeta.filterName == searchFilterCustomType) regularSearchFiltersInitialExpandState
+                                        |> Maybe.map (\sfMeta -> sfMeta)
+                                        -- the below condition should never happen unless you misspell in metadata list in model.elm file
+                                        |> Maybe.withDefault {filterName = defaultSearchFiltersMetadata.filterName, truckFieldFunction = defaultSearchFiltersMetadata.truckFieldFunction, expandByDefault = defaultSearchFiltersMetadata.expandByDefault }
 
-        MakeModel -> 
-            --List.map (\t -> t.model) trucks
-            List.map .model trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.model == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
+                        fieldFunc = Tuple.first sfMetaData.truckFieldFunction
+                        fieldcompareFunc = Tuple.second sfMetaData.truckFieldFunction
+                in    
+                        (fieldFunc trucks)
+                                |> (if searchFilterCustomType == Year then applyExtraOnSearchFilters SortDSC else applyExtraOnSearchFilters SortASC)
+                                |> (\sfArray -> 
+                                                Array.indexedMap (\index sf -> 
+ 
+                                                        SearchFilterType
+                                                                        index 
+                                                                        sf 
+                                                                        sf
+                                                                        False
+                                                                        (List.length <| ( List.filter (fieldcompareFunc sf) trucks ) ) 
+                                                                        searchFilterCustomType
+                                                )
+                                                sfArray
+                                ) 
+        else
+                let
+                        sfMetaData =  
+                                find (\sfMeta -> sfMeta.filterName == searchFilterCustomType) rangeSearchFiltersInitialExpandState
+                                        |> Maybe.map (\sfMeta -> sfMeta)
+                                        -- the below condition should never happen unless you misspell in metadata list in model.elm file
+                                        |> Maybe.withDefault {filterName = defaultSearchFiltersMetadata.filterName, filterNameString = defaultSearchFiltersMetadata.filterNameString, truckRangeFieldFunction = defaultSearchFiltersMetadata.truckRangeFieldFunction, expandByDefault = defaultSearchFiltersMetadata.expandByDefault }
 
-        SleeperRoof -> 
-            --List.map (\t -> t.sleeperRoof) trucks
-            List.map .sleeperRoof trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperRoof == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
-                
-        SleeperBunk ->             
-            List.map .sleeperBunk trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.sleeperBunk == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    ) 
-                
-        EngineMake ->             
-            List.map .engineMake trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.engineMake == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                                
-                
-        TransType ->             
-            List.map .transType trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.transType == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                                               
-                
-        Suspension ->             
-            List.map .suspension trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.suspension == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                                                              
-                
-        BodyType ->             
-            List.map .bodyType trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.bodyType == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                        
-                
-        RearAxleType ->             
-            List.map .rearAxleType trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.rearAxleType == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
-                
-        TruckType ->             
-            List.map .truckType trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                let
-                                                    trimmedsfValue = String.trim sf
-                                                    displayValue = 
-                                                                    if trimmedsfValue == "I" then
-                                                                         "Inventory"
-                                                                    else if trimmedsfValue == "A" then 
-                                                                        "Appraisal"
-                                                                    else
-                                                                        "Purchase Order"
-                                                in
-                                                
-                                                SearchFilterType index trimmedsfValue displayValue False (List.length <| (List.filter (\t -> String.trim t.truckType == trimmedsfValue) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
-
-        FleetCode ->        
-            List.map .fleetCode trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.fleetCode == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
-                
-        SpecialFinancing ->        
-            List.map .specialFinancing trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.specialFinancing == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )                
-                
-        OwningBranch ->        
-            List.map .owningBranch trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.owningBranch == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )      
-
-        LocationName ->        
-            List.map .locationName trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.locationName == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )
-
-        APU ->        
-            List.map .apu trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.apu == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )  
-
-        CDL ->        
-            List.map .cdl trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.cdl == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )  
-
-        Photo ->        
-            List.map .hasPhoto trucks
-                |> applyExtraOnSearchFilters SortASC
-                |> (\sfArray -> 
-                                Array.indexedMap (\index sf -> 
-                                                SearchFilterType index sf "EXD" False (List.length <| (List.filter (\t -> String.trim t.hasPhoto == sf) trucks )) searchFilterCustomType
-                                )
-                                sfArray
-                    )  
-
-------------------Range filters 
-        Price ->            
-                createRangeFilters  searchFilterTypes
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.price >= minValue && t.price <= maxValue) trucks) 
-                                    )
-
-        EngineHP ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.engineHP >= minValue && t.engineHP <= maxValue) trucks) 
-                                    )
-
-        SleeperInches ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                        -- let
-                                        --     y = Debug.log "minmax" [minValue, maxValue]
-                                        -- in
-
-                                            (List.length <| List.filter (\t -> t.sleeperInches >= minValue && t.sleeperInches <= maxValue) trucks) 
-                                    )
-
-        WheelBase ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.wheelBase >= minValue && t.wheelBase <= maxValue) trucks) 
-                                    )
-
-        Mileage ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.mileage >= minValue && t.mileage <= maxValue) trucks) 
-                                    )
-
-        FrontAxleWeight ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.frontAxleWeight >= minValue && t.frontAxleWeight <= maxValue) trucks) 
-                                    )
-
-        RearAxleWeight ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.rearAxleWeight >= minValue && t.rearAxleWeight <= maxValue) trucks) 
-                                    )
-
-        InventoryAge ->
-                createRangeFilters  searchFilterTypes 
-                                    searchFilterCustomType 
-                                    (\minValue maxValue ->
-                                            (List.length <| List.filter (\t -> t.inventoryAge >= minValue && t.inventoryAge <= maxValue) trucks) 
-                                    )
+                        fieldcompareFunc = sfMetaData.truckRangeFieldFunction
+                in    
+                       createRangeFilters       
+                                                searchFilterTypes
+                                                searchFilterCustomType 
+                                                (\minValue maxValue ->
+                                                        (List.length <| List.filter (fieldcompareFunc minValue maxValue) trucks) 
+                                                )
 
 createRangeFilters searchFilterTypes searchFilterCustomType filterCompareCheckFunc = 
         Array.indexedMap
@@ -623,7 +255,7 @@ createRangeFilters searchFilterTypes searchFilterCustomType filterCompareCheckFu
                                 maxValue = Tuple.second minmaxValue
                             in
                                 --using Constructor style
-                                SearchFilterType   index 
+                                SearchFilterType        index
                                                         range.searchFilterKey 
                                                         range.searchFilterExtraData 
                                                         False
@@ -633,6 +265,6 @@ createRangeFilters searchFilterTypes searchFilterCustomType filterCompareCheckFu
                          )
                         searchFilterTypes
 
-buildSearchFilterValueRecordList : SearchFilterCustomType -> Array SearchFilterType -> List Truck -> Array SearchFilterType
-buildSearchFilterValueRecordList searchFilterCustomType searchFilterTypes trucks =
-    buildSearchFilterValueList searchFilterCustomType searchFilterTypes trucks
+buildSearchFilterValueRecordList : SearchFilterStyle -> SearchFilterCustomType -> Array SearchFilterType -> List Truck -> Array SearchFilterType
+buildSearchFilterValueRecordList searchFilterStyle searchFilterCustomType searchFilterTypes trucks =
+    buildSearchFilterValueList searchFilterStyle searchFilterCustomType searchFilterTypes trucks
