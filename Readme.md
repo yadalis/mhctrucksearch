@@ -26,12 +26,13 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
          json-extra
          unique-list
 
-Url:
-         UI: https://mhctrucksmartsearch.azurewebsites.net/
-         Data api endpoints:
-                  https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks
-                  https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks
-                  https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks
+# Artifacts
+         Url:
+                  UI: https://mhctrucksmartsearch.azurewebsites.net/
+                  Data api endpoints:
+                           https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks
+                           https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks
+                           https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks
 
 
          
