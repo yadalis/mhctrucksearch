@@ -29,6 +29,7 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
 # Artifacts
          Url:
                   UI: https://mhctrucksmartsearch.azurewebsites.net/
+                  
                   Data api endpoints:
                            https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks
                            https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks
