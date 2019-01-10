@@ -120,7 +120,7 @@ update msg (model, uiModel) =
 
             OnFetchTrucks response ->
                 let
-                    --vx = Debug.log "asdfasfasd" [response]
+                   -- vx = Debug.log "asdfasfasd" [response]
 
                     trucks = case response of
                                 Ok truckList ->

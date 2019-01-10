@@ -48,10 +48,25 @@ fetchTrucksUrl : String -> String -> String
 fetchTrucksUrl truckCondition searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-            if String.isEmpty searchText then
-                crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition] []
-            else
-                crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition, searchText] []
+            
+                if String.toLower truckCondition == "used"then
+                    if  String.isEmpty searchText then
+                        "https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks"
+                    else
+                        crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks" [] [string "searchText" searchText]
+                else
+                    if String.isEmpty searchText then
+                        crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks" [] []
+                    else
+                        crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks" [] [string "searchText" searchText]
+
+
+
+
+            -- if String.isEmpty searchText then
+            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition] []
+            -- else
+            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition, searchText] []
 
             -- if String.isEmpty searchText then
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks"  [truckCondition] []
@@ -63,10 +78,17 @@ fetchAppraisedTrucksUrl : String -> String
 fetchAppraisedTrucksUrl searchText =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
+
             if String.isEmpty searchText then
-                "http://localhost:50977/api/mhc/getappraisedtrucks"
+                "https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks"
             else
-                crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks"  [searchText] []
+                crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks"  [searchText] []
+
+
+            -- if String.isEmpty searchText then
+            --     "http://localhost:50977/api/mhc/getappraisedtrucks"
+            -- else
+            --     crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks"  [searchText] []
 
             -- if String.isEmpty searchText then
             --     "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks"
@@ -80,8 +102,9 @@ fetchSearchFilterRangesUrl =
         --"http://localhost:13627/api/repairorder/gettrucks"
         --"http://localhost:50977/api/repairorder/gettrucks"
         --"http://localhost:4444/srchRanges"
-        "http://localhost:50977/api/mhc/getrangefilters"
-        --   "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
+        --"http://localhost:50977/api/mhc/getrangefilters"
+          --"http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
+        "https://testfuncappsuresh.azurewebsites.net/api/getrangefiltersmetadata"
         
 fetchTrucksDecoder: Decode.Decoder (List Truck)
 fetchTrucksDecoder = 
