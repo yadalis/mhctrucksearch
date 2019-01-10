@@ -9,13 +9,33 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
 
 # Purpose
  
-         Truck Sales team needed a super fast search/fitler trucks on inventory.
+         Truck Sales team needed a super fast search/fitler trucks to give the results instantly.
 
 # Why Elm and .NET
 
-         **Frontend** : Elm, I honeslty believe this is the best open-source/front-end tech out there in the market, looked at React.js, Angular and Vue, none could gave the confidence that Elm gave me, so there is not much to make a decision on what to choose for frontend other than Elm, simply because of its super smart compiler with 100% type-safty, immutability.
+         **Front-end** : Elm, like many others, I honeslty believe this is the best open-source/front-end tech out there in the market, looked at React.js, Angular and Vue, none could gave me the confidence that Elm did, so there is not much to make a decision on what to choose for frontend other than Elm, simply because of its super smart compiler with 100% type-safty, immutability, super fast Virtual DOM and most importantly, confident refactoring.
          
-         Bachend: .NET/C#, this is what my primary skillset is, so there is not other thought on this side, simple.
+         Back-end: .NET/C#, this is what my primary skillset is, so there is not other thought on this side, simple.
+
+# Packages used
+
+         Elm-UI (100% elm-ui , no CSS other than just in-line style for sticky hearder)
+         List-Extra
+         Maybe-Extra
+         elm-money
+         json-extra
+         unique-list
+
+Url:
+         UI: https://mhctrucksmartsearch.azurewebsites.net/
+         Data api endpoints:
+                  https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks
+                  https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks
+                  https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks
+
+
+         
+
 
 
 
