@@ -30,6 +30,7 @@ import BusinessFunctions.Pager exposing (..)
 import Helpers.Colors exposing (..)
 import Task
 import Process
+import Time
 
 
 ---- INIT ----
@@ -59,22 +60,14 @@ update msg (model, uiModel) =
                 let
                     trucksHttpCmd = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
                 in
-                    (
-                        (
-                            {model |
-                                    filteredTruckList = [],
-                                    truckList = [],
-                                    pagedTruckList = []}
-                            ,uiModel
-
-                        )
-                        , trucksHttpCmd
-                    )
-
+                    --( ( { model | filteredTruckList = [], truckList = [], pagedTruckList = [] } , uiModel), trucksHttpCmd)
+                    ( (model , uiModel), trucksHttpCmd)
     in
         case msg of
             OnFetchSearchFilterRanges response ->
                 let
+                    --vxx = Debug.log "OnFetchSearchFilterRanges " [response]
+
                     rangeSearchFilters = 
                                 case response of
                                         Ok rangeFltrs ->
@@ -120,7 +113,7 @@ update msg (model, uiModel) =
 
             OnFetchTrucks response ->
                 let
-                   -- vx = Debug.log "asdfasfasd" [response]
+                    --vx = Debug.log "OnFetchTrucks " [response]
 
                     trucks = case response of
                                 Ok truckList ->
@@ -131,28 +124,60 @@ update msg (model, uiModel) =
                     
                     --vx = Debug.log "asdfasfasd" [trucks]
 
-                    pagedTruckList = List.take 100 trucks
-
                     executeRegularFilterFunc regularFilterMeta currentUIModel =
-                         regularFilterMeta.pushModifiedFilterListBackInToUIModel 
-                                                    currentUIModel 
-                                                    (buildSearchFilterValueRecordList SingleValue regularFilterMeta.filterName (regularFilterMeta.filters currentUIModel)  trucks)
+                            regularFilterMeta.pushModifiedFilterListBackInToUIModel 
+                                                        currentUIModel 
+                                                        (buildSearchFilterValueRecordList SingleValue regularFilterMeta.filterName (regularFilterMeta.filters currentUIModel)  trucks)
 
-                    newUIModel = 
-                        List.foldl
-                                executeRegularFilterFunc
-                                uiModel
-                                (List.filter (\fltrMeta -> fltrMeta.filterStyle == SingleValue) partialSearchFiltersMetadata)
+                    (newModel, newUIModel, cmd) = 
+                    
+                        if List.length trucks > 0 then
+                            (
+                                {model  | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = List.take 100 trucks },
+                                List.foldl
+                                        executeRegularFilterFunc
+                                        uiModel
+                                        (List.filter (\fltrMeta -> fltrMeta.filterStyle == SingleValue) partialSearchFiltersMetadata),
+                                fetchSearchFilterRanges
+                            )
+                        else
+                            (
+                                model,  
+                                uiModel,
+                                Cmd.none
+                            )
+
+                    updatedUIModel =
+                        if List.length trucks > 0 then
+                            {newUIModel | hasWarningsToPresent = False, userWarningMessage = "" }
+                        else
+                            {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the text " ++ uiModel.searchString }
+                    
+                    -- pagedTruckList = List.take 100 trucks
+
+                    -- executeRegularFilterFunc regularFilterMeta currentUIModel =
+                    --      regularFilterMeta.pushModifiedFilterListBackInToUIModel 
+                    --                                 currentUIModel 
+                    --                                 (buildSearchFilterValueRecordList SingleValue regularFilterMeta.filterName (regularFilterMeta.filters currentUIModel)  trucks)
+
+                    -- newUIModel = 
+                    --     List.foldl
+                    --             executeRegularFilterFunc
+                    --             uiModel
+                    --             (List.filter (\fltrMeta -> fltrMeta.filterStyle == SingleValue) partialSearchFiltersMetadata)
 
                 in
-                    ( 
-                        (
-                            {model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
-                            { newUIModel | selectedFilterBullets = [] }
-                        )
-                        , fetchSearchFilterRanges   -- change this, otherwise it will bring all json based range filters data again and again, you should only rebuild the range filter counts
-                                                    -- but not regenrate the filters completely
-                    ) 
+                    -- if List.length trucks > 0 then
+                    --     ( 
+                    --         (
+                    --             {model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
+                    --             { newUIModel | selectedFilterBullets = [] }
+                    --         )
+                    --         , fetchSearchFilterRanges   -- change this, otherwise it will bring all json based range filters data again and again, you should only rebuild the range filter counts
+                    --                                     -- but not regenrate the filters completely
+                    --     ) 
+                    -- else
+                         ( ( newModel , updatedUIModel), cmd)
 
             FilterCheckBoxClicked selectedSearchFilter userAction->
                 let
@@ -283,6 +308,9 @@ update msg (model, uiModel) =
             OperateSortDialog show ->
                 ( (model, {uiModel | showDropdown = show }), Cmd.none )
             
+            CloseUserWarningsDialog userAction ->
+                ( (model, {uiModel | hasWarningsToPresent = userAction }), Cmd.none )
+            
             SortTrucks sortBy ->
                 let
                     sortedFilteredTruckList = 
@@ -393,14 +421,32 @@ view (model, uiModel) =
                         [
                             image [hpx 35] {src = "mhclogo.png", description ="Logo" }
                             ,
-                            el[pdl 5, fs 18, eab] <| textValue "v1.0.1"
+                            el[pdl 5, fs 18, eab] <| textValue "v1.0.2"
                         ]
                         ,row[wf]
                         [
-                            row[wpx 350, bw 1, greyBorder 200]
+                            row[wpx 350, bw 1, greyBorder 200, 
+                                    below (
+                                            if uiModel.hasWarningsToPresent then
+                                                row[pde 5 15 5 0, bw 1, bc 255 153 153 ]
+                                                [
+                                                    el [pd 15] <| textValue uiModel.userWarningMessage
+                                                    ,
+                                                    row[ bw 1, greyBg 228  ][
+                                                            Input.button ( [])
+                                                                                { 
+                                                                                    onPress = Just <| CloseUserWarningsDialog False
+                                                                                    ,label = textValue " x "
+                                                                                }
+                                                    ]
+                                                ]
+                                            else
+                                                none
+                                    )]
                             [   
                                 -- you need bw 0 here to remove the border around textbox to make it blend with search button
-                                Input.text[bw 0, Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)]
+                                Input.text[bw 0, Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
+                                ]
                                 {
                                     onChange = SearchString
                                     ,text  = uiModel.searchString
@@ -468,6 +514,7 @@ view (model, uiModel) =
                             ]
                         ]
                     ]
+                   
                     -- exp/col/clearfitlers/totaltrucks/sort row
                     ,row[wf, spx 15, greyBg 235,
                         Border.shadow  { offset = ( 0, 3 )
@@ -564,6 +611,10 @@ view (model, uiModel) =
 
 ---- PROGRAM ----
 
+subscriptions : (Model,UIModel) -> Sub Msg
+subscriptions model =
+    --Time.every 5000.00 (\pox -> SearchPressed)
+    Sub.none
 
 main : Program OnLoadSearchFilter (Model,UIModel) Msg
 main =
@@ -571,5 +622,6 @@ main =
         { view = view
         , init = init -- to capture flags from JS
         , update = update
-        , subscriptions = always Sub.none
+        --, subscriptions = always Sub.none
+        ,subscriptions = subscriptions
         }

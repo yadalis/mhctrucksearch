@@ -24,6 +24,7 @@ type Msg
     | CollapseAllClicked Bool
     | PageNumberClicked Int
     | OperateSortDialog Bool
+    | CloseUserWarningsDialog Bool
     | SortTrucks SortBy
     --| ShowAppraisedTrucks Bool
     | WorkWithAppraisedTrucks  Bool

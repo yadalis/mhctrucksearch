@@ -108,6 +108,9 @@ type alias UIModel =
         --,showAppraisedTrucks : Bool
         ,workWithAppraisedTrucks : Bool
         ,workWithNewTrucks : Bool
+        ,hasErrorsToPresent : Bool
+        ,hasWarningsToPresent : Bool
+        ,userWarningMessage : String
     }
 
 type alias SearchFilterState =
@@ -326,5 +329,8 @@ initalUIModel jsFlag =
         showLoader = False,
         currentSortBy = MakeAtoZ,
         workWithAppraisedTrucks = False,
-        workWithNewTrucks = False
+        workWithNewTrucks = False,
+        hasErrorsToPresent = False,
+        hasWarningsToPresent = False,
+        userWarningMessage = ""
     }
