@@ -38,11 +38,8 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
 
          
 
+git checkout workingbr (Switch to workingbr)
 
+git push (push local repo changes to workingbr which are same as master)
 
-
-
-
-
-
-
+git checkout master (Switch to workingbr)
