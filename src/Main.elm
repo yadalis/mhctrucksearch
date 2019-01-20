@@ -205,7 +205,7 @@ update msg (model, uiModel) =
                                 uiModel
 
                     newUIModel = 
-                            (partialSearchFiltersMetadata)
+                            partialSearchFiltersMetadata
                                 |> find (\sfMeta -> sfMeta.filterName == selectedSearchFilter.filterCategory)
                                 |> Maybe.map (
                                                 \sfMeta -> ( 
@@ -236,7 +236,7 @@ update msg (model, uiModel) =
                                                                 |> convertMaybeInt
                                                                 |> (\idx -> 
                                                                         let
-                                                                            yu =  SearchFilterType -- TODO change this variable name
+                                                                            selectedFilterBullet =  SearchFilterType -- TODO change this variable name
                                                                                         selectedSearchFilter.index 
                                                                                         selectedSearchFilter.searchFilterKey 
                                                                                         selectedSearchFilter.searchFilterExtraData
@@ -248,8 +248,7 @@ update msg (model, uiModel) =
                                                                             if idx > 0 then
                                                                                 newUIModel.selectedFilterBullets 
                                                                             else
-                                                                                ( yu
-                                                                                ) :: (newUIModel.selectedFilterBullets)
+                                                                                selectedFilterBullet :: newUIModel.selectedFilterBullets
                                                                     )
                                                         else
                                                             newUIModel.selectedFilterBullets
@@ -577,28 +576,44 @@ view (model, uiModel) =
                     [
                         navBar,
                         
-                        row[wf, pde 90 3 0 3, spx 16]
+                        row[wf, pde 90 3 0 3, spx 16,  (
+
+                                column [wpx 300, eat] 
+                                                            [
+                                                                column[wf, spy 5, greyBg 240, pd 10]
+                                                                    <| (
+                                                                        if List.length model.filteredTruckList == 0 then
+                                                                            [loaderIconElement]
+                                                                        else 
+                                                                            List.map 
+                                                                                (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
+                                                                                partialSearchFiltersMetadata
+                                                                    )
+                                                            ]
+
+                        )]
                         [     
                             -- Search Filter Panel
-                            column [wpx 300, eat] 
-                            [
-                                column[wf, spy 5, greyBg 240, pd 10]
-                                    <| (
-                                        if List.length model.filteredTruckList == 0 then
-                                            [loaderIconElement]
-                                        else 
-                                            List.map 
-                                                (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
-                                                partialSearchFiltersMetadata
-                                    )
-                            ]
-                            -- Trucks search Filter Bullets & Search Result List Panel 
-                            ,column[wf, hf]
+                            -- column [wpx 300, eat] 
+                            -- [
+                            --     column[wf, spy 5, greyBg 240, pd 10]
+                            --         <| (
+                            --             if List.length model.filteredTruckList == 0 then
+                            --                 [loaderIconElement]
+                            --             else 
+                            --                 List.map 
+                            --                     (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
+                            --                     partialSearchFiltersMetadata
+                            --         )
+                            -- ]
+                            -- -- Trucks search Filter Bullets & Search Result List Panel 
+                            -- ,
+                            column[wf, hf]
                             [
                                 lazy searchFilterBulletView 
                                         <| uiModel.selectedFilterBullets --Array.fromList <| concatAllFilters uiModel
                                 ,
-                                column[wf]
+                                column[wf, pdl 500]
                                 [
                                         lazy trucksView model.pagedTruckList -- model.filteredTruckList
                                 ]         
