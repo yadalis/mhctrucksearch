@@ -59,7 +59,7 @@ type alias Model =
         ,totalTrucksCount : Int
         ,filteredTruckList : List Truck
         ,pagedTruckList : List Truck
-        ,currentPageNumber : Int
+
     }
 
 type alias UIModel =
@@ -76,6 +76,8 @@ type alias UIModel =
         ,hasWarningsToPresent : Bool
         ,userWarningMessage : String
         ,initialLoad : Bool
+        ,currentPageNumber : Int
+        ,totalPages : Int
     }
 
 type alias SearchFilterState =
@@ -185,7 +187,7 @@ initialModel =
         ,totalTrucksCount = 0
         ,filteredTruckList = []
         ,pagedTruckList = []
-        ,currentPageNumber = 1
+
     }
  
 
@@ -249,5 +251,7 @@ initalUIModel jsFlag =
         hasErrorsToPresent = False,
         hasWarningsToPresent = False,
         initialLoad = True,
-        userWarningMessage = ""
+        userWarningMessage = "",
+        currentPageNumber = 1,
+        totalPages = 1
     }

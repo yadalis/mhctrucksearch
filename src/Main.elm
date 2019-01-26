@@ -40,7 +40,7 @@ type alias OnLoadSearchFilter =
 
 init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
-    ( (initialModel,initalUIModel jsflg) , Cmd.batch [fetchTrucks "x" "x" "1"] ) -- initially loads first 100 trucks with all possible search filters and counts
+    ( (initialModel,initalUIModel jsflg) , Cmd.batch [fetchTrucks "" "" 1] ) -- initially loads first 100 trucks with all possible search filters and counts
 
 ---- UPDATE ----
  
@@ -50,20 +50,15 @@ update msg (model, uiModel) =
         getTrucksHttpCmd newUIModel = 
                 let
                     searchFilterString = (String.join "|" <| List.filter (\sb -> sb /= "" ) (formattedSelectedFilterBullets newUIModel) )
-
-                    searchText = if newUIModel.searchString == "" then "x" else newUIModel.searchString
-                    trucksHttpCmd = 
-                        if List.length (formattedSelectedFilterBullets newUIModel) > 0 then
-                            fetchTrucks searchFilterString searchText "1"
-                        else
-                            fetchTrucks "x" searchText "1"
-                    
-                    --vvrs = Debug.log "fetch truck url " [searchFilterString]
+                    vvrs = Debug.log "fetch truck url " [searchFilterString]
                 in
-                    trucksHttpCmd
+                    fetchTrucks searchFilterString newUIModel.searchString newUIModel.currentPageNumber
 
-        buildTrucksHttpCmd =
-                    ( (model , uiModel), getTrucksHttpCmd uiModel)
+        executeTextSearch =
+                let
+                    newUIModel = {uiModel | currentPageNumber = 1, showLoader = True}
+                in
+                    ( (model , newUIModel), getTrucksHttpCmd uiModel)
     in
         case msg of
             OnFetchTrucks response ->
@@ -75,7 +70,6 @@ update msg (model, uiModel) =
 
                                     Err err ->
                                             TruckData 0 [] [] 0 True-- use this to show errors on page
-                    --truckList = if List.length trucks > 0 then trucks else model.truckList
 
                     newModel = {model  | truckList = trucks, totalTrucksCount = totalTrucksCount}
 
@@ -85,8 +79,9 @@ update msg (model, uiModel) =
  
                     updatedUIModel =
                                 {uiModel | allSearchFilters = searchFilters, initialLoad = False,
-                                 searchString = if cleanSearchFilterBullets then "" else uiModel.searchString ,
-                                 selectedFilterBullets = if cleanSearchFilterBullets then [] else uiModel.selectedFilterBullets, showLoader = False}
+                                 totalPages = pages,
+                                 selectedFilterBullets = if cleanSearchFilterBullets then [] else uiModel.selectedFilterBullets,
+                                 showLoader = False}
 
                     --asdfasdfasdf = Debug.log "updatedUuiModel.allSearchFilters sadf" [updatedUIModel.allSearchFilters] 
                 in
@@ -110,6 +105,7 @@ update msg (model, uiModel) =
 
                     newUIModelUpdatedWithSearchFilterBullets = 
                             {newUIModel | 
+                                            currentPageNumber = 1,
                                             showLoader = True,
                                             selectedFilterBullets = 
                                                                     if userAction then
@@ -132,7 +128,7 @@ update msg (model, uiModel) =
 
                     newSortedFilteredTruckList = model.truckList
                 in
-                    ( ( {model | truckList = newSortedFilteredTruckList, currentPageNumber = 1 } , newUIModelUpdatedWithSearchFilterBullets), getTrucksHttpCmd newUIModelUpdatedWithSearchFilterBullets )
+                    ( ( {model | truckList = newSortedFilteredTruckList } , newUIModelUpdatedWithSearchFilterBullets), getTrucksHttpCmd newUIModelUpdatedWithSearchFilterBullets )
 
             -- ApplyFilters ->
             --     let
@@ -161,10 +157,10 @@ update msg (model, uiModel) =
                     ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
             SearchPressed ->
-                buildTrucksHttpCmd
+                executeTextSearch
                 
             HandleKeyboardEvent ->
-                buildTrucksHttpCmd
+                executeTextSearch
             
             CollapseClicked searchFilterState userAction->
                 let
@@ -185,16 +181,10 @@ update msg (model, uiModel) =
                     ( ( model , {uiModel |  expandCollapseSearchFilterStates = updatedSearchFilterStates}), Cmd.none )
 
             PageNumberClicked pageNumber ->
-                let              
-                    grps = greedyGroupsOf 100 model.filteredTruckList
-                    grpByPageNumber = List.drop (pageNumber - 1) grps
-
-                    firstList = case List.head grpByPageNumber of
-                                        Just page -> page
-                                        Nothing -> []
-                
+                let
+                    newUIModel = {uiModel |  showLoader = True, currentPageNumber = pageNumber }
                 in
-                    ( ( {model | pagedTruckList = firstList, currentPageNumber = pageNumber } , uiModel ), Cmd.none )
+                   ( ( model, newUIModel), getTrucksHttpCmd newUIModel )
 
             OperateSortDialog show ->
                 ( (model, {uiModel | showDropdown = show }), Cmd.none )
@@ -205,13 +195,13 @@ update msg (model, uiModel) =
             SortTrucks sortBy ->
                 let
                     sortedFilteredTruckList = 
-                        sortTruckList sortBy <| model.filteredTruckList 
+                        sortTruckList sortBy <| model.truckList 
 
                     newModel =
-                        {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList, currentPageNumber = 1 }
+                        {model | truckList = sortedFilteredTruckList  }
 
                 in
-                    ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
+                    ( (newModel, {uiModel | currentSortBy = sortBy, currentPageNumber = 1}), Cmd.none )
 
             ShowLoader userAction ->
                  ( (model, {uiModel | showLoader = userAction }), 
@@ -221,17 +211,18 @@ update msg (model, uiModel) =
 
             ClearAllFilters ->
                 let
-                    newUIModel = {uiModel |  showLoader = True}
-
-                    cmd = fetchTrucks "x" "x" "1"
+                    newSearchFilters = List.map (\sf -> {sf | userAction = False}) uiModel.allSearchFilters
+                    newUIModel = {uiModel |  showLoader = True, allSearchFilters = newSearchFilters,
+                                             searchString = "", selectedFilterBullets = [], currentPageNumber = 1,
+                                             totalPages = 0}    
                 in
-                   ( ( model, newUIModel), cmd )
+                   ( ( model, newUIModel), getTrucksHttpCmd newUIModel )
             
-            ClearSearchTextAndContinue ->
+            ClearSearchTextAndContinue -> 
+                -- this action will be execute when user clicks on X on "No Trucks Found" Message,
+                -- this happens when user tries search for text that doesnt exist in any truck info
                 let
-                    newUIModel = {uiModel |  showLoader = True, searchString = ""}
-
-                    --cmd = fetchTrucks "x" "x" "1"
+                    newUIModel = {uiModel |  showLoader = True, searchString = "", currentPageNumber = 1, totalPages = 0}
                 in
                    ( ( model, newUIModel), getTrucksHttpCmd newUIModel )
 
@@ -372,7 +363,7 @@ view (model, uiModel) =
                         ]
                     ]
                     -- exp/col/clearfitlers/totaltrucks/sort row
-                    ,row[wf, spx 15, greyBg 235,
+                    ,row[wf,  greyBg 235,
                         Border.shadow  { offset = ( 0, 3 )
                                 , size = 1
                                 , blur = 15.0
@@ -381,50 +372,52 @@ view (model, uiModel) =
                     , hfRange 40 65, clipY]
                     [
                         --exp/coll/clearfitlers
-                        row[wpx 300, spx 15, fs 12, mhcRed, pdl 15][
-                            Input.button ( [ mouseOver [fc 217 98 69] ])
-                            { 
-                                onPress = Just <| CollapseAllClicked True
-                                ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
-                            }
-                            ,
-                            Input.button ( [ mouseOver [fc 217 98 69]])
-                            { 
-                                onPress = Just <| CollapseAllClicked False
-                                ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
-                            }
-                            ,
-                            Input.button ( [ mouseOver [fc 217 98 69] ])
-                            { 
-                                onPress =   if (anyFilterApplied uiModel || uiModel.searchString /= "") then Just <| ClearAllFilters  else Nothing ----  (ShowLoader True) 
-                                ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
-                            }
-                            ,
-                            --  Input.button ( [ mouseOver [fc 217 98 69] ])
-                            -- { 
-                            --     onPress = Just <| ApplyFilters
-                            --     ,label = el[  bwb 1] <| textValue  "APPLY FILTERS"
-                            -- }
-                            -- ,
-                            row[wf, spx 50, bwl 1, fs 18, pdl 10 ]
-                            [ 
-                                --el [mhcRed] <| textValue <| "Total " ++ (if uiModel.workWithNewTrucks  then "(NEW)"  else  "(USED)") ++  " trucks found : " ++ (String.fromInt <| (List.length model.truckList))   
-                                el [mhcRed] <| textValue <| "Total trucks found : " ++ (String.fromInt <| model.totalTrucksCount)   
+                        column[bw 0][
+                            row[wpx 315, spx 15, fs 12, mhcRed, pdl 15]
+                            [
+                                Input.button ( [ mouseOver [fc 217 98 69] ])
+                                { 
+                                    onPress = Just <| CollapseAllClicked True
+                                    ,label = el[  bwb 1] <| textValue  "EXPAND ALL"
+                                }
                                 ,
-                                 
-                                row[wfp 2] --clipY cuts the content of pager number if it goes beyond 65 height, this could happen
-                                --if user resize the browser to a smaller width/height
-                                [
-                                    wrappedRow [wf, pd 8 , spx 5, spy 5]
-                                        -- using <| u can avoid parans around the below func and its params
-                                        <| buildPageNumbersView  model.filteredTruckList model.currentPageNumber
-                                ]
+                                Input.button ( [ mouseOver [fc 217 98 69]])
+                                { 
+                                    onPress = Just <| CollapseAllClicked False
+                                    ,label = el[  bwb 1] <| textValue "COLLAPSE ALL"
+                                }
+                                ,
+                                Input.button ( [ mouseOver [fc 217 98 69] ])
+                                { 
+                                    onPress =   if (anyFilterApplied uiModel || uiModel.searchString /= "") then Just <| ClearAllFilters  else Nothing ----  (ShowLoader True) 
+                                    ,label = el[  bwb 1] <| textValue "CLEAR FILTERS"
+                                }
+                             
+                                --  Input.button ( [ mouseOver [fc 217 98 69] ])
+                                -- { 
+                                --     onPress = Just <| ApplyFilters
+                                --     ,label = el[  bwb 1] <| textValue  "APPLY FILTERS"
+                                -- }
+                                -- ,
+                                
+                                    --el [mhcRed] <| textValue <| "Total " ++ (if uiModel.workWithNewTrucks  then "(NEW)"  else  "(USED)") ++  " trucks found : " ++ (String.fromInt <| (List.length model.truckList))   
+                                    
                             ]
-                            
+                        ]
+                        ,
+                        column[bwr 1, hf, pdr 25]
+                        [    
+                             el [mhcRed, pdr 0, eacy] <| textValue <| "Total trucks found : " ++ (String.fromInt <| model.totalTrucksCount)   
+                        ] 
+                        ,
+                        column[wfp 2,pdl 15]
+                        [    
+                            wrappedRow [wf, pd 8 , spx 5, spy 5]
+                                        -- using <| u can avoid parans around the below func and its params
+                                        <| buildPageNumbersView  uiModel.totalPages uiModel.currentPageNumber --model.filteredTruckList model.currentPageNumber     
                         ]
                         
                         -- pager/totaltrucks-found
-                        
                     ]
                 ]
         in

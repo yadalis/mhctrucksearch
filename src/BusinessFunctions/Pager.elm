@@ -8,18 +8,18 @@ import Msg exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Colors exposing (..)
 
-buildPageNumbersView  filteredTruckList currentPageNumber = 
+buildPageNumbersView  pages currentPageNumber = 
     let
-        grps = greedyGroupsOf 100 filteredTruckList
-        pageNumbers = (List.range 1  <| List.length grps)
-
         searchStringBtnStyle num = 
-                    if currentPageNumber == num then 
-                        [  greyBg 185, greyFont 57 , fs 16]
-                    else
-                        [  mhcMediumRed  , fs 12]
+                if currentPageNumber == num then 
+                    [  greyBg 185, greyFont 57 , fs 16]
+                else
+                    [  mhcMediumRed  , fs 12]
+        
+        pageNumbers = List.range 1 pages
+
     in
-        if List.length pageNumbers > 1 then
+        if pages > 1 then
             List.map (\num -> 
                            row[wpx 25, hpx 20]
                                     [
