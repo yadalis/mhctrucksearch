@@ -15,7 +15,7 @@ showSortOptionsDialog show currentSortByOption =
         column[greyBg 245, pd 15, br 5, bw 2, wpx 300]
         [
             row[ear, bw 1, greyBg 228  ][
-                     Input.button ( [])
+                     Input.button []
                                         { 
                                             onPress = Just <| OperateSortDialog False
                                             ,label = textValue " x "

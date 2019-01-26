@@ -9,8 +9,12 @@ import Json.Encode as Encode
 
 type Msg
     --= OnFetchTrucks (WebData (Array Truck))
-    = OnFetchTrucks (Result Error (List Truck) )
-    | OnFetchSearchFilterRanges (Result Error (List SearchFilterType) )
+    =
+        --OnFetchTrucks (Result Error (List Truck) )
+        OnFetchTrucks (Result Error TruckData )
+    --| OnFetchSearchFilterRanges (Result Error (List SearchFilterType) )
+    --| OnFetchSearchFilters (Result Error (List SearchFilterType) )
+    --| OnFetchSearchFilters (Result Error SearchFiltersAndPages )
     --| OnFetchSearchFilterRanges (Result Error (List SearchFilterRangeType) )
     --| FilterCheckBoxClicked Int SearchFilterCustomType String String Bool  -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
     | FilterCheckBoxClicked SearchFilterType Bool  -- might want to use ModelSearchFitler type instead of individual field types -- index make resultCount userAction - bool must be the last arg, since onclick events send user action to that last var automatically to the message
@@ -26,9 +30,11 @@ type Msg
     | OperateSortDialog Bool
     | CloseUserWarningsDialog Bool
     | SortTrucks SortBy
+    --| ApplyFilters
     --| ShowAppraisedTrucks Bool
-    | WorkWithAppraisedTrucks  Bool
-    | WorkWithNewTrucks Bool
+    -- | WorkWithAppraisedTrucks  Bool
+    -- | WorkWithNewTrucks Bool
     | ShowLoader Bool
     --| ShowTrucksWithPhotoOnly
     | ClearAllFilters
+    | ClearSearchTextAndContinue

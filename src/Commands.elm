@@ -10,106 +10,17 @@ import Model  exposing (..)
 import Array exposing(..)
 import Url.Builder exposing (..)
 import List.Extra exposing (..)
+import BusinessFunctions.SearchFilterFunctions exposing (..)
 
 import Json.Decode.Extra exposing (fromResult)
 
-
-getFetchURL truckCondition srchString isWorkingWithAppraisedTrucks =
-    if isWorkingWithAppraisedTrucks then
-        fetchAppraisedTrucks srchString      
-    else
-        fetchTrucks truckCondition srchString
-
-fetchTrucks : String -> String -> Cmd Msg
-fetchTrucks truckCondition searchText =
+fetchTrucks searchFilterParam searchText pageNumber=
     Http.get
-        { url = fetchTrucksUrl truckCondition searchText
+        { url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [searchFilterParam,searchText,pageNumber][]
         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }
-
-fetchAppraisedTrucks : String -> Cmd Msg
-fetchAppraisedTrucks searchText =
-    Http.get
-        { url = fetchAppraisedTrucksUrl searchText
-        --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
-        , expect = expectJson OnFetchTrucks fetchTrucksDecoder
-        }
-
-fetchSearchFilterRanges: Cmd Msg
-fetchSearchFilterRanges =
-    Http.get
-        { url = fetchSearchFilterRangesUrl
-        --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
-        , expect = expectJson OnFetchSearchFilterRanges onFetchSearchFilterRangesDecoder
-        }
-
-fetchTrucksUrl : String -> String -> String
-fetchTrucksUrl truckCondition searchText =
-        --"http://localhost:13627/api/repairorder/gettrucks"
-        --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-            
-                -- if String.toLower truckCondition == "used"then
-                --     if  String.isEmpty searchText then
-                --         "https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks"
-                --     else
-                --         crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks" [] [string "searchText" searchText]
-                -- else
-                --     if String.isEmpty searchText then
-                --         crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks" [] []
-                --     else
-                --         crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks" [] [string "searchText" searchText]
-
-
-
-
-            -- if String.isEmpty searchText then
-            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition] []
-            -- else
-            --     crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition, searchText] []
-
-            -- if String.isEmpty searchText then
-            --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks"  [truckCondition] []
-            -- else
-            --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks" [truckCondition, searchText] []
-        "http://localhost:3333/trks"
-
-fetchAppraisedTrucksUrl : String -> String
-fetchAppraisedTrucksUrl searchText =
-        --"http://localhost:13627/api/repairorder/gettrucks"
-        --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
-
-            -- if String.isEmpty searchText then
-            --     "https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks"
-            -- else
-            --     crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks"  [searchText] []
-
-
-            -- if String.isEmpty searchText then
-            --     "http://localhost:50977/api/mhc/getappraisedtrucks"
-            -- else
-            --     crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks"  [searchText] []
-
-            if String.isEmpty searchText then
-                "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks"
-            else
-                crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks" [searchText] []
-         --"http://localhost:3333/trks"
-
-
-fetchSearchFilterRangesUrl: String
-fetchSearchFilterRangesUrl =
-        --"http://localhost:13627/api/repairorder/gettrucks"
-        --"http://localhost:50977/api/repairorder/gettrucks"
-        --"http://localhost:4444/srchRanges"
-        --"http://localhost:50977/api/mhc/getrangefilters"
-        -- "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
-        "https://testfuncappsuresh.azurewebsites.net/api/getrangefiltersmetadata"
-        
-fetchTrucksDecoder: Decode.Decoder (List Truck)
-fetchTrucksDecoder = 
-    Decode.list trucksDecoder
-          
+ 
 trucksDecoder :  Decode.Decoder Truck
 trucksDecoder  =
     Decode.succeed Truck  
@@ -170,21 +81,23 @@ truckTypeDecoder =
             _     -> Decode.succeed   "Purchase Order"
     )
 
-onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterType)
-onFetchSearchFilterRangesDecoder = 
-    Decode.list searchFilterRangeDecoder
-
-      
-searchFilterRangeDecoder :  Decode.Decoder SearchFilterType
-searchFilterRangeDecoder  =       
+fetchTrucksDecoder : Decode.Decoder TruckData
+fetchTrucksDecoder = 
+     Decode.succeed TruckData  
+        |> required "pages" Decode.int
+        |> required "searchFilters" (Decode.list searchFilterDecoder)
+        |> required "finalFilteredTrucks" (Decode.list trucksDecoder)
+        |> required "totalTrucksCount" Decode.int
+        |> required "cleanSearchFilterBullets" Decode.bool
+    
+searchFilterDecoder :  Decode.Decoder SearchFilterType
+searchFilterDecoder  =       
     Decode.succeed SearchFilterType  
-        |> hardcoded 0
+        |> required "index" Decode.int
         |> required "searchFilterKey" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
         |> required "searchFilterExtraData" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
-        -- |> required "searchFilterMinValue" Decode.int
-        -- |> required "searchFilterMaxValue" Decode.int
         |> required "userAction" stringBoolDecoder --Decode.bool
-        |> hardcoded 0
+        |> required "resultCount" Decode.int
         |> required "filterCategory" searchFilterRangeUnionTypeDecoder
 
 stringBoolDecoder : Decode.Decoder Bool
@@ -208,22 +121,9 @@ searchFilterRangeUnionTypeString : String -> Decode.Decoder SearchFilterCustomTy
 searchFilterRangeUnionTypeString str =
     Decode.succeed <| convertStringToRangeSearchFilter str
 
-convertStringToRangeSearchFilter rangeFilterStr =
-    
-    find (\sfRangeMeta -> sfRangeMeta.filterNameString == rangeFilterStr) rangeSearchFiltersInitialExpandState
-        |> Maybe.map (\sfRangeMeta -> sfRangeMeta.filterName)
-        -- the below condition should never happen unless you misspell in metadata list in model.elm file
-        |> Maybe.withDefault Price
-
-    -- rangeSearchFiltersInitialExpandState
-    --     |> List.filter(\(k, v) -> k == rangeFilterStr)
-    --     |> List.head
-    --     |> Maybe.map (\(k, v) -> v)
-    --     |> Maybe.withDefault Price --introduce noValue filter type to handle this situation
-
--- convertStringToRangeSearchFilter rangeFilterStr =
---     allRangeFilterTypesKeyValueParis
---         |> List.filter(\(k, v) -> k == rangeFilterStr)
---         |> List.head
---         |> Maybe.map (\(k, v) -> v)
---         |> Maybe.withDefault Price --introduce noValue filter type to handle this situation
+convertStringToRangeSearchFilter filterStr =
+    find (\(filterNameString, filterName) -> filterNameString == filterStr)
+            (List.map (\rf -> (rf.filterNameString, rf.filterName)) partialSearchFiltersMetadata)
+    |> Maybe.map (\(filterNameString, filterName) -> filterName)
+    -- the below condition should never happen unless you misspell in metadata list in model.elm file
+    |> Maybe.withDefault Price

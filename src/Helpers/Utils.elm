@@ -14,6 +14,11 @@ appendIf flag value list =
     else
         list
 
+convertMaybeInt intValue =
+    case intValue of 
+            Just val -> val
+            Nothing -> 0
+
 buildQueryString list =
     list    
         |> List.map (\(a,b) -> a ++ "=" ++ b)
