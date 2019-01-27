@@ -71,7 +71,8 @@ type alias UIModel =
         ,expandCollapseSearchFilterStates : Array SearchFilterState
         ,showDropdown : Bool
         ,showLoader : Bool
-        ,currentSortBy : SortBy
+        ,currentSortByMetaData : SortMetaData
+        ,currentSortOrder : SortOrder
         ,hasErrorsToPresent : Bool
         ,hasWarningsToPresent : Bool
         ,userWarningMessage : String
@@ -124,7 +125,7 @@ type SearchFilterCustomType
 
 type SortOrder
     = SortASC
-    | SortDSC
+    | SortDESC
 
 type SortBy
     = PriceLowToHigh
@@ -136,6 +137,14 @@ type SortBy
     | YearNewToOld
     | YearOldToNew
 
+type alias SortMetaData =
+    {
+        --sortKey : String,
+        sortItemDisplayText : String,
+        sortBy : String,
+        sortByField : SortBy,
+        sortOrder : String
+    }
 
 type alias TruckData =
     {   
@@ -247,7 +256,8 @@ initalUIModel jsFlag =
                          ,
         showDropdown = False,
         showLoader = False,
-        currentSortBy = MakeAtoZ,
+        currentSortByMetaData =  {sortItemDisplayText = "Make A to Z", sortBy = "Make", sortByField = MakeAtoZ, sortOrder = "ASC"},
+        currentSortOrder = SortDESC,
         hasErrorsToPresent = False,
         hasWarningsToPresent = False,
         initialLoad = True,

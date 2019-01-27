@@ -40,7 +40,7 @@ type alias OnLoadSearchFilter =
 
 init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
-    ( (initialModel,initalUIModel jsflg) , Cmd.batch [fetchTrucks "" "" 1] ) -- initially loads first 100 trucks with all possible search filters and counts
+    ( (initialModel,initalUIModel jsflg) , Cmd.batch [fetchTrucks "" "" 1 "Make" "ASC"] ) -- initially loads first 100 trucks with all possible search filters and counts
 
 ---- UPDATE ----
  
@@ -50,9 +50,9 @@ update msg (model, uiModel) =
         getTrucksHttpCmd newUIModel = 
                 let
                     searchFilterString = (String.join "|" <| List.filter (\sb -> sb /= "" ) (formattedSelectedFilterBullets newUIModel) )
-                    vvrs = Debug.log "fetch truck url " [searchFilterString]
+                    --vvrs = Debug.log "fetch truck url " [searchFilterString]
                 in
-                    fetchTrucks searchFilterString newUIModel.searchString newUIModel.currentPageNumber
+                    fetchTrucks searchFilterString newUIModel.searchString newUIModel.currentPageNumber newUIModel.currentSortByMetaData.sortBy newUIModel.currentSortByMetaData.sortOrder
 
         executeTextSearch =
                 let
@@ -63,6 +63,7 @@ update msg (model, uiModel) =
         case msg of
             OnFetchTrucks response ->
                 let
+                    --asdfasdf = Debug.log "searchFilters sadf" [response] 
                     {pages, searchFilters, trucks, totalTrucksCount, cleanSearchFilterBullets} = 
                             case response of
                                     Ok rangeFltrs ->
@@ -192,16 +193,12 @@ update msg (model, uiModel) =
             CloseUserWarningsDialog userAction ->
                 ( (model, {uiModel | hasWarningsToPresent = userAction }), Cmd.none )
             
-            SortTrucks sortBy ->
+            SortTrucks selectedSortByMetaData ->
                 let
-                    sortedFilteredTruckList = 
-                        sortTruckList sortBy <| model.truckList 
-
-                    newModel =
-                        {model | truckList = sortedFilteredTruckList  }
-
+                    newUIModel =
+                        {uiModel |  showLoader = True, currentSortByMetaData =  selectedSortByMetaData, currentPageNumber = 1}
                 in
-                    ( (newModel, {uiModel | currentSortBy = sortBy, currentPageNumber = 1}), Cmd.none )
+                    ( (model, newUIModel), getTrucksHttpCmd newUIModel  )
 
             ShowLoader userAction ->
                  ( (model, {uiModel | showLoader = userAction }), 
@@ -349,14 +346,13 @@ view (model, uiModel) =
                             [ 
                                 row[bwl 0, hpx 30][]   
                                 ,
-                                
-                                
-                                row [wpx 325, fc 97 97 97, below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortBy)]
+
+                                row [wpx 325, fc 97 97 97, below (showSortOptionsDialog uiModel.showDropdown uiModel.currentSortByMetaData)]
                                 [
                                     Input.button []  
                                     { 
                                         onPress = Just <| OperateSortDialog <| not <| uiModel.showDropdown
-                                        ,label = el[bwb 1] <| textValue <| "Sort by : " ++ convertSortByToDescription uiModel.currentSortBy
+                                        ,label = el[bwb 1] <| textValue <| "Sort by : " ++ uiModel.currentSortByMetaData.sortItemDisplayText
                                     }
                                 ]                         
                             ]

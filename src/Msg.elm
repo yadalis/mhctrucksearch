@@ -29,7 +29,7 @@ type Msg
     | PageNumberClicked Int
     | OperateSortDialog Bool
     | CloseUserWarningsDialog Bool
-    | SortTrucks SortBy
+    | SortTrucks SortMetaData
     --| ApplyFilters
     --| ShowAppraisedTrucks Bool
     -- | WorkWithAppraisedTrucks  Bool

@@ -14,9 +14,10 @@ import BusinessFunctions.SearchFilterFunctions exposing (..)
 
 import Json.Decode.Extra exposing (fromResult)
 
-fetchTrucks searchFilterParam searchText pageNumber =
+fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
     Http.get
-        { url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber]
+        { url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
+                                                                               string "sortField" sortField, string "sortOrder" sortOrder ]
         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }

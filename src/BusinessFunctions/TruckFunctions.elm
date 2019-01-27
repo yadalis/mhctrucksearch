@@ -11,86 +11,15 @@ buildTruckIdNumber truck =
     else
         ("PO#: " , "P" ++ truck.poNumber)
 
-sortTruckList sortBy listToSort =
-                    case sortBy of 
-                        PriceLowToHigh ->
-                            listToSort
-                                |> List.sortBy .price 
-                        PriceHighToLow ->
-                            listToSort
-                                |> List.sortWith desendingOrderByPrice
-                        MileageLowToHigh ->
-                            listToSort
-                                |> List.sortBy .mileage 
-                        MileageHighToLow ->
-                            listToSort
-                                |> List.sortWith desendingOrderByMileage
-                        MakeAtoZ ->
-                            listToSort
-                                |> List.sortBy .make     
-                        MakeZtoA ->
-                            listToSort
-                                |> List.sortWith desendingOrderByMake
-                        YearOldToNew ->
-                            listToSort
-                                |> List.sortBy .year     
-                        YearNewToOld ->
-                            listToSort
-                                |> List.sortWith desendingOrderByYear
-                                
-defaultSortBy  =
-    MakeAtoZ
-
-defaultSortByText  =
-    "Make A to Z"
-
-sortByItemslist : List (String, String, SortBy)
+sortByItemslist : List SortMetaData
 sortByItemslist = 
     [
-        ("PriceLowToHigh","Price - Low to High",PriceLowToHigh),
-        ("PriceHighToLow","Price - High to Low",PriceHighToLow),
-        ("MileageLowToHigh","Mileage - Low to High",MileageLowToHigh),
-        ("MileageHighToLow","Mileage - High to Low",MileageHighToLow),
-        ("MakeAtoZ","Make A to Z",MakeAtoZ),
-        ("MakeZtoA","Make Z to A",MakeZtoA),
-        ("YearNewToOld","Year - New to Old",YearNewToOld),
-        ("YearOldToNew","Year - Old to New",YearOldToNew)
+        {sortItemDisplayText = "Price - Low to High"     , sortBy = "Price"    , sortByField = PriceLowToHigh      , sortOrder = "ASC"},
+        {sortItemDisplayText = "Price - High to Low"     , sortBy = "Price"    , sortByField = PriceHighToLow      , sortOrder = "DESC"},
+        {sortItemDisplayText = "Mileage - Low to High"   , sortBy = "Mileage"  , sortByField = MileageLowToHigh    , sortOrder = "ASC"},
+        {sortItemDisplayText = "Mileage - High to Low"   , sortBy = "Mileage"  , sortByField = MileageHighToLow    , sortOrder = "DESC"},
+        {sortItemDisplayText = "Make A to Z"             , sortBy = "Make"     , sortByField = MakeAtoZ            , sortOrder = "ASC"},
+        {sortItemDisplayText = "Make Z to A"             , sortBy = "Make"     , sortByField = MakeZtoA            , sortOrder = "DESC"},
+        {sortItemDisplayText = "Year - Old to New"       , sortBy = "Year"     , sortByField = YearOldToNew        , sortOrder = "ASC"},
+        {sortItemDisplayText = "Year - New to Old"       , sortBy = "Year"     , sortByField = YearNewToOld        , sortOrder = "DESC"}
     ]
-
-convertSortByToDescription sortBy =
-    sortByItemslist
-        |> List.filter(\(_,_, v) -> v == sortBy)
-        |> List.head
-        |> Maybe.map (\(k, d, v) -> d)
-        |> Maybe.withDefault defaultSortByText
-                
-convertSortByToKey sortBy =
-    sortByItemslist
-        |> List.filter(\(_,_, v) -> v == sortBy)
-        |> List.head
-        |> Maybe.map (\(k, d, v) -> k)
-        |> Maybe.withDefault defaultSortByText
-
-desendingOrderByPrice a b =
-    case compare a.price b.price of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
-
-desendingOrderByMileage a b =
-    case compare a.mileage b.mileage of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
-
-desendingOrderByMake a b =
-    case compare a.make b.make of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
-
-desendingOrderByYear a b =
-    case compare a.year b.year of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
