@@ -316,7 +316,7 @@ view (model, uiModel) =
                         [
                             image [hpx 35] {src = "mhclogo.png", description ="Logo" }
                             ,
-                            el[pdl 5, fs 18, eab] <| textValue "v1.0.2"
+                            el[pdl 5, fs 18, eab] <| textValue "v1.0.1 - Beta"
                         ]
                         ,row[wf]
                         [
