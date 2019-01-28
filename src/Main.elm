@@ -63,7 +63,7 @@ update msg (model, uiModel) =
         case msg of
             OnFetchTrucks response ->
                 let
-                    asdfasdf = Debug.log "searchFilters sadf" [response] 
+--                    asdfasdf = Debug.log "searchFilters sadf" [response] 
                     {pages, searchFilters, trucks, totalTrucksCount, cleanSearchFilterBullets} = 
                             case response of
                                     Ok rangeFltrs ->
@@ -103,9 +103,9 @@ update msg (model, uiModel) =
                             Array.toList filterList
                                 |> find (\sf -> sf.searchFilterKey == selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory )
                                 |> Maybe.map (\sf -> 
-                                                    let
-                                                        asdfasdfasdf = Debug.log "updatedUuiModel.allSearchFilters sadf" [sf.index] 
-                                                    in
+                                                    -- let
+                                                    --     --asdfasdfasdf = Debug.log "updatedUuiModel.allSearchFilters sadf" [sf.index] 
+                                                    -- in
                                                     
                                                         {sf | userAction = userAction}
                                             )

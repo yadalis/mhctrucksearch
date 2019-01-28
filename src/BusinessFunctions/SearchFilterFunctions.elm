@@ -42,7 +42,7 @@ partialSearchFiltersMetadata =
         ,{filterName = BodyType         , filterCode = "bt"  ,  displayText = "Body Type"         , filterNameString = "BodyType"                }
         ,{filterName = APU              , filterCode = "ap"  ,  displayText = "APU"               , filterNameString = "APU"                     }
         ,{filterName = CDL              , filterCode = "cd"  ,  displayText = "CDL"               , filterNameString = "CDL"                     }
-        ,{filterName = Photo            , filterCode = "ph"  ,  displayText = "Photo"             , filterNameString = "Photo"                   }      
+        ,{filterName = Photo            , filterCode = "hp"  ,  displayText = "Photo"             , filterNameString = "HasPhoto"                   }      
         ,{filterName = InventoryAge     , filterCode = "ia"  ,  displayText = "Inventory Age"     , filterNameString = "InventoryAge"            }
         ,{filterName = LocationName     , filterCode = "lc"  ,  displayText = "Location Name"     , filterNameString = "LocationName"            }
         ,{filterName = OwningBranch     , filterCode = "ob"  ,  displayText = "Owning Branch"     , filterNameString = "OwningBranch"            }     
