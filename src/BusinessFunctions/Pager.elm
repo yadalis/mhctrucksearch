@@ -7,10 +7,11 @@ import Element.Input as Input exposing (..)
 import Msg exposing (..)
 import Helpers.ElmUI exposing (..)
 import Helpers.Colors exposing (..)
+import Helpers.Utils exposing (..)
 
 buildPageNumbersView  filteredTruckList currentPageNumber = 
     let
-        grps = greedyGroupsOf 100 filteredTruckList
+        grps = greedyGroupsOf defaultTrucksPerPage filteredTruckList
         pageNumbers = (List.range 1  <| List.length grps)
 
         searchStringBtnStyle num = 

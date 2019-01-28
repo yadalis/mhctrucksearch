@@ -4,6 +4,8 @@ import Html.Events exposing (on, targetValue)
 import Json.Decode as Decode
 import Task
 
+defaultTrucksPerPage = 150
+
 onChange  tagger =
     on "change" (Decode.map tagger targetValue)
 

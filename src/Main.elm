@@ -133,7 +133,7 @@ update msg (model, uiModel) =
                     
                         if List.length trucks > 0 then
                             (
-                                {model  | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = List.take 100 trucks },
+                                {model  | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = List.take defaultTrucksPerPage trucks },
                                 List.foldl
                                         executeRegularFilterFunc
                                         uiModel
@@ -153,7 +153,7 @@ update msg (model, uiModel) =
                         else
                             {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the text " ++ uiModel.searchString }
                     
-                    -- pagedTruckList = List.take 100 trucks
+                    -- pagedTruckList = List.take defaultTrucksPerPage trucks
 
                     -- executeRegularFilterFunc regularFilterMeta currentUIModel =
                     --      regularFilterMeta.pushModifiedFilterListBackInToUIModel 
@@ -263,7 +263,7 @@ update msg (model, uiModel) =
                     uiModelUpdatedWithLatestSearchFilters =
                             rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModelUpdatedWithSearchFilterBullets
                 in
-                    ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take 100 newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+                    ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take defaultTrucksPerPage newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
 
             SearchString searchString ->
                     ( ( model , {uiModel | searchString = searchString}), Cmd.none)
@@ -294,7 +294,7 @@ update msg (model, uiModel) =
 
             PageNumberClicked pageNumber ->
                 let              
-                    grps = greedyGroupsOf 100 model.filteredTruckList
+                    grps = greedyGroupsOf defaultTrucksPerPage model.filteredTruckList
                     grpByPageNumber = List.drop (pageNumber - 1) grps
 
                     firstList = case List.head grpByPageNumber of
@@ -316,7 +316,7 @@ update msg (model, uiModel) =
                         sortTruckList sortBy <| model.filteredTruckList 
 
                     newModel =
-                        {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList, currentPageNumber = 1 }
+                        {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take defaultTrucksPerPage sortedFilteredTruckList, currentPageNumber = 1 }
 
                 in
                     ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
@@ -363,7 +363,7 @@ update msg (model, uiModel) =
                     newModel = 
                         {model |
                                 filteredTruckList = sortedTrkList,
-                                pagedTruckList =List.take 100 sortedTrkList
+                                pagedTruckList =List.take defaultTrucksPerPage sortedTrkList
                                 ,currentPageNumber = 1}
 
                     uiModelUpdatedWithLatestSearchFilters =
@@ -420,7 +420,7 @@ view (model, uiModel) =
                         [
                             image [hpx 35] {src = "mhclogo.png", description ="Logo" }
                             ,
-                            el[pdl 5, fs 18, eab] <| textValue "v1.0.2"
+                            el[pdl 5, fs 18, eab] <| textValue "v1.0.0 - Live"
                         ]
                         ,row[wf]
                         [
@@ -466,36 +466,36 @@ view (model, uiModel) =
                                 else
                                     none
                                 ,
-                                checkbox [] 
-                                {
-                                    onChange = WorkWithNewTrucks
-                                    ,icon = buildWorkWithAppraisedTrucksToggleImage
-                                    , label = labelRight [] <| 
-                                                                if  uiModel.workWithNewTrucks then 
-                                                                    textValue <| "Stop Browsing New Trucks"
-                                                                else
-                                                                    textValue <| "Browse New Trucks"
-                                    , checked =
-                                                uiModel.workWithNewTrucks
-                                }
-                                ,
+                                -- checkbox [] 
+                                -- {
+                                --     onChange = WorkWithNewTrucks
+                                --     ,icon = buildWorkWithAppraisedTrucksToggleImage
+                                --     , label = labelRight [] <| 
+                                --                                 if  uiModel.workWithNewTrucks then 
+                                --                                     textValue <| "Stop Browsing New Trucks"
+                                --                                 else
+                                --                                     textValue <| "Browse New Trucks"
+                                --     , checked =
+                                --                 uiModel.workWithNewTrucks
+                                -- }
+                                -- ,
                                 row[bwl 1, hpx 30][]   
-                                ,
-                                if not uiModel.workWithNewTrucks then
-                                    checkbox [] 
-                                    {
-                                        onChange = WorkWithAppraisedTrucks
-                                        ,icon = buildWorkWithAppraisedTrucksToggleImage
-                                        , label = labelRight [] <| 
-                                                                    if  uiModel.workWithAppraisedTrucks then 
-                                                                        textValue <| "Stop Browsing Appraised Trucks"
-                                                                    else
-                                                                        textValue <| "Browse Appraised Trucks"
-                                        , checked =
-                                                    uiModel.workWithAppraisedTrucks
-                                    }
-                                else
-                                    none
+                                -- ,
+                                -- if not uiModel.workWithNewTrucks then
+                                --     checkbox [] 
+                                --     {
+                                --         onChange = WorkWithAppraisedTrucks
+                                --         ,icon = buildWorkWithAppraisedTrucksToggleImage
+                                --         , label = labelRight [] <| 
+                                --                                     if  uiModel.workWithAppraisedTrucks then 
+                                --                                         textValue <| "Stop Browsing Appraised Trucks"
+                                --                                     else
+                                --                                         textValue <| "Browse Appraised Trucks"
+                                --         , checked =
+                                --                     uiModel.workWithAppraisedTrucks
+                                --     }
+                                -- else
+                                --     none
                                 ,
                                 if not uiModel.workWithNewTrucks then
                                     row[bwl 1, hpx 30][]
@@ -576,44 +576,29 @@ view (model, uiModel) =
                     [
                         navBar,
                         
-                        row[wf, pde 90 3 0 3, spx 16,  (
-
-                                column [wpx 300, eat] 
-                                                            [
-                                                                column[wf, spy 5, greyBg 240, pd 10]
-                                                                    <| (
-                                                                        if List.length model.filteredTruckList == 0 then
-                                                                            [loaderIconElement]
-                                                                        else 
-                                                                            List.map 
-                                                                                (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
-                                                                                partialSearchFiltersMetadata
-                                                                    )
-                                                            ]
-
-                        )]
+                        row[wf, pde 90 3 0 3, spx 16 ]
                         [     
                             -- Search Filter Panel
-                            -- column [wpx 300, eat] 
-                            -- [
-                            --     column[wf, spy 5, greyBg 240, pd 10]
-                            --         <| (
-                            --             if List.length model.filteredTruckList == 0 then
-                            --                 [loaderIconElement]
-                            --             else 
-                            --                 List.map 
-                            --                     (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
-                            --                     partialSearchFiltersMetadata
-                            --         )
-                            -- ]
+                            column [wpx 300, eat] 
+                            [
+                                column[wf, spy 5, greyBg 240, pd 10]
+                                    <| (
+                                        if List.length model.filteredTruckList == 0 then
+                                            [loaderIconElement]
+                                        else 
+                                            List.map 
+                                                (\filterType -> lazy3 buildSearchFilterValuesGroup filterType.filterName model uiModel) 
+                                                partialSearchFiltersMetadata
+                                    )
+                            ]
                             -- -- Trucks search Filter Bullets & Search Result List Panel 
-                            -- ,
+                            ,
                             column[wf, hf]
                             [
                                 lazy searchFilterBulletView 
                                         <| uiModel.selectedFilterBullets --Array.fromList <| concatAllFilters uiModel
                                 ,
-                                column[wf, pdl 500]
+                                column[wf]
                                 [
                                         lazy trucksView model.pagedTruckList -- model.filteredTruckList
                                 ]         
