@@ -37,7 +37,7 @@ partialSearchFiltersMetadata =
         ,{filterName = RearAxleWeight   , filterCode = "rw"  ,  displayText = "Rear Axle Weight"  , filterNameString = "RearAxleWeight"          }
         ,{filterName = RearWheelSize    , filterCode = "rs"  ,  displayText = "Rear Wheel Size"   , filterNameString = "RearWheelSize"           }      
         ,{filterName = FrontWheelSize   , filterCode = "fs"  ,  displayText = "Front Wheel Size"  , filterNameString = "FrontWheelSize"          }       
-        ,{filterName = BrakeType        , filterCode = "bt"  ,  displayText = "Brake Type"        , filterNameString = "BrakeType"               }
+        ,{filterName = BrakeType        , filterCode = "bk"  ,  displayText = "Brake Type"        , filterNameString = "BrakeType"               }
         ,{filterName = ExhaustType      , filterCode = "et"  ,  displayText = "Exhaust Type"      , filterNameString = "ExhaustType"             }
         ,{filterName = BodyType         , filterCode = "bt"  ,  displayText = "Body Type"         , filterNameString = "BodyType"                }
         ,{filterName = APU              , filterCode = "ap"  ,  displayText = "APU"               , filterNameString = "APU"                     }

@@ -63,7 +63,7 @@ update msg (model, uiModel) =
         case msg of
             OnFetchTrucks response ->
                 let
-                    --asdfasdf = Debug.log "searchFilters sadf" [response] 
+                    asdfasdf = Debug.log "searchFilters sadf" [response] 
                     {pages, searchFilters, trucks, totalTrucksCount, cleanSearchFilterBullets} = 
                             case response of
                                     Ok rangeFltrs ->
@@ -93,9 +93,22 @@ update msg (model, uiModel) =
 
                     updateUserSelectedSearchFilter : Array SearchFilterType -> UIModel
                     updateUserSelectedSearchFilter  filterList =
+                        let
+                            abc = Array.toList filterList
+                                        |> find (\sf -> sf.searchFilterKey == selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory )
+                            
+                            --asdfasdfasdf = Debug.log "updatedUuiModel.allSearchFilters sadf" [abc.index] 
+                        in
+                        
                             Array.toList filterList
                                 |> find (\sf -> sf.searchFilterKey == selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory )
-                                |> Maybe.map (\sf -> {sf | userAction = userAction})
+                                |> Maybe.map (\sf -> 
+                                                    let
+                                                        asdfasdfasdf = Debug.log "updatedUuiModel.allSearchFilters sadf" [sf.index] 
+                                                    in
+                                                    
+                                                        {sf | userAction = userAction}
+                                            )
                                 |> Maybe.map (\sf -> Array.set sf.index sf filterList)
                                 |> Maybe.map (\fltrs -> {uiModel | allSearchFilters = Array.toList fltrs})
                                 |> Maybe.withDefault uiModel
