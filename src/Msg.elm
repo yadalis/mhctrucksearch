@@ -38,3 +38,4 @@ type Msg
     --| ShowTrucksWithPhotoOnly
     | ClearAllFilters
     | ClearSearchTextAndContinue
+    | NOoP

@@ -16,8 +16,11 @@ import Json.Decode.Extra exposing (fromResult)
 
 fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
     Http.get
-        { url = crossOrigin "http://172.21.123.180/NewMHCtruckSyncapidemo/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
+        { 
+            url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
                                                                                string "sortField" sortField, string "sortOrder" sortOrder ]
+            -- url = crossOrigin "http://172.21.123.180/NewMHCtruckSyncapidemo/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
+            --                                                                    string "sortField" sortField, string "sortOrder" sortOrder ]
         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }

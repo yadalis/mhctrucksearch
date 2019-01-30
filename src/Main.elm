@@ -90,7 +90,8 @@ update msg (model, uiModel) =
                 
             FilterCheckBoxClicked selectedSearchFilter userAction ->
                 let
-
+                    asdfasdfasdf = Debug.log "from FilterCheckBoxClicked " [uiModel.showLoader] 
+                    
                     updateUserSelectedSearchFilter : Array SearchFilterType -> UIModel
                     updateUserSelectedSearchFilter  filterList =
                         let
@@ -142,8 +143,9 @@ update msg (model, uiModel) =
 
                     newSortedFilteredTruckList = model.truckList
                 in
-                    ( ( {model | truckList = newSortedFilteredTruckList } , newUIModelUpdatedWithSearchFilterBullets), getTrucksHttpCmd newUIModelUpdatedWithSearchFilterBullets )
-
+                    ( ( {model | truckList = newSortedFilteredTruckList } , newUIModelUpdatedWithSearchFilterBullets), Cmd.batch [ getTrucksHttpCmd newUIModelUpdatedWithSearchFilterBullets, Task.perform (\_ -> NOoP) (setViewport 0 0)] )
+            NOoP ->
+                    ( ( model , uiModel), Cmd.none)
             -- ApplyFilters ->
             --     let
             --         formattedSelectedFilterBullets = 
@@ -255,6 +257,8 @@ textBox uiModel=
 view : (Model, UIModel) -> Html Msg
 view (model, uiModel) =
         let
+            asdfasdfasdf = Debug.log "from view " [uiModel.showLoader] 
+
             (searchStringBtnStyle, searchBtnIcon) = 
                         if String.length (String.trim <| uiModel.searchString) > 0 then 
                             ([ bc 226 63 63, fc 250 250 250],  image [] {src = "srch_white.ico", description ="Logo" })
