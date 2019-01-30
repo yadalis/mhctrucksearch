@@ -469,36 +469,36 @@ view (model, uiModel) =
                                 else
                                     none
                                 ,
-                                -- checkbox [] 
-                                -- {
-                                --     onChange = WorkWithNewTrucks
-                                --     ,icon = buildWorkWithAppraisedTrucksToggleImage
-                                --     , label = labelRight [] <| 
-                                --                                 if  uiModel.workWithNewTrucks then 
-                                --                                     textValue <| "Stop Browsing New Trucks"
-                                --                                 else
-                                --                                     textValue <| "Browse New Trucks"
-                                --     , checked =
-                                --                 uiModel.workWithNewTrucks
-                                -- }
-                                -- ,
+                                checkbox [] 
+                                {
+                                    onChange = WorkWithNewTrucks
+                                    ,icon = buildWorkWithAppraisedTrucksToggleImage
+                                    , label = labelRight [] <| 
+                                                                if  uiModel.workWithNewTrucks then 
+                                                                    textValue <| "Stop Browsing New Trucks"
+                                                                else
+                                                                    textValue <| "Browse New Trucks"
+                                    , checked =
+                                                uiModel.workWithNewTrucks
+                                }
+                                ,
                                 row[bwl 1, hpx 30][]   
-                                -- ,
-                                -- if not uiModel.workWithNewTrucks then
-                                --     checkbox [] 
-                                --     {
-                                --         onChange = WorkWithAppraisedTrucks
-                                --         ,icon = buildWorkWithAppraisedTrucksToggleImage
-                                --         , label = labelRight [] <| 
-                                --                                     if  uiModel.workWithAppraisedTrucks then 
-                                --                                         textValue <| "Stop Browsing Appraised Trucks"
-                                --                                     else
-                                --                                         textValue <| "Browse Appraised Trucks"
-                                --         , checked =
-                                --                     uiModel.workWithAppraisedTrucks
-                                --     }
-                                -- else
-                                --     none
+                                ,
+                                if not uiModel.workWithNewTrucks then
+                                    checkbox [] 
+                                    {
+                                        onChange = WorkWithAppraisedTrucks
+                                        ,icon = buildWorkWithAppraisedTrucksToggleImage
+                                        , label = labelRight [] <| 
+                                                                    if  uiModel.workWithAppraisedTrucks then 
+                                                                        textValue <| "Stop Browsing Appraised Trucks"
+                                                                    else
+                                                                        textValue <| "Browse Appraised Trucks"
+                                        , checked =
+                                                    uiModel.workWithAppraisedTrucks
+                                    }
+                                else
+                                    none
                                 ,
                                 if not uiModel.workWithNewTrucks then
                                     row[bwl 1, hpx 30][]
