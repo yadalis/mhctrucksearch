@@ -89,7 +89,9 @@ type alias SearchFilterState =
     }
 
 type SearchFilterCustomType
-    = SalesStatus
+    = 
+        Condition
+    | SalesStatus
     | Year
     | Make
     | MakeModel
@@ -202,7 +204,8 @@ initialModel =
 
 searchFiltersInitialExpandState = 
     [
-          {filterName = FleetCode,        expandByDefault = False}
+        {filterName = Condition,        expandByDefault = False}
+        , {filterName = FleetCode,        expandByDefault = False}
         , {filterName = SalesStatus,      expandByDefault = True}
         , {filterName = TruckType,        expandByDefault = False}
         , {filterName = SpecialFinancing, expandByDefault = False}
