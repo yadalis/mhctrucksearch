@@ -263,7 +263,10 @@ update msg (model, uiModel) =
                     uiModelUpdatedWithLatestSearchFilters =
                             rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModelUpdatedWithSearchFilterBullets
                 in
-                    ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take defaultTrucksPerPage newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+                    ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take defaultTrucksPerPage newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Task.perform (\_ -> NOoP) (setViewport 0 0))
+
+            NOoP ->
+                    ( ( model , uiModel), Cmd.none)
 
             SearchString searchString ->
                     ( ( model , {uiModel | searchString = searchString}), Cmd.none)

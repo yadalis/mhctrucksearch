@@ -32,3 +32,4 @@ type Msg
     | ShowLoader Bool
     --| ShowTrucksWithPhotoOnly
     | ClearAllFilters
+    | NOoP

@@ -72,7 +72,7 @@ fetchTrucksUrl truckCondition searchText =
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks"  [truckCondition] []
             -- else
             --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks" [truckCondition, searchText] []
-        "http://172.21.123.180/NewMHCtruckSyncAPIDemo/api/mhc/getalltrucks"
+        "http://localhost:50977/api/mhc/getalltrucks"
 
 fetchAppraisedTrucksUrl : String -> String
 fetchAppraisedTrucksUrl searchText =
