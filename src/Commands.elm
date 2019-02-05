@@ -10,21 +10,127 @@ import Model  exposing (..)
 import Array exposing(..)
 import Url.Builder exposing (..)
 import List.Extra exposing (..)
-import BusinessFunctions.SearchFilterFunctions exposing (..)
 
 import Json.Decode.Extra exposing (fromResult)
 
-fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
-    Http.get
-        { 
-            url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
-                                                                               string "sortField" sortField, string "sortOrder" sortOrder ]
-            -- url = crossOrigin "http://172.21.123.180/NewMHCtruckSyncapidemo/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
-            --                                                                    string "sortField" sortField, string "sortOrder" sortOrder ]
-        --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
-        , expect = expectJson OnFetchTrucks fetchTrucksDecoder
-        }
- 
+fetchTrucks searchFilterParam searchText pageNumber=
+    let
+        url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [searchFilterParam,searchText,pageNumber][]
+    in
+        Http.get
+            { url = url
+            --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+            , expect = expectJson OnFetchTrucks fetchTrucksDecoder
+            }
+
+-- getFetchURL truckCondition srchString isWorkingWithAppraisedTrucks =
+--     if isWorkingWithAppraisedTrucks then
+--         fetchAppraisedTrucks srchString      
+--     else
+--         fetchTrucks truckCondition srchString
+
+-- fetchTrucks : String -> String -> Cmd Msg
+-- fetchTrucks truckCondition searchText =
+--     Http.get
+--         { url = fetchTrucksUrl truckCondition searchText
+--         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+--         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
+--         }
+
+-- fetchAppraisedTrucks : String -> Cmd Msg
+-- fetchAppraisedTrucks searchText =
+--     Http.get
+--         { url = fetchAppraisedTrucksUrl searchText
+--         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+--         , expect = expectJson OnFetchTrucks fetchTrucksDecoder
+--         }
+
+-- fetchSearchFilterRanges: Cmd Msg
+-- fetchSearchFilterRanges =
+--     Http.get
+--         { url = fetchSearchFilterRangesUrl
+--         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+--         , expect = expectJson OnFetchSearchFilterRanges onFetchSearchFilterRangesDecoder
+--         }
+
+-- fetchSearchFilters: String -> Cmd Msg
+-- fetchSearchFilters param =
+--     Http.get
+--         { url = fetchSearchFiltersUrl param
+--         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
+--         , expect = expectJson OnFetchSearchFilters onFetchSearchFiltersAndPagesDecoder
+--         }
+
+-- fetchTrucksUrl : String -> String
+-- fetchTrucksUrl searchText =
+--         --"http://localhost:13627/api/repairorder/gettrucks"
+--         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
+            
+--                 -- if String.toLower truckCondition == "used"then
+--                 --     if  String.isEmpty searchText then
+--                 --         "https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks"
+--                 --     else
+--                 --         crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getusedtrucks" [] [string "searchText" searchText]
+--                 -- else
+--                 --     if String.isEmpty searchText then
+--                 --         crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks" [] []
+--                 --     else
+--                 --         crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks" [] [string "searchText" searchText]
+
+
+
+
+--             if String.isEmpty searchText then
+--                 crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition] []
+--             else
+--                 crossOrigin "http://localhost:50977/api/mhc/gettrucks" [truckCondition, searchText] []
+
+            -- if String.isEmpty searchText then
+            --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks"  [truckCondition] []
+            -- else
+            --     crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/gettrucks" [truckCondition, searchText] []
+        --"http://localhost:3333/trks"
+
+-- fetchAppraisedTrucksUrl : String -> String
+-- fetchAppraisedTrucksUrl searchText =
+--         --"http://localhost:13627/api/repairorder/gettrucks"
+--         --http://172.21.123.180/NewMHCtruckSync/api/mhc/gettrucks
+
+--             -- if String.isEmpty searchText then
+--             --     "https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks"
+--             -- else
+--             --     crossOrigin "https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks"  [searchText] []
+
+
+--             -- if String.isEmpty searchText then
+--             --     "http://localhost:50977/api/mhc/getappraisedtrucks"
+--             -- else
+--             --     crossOrigin "http://localhost:50977/api/mhc/getappraisedtrucks"  [searchText] []
+
+--             if String.isEmpty searchText then
+--                 "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks"
+--             else
+--                 crossOrigin "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getappraisedtrucks" [searchText] []
+--          --"http://localhost:3333/trks"
+
+
+-- fetchSearchFilterRangesUrl: String
+-- fetchSearchFilterRangesUrl =
+-- fetchTrucksUrl: String -> String
+-- fetchTrucksUrl  param =
+--         --"http://localhost:13627/api/repairorder/gettrucks"
+--         --"http://localhost:50977/api/repairorder/gettrucks"
+--         --"http://localhost:4444/srchRanges"
+--         --"http://localhost:50977/api/mhc/getrangefilters"
+--         -- "http://172.21.123.180/NewMHCtruckSyncAPILive/api/mhc/getrangefilters"
+--         --"https://testfuncappsuresh.azurewebsites.net/api/getrangefiltersmetadata"
+
+--         crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [param,"1"][]
+        
+-- fetchTrucksDecoder: Decode.Decoder (List Truck)
+-- fetchTrucksDecoder = 
+--     Decode.list trucksDecoder
+          
 trucksDecoder :  Decode.Decoder Truck
 trucksDecoder  =
     Decode.succeed Truck  
@@ -85,6 +191,10 @@ truckTypeDecoder =
             _     -> Decode.succeed   "Purchase Order"
     )
 
+-- onFetchSearchFilterRangesDecoder : Decode.Decoder (List SearchFilterType)
+-- onFetchSearchFilterRangesDecoder = 
+--     Decode.list searchFilterRangeDecoder
+
 fetchTrucksDecoder : Decode.Decoder TruckData
 fetchTrucksDecoder = 
      Decode.succeed TruckData  
@@ -93,13 +203,22 @@ fetchTrucksDecoder =
         |> required "finalFilteredTrucks" (Decode.list trucksDecoder)
         |> required "totalTrucksCount" Decode.int
         |> required "cleanSearchFilterBullets" Decode.bool
-    
+        
+
+-- searchFiltersDecoder : Decode.Decoder (Array SearchFilterType)
+-- searchFiltersDecoder = 
+--     Decode.array searchFilterDecoder
+
+-- searchFilterRangeDecoder :  Decode.Decoder SearchFilterType
+-- searchFilterRangeDecoder  =       
 searchFilterDecoder :  Decode.Decoder SearchFilterType
 searchFilterDecoder  =       
     Decode.succeed SearchFilterType  
         |> required "index" Decode.int
         |> required "searchFilterKey" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
         |> required "searchFilterExtraData" Decode.string -- if you omit this, it returns partial func waiting to accept searchFilterKey
+        -- |> required "searchFilterMinValue" Decode.int
+        -- |> required "searchFilterMaxValue" Decode.int
         |> required "userAction" stringBoolDecoder --Decode.bool
         |> required "resultCount" Decode.int
         |> required "filterCategory" searchFilterRangeUnionTypeDecoder
@@ -127,7 +246,31 @@ searchFilterRangeUnionTypeString str =
 
 convertStringToRangeSearchFilter filterStr =
     find (\(filterNameString, filterName) -> filterNameString == filterStr)
-            (List.map (\rf -> (rf.filterNameString, rf.filterName)) partialSearchFiltersMetadata)
+                            (
+                                List.concat 
+                                            [ 
+                                                List.map (\rf -> (rf.filterNameString, rf.filterName)) rangeSearchFiltersInitialExpandState,
+                                                List.map (\rf -> (rf.filterNameString, rf.filterName)) regularSearchFiltersInitialExpandState
+                                            ]
+                            )
     |> Maybe.map (\(filterNameString, filterName) -> filterName)
     -- the below condition should never happen unless you misspell in metadata list in model.elm file
     |> Maybe.withDefault Price
+
+    -- find (\sfRangeMeta -> sfRangeMeta.filterNameString == rangeFilterStr) rangeSearchFiltersInitialExpandState
+    --     |> Maybe.map (\sfRangeMeta -> sfRangeMeta.filterName)
+    --     -- the below condition should never happen unless you misspell in metadata list in model.elm file
+    --     |> Maybe.withDefault Price
+
+    -- rangeSearchFiltersInitialExpandState
+    --     |> List.filter(\(k, v) -> k == rangeFilterStr)
+    --     |> List.head
+    --     |> Maybe.map (\(k, v) -> v)
+    --     |> Maybe.withDefault Price --introduce noValue filter type to handle this situation
+
+-- convertStringToRangeSearchFilter rangeFilterStr =
+--     allRangeFilterTypesKeyValueParis
+--         |> List.filter(\(k, v) -> k == rangeFilterStr)
+--         |> List.head
+--         |> Maybe.map (\(k, v) -> v)
+--         |> Maybe.withDefault Price --introduce noValue filter type to handle this situation

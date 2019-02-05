@@ -9,13 +9,13 @@ import Msg exposing (..)
 import Model exposing (..)
 import BusinessFunctions.TruckFunctions exposing (..)
 
-showSortOptionsDialog : Bool -> SortMetaData -> Element Msg
-showSortOptionsDialog show currentSortByChoice =
+showSortOptionsDialog : Bool -> SortBy -> Element Msg
+showSortOptionsDialog show currentSortByOption =
     if show then 
         column[greyBg 245, pd 15, br 5, bw 2, wpx 300]
         [
             row[ear, bw 1, greyBg 228  ][
-                     Input.button []
+                     Input.button ( [])
                                         { 
                                             onPress = Just <| OperateSortDialog False
                                             ,label = textValue " x "
@@ -26,17 +26,17 @@ showSortOptionsDialog show currentSortByChoice =
             [
                 column[spy 3, wf]
                     <|
-                        List.intersperse (el[bwb 1,bdot, wf] <| textValue "") (List.map (\sortMetaDataItem -> buildSortOption sortMetaDataItem currentSortByChoice.sortByField) sortByItemslist)
+                        List.intersperse (el[bwb 1,bdot, wf] <| textValue "") (List.map (\(key, label, sortBy) -> buildSortOption key label sortBy currentSortByOption) sortByItemslist)
             ]
         ]
         
     else
         none
 
-buildSortOption sortMetaDataItem currentSortByField =
+buildSortOption key label sortBy currentSortByOption =
     let
         (rowStyle, mouseOverStyle) =
-            if sortMetaDataItem.sortByField == currentSortByField then
+            if key == convertSortByToKey currentSortByOption then
                 ([greyBg 175], [])
             else
                 ([greyBg 245], [greyBg 225])
@@ -46,7 +46,7 @@ buildSortOption sortMetaDataItem currentSortByField =
             Input.button ( [hf, fal, wf
                             ])
                             { 
-                                onPress = Just <| SortTrucks sortMetaDataItem
-                                ,label = el[pd 3] <| textValue sortMetaDataItem.sortItemDisplayText
+                                onPress = Just <| SortTrucks sortBy
+                                ,label = el[pd 3] <| textValue label
                             }
         ]
