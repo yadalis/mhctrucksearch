@@ -11,6 +11,7 @@ buildTruckIdNumber truck =
     else
         ("PO#: " , "P" ++ truck.poNumber)
 
+--
 sortByItemslist : List SortMetaData
 sortByItemslist = 
     [
