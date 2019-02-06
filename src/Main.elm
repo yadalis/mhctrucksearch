@@ -90,7 +90,7 @@ update msg (model, uiModel) =
                 
             FilterCheckBoxClicked selectedSearchFilter userAction ->
                 let
-                    asdfasdfasdf = Debug.log "from FilterCheckBoxClicked " [uiModel.showLoader] 
+                    --asdfasdfasdf = Debug.log "from FilterCheckBoxClicked " [uiModel.showLoader] 
                     
                     updateUserSelectedSearchFilter : Array SearchFilterType -> UIModel
                     updateUserSelectedSearchFilter  filterList =
@@ -257,7 +257,7 @@ textBox uiModel=
 view : (Model, UIModel) -> Html Msg
 view (model, uiModel) =
         let
-            asdfasdfasdf = Debug.log "from view " [uiModel.showLoader] 
+            --asdfasdfasdf = Debug.log "from view " [uiModel.showLoader] 
 
             (searchStringBtnStyle, searchBtnIcon) = 
                         if String.length (String.trim <| uiModel.searchString) > 0 then 
@@ -303,7 +303,7 @@ view (model, uiModel) =
             spinnerRow = 
                 column[wf,  htmlAttribute <|  style "z-index" "45", htmlAttribute <|  style "position" "fixed", alpha  0.45, spy 0]
                 [
-                    row[wf, hpx 1750,  greyBg 25]
+                    row[wf, hpx 1750,  greyBg 75]
                     [
                         image [ eacx,eacy, bw 0, hf, pdt 150] {src = "red_loader.gif", description ="Logo" }   
                         
@@ -320,7 +320,7 @@ view (model, uiModel) =
                         [
                             image [hpx 35] {src = "mhclogo.png", description ="Logo" }
                             ,
-                            el[pdl 5, fs 18, eab] <| textValue "v1.0.1 - Beta"
+                            el[pdl 5, fs 18, eab] <| textValue "v2.0.0 - Live"
                         ]
                         ,row[wf]
                         [

@@ -15,14 +15,34 @@ import BusinessFunctions.SearchFilterFunctions exposing (..)
 import Json.Decode.Extra exposing (fromResult)
 
 fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
+    let
+            -- url  = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged" 
+            --                     []
+            --                     [
+            --                         string "filterString" searchFilterParam,
+            --                         string "searchText" searchText,
+            --                         int "pageNumber" pageNumber,
+            --                         string "sortField" sortField, string "sortOrder" sortOrder 
+            --                     ]
+            
+            url = crossOrigin  "http://172.21.123.180/NewMHCtruckSyncapidemo/api/mhc/gettruckspaged" 
+                                []
+                                [
+                                    string "filterString" searchFilterParam,
+                                    string "searchText" searchText,
+                                    int "pageNumber" pageNumber,
+                                    string "sortField" sortField, string "sortOrder" sortOrder 
+                                ]
+
+            --asdf = Debug.log "url " [url]
+    in
+    
     Http.get
         { 
-            url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
-                                                                               string "sortField" sortField, string "sortOrder" sortOrder ]
-            -- url = crossOrigin "http://172.21.123.180/NewMHCtruckSyncapidemo/api/mhc/gettruckspaged/" [][string "filterString" searchFilterParam, string "searchText" searchText, int "pageNumber" pageNumber,
-            --                                                                    string "sortField" sortField, string "sortOrder" sortOrder ]
+            
+            url = url
         --, expect = expectJson (RemoteData.fromResult >> OnFetchTrucks) fetchTrucksDecoder
-        , expect = expectJson OnFetchTrucks fetchTrucksDecoder
+            , expect = expectJson OnFetchTrucks fetchTrucksDecoder
         }
  
 trucksDecoder :  Decode.Decoder Truck
