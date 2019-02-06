@@ -2498,6 +2498,23 @@ function _Http_track(router, xhr, tracker)
 	});
 }
 
+function _Url_percentEncode(string)
+{
+	return encodeURIComponent(string);
+}
+
+function _Url_percentDecode(string)
+{
+	try
+	{
+		return elm$core$Maybe$Just(decodeURIComponent(string));
+	}
+	catch (e)
+	{
+		return elm$core$Maybe$Nothing;
+	}
+}
+
 
 var _Bitwise_and = F2(function(a, b)
 {
@@ -6957,20 +6974,49 @@ var elm$url$Url$Builder$crossOrigin = F3(
 	function (prePath, pathSegments, parameters) {
 		return prePath + ('/' + (A2(elm$core$String$join, '/', pathSegments) + elm$url$Url$Builder$toQuery(parameters)));
 	});
+var elm$url$Url$percentEncode = _Url_percentEncode;
+var elm$url$Url$Builder$QueryParameter = F2(
+	function (a, b) {
+		return {$: 'QueryParameter', a: a, b: b};
+	});
+var elm$url$Url$Builder$int = F2(
+	function (key, value) {
+		return A2(
+			elm$url$Url$Builder$QueryParameter,
+			elm$url$Url$percentEncode(key),
+			elm$core$String$fromInt(value));
+	});
+var elm$url$Url$Builder$string = F2(
+	function (key, value) {
+		return A2(
+			elm$url$Url$Builder$QueryParameter,
+			elm$url$Url$percentEncode(key),
+			elm$url$Url$percentEncode(value));
+	});
 var author$project$Commands$fetchTrucks = F3(
-	function (searchFilterParam, searchText, pageNumber) {
+	function (filterString, searchText, pageNumber) {
+		var sortOrder = 'DESC';
+		var sortField = 'Price';
+		var url = A3(
+			elm$url$Url$Builder$crossOrigin,
+			'http://localhost:50977/api/mhc/gettruckspaged',
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(elm$url$Url$Builder$string, 'filterString', filterString),
+					A2(elm$url$Url$Builder$string, 'searchText', searchText),
+					A2(elm$url$Url$Builder$int, 'pageNumber', pageNumber),
+					A2(elm$url$Url$Builder$string, 'sortField', sortField),
+					A2(elm$url$Url$Builder$string, 'sortOrder', sortOrder)
+				]));
 		return elm$http$Http$get(
 			{
 				expect: A2(elm$http$Http$expectJson, author$project$Msg$OnFetchTrucks, author$project$Commands$fetchTrucksDecoder),
-				url: A3(
-					elm$url$Url$Builder$crossOrigin,
-					'http://localhost:50977/api/mhc/gettruckspaged/',
-					_List_fromArray(
-						[searchFilterParam, searchText, pageNumber]),
-					_List_Nil)
+				url: url
 			});
 	});
 var author$project$Model$MakeAtoZ = {$: 'MakeAtoZ'};
+var author$project$Model$SortASC = {$: 'SortASC'};
 var elm$core$Array$fromListHelp = F3(
 	function (list, nodeList, nodeListSize) {
 		fromListHelp:
@@ -7009,7 +7055,15 @@ var elm$core$Array$fromList = function (list) {
 var author$project$Model$initalUIModel = function (jsFlag) {
 	return {
 		allSearchFilters: _List_Nil,
+		apuFilters: elm$core$Array$empty,
+		bodyTypeFilters: elm$core$Array$empty,
+		brakeTypeFilters: elm$core$Array$empty,
+		cdlFilters: elm$core$Array$empty,
 		currentSortBy: author$project$Model$MakeAtoZ,
+		currentSortOrder: author$project$Model$SortASC,
+		engineHPFilters: elm$core$Array$empty,
+		engineMakeFilters: elm$core$Array$empty,
+		exhaustTypeFilters: elm$core$Array$empty,
 		expandCollapseSearchFilterStates: elm$core$Array$fromList(
 			elm$core$List$concat(
 				_List_fromArray(
@@ -7035,16 +7089,41 @@ var author$project$Model$initalUIModel = function (jsFlag) {
 					]))),
 		filterCDLNoSelected: false,
 		filterCDLYesSelected: false,
+		fleetCodeFilters: elm$core$Array$empty,
+		frontAxleWeightFilters: elm$core$Array$empty,
+		frontWheelSizeFilters: elm$core$Array$empty,
 		hasErrorsToPresent: false,
 		hasWarningsToPresent: false,
+		inventoryAgeFilters: elm$core$Array$empty,
+		locationNameFilters: elm$core$Array$empty,
+		makeFilters: elm$core$Array$empty,
+		mileageFilters: elm$core$Array$empty,
+		modelFilters: elm$core$Array$empty,
 		onLoadSearchFilters: A2(elm$core$String$split, '&', jsFlag),
+		owningBranchFilters: elm$core$Array$empty,
+		photoFilters: elm$core$Array$empty,
+		priceFilters: elm$core$Array$empty,
+		rearAxleRatioFilters: elm$core$Array$empty,
+		rearAxleTypeFilters: elm$core$Array$empty,
+		rearAxleWeightFilters: elm$core$Array$empty,
+		rearWheelSizeFilters: elm$core$Array$empty,
+		salesStatusFilters: elm$core$Array$empty,
 		searchString: '',
 		selectedFilterBullets: _List_Nil,
 		showDropdown: false,
 		showLoader: false,
+		sleeperBunkFilters: elm$core$Array$empty,
+		sleeperInchesFilters: elm$core$Array$empty,
+		sleeperRoofFilters: elm$core$Array$empty,
+		specialFinancingFilters: elm$core$Array$empty,
+		suspensionFilters: elm$core$Array$empty,
+		transTypeFilters: elm$core$Array$empty,
+		truckTypeFilters: elm$core$Array$empty,
 		userWarningMessage: '',
+		wheelBaseFilters: elm$core$Array$empty,
 		workWithAppraisedTrucks: false,
-		workWithNewTrucks: false
+		workWithNewTrucks: false,
+		yearFilters: elm$core$Array$empty
 	};
 };
 var author$project$Model$initialModel = {currentPageNumber: 1, filteredTruckList: _List_Nil, pagedTruckList: _List_Nil, totalTrucksCount: 0, truckList: _List_Nil};
@@ -7057,7 +7136,7 @@ var author$project$Main$init = function (jsflg) {
 		elm$core$Platform$Cmd$batch(
 			_List_fromArray(
 				[
-					A3(author$project$Commands$fetchTrucks, 'x', 'x', '1')
+					A3(author$project$Commands$fetchTrucks, ' ', ' ', 1)
 				])));
 };
 var elm$core$Platform$Sub$batch = _Platform_batch;
@@ -7136,97 +7215,6 @@ var author$project$BusinessFunctions$SearchFilterFunctions$formattedSelectedFilt
 		},
 		author$project$BusinessFunctions$SearchFilterFunctions$partialSearchFiltersMetadata) : _List_Nil;
 };
-var author$project$BusinessFunctions$TruckFunctions$desendingOrderByMake = F2(
-	function (a, b) {
-		var _n0 = A2(elm$core$Basics$compare, a.make, b.make);
-		switch (_n0.$) {
-			case 'LT':
-				return elm$core$Basics$GT;
-			case 'EQ':
-				return elm$core$Basics$EQ;
-			default:
-				return elm$core$Basics$LT;
-		}
-	});
-var author$project$BusinessFunctions$TruckFunctions$desendingOrderByMileage = F2(
-	function (a, b) {
-		var _n0 = A2(elm$core$Basics$compare, a.mileage, b.mileage);
-		switch (_n0.$) {
-			case 'LT':
-				return elm$core$Basics$GT;
-			case 'EQ':
-				return elm$core$Basics$EQ;
-			default:
-				return elm$core$Basics$LT;
-		}
-	});
-var author$project$BusinessFunctions$TruckFunctions$desendingOrderByPrice = F2(
-	function (a, b) {
-		var _n0 = A2(elm$core$Basics$compare, a.price, b.price);
-		switch (_n0.$) {
-			case 'LT':
-				return elm$core$Basics$GT;
-			case 'EQ':
-				return elm$core$Basics$EQ;
-			default:
-				return elm$core$Basics$LT;
-		}
-	});
-var author$project$BusinessFunctions$TruckFunctions$desendingOrderByYear = F2(
-	function (a, b) {
-		var _n0 = A2(elm$core$Basics$compare, a.year, b.year);
-		switch (_n0.$) {
-			case 'LT':
-				return elm$core$Basics$GT;
-			case 'EQ':
-				return elm$core$Basics$EQ;
-			default:
-				return elm$core$Basics$LT;
-		}
-	});
-var elm$core$List$sortBy = _List_sortBy;
-var elm$core$List$sortWith = _List_sortWith;
-var author$project$BusinessFunctions$TruckFunctions$sortTruckList = F2(
-	function (sortBy, listToSort) {
-		switch (sortBy.$) {
-			case 'PriceLowToHigh':
-				return A2(
-					elm$core$List$sortBy,
-					function ($) {
-						return $.price;
-					},
-					listToSort);
-			case 'PriceHighToLow':
-				return A2(elm$core$List$sortWith, author$project$BusinessFunctions$TruckFunctions$desendingOrderByPrice, listToSort);
-			case 'MileageLowToHigh':
-				return A2(
-					elm$core$List$sortBy,
-					function ($) {
-						return $.mileage;
-					},
-					listToSort);
-			case 'MileageHighToLow':
-				return A2(elm$core$List$sortWith, author$project$BusinessFunctions$TruckFunctions$desendingOrderByMileage, listToSort);
-			case 'MakeAtoZ':
-				return A2(
-					elm$core$List$sortBy,
-					function ($) {
-						return $.make;
-					},
-					listToSort);
-			case 'MakeZtoA':
-				return A2(elm$core$List$sortWith, author$project$BusinessFunctions$TruckFunctions$desendingOrderByMake, listToSort);
-			case 'YearOldToNew':
-				return A2(
-					elm$core$List$sortBy,
-					function ($) {
-						return $.year;
-					},
-					listToSort);
-			default:
-				return A2(elm$core$List$sortWith, author$project$BusinessFunctions$TruckFunctions$desendingOrderByYear, listToSort);
-		}
-	});
 var elm$core$Elm$JsArray$map = _JsArray_map;
 var elm$core$Array$map = F2(
 	function (func, _n0) {
@@ -7334,6 +7322,7 @@ var elm$core$List$head = function (list) {
 		return elm$core$Maybe$Nothing;
 	}
 };
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var elm$core$List$takeReverse = F3(
 	function (n, list, kept) {
 		takeReverse:
@@ -7460,7 +7449,6 @@ var elm$core$List$take = F2(
 	function (n, list) {
 		return A3(elm$core$List$takeFast, 0, n, list);
 	});
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var elm_community$list_extra$List$Extra$greedyGroupsOfWithStep = F3(
 	function (size, step, xs) {
 		var xs_ = A2(elm$core$List$drop, step, xs);
@@ -7493,7 +7481,7 @@ var author$project$Main$update = F2(
 		var model = _n0.a;
 		var uiModel = _n0.b;
 		var getTrucksHttpCmd = function (newUIModel) {
-			var searchText = (newUIModel.searchString === '') ? 'x' : newUIModel.searchString;
+			var searchText = (newUIModel.searchString === '') ? '' : newUIModel.searchString;
 			var searchFilterString = A2(
 				elm$core$String$join,
 				'|',
@@ -7504,10 +7492,10 @@ var author$project$Main$update = F2(
 					},
 					author$project$BusinessFunctions$SearchFilterFunctions$formattedSelectedFilterBullets(newUIModel)));
 			var trucksHttpCmd = (elm$core$List$length(
-				author$project$BusinessFunctions$SearchFilterFunctions$formattedSelectedFilterBullets(newUIModel)) > 0) ? A3(author$project$Commands$fetchTrucks, searchFilterString, searchText, '1') : A3(author$project$Commands$fetchTrucks, 'x', searchText, '1');
+				author$project$BusinessFunctions$SearchFilterFunctions$formattedSelectedFilterBullets(newUIModel)) > 0) ? A3(author$project$Commands$fetchTrucks, searchFilterString, searchText, 1) : A3(author$project$Commands$fetchTrucks, '', searchText, 1);
 			return trucksHttpCmd;
 		};
-		var buildTrucksHttpCmd = _Utils_Tuple2(
+		var executeTextSearch = _Utils_Tuple2(
 			_Utils_Tuple2(model, uiModel),
 			getTrucksHttpCmd(uiModel));
 		switch (msg.$) {
@@ -7621,9 +7609,9 @@ var author$project$Main$update = F2(
 							{searchString: searchString})),
 					elm$core$Platform$Cmd$none);
 			case 'SearchPressed':
-				return buildTrucksHttpCmd;
+				return executeTextSearch;
 			case 'HandleKeyboardEvent':
-				return buildTrucksHttpCmd;
+				return executeTextSearch;
 			case 'CollapseClicked':
 				var searchFilterState = msg.a;
 				var userAction = msg.b;
@@ -7695,21 +7683,16 @@ var author$project$Main$update = F2(
 					elm$core$Platform$Cmd$none);
 			case 'SortTrucks':
 				var sortBy = msg.a;
-				var sortedFilteredTruckList = A2(author$project$BusinessFunctions$TruckFunctions$sortTruckList, sortBy, model.filteredTruckList);
+				var sortOrder = msg.b;
+				var newUIModel = _Utils_update(
+					uiModel,
+					{currentSortBy: sortBy, currentSortOrder: sortOrder, showLoader: true});
 				var newModel = _Utils_update(
 					model,
-					{
-						currentPageNumber: 1,
-						filteredTruckList: sortedFilteredTruckList,
-						pagedTruckList: A2(elm$core$List$take, 100, sortedFilteredTruckList)
-					});
+					{currentPageNumber: 1});
 				return _Utils_Tuple2(
-					_Utils_Tuple2(
-						newModel,
-						_Utils_update(
-							uiModel,
-							{currentSortBy: sortBy})),
-					elm$core$Platform$Cmd$none);
+					_Utils_Tuple2(newModel, newUIModel),
+					getTrucksHttpCmd(newUIModel));
 			case 'ShowLoader':
 				var userAction = msg.a;
 				return _Utils_Tuple2(
@@ -7723,7 +7706,7 @@ var author$project$Main$update = F2(
 				var newUIModel = _Utils_update(
 					uiModel,
 					{searchString: '', showLoader: true});
-				var cmd = A3(author$project$Commands$fetchTrucks, 'x', 'x', '1');
+				var cmd = A3(author$project$Commands$fetchTrucks, '', '', 1);
 				return _Utils_Tuple2(
 					_Utils_Tuple2(model, newUIModel),
 					cmd);
@@ -13402,18 +13385,19 @@ var author$project$Model$MileageHighToLow = {$: 'MileageHighToLow'};
 var author$project$Model$MileageLowToHigh = {$: 'MileageLowToHigh'};
 var author$project$Model$PriceHighToLow = {$: 'PriceHighToLow'};
 var author$project$Model$PriceLowToHigh = {$: 'PriceLowToHigh'};
+var author$project$Model$SortDSC = {$: 'SortDSC'};
 var author$project$Model$YearNewToOld = {$: 'YearNewToOld'};
 var author$project$Model$YearOldToNew = {$: 'YearOldToNew'};
 var author$project$BusinessFunctions$TruckFunctions$sortByItemslist = _List_fromArray(
 	[
-		_Utils_Tuple3('PriceLowToHigh', 'Price - Low to High', author$project$Model$PriceLowToHigh),
-		_Utils_Tuple3('PriceHighToLow', 'Price - High to Low', author$project$Model$PriceHighToLow),
-		_Utils_Tuple3('MileageLowToHigh', 'Mileage - Low to High', author$project$Model$MileageLowToHigh),
-		_Utils_Tuple3('MileageHighToLow', 'Mileage - High to Low', author$project$Model$MileageHighToLow),
-		_Utils_Tuple3('MakeAtoZ', 'Make A to Z', author$project$Model$MakeAtoZ),
-		_Utils_Tuple3('MakeZtoA', 'Make Z to A', author$project$Model$MakeZtoA),
-		_Utils_Tuple3('YearNewToOld', 'Year - New to Old', author$project$Model$YearNewToOld),
-		_Utils_Tuple3('YearOldToNew', 'Year - Old to New', author$project$Model$YearOldToNew)
+		{sortByField: author$project$Model$PriceLowToHigh, sortByText: 'Price - Low to High', sortByTextKey: 'PriceLowToHigh', sortOrder: author$project$Model$SortASC},
+		{sortByField: author$project$Model$PriceHighToLow, sortByText: 'Price - High to Low', sortByTextKey: 'PriceHighToLow', sortOrder: author$project$Model$SortDSC},
+		{sortByField: author$project$Model$MileageLowToHigh, sortByText: 'Mileage - Low to High', sortByTextKey: 'MileageLowToHigh', sortOrder: author$project$Model$SortASC},
+		{sortByField: author$project$Model$MileageHighToLow, sortByText: 'Mileage - Low to High', sortByTextKey: 'MileageHighToLow', sortOrder: author$project$Model$SortDSC},
+		{sortByField: author$project$Model$MakeAtoZ, sortByText: 'Make - Low to High', sortByTextKey: 'MakeAtoZ', sortOrder: author$project$Model$SortASC},
+		{sortByField: author$project$Model$MakeZtoA, sortByText: 'Make - Low to High', sortByTextKey: 'MakeZtoA', sortOrder: author$project$Model$SortDSC},
+		{sortByField: author$project$Model$YearOldToNew, sortByText: 'Year - Old to New', sortByTextKey: 'YearOldToNew', sortOrder: author$project$Model$SortASC},
+		{sortByField: author$project$Model$YearNewToOld, sortByText: 'Year - New to Old', sortByTextKey: 'YearNewToOld', sortOrder: author$project$Model$SortDSC}
 	]);
 var author$project$BusinessFunctions$TruckFunctions$convertSortByToDescription = function (sortBy) {
 	return A2(
@@ -13422,17 +13406,21 @@ var author$project$BusinessFunctions$TruckFunctions$convertSortByToDescription =
 		A2(
 			elm$core$Maybe$map,
 			function (_n1) {
-				var k = _n1.a;
-				var d = _n1.b;
-				var v = _n1.c;
-				return d;
+				var sortByTextKey = _n1.sortByTextKey;
+				var sortByText = _n1.sortByText;
+				var sortByField = _n1.sortByField;
+				var sortOrder = _n1.sortOrder;
+				return sortByText;
 			},
 			elm$core$List$head(
 				A2(
 					elm$core$List$filter,
 					function (_n0) {
-						var v = _n0.c;
-						return _Utils_eq(v, sortBy);
+						var sortByTextKey = _n0.sortByTextKey;
+						var sortByText = _n0.sortByText;
+						var sortByField = _n0.sortByField;
+						var sortOrder = _n0.sortOrder;
+						return _Utils_eq(sortByField, sortBy);
 					},
 					author$project$BusinessFunctions$TruckFunctions$sortByItemslist))));
 };
@@ -14361,37 +14349,43 @@ var author$project$TruckViews$SearchFilterBullet$searchFilterBulletView = functi
 var mdgriffith$elm_ui$Internal$Flag$borderStyle = mdgriffith$elm_ui$Internal$Flag$flag(11);
 var mdgriffith$elm_ui$Element$Border$dotted = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$borderStyle, mdgriffith$elm_ui$Internal$Style$classes.borderDotted);
 var author$project$Helpers$ElmStyleShotcuts$bdot = mdgriffith$elm_ui$Element$Border$dotted;
+var author$project$BusinessFunctions$TruckFunctions$defaultSortByKey = 'MakeAtoZ';
 var author$project$BusinessFunctions$TruckFunctions$convertSortByToKey = function (sortBy) {
 	return A2(
 		elm$core$Maybe$withDefault,
-		author$project$BusinessFunctions$TruckFunctions$defaultSortByText,
+		author$project$BusinessFunctions$TruckFunctions$defaultSortByKey,
 		A2(
 			elm$core$Maybe$map,
 			function (_n1) {
-				var k = _n1.a;
-				var d = _n1.b;
-				var v = _n1.c;
-				return k;
+				var sortByTextKey = _n1.sortByTextKey;
+				var sortByText = _n1.sortByText;
+				var sortByField = _n1.sortByField;
+				var sortOrder = _n1.sortOrder;
+				return sortByTextKey;
 			},
 			elm$core$List$head(
 				A2(
 					elm$core$List$filter,
 					function (_n0) {
-						var v = _n0.c;
-						return _Utils_eq(v, sortBy);
+						var sortByTextKey = _n0.sortByTextKey;
+						var sortByText = _n0.sortByText;
+						var sortByField = _n0.sortByField;
+						var sortOrder = _n0.sortOrder;
+						return _Utils_eq(sortByField, sortBy);
 					},
 					author$project$BusinessFunctions$TruckFunctions$sortByItemslist))));
 };
 var mdgriffith$elm_ui$Element$Font$alignLeft = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontAlignment, mdgriffith$elm_ui$Internal$Style$classes.textLeft);
 var author$project$Helpers$ElmStyleShotcuts$fal = mdgriffith$elm_ui$Element$Font$alignLeft;
-var author$project$Msg$SortTrucks = function (a) {
-	return {$: 'SortTrucks', a: a};
-};
-var author$project$TruckViews$SortDialog$buildSortOption = F4(
-	function (key, label, msg, currentSortByOption) {
+var author$project$Msg$SortTrucks = F2(
+	function (a, b) {
+		return {$: 'SortTrucks', a: a, b: b};
+	});
+var author$project$TruckViews$SortDialog$buildSortOption = F5(
+	function (key, label, sortBy, sortOrder, currentSortBy) {
 		var _n0 = _Utils_eq(
 			key,
-			author$project$BusinessFunctions$TruckFunctions$convertSortByToKey(currentSortByOption)) ? _Utils_Tuple2(
+			author$project$BusinessFunctions$TruckFunctions$convertSortByToKey(currentSortBy)) ? _Utils_Tuple2(
 			_List_fromArray(
 				[
 					author$project$Helpers$Colors$greyBg(175)
@@ -14431,7 +14425,7 @@ var author$project$TruckViews$SortDialog$buildSortOption = F4(
 								]),
 							author$project$Helpers$ElmUI$textValue(label)),
 						onPress: elm$core$Maybe$Just(
-							author$project$Msg$SortTrucks(msg))
+							A2(author$project$Msg$SortTrucks, sortBy, sortOrder))
 					})
 				]));
 	});
@@ -14454,7 +14448,7 @@ var elm$core$List$intersperse = F2(
 		}
 	});
 var author$project$TruckViews$SortDialog$showSortOptionsDialog = F2(
-	function (show, currentSortByOption) {
+	function (show, currentSortBy) {
 		return show ? A2(
 			mdgriffith$elm_ui$Element$column,
 			_List_fromArray(
@@ -14516,10 +14510,11 @@ var author$project$TruckViews$SortDialog$showSortOptionsDialog = F2(
 								A2(
 									elm$core$List$map,
 									function (_n0) {
-										var key = _n0.a;
-										var label = _n0.b;
-										var msg = _n0.c;
-										return A4(author$project$TruckViews$SortDialog$buildSortOption, key, label, msg, currentSortByOption);
+										var sortByTextKey = _n0.sortByTextKey;
+										var sortByText = _n0.sortByText;
+										var sortByField = _n0.sortByField;
+										var sortOrder = _n0.sortOrder;
+										return A5(author$project$TruckViews$SortDialog$buildSortOption, sortByTextKey, sortByText, sortByField, sortOrder, currentSortBy);
 									},
 									author$project$BusinessFunctions$TruckFunctions$sortByItemslist)))
 						]))
@@ -16685,7 +16680,7 @@ var author$project$Main$view = function (_n0) {
 				author$project$Helpers$ElmStyleShotcuts$bwb(2),
 				author$project$Helpers$ElmStyleShotcuts$eat
 			]),
-		{description: 'Logo', src: 'red_loader.gif'});
+		{description: 'Logo', src: 'loader.gif'});
 	var focusStyle = mdgriffith$elm_ui$Element$focusStyle(
 		{backgroundColor: elm$core$Maybe$Nothing, borderColor: elm$core$Maybe$Nothing, shadow: elm$core$Maybe$Nothing});
 	var _n1 = (elm$core$String$length(

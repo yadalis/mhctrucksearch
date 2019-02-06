@@ -13,9 +13,15 @@ import List.Extra exposing (..)
 
 import Json.Decode.Extra exposing (fromResult)
 
-fetchTrucks searchFilterParam searchText pageNumber=
+fetchTrucks filterString searchText pageNumber=
     let
-        url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged/" [searchFilterParam,searchText,pageNumber][]
+        sortField = "Price"
+        sortOrder = "DESC"
+        url = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged" [] [  string "filterString" filterString,
+                                                                                string "searchText" searchText,
+                                                                                int "pageNumber" pageNumber,
+                                                                                string "sortField" sortField,
+                                                                                string "sortOrder" sortOrder]
     in
         Http.get
             { url = url

@@ -107,6 +107,7 @@ type alias UIModel =
         ,showDropdown : Bool
         ,showLoader : Bool
         ,currentSortBy : SortBy
+        ,currentSortOrder : SortOrder
         --,showAppraisedTrucks : Bool
         ,workWithAppraisedTrucks : Bool
         ,workWithNewTrucks : Bool
@@ -169,9 +170,9 @@ type SortOrder
     = SortASC
     | SortDSC
 
-type SearchFilterStyle
-    = SingleValue
-    | RangeValue
+-- type SearchFilterStyle
+--     = SingleValue
+--     | RangeValue
 
 type SortBy
     = PriceLowToHigh
@@ -203,6 +204,14 @@ type alias SearchFilterType =
         ,resultCount : Int
         ,filterCategory : SearchFilterCustomType
     }
+--("PriceLowToHigh","Price - Low to High",PriceLowToHigh),
+type alias SortByMetaData =
+    {   
+        sortByTextKey : String
+        ,sortByText : String
+        ,sortByField : SortBy
+        ,sortOrder : SortOrder
+    }
 
 type alias SelectedSearchFilterBulletType =
     {   
@@ -222,7 +231,7 @@ defaultSearchFiltersMetadata =
                                     expandByDefault = False, 
                                     truckFieldFunction = (List.map .fleetCode, \sf t -> String.trim t.fleetCode == sf),
                                     truckRangeFieldFunction = (\minValue maxValue t -> t.price >= minValue && t.price <= maxValue),
-                                    filterNameString = "Price"
+                                    filterNameString = "FleetCode"
                             }
 
 initialModel : Model
@@ -342,6 +351,7 @@ initalUIModel jsFlag =
         showDropdown = False,
         showLoader = False,
         currentSortBy = MakeAtoZ,
+        currentSortOrder = SortASC,
         workWithAppraisedTrucks = False,
         workWithNewTrucks = False,
         hasErrorsToPresent = False,

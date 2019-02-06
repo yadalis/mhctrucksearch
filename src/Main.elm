@@ -40,7 +40,7 @@ type alias OnLoadSearchFilter =
 
 init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
-    ( (initialModel,initalUIModel jsflg) , Cmd.batch [fetchTrucks "x" "x" "1"] ) -- initially loads first 100 trucks with all possible search filters and counts
+    ( (initialModel,initalUIModel jsflg) , Cmd.batch [fetchTrucks " " " " 1] ) -- initially loads first 100 trucks with all possible search filters and counts
 
 ---- UPDATE ----
  
@@ -51,18 +51,18 @@ update msg (model, uiModel) =
                 let
                     searchFilterString = (String.join "|" <| List.filter (\sb -> sb /= "" ) (formattedSelectedFilterBullets newUIModel) )
 
-                    searchText = if newUIModel.searchString == "" then "x" else newUIModel.searchString
+                    searchText = if newUIModel.searchString == "" then "" else newUIModel.searchString
                     trucksHttpCmd = 
                         if List.length (formattedSelectedFilterBullets newUIModel) > 0 then
-                            fetchTrucks searchFilterString searchText "1"
+                            fetchTrucks searchFilterString searchText 1
                         else
-                            fetchTrucks "x" searchText "1"
+                            fetchTrucks "" searchText 1
                     
                     --vvrs = Debug.log "fetch truck url " [searchFilterString]
                 in
                     trucksHttpCmd
 
-        buildTrucksHttpCmd =
+        executeTextSearch =
                     ( (model , uiModel), getTrucksHttpCmd uiModel)
     in
         case msg of
@@ -152,10 +152,10 @@ update msg (model, uiModel) =
                     ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
             SearchPressed ->
-                buildTrucksHttpCmd
+                executeTextSearch
                 
             HandleKeyboardEvent ->
-                buildTrucksHttpCmd
+                executeTextSearch
             
             CollapseClicked searchFilterState userAction->
                 let
@@ -193,16 +193,18 @@ update msg (model, uiModel) =
             CloseUserWarningsDialog userAction ->
                 ( (model, {uiModel | hasWarningsToPresent = userAction }), Cmd.none )
             
-            SortTrucks sortBy   ->
+            SortTrucks sortBy sortOrder ->
                 let
-                    sortedFilteredTruckList = 
-                        sortTruckList sortBy <| model.filteredTruckList 
+                    newUIModel = {uiModel |  showLoader = True, currentSortBy = sortBy, currentSortOrder = sortOrder}
+                    
+
+                    -- sortedFilteredTruckList = 
+                    --     sortTruckList sortBy <| model.filteredTruckList 
 
                     newModel =
-                        {model | filteredTruckList = sortedFilteredTruckList, pagedTruckList = List.take 100 sortedFilteredTruckList, currentPageNumber = 1 }
-
+                       {model | currentPageNumber = 1 }
                 in
-                    ( (newModel, {uiModel | currentSortBy = sortBy}), Cmd.none )
+                    ( (newModel, newUIModel), getTrucksHttpCmd newUIModel )
 
             ShowLoader userAction ->
                  ( (model, {uiModel | showLoader = userAction }), 
@@ -214,7 +216,7 @@ update msg (model, uiModel) =
                 let
                     newUIModel = {uiModel |  showLoader = True, searchString = ""}
 
-                    cmd = fetchTrucks "x" "x" "1"
+                    cmd = fetchTrucks "" "" 1
                 in
                    ( ( model, newUIModel), cmd )
 

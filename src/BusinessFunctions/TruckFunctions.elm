@@ -11,32 +11,32 @@ buildTruckIdNumber truck =
     else
         ("PO#: " , "P" ++ truck.poNumber)
 
-sortTruckList sortBy listToSort =
-                    case sortBy of 
-                        PriceLowToHigh ->
-                            listToSort
-                                |> List.sortBy .price 
-                        PriceHighToLow ->
-                            listToSort
-                                |> List.sortWith desendingOrderByPrice
-                        MileageLowToHigh ->
-                            listToSort
-                                |> List.sortBy .mileage 
-                        MileageHighToLow ->
-                            listToSort
-                                |> List.sortWith desendingOrderByMileage
-                        MakeAtoZ ->
-                            listToSort
-                                |> List.sortBy .make     
-                        MakeZtoA ->
-                            listToSort
-                                |> List.sortWith desendingOrderByMake
-                        YearOldToNew ->
-                            listToSort
-                                |> List.sortBy .year     
-                        YearNewToOld ->
-                            listToSort
-                                |> List.sortWith desendingOrderByYear
+-- sortTruckList sortBy listToSort =
+--                     case sortBy of 
+--                         PriceLowToHigh ->
+--                             listToSort
+--                                 |> List.sortBy .price 
+--                         PriceHighToLow ->
+--                             listToSort
+--                                 |> List.sortWith desendingOrderByPrice
+--                         MileageLowToHigh ->
+--                             listToSort
+--                                 |> List.sortBy .mileage 
+--                         MileageHighToLow ->
+--                             listToSort
+--                                 |> List.sortWith desendingOrderByMileage
+--                         MakeAtoZ ->
+--                             listToSort
+--                                 |> List.sortBy .make     
+--                         MakeZtoA ->
+--                             listToSort
+--                                 |> List.sortWith desendingOrderByMake
+--                         YearOldToNew ->
+--                             listToSort
+--                                 |> List.sortBy .year     
+--                         YearNewToOld ->
+--                             listToSort
+--                                 |> List.sortWith desendingOrderByYear
                                 
 defaultSortBy  =
     MakeAtoZ
@@ -47,53 +47,67 @@ defaultSortByText  =
 defaultSortByKey  =
     "MakeAtoZ"
 
-sortByItemslist : List (String, String, SortBy)
+sortByItemslist : List SortByMetaData
 sortByItemslist = 
     [
-        ("PriceLowToHigh","Price - Low to High",PriceLowToHigh),
-        ("PriceHighToLow","Price - High to Low",PriceHighToLow),
-        ("MileageLowToHigh","Mileage - Low to High",MileageLowToHigh),
-        ("MileageHighToLow","Mileage - High to Low",MileageHighToLow),
-        ("MakeAtoZ","Make A to Z",MakeAtoZ),
-        ("MakeZtoA","Make Z to A",MakeZtoA),
-        ("YearNewToOld","Year - New to Old",YearNewToOld),
-        ("YearOldToNew","Year - Old to New",YearOldToNew)
+        {sortByTextKey = "PriceLowToHigh", sortByText = "Price - Low to High", sortByField = PriceLowToHigh, sortOrder = SortASC},
+        {sortByTextKey = "PriceHighToLow", sortByText = "Price - High to Low", sortByField = PriceHighToLow, sortOrder = SortDSC},
+        {sortByTextKey = "MileageLowToHigh", sortByText = "Mileage - Low to High", sortByField = MileageLowToHigh, sortOrder = SortASC},
+        {sortByTextKey = "MileageHighToLow", sortByText = "Mileage - Low to High", sortByField = MileageHighToLow, sortOrder = SortDSC},
+        {sortByTextKey = "MakeAtoZ", sortByText = "Make - Low to High", sortByField = MakeAtoZ, sortOrder = SortASC},
+        {sortByTextKey = "MakeZtoA", sortByText = "Make - Low to High", sortByField = MakeZtoA, sortOrder = SortDSC},
+        {sortByTextKey = "YearOldToNew", sortByText = "Year - Old to New", sortByField = YearOldToNew, sortOrder = SortASC},
+        {sortByTextKey = "YearNewToOld", sortByText = "Year - New to Old", sortByField = YearNewToOld, sortOrder = SortDSC}
     ]
 
 convertSortByToDescription sortBy =
     sortByItemslist
-        |> List.filter(\(_,_, v) -> v == sortBy)
+        |> List.filter(\{sortByTextKey,sortByText,sortByField,sortOrder} -> sortByField == sortBy)
         |> List.head
-        |> Maybe.map (\(k, d, v) -> d)
+        |> Maybe.map (\{sortByTextKey,sortByText,sortByField,sortOrder} -> sortByText)
         |> Maybe.withDefault defaultSortByText
                 
 convertSortByToKey sortBy =
     sortByItemslist
-        |> List.filter(\(_,_, v) -> v == sortBy)
+        |> List.filter(\{sortByTextKey,sortByText,sortByField,sortOrder} -> sortByField == sortBy)
         |> List.head
-        |> Maybe.map (\(k, d, v) -> k)
+        |> Maybe.map (\{sortByTextKey,sortByText,sortByField,sortOrder} -> sortByTextKey)
         |> Maybe.withDefault defaultSortByKey
 
-desendingOrderByPrice a b =
-    case compare a.price b.price of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
+-- convertSortByToDescription sortBy =
+--     sortByItemslist
+--         |> List.filter(\(_,_, v) -> v == sortBy)
+--         |> List.head
+--         |> Maybe.map (\(k, d, v) -> d)
+--         |> Maybe.withDefault defaultSortByText
+                
+-- convertSortByToKey sortBy =
+--     sortByItemslist
+--         |> List.filter(\(_,_, v) -> v == sortBy)
+--         |> List.head
+--         |> Maybe.map (\(k, d, v) -> k)
+--         |> Maybe.withDefault defaultSortByKey
 
-desendingOrderByMileage a b =
-    case compare a.mileage b.mileage of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
+-- desendingOrderByPrice a b =
+--     case compare a.price b.price of
+--         LT -> GT
+--         EQ -> EQ
+--         GT -> LT
 
-desendingOrderByMake a b =
-    case compare a.make b.make of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
+-- desendingOrderByMileage a b =
+--     case compare a.mileage b.mileage of
+--         LT -> GT
+--         EQ -> EQ
+--         GT -> LT
 
-desendingOrderByYear a b =
-    case compare a.year b.year of
-        LT -> GT
-        EQ -> EQ
-        GT -> LT
+-- desendingOrderByMake a b =
+--     case compare a.make b.make of
+--         LT -> GT
+--         EQ -> EQ
+--         GT -> LT
+
+-- desendingOrderByYear a b =
+--     case compare a.year b.year of
+--         LT -> GT
+--         EQ -> EQ
+--         GT -> LT
