@@ -204,7 +204,7 @@ initialModel =
 
 searchFiltersInitialExpandState = 
     [
-        {filterName = Condition,        expandByDefault = False}
+        {filterName = Condition,        expandByDefault = True}
         , {filterName = FleetCode,        expandByDefault = False}
         , {filterName = SalesStatus,      expandByDefault = True}
         , {filterName = TruckType,        expandByDefault = False}
