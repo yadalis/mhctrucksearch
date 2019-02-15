@@ -14,7 +14,7 @@ anyFilterApplied uiModel =
 
 partialSearchFiltersMetadata = 
     [
-         {filterName = Condition        , filterCode = "cn"  ,  displayText = "Condition"         , filterNameString = "Condition"               }
+         {filterName = Condition        , filterCode = "cn"  ,  displayText = "New/Used"         , filterNameString = "Condition"               }
         ,{filterName = FleetCode        , filterCode = "fc"  ,  displayText = "Fleet Code"        , filterNameString = "FleetCode"               }
         ,{filterName = SalesStatus      , filterCode = "ss"  ,  displayText = "Sales Status"      , filterNameString = "SalesStatus"             }
         ,{filterName = TruckType        , filterCode = "tt"  ,  displayText = "Truck Status"      , filterNameString = "TruckType"               }
