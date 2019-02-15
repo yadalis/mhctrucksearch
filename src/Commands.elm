@@ -25,7 +25,7 @@ fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
             --                         string "sortField" sortField, string "sortOrder" sortOrder 
             --                     ]
             
-            url = crossOrigin  "http://172.21.123.180/NewMHCtruckSyncapilive/api/mhc/gettruckspaged" 
+            url = crossOrigin  "https://172.21.123.180/NewMHCtruckSyncapilive/api/mhc/gettruckspaged" 
                                 []
                                 [
                                     string "filterString" searchFilterParam,
