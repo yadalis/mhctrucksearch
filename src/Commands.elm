@@ -16,16 +16,7 @@ import Json.Decode.Extra exposing (fromResult)
 
 fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
     let
-            -- url  = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged" 
-            --                     []
-            --                     [
-            --                         string "filterString" searchFilterParam,
-            --                         string "searchText" searchText,
-            --                         int "pageNumber" pageNumber,
-            --                         string "sortField" sortField, string "sortOrder" sortOrder 
-            --                     ]
-            
-            url = crossOrigin  "https://172.21.123.180/NewMHCtruckSyncapilive/api/mhc/gettruckspaged" 
+            url  = crossOrigin "http://localhost:50977/api/mhc/gettruckspaged" 
                                 []
                                 [
                                     string "filterString" searchFilterParam,
@@ -33,6 +24,15 @@ fetchTrucks searchFilterParam searchText pageNumber sortField sortOrder  =
                                     int "pageNumber" pageNumber,
                                     string "sortField" sortField, string "sortOrder" sortOrder 
                                 ]
+            
+            -- url = crossOrigin  "https://rest.mhc.com/trucks_rest/api/mhc/gettruckspaged" 
+            --                     []
+            --                     [
+            --                         string "filterString" searchFilterParam,
+            --                         string "searchText" searchText,
+            --                         int "pageNumber" pageNumber,
+            --                         string "sortField" sortField, string "sortOrder" sortOrder 
+            --                     ]
 
             --asdf = Debug.log "url " [url]
     in
