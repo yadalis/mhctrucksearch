@@ -35,7 +35,7 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
                            https://testfuncappsuresh.azurewebsites.net/api/getnewtrucks
                            https://testfuncappsuresh.azurewebsites.net/api/getappraisedtrucks
 
-When security errors, while runn elm app, try "set-executionpolicy remotesigned" in powershell (as admin)
+# When security errors, while runn elm app, try "set-executionpolicy remotesigned" in powershell (as admin)
 
 
          
