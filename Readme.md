@@ -38,6 +38,12 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
 # When security errors, while runn elm app, try "set-executionpolicy remotesigned" in powershell (as admin)
 
 
+# To run with trucksdata.json file within the project, just do the following
+         first, install create-elm-app NPM package
+         install json-server using the command "npm install json-server -g"
+         then, run, the command "json-server --watch src\truckdata.json --port 3004"
+         return ""http://localhost:3004/trks"" as a url from fetchTrucksUrl & fetchAppraisedTrucksUrl functions in Commands.elm file
+         the, jus run the "elm-app start"
          
 
 
