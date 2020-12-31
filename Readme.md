@@ -41,7 +41,8 @@ This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/
 # To run with trucksdata.json file within the project, just do the following
          first, install create-elm-app NPM package
          install json-server using the command "npm install json-server -g"
-         then, run, the command "json-server --watch src\truckdata.json --port 3004"
+         then, run, the command "json-server --watch src\newtruckdata.json --port 3004" (any truck data in a json file should contain a root elemnts named "trks" (http://localhost:3004/trks)
+         then, run the command "json-server --watch src\srcFilterRanges.json --port 3005" (http://localhost:3005/srchRanges)
          return ""http://localhost:3004/trks"" as a url from fetchTrucksUrl & fetchAppraisedTrucksUrl functions in Commands.elm file
          the, jus run the "elm-app start"
          
