@@ -53,13 +53,6 @@ buildSearchFilterValuesGroup searchFilterCustomType model uiModel =
                                         [mhcRed, fb ]
                                     else
                                         [greyFont 0]
-                    -- displayValue = 
-                    --                 -- if searchFilter.filterCategory == TruckType then
-                    --                 --     searchFilter.searchFilterExtraData
-                    --                 -- else
-                    --                     searchFilter.searchFilterKey
-                    
-                    --updatedSearchFilter = {searchFilter | index = index, filterCategory = searchFilterCustomType }
                 in
                     if searchFilter.resultCount > 0 then
                         row[wf, size 14, pdl 25]

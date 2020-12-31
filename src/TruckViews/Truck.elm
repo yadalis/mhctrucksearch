@@ -26,7 +26,8 @@ truckView index truck =
         formatImageLink = -- "https://az832863.vo.msecnd.net/~/media/images/trucks/i0412861/i0412861_1.jpg?_=-1254660955&mw=2048&thn=0&w=225"
                             truck.primaryImageLink
                                                 |> String.isEmpty
-                                                |> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else truck.primaryImageLink)
+                                                --|> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else truck.primaryImageLink)
+                                                |> (\isLinkEmpty -> if isLinkEmpty then "photoscomingsoon.png"  else "photoscomingsoon.png") -- this is to test local with no truck image available online
                                                 |> String.replace "&h=16" ""
                                                 |> String.replace "&w=16" "&w=225" 
                                                 |> String.replace "&thn=1" "&thn=2"
@@ -56,13 +57,6 @@ truckView index truck =
                             crossOrigin "https://www.mhc.com/trucks/used" [truck.year, truck.make, truck.model, ((\tup -> Tuple.second tup ) <| buildTruckIdNumber truck)] []
                             , label = el [fs 24, fb, mhcRed] <| textValue <| truck.title
                         }
-                    -- ,
-                    -- link [wf,  Element.htmlAttribute (target "_blank"), fal ]
-                    --     { url = 
-                    --         formatImageLink
-                    --         , label = paragraph [fs 28, fb, mhcRed] [textValue <| formatImageLink]
-                    --     }
-
                 ]
                 ,row[bw 0, spx 15]
                 [

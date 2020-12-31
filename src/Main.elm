@@ -151,32 +151,8 @@ update msg (model, uiModel) =
                         if List.length trucks > 0 then
                             {newUIModel | hasWarningsToPresent = False, userWarningMessage = "" }
                         else
-                            {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the text " ++ uiModel.searchString }
-                    
-                    -- pagedTruckList = List.take defaultTrucksPerPage trucks
-
-                    -- executeRegularFilterFunc regularFilterMeta currentUIModel =
-                    --      regularFilterMeta.pushModifiedFilterListBackInToUIModel 
-                    --                                 currentUIModel 
-                    --                                 (buildSearchFilterValueRecordList SingleValue regularFilterMeta.filterName (regularFilterMeta.filters currentUIModel)  trucks)
-
-                    -- newUIModel = 
-                    --     List.foldl
-                    --             executeRegularFilterFunc
-                    --             uiModel
-                    --             (List.filter (\fltrMeta -> fltrMeta.filterStyle == SingleValue) partialSearchFiltersMetadata)
-
+                            {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the textmmmmmmmmmmmm " ++ uiModel.searchString }
                 in
-                    -- if List.length trucks > 0 then
-                    --     ( 
-                    --         (
-                    --             {model     | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = pagedTruckList},
-                    --             { newUIModel | selectedFilterBullets = [] }
-                    --         )
-                    --         , fetchSearchFilterRanges   -- change this, otherwise it will bring all json based range filters data again and again, you should only rebuild the range filter counts
-                    --                                     -- but not regenrate the filters completely
-                    --     ) 
-                    -- else
                          ( ( newModel , updatedUIModel), cmd)
 
             FilterCheckBoxClicked selectedSearchFilter userAction->
@@ -214,17 +190,6 @@ update msg (model, uiModel) =
                                             )
                                 -- the below condition should never happen unless you misspell in metadata list in model.elm file
                                 |> Maybe.withDefault uiModel
-
-                    -- displayValue = 
-                    --     if selectedSearchFilter.filterCategory == TruckType then 
-                    --             if selectedSearchFilter.searchFilterKey == "I" then
-                    --                     "Inventory"
-                    --             else if selectedSearchFilter.searchFilterKey == "A" then 
-                    --                     "Appraisal"
-                    --             else
-                    --                     "Purchase Order"
-                    --     else
-                    --         selectedSearchFilter.searchFilterExtraData
 
                     newUIModelUpdatedWithSearchFilterBullets = 
                                     {newUIModel |
@@ -380,7 +345,6 @@ textBox uiModel=
 
     Input.text
     [ wpx 300
-                --,Element.htmlAttribute ( on "keydown" (Decode.map HandleKeyboardEvent  decodeKeyboardEvent) )
                 , Element.htmlAttribute(ExtraHtmlEvents.onEnter HandleKeyboardEvent)
     ]
     {
