@@ -25,12 +25,12 @@ import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
 import Element.Events exposing (..)
 import Helpers.Utils exposing (..)
-import Browser.Dom exposing (..)
 import BusinessFunctions.Pager exposing (..)
 import Helpers.Colors exposing (..)
-import Task
-import Process
-import Time
+import MessageActions.HandleOnFetchSearchFilterRanges exposing (..)
+import MessageActions.HandleOnFetchTrucks exposing (..)
+import MessageActions.HandleFilterCheckBoxClicked exposing (..)
+
 
 
 ---- INIT ----
@@ -65,176 +65,19 @@ update msg (model, uiModel) =
     in
         case msg of
             OnFetchSearchFilterRanges response ->
-                let
-                    --vxx = Debug.log "OnFetchSearchFilterRanges " [response]
-
-                    rangeSearchFilters = 
-                                case response of
-                                        Ok rangeFltrs ->
-                                                rangeFltrs
-
-                                        Err err ->
-                                                []
-
-                    allRangeSearchFiltersWithNoCountsWithItsFilterType = 
-                                                List.map 
-                                                        (
-                                                            \eachRangeFilterType ->  
-                                                                        (eachRangeFilterType, List.filter (\sf -> sf.filterCategory == eachRangeFilterType ) rangeSearchFilters)
-                                                        ) 
-                                                --allRangeFilterTypesMasterList -- make sure this list is up to date with all possible range filters, this is defined in model.elm
-                                                (List.map (\rangeFltrMeta -> rangeFltrMeta.filterName) rangeSearchFiltersInitialExpandState)
-                    
-                    allRangeSearchFiltersWithCountsWithItsFilterType = 
-                                List.map 
-                                        (
-                                            \(rangeFltrType, rangeFltrWithNoCountsList) ->  
-                                                    (rangeFltrType, (buildSearchFilterValueRecordList RangeValue rangeFltrType (Array.fromList <| rangeFltrWithNoCountsList) model.truckList ))
-                                        ) 
-                                allRangeSearchFiltersWithNoCountsWithItsFilterType
-
-                    
-                    fetchRangeFiltersPoplulatedWithCounts fltrType = 
-                                case    (find (\(rangeFltrType,filtrArray)  -> rangeFltrType == fltrType ) allRangeSearchFiltersWithCountsWithItsFilterType) of
-                                    Just item -> Tuple.second item
-                                    Nothing -> Array.empty
-
-                    executeRangeFilterFunc rangeFilterMeta currentUIModel =
-                        rangeFilterMeta.pushModifiedFilterListBackInToUIModel currentUIModel (fetchRangeFiltersPoplulatedWithCounts rangeFilterMeta.filterName)
-
-                    newUIModel = 
-                        List.foldl
-                                executeRangeFilterFunc
-                                uiModel
-                                (List.filter (\fltrMeta -> fltrMeta.filterStyle == RangeValue) partialSearchFiltersMetadata)
-
-                in
-                    ( ( model , {newUIModel | selectedFilterBullets = [] }), Cmd.none)--sendMessage ( FilterCheckBoxClicked 0 SalesStatus True ) )
+                handleOnFetchSearchFilterRanges response model uiModel
 
             OnFetchTrucks response ->
-                let
-                    --vx = Debug.log "OnFetchTrucks " [response]
+                handleOnFetchTrucks response model uiModel
 
-                    trucks = case response of
-                                Ok truckList ->
-                                        truckList
-                                            |> sortTruckList uiModel.currentSortBy
-                                Err err ->
-                                        []
-                    
-                    --vx = Debug.log "asdfasfasd" [trucks]
-
-                    executeRegularFilterFunc regularFilterMeta currentUIModel =
-                            regularFilterMeta.pushModifiedFilterListBackInToUIModel 
-                                                        currentUIModel 
-                                                        (buildSearchFilterValueRecordList SingleValue regularFilterMeta.filterName (regularFilterMeta.filters currentUIModel)  trucks)
-
-                    (newModel, newUIModel, cmd) = 
-                    
-                        if List.length trucks > 0 then
-                            (
-                                {model  | truckList = trucks,  filteredTruckList = trucks, pagedTruckList = List.take defaultTrucksPerPage trucks },
-                                List.foldl
-                                        executeRegularFilterFunc
-                                        uiModel
-                                        (List.filter (\fltrMeta -> fltrMeta.filterStyle == SingleValue) partialSearchFiltersMetadata),
-                                fetchSearchFilterRanges
-                            )
-                        else
-                            (
-                                model,  
-                                uiModel,
-                                Cmd.none
-                            )
-
-                    updatedUIModel =
-                        if List.length trucks > 0 then
-                            {newUIModel | hasWarningsToPresent = False, userWarningMessage = "" }
-                        else
-                            {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the textmmmmmmmmmmmm " ++ uiModel.searchString }
-                in
-                         ( ( newModel , updatedUIModel), cmd)
-
-            FilterCheckBoxClicked selectedSearchFilter userAction->
-                let
-                    convertMaybeInt intValue =
-                         case intValue of 
-                                Just val -> val
-                                Nothing -> 0
-
-                    updateUserSelectedSearchFilter : Array SearchFilterType -> (Array SearchFilterType -> UIModel) -> UIModel -- Anonymous funcs
-                    updateUserSelectedSearchFilter  filterList pushModifiedFilterListBackInToUIModelFunc =
-                        let
-                            sfIndex =
-                                Array.toList filterList
-                                    |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
-                                    |> convertMaybeInt
-                        in
-                            if sfIndex > 0 then
-                                Array.toList filterList
-                                        |> find (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey  && sf.filterCategory == selectedSearchFilter.filterCategory)
-                                        |> Maybe.map (\sf -> {sf | userAction = userAction})
-                                        |> Maybe.map (\sf -> Array.set sfIndex sf filterList)
-                                        |> Maybe.map pushModifiedFilterListBackInToUIModelFunc
-                                        |> Maybe.withDefault uiModel
-                            else
-                                uiModel
-
-                    newUIModel = 
-                            partialSearchFiltersMetadata
-                                |> find (\sfMeta -> sfMeta.filterName == selectedSearchFilter.filterCategory)
-                                |> Maybe.map (
-                                                \sfMeta -> ( 
-                                                            (sfMeta.filters uiModel |> updateUserSelectedSearchFilter) (sfMeta.pushModifiedFilterListBackInToUIModel uiModel)
-                                                )
-                                            )
-                                -- the below condition should never happen unless you misspell in metadata list in model.elm file
-                                |> Maybe.withDefault uiModel
-
-                    newUIModelUpdatedWithSearchFilterBullets = 
-                                    {newUIModel |
-                                                    selectedFilterBullets = 
-                                                        if userAction then
-                                                            -- do not insert if the combo sf exists
-                                                            newUIModel.selectedFilterBullets
-                                                                |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
-                                                                |> convertMaybeInt
-                                                                |> (\idx -> 
-                                                                        let
-                                                                            selectedFilterBullet =  SearchFilterType -- TODO change this variable name
-                                                                                        selectedSearchFilter.index 
-                                                                                        selectedSearchFilter.searchFilterKey 
-                                                                                        selectedSearchFilter.searchFilterExtraData
-                                                                                        userAction
-                                                                                        0
-                                                                                        selectedSearchFilter.filterCategory 
-                                                                        in
-                                                                        
-                                                                            if idx > 0 then
-                                                                                newUIModel.selectedFilterBullets 
-                                                                            else
-                                                                                selectedFilterBullet :: newUIModel.selectedFilterBullets
-                                                                    )
-                                                        else
-                                                            newUIModel.selectedFilterBullets
-                                                                |> find (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
-                                                                |> Maybe.map (\sf -> remove sf  newUIModel.selectedFilterBullets)
-                                                                |> Maybe.withDefault newUIModel.selectedFilterBullets
-                                    }
-
-                    newSortedFilteredTruckList = applySearchFilters model newUIModelUpdatedWithSearchFilterBullets
-                                                    |> sortTruckList uiModel.currentSortBy
-
-                    uiModelUpdatedWithLatestSearchFilters =
-                            rebuildSearchFiltersBasedOnCurrentSearchCriteria model newUIModelUpdatedWithSearchFilterBullets
-                in
-                    ( ( {model | filteredTruckList = newSortedFilteredTruckList, pagedTruckList = List.take defaultTrucksPerPage newSortedFilteredTruckList, currentPageNumber = 1 } , uiModelUpdatedWithLatestSearchFilters), Task.perform (\_ -> NOoP) (setViewport 0 0))
-
+            FilterCheckBoxClicked selectedSearchFilter userAction ->
+                handleFilterCheckBoxClicked selectedSearchFilter userAction model uiModel
+                
             NOoP ->
-                    ( ( model , uiModel), Cmd.none)
+                ( ( model , uiModel), Cmd.none)
 
             SearchString searchString ->
-                    ( ( model , {uiModel | searchString = searchString}), Cmd.none)
+                ( ( model , {uiModel | searchString = searchString}), Cmd.none)
 
             SearchPressed ->
                 buildTrucksHttpCmd
