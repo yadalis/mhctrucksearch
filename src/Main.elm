@@ -404,9 +404,10 @@ subscriptions model =
 main : Program OnLoadSearchFilter (Model,UIModel) Msg
 main =
     Browser.element
-        { view = view
-        , init = init -- to capture flags from JS
-        , update = update
-        --, subscriptions = always Sub.none
-        ,subscriptions = subscriptions
+        { 
+              view = view
+            , init = init -- to capture flags from JS
+            , update = update
+            --, subscriptions = always Sub.none
+            ,subscriptions = subscriptions
         }
