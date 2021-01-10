@@ -30,6 +30,7 @@ import Helpers.Colors exposing (..)
 import MessageActions.HandleOnFetchSearchFilterRanges exposing (..)
 import MessageActions.HandleOnFetchTrucks exposing (..)
 import MessageActions.HandleFilterCheckBoxClicked exposing (..)
+import MessageActions.HandleClearAllFilters exposing (handleClearAllFilters)
 
 
 
@@ -58,6 +59,7 @@ update msg (model, uiModel) =
         
         buildTrucksHttpCmd =
                 let
+                    a = 1
                     trucksHttpCmd = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
                 in
                     --( ( { model | filteredTruckList = [], truckList = [], pagedTruckList = [] } , uiModel), trucksHttpCmd)
@@ -87,6 +89,7 @@ update msg (model, uiModel) =
             
             CollapseClicked searchFilterState userAction->
                 let
+                    a =1
                     newSearchFilterState = {searchFilterState | userAction = userAction }
                     updatedSearchFilterStates = 
                         uiModel.expandCollapseSearchFilterStates
@@ -149,38 +152,10 @@ update msg (model, uiModel) =
                                                     )
 
             ShowLoader userAction ->
-                 ( (model, {uiModel | showLoader = userAction }), 
- 
-                   Cmd.none
-                )
+                 ( (model, {uiModel | showLoader = userAction }), Cmd.none)
 
             ClearAllFilters ->
-                let
-                    executeRegularAndRangeFilterFunc filterMeta updatableUIModel =
-                        filterMeta.pushModifiedFilterListBackInToUIModel 
-                            updatableUIModel 
-                            (resetFilters (filterMeta.filters updatableUIModel))
-    
-                    newUIModelx = 
-                        List.foldl
-                                executeRegularAndRangeFilterFunc
-                                uiModel
-                                partialSearchFiltersMetadata
-
-                    newUIModel = {newUIModelx | selectedFilterBullets = []}
-                    
-                    sortedTrkList = model.truckList |> sortTruckList uiModel.currentSortBy
-
-                    newModel = 
-                        {model |
-                                filteredTruckList = sortedTrkList,
-                                pagedTruckList =List.take defaultTrucksPerPage sortedTrkList
-                                ,currentPageNumber = 1}
-
-                    uiModelUpdatedWithLatestSearchFilters =
-                            rebuildSearchFiltersBasedOnCurrentSearchCriteria newModel newUIModel
-                in
-                    ( (newModel, uiModelUpdatedWithLatestSearchFilters), Cmd.none )
+                handleClearAllFilters model uiModel
 
 ---- VIEW ----
 

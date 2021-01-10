@@ -8,7 +8,7 @@ import List.Extra exposing (..)
 handleOnFetchSearchFilterRanges response model uiModel =
 
     let
-        --vxx = Debug.log "OnFetchSearchFilterRanges " [response]
+        vxx = Debug.log "OnFetchSearchFilterRanges " [response]
 
         rangeSearchFilters = 
                     case response of

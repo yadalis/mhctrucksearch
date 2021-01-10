@@ -1,25 +1,25 @@
-module BusinessFunctions.SearchFilterFunctions exposing (..)
+-- module BusinessFunctions.SearchFilterFunctions exposing (..)
 
-import Model exposing (..)
-import Array exposing (..)
-import SearchFilterViews.SearchFilter exposing (..)
-import List.Extra exposing (..)
-import List.Unique exposing (..)
-import Maybe.Extra exposing (..)
+-- import Model exposing (..)
+-- import Array exposing (..)
+-- import SearchFilterViews.SearchFilter exposing (..)
+-- import List.Extra exposing (..)
+-- import List.Unique exposing (..)
+-- import Maybe.Extra exposing (..)
  
-resetFilters filters = 
-        Array.map(\sf -> {sf | userAction = False } ) filters
-        -- if (Array.length filters) > 0 then
-        --         Array.map(\sf -> {sf | userAction = False } ) filters
-        -- else
-        --         filters
+-- resetFilters filters = 
+--         Array.map(\sf -> {sf | userAction = False } ) filters
+--         -- if (Array.length filters) > 0 then
+--         --         Array.map(\sf -> {sf | userAction = False } ) filters
+--         -- else
+--         --         filters
 
-anyFilterApplied uiModel =
-        List.length (uiModel.selectedFilterBullets) > 0
+-- anyFilterApplied uiModel =
+--         List.length (uiModel.selectedFilterBullets) > 0
 
 
-getSelectedFilterBulletsByFilterCategory filterCategory selectedFilterList =
-        (Array.fromList <| List.filter (\sf -> sf.filterCategory == filterCategory)  selectedFilterList)
+-- getSelectedFilterBulletsByFilterCategory filterCategory selectedFilterList =
+--         (Array.fromList <| List.filter (\sf -> sf.filterCategory == filterCategory)  selectedFilterList)
         
 -- selectedFiltersCount filters = 
 --         count (\sf -> sf.userAction == True) <| Array.toList filters
@@ -235,4 +235,3 @@ getSelectedFilterBulletsByFilterCategory filterCategory selectedFilterList =
 --         getSelectedSearchFilterKeys searchFilters
 --             |> notMember (String.trim value)
 --             |> not
-

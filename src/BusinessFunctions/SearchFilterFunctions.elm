@@ -126,7 +126,7 @@ rebuildSearchFiltersBasedOnCurrentSearchCriteria model uiModel =
                                 executeFilterFunc
                                 (uiModel.selectedFilterBullets, model.truckList, uiModel) 
                                 (List.filter (\filterMetaData -> filterMetaData.filterName /= filterCategory ) partialSearchFiltersMetadata )
-                                        |> rebuildFilters filterStyle filterCategory filters
+                                        |> rebuildFilters filterStyle filterCategory filters    
                 
                 executeRegularAndRangeFilterFunc filterMeta currentUIModel =
                         filterMeta.pushModifiedFilterListBackInToUIModel currentUIModel (applyAllFiltersExcept  filterMeta.filterName (filterMeta.filters currentUIModel) filterMeta.filterStyle)

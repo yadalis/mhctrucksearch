@@ -11,10 +11,12 @@ import Task
 import Process
 import Msg exposing (..)
 import Browser.Dom exposing (..)
+import Maybe
 
 handleFilterCheckBoxClicked selectedSearchFilter userAction model uiModel =
 
         let
+                vxx = Debug.log "OnFetchSearchFilterRanges " [selectedSearchFilter]
                 convertMaybeInt intValue =
                         case intValue of 
                                 Just val -> 
@@ -54,28 +56,57 @@ handleFilterCheckBoxClicked selectedSearchFilter userAction model uiModel =
                 newUIModelUpdatedWithSearchFilterBullets = 
                                 {newUIModel |
                                                 selectedFilterBullets = 
-                                                        if userAction then
-                                                                -- do not insert if the combo sf exists
-                                                                newUIModel.selectedFilterBullets
-                                                                        |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
-                                                                        |> convertMaybeInt
-                                                                        |> (\idx -> 
-                                                                                let
-                                                                                        selectedFilterBullet =  SearchFilterType -- TODO change this variable name
+                                                        if userAction then -- user checked a filter
+                                                                let
+                                                                        selectedFilterBullet =  SearchFilterType -- TODO change this variable name
                                                                                                 selectedSearchFilter.index 
                                                                                                 selectedSearchFilter.searchFilterKey 
                                                                                                 selectedSearchFilter.searchFilterExtraData
                                                                                                 userAction
                                                                                                 0
                                                                                                 selectedSearchFilter.filterCategory 
-                                                                                in
+                                                                in
+                                                                        selectedFilterBullet :: newUIModel.selectedFilterBullets -- :: is called cons or appending to the end of the list
+                                                                
+                                                                -- do not insert if the combo sf exists
+                                                                -- newUIModel.selectedFilterBullets
+                                                                --         |> findIndex (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
+                                                                --         --|> convertMaybeInt -- you can use Maybe.map to unwarp values from Maybe types
+                                                                --         --so instead of writing a function convertMaybeInt to evalueate the index values returned by 
+                                                                --         --findIndex function above, you can simply write Maybe.map and maybe.withDefautl
+                                                                --         -- maybe.map takes an argument like idx in this case if findIndex actually returns a value
+                                                                --         -- maybe.map withDefautl option handles when the index returned by findIndex is NOTHING
+                                                                --         -- so with maybe.map and maybe.withDefault you can avoid writing functions to evalute
+                                                                --         --maybe types
+                                                                --         |> Maybe.map(\idx -> --if Index returned by findIndex func has a int value , the control comes here
+                                                                --                 -- let
+                                                                --                 --         selectedFilterBullet =  SearchFilterType -- TODO change this variable name
+                                                                --                 --                 selectedSearchFilter.index 
+                                                                --                 --                 selectedSearchFilter.searchFilterKey 
+                                                                --                 --                 selectedSearchFilter.searchFilterExtraData
+                                                                --                 --                 userAction
+                                                                --                 --                 0
+                                                                --                 --                 selectedSearchFilter.filterCategory 
+                                                                --                 -- in
                                                                                 
-                                                                                        if idx > 0 then
-                                                                                                newUIModel.selectedFilterBullets 
-                                                                                        else
-                                                                                                selectedFilterBullet :: newUIModel.selectedFilterBullets
-                                                                                )
-                                                        else
+                                                                --                         --if idx > 0 then
+                                                                --                                 newUIModel.selectedFilterBullets 
+                                                                --                         --else
+                                                                --                                 --selectedFilterBullet :: newUIModel.selectedFilterBullets
+                                                                --                 )
+                                                                --         |> Maybe.withDefault ( --if Index returned by findIndex func is nothing, then the control comes here
+                                                                --                 let
+                                                                --                         selectedFilterBullet =  SearchFilterType -- TODO change this variable name
+                                                                --                                 selectedSearchFilter.index 
+                                                                --                                 selectedSearchFilter.searchFilterKey 
+                                                                --                                 selectedSearchFilter.searchFilterExtraData
+                                                                --                                 userAction
+                                                                --                                 0
+                                                                --                                 selectedSearchFilter.filterCategory 
+                                                                --                 in
+                                                                --                                 selectedFilterBullet :: newUIModel.selectedFilterBullets -- :: is called cons or appending to the end of the list
+                                                                --                 )
+                                                        else -- user unchecked a filter
                                                                 newUIModel.selectedFilterBullets
                                                                         |> find (\sf -> String.trim sf.searchFilterKey == String.trim selectedSearchFilter.searchFilterKey && sf.filterCategory == selectedSearchFilter.filterCategory)
                                                                         |> Maybe.map (\sf -> remove sf  newUIModel.selectedFilterBullets)
