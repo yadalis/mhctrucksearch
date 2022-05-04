@@ -43,16 +43,16 @@ fetchSearchFilterRanges =
 
 fetchTrucksUrl : String -> String -> String
 fetchTrucksUrl truckCondition searchText =
-        "http://localhost:3004/trks"
+        "http://127.0.0.1:3004/trks"
        
 
 fetchAppraisedTrucksUrl : String -> String
 fetchAppraisedTrucksUrl searchText =
-        "http://localhost:3004/trks"
+        "http://127.0.0.1:3004/trks"
 
 fetchSearchFilterRangesUrl: String
 fetchSearchFilterRangesUrl =
-        "http://localhost:3005/srchRanges"
+        "http://127.0.0.1:3005/srchRanges"
        
         
 fetchTrucksDecoder: Decode.Decoder (List Truck)

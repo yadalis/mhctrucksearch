@@ -11,7 +11,7 @@ import Commands exposing (fetchSearchFilterRanges)
 handleOnFetchTrucks response model uiModel =
 
     let
-        --vxx = Debug.log "OnFetchSearchFilterRanges " [response]
+        vxx = Debug.log "OnFetchSearchFilterRanges " [response]
 
         trucks = 
                 case response of
@@ -49,7 +49,7 @@ handleOnFetchTrucks response model uiModel =
                 if List.length trucks > 0 then
                         {newUIModel | hasWarningsToPresent = False, userWarningMessage = "" }
                 else
-                        {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the textmmmmmmmmmmmm " ++ uiModel.searchString }
+                        {newUIModel | hasWarningsToPresent = True, userWarningMessage = "No trucks found for the text " ++ uiModel.searchString }
 
     in
          ( ( newModel , updatedUIModel), cmd)
