@@ -19,7 +19,7 @@ import BusinessFunctions.SearchFilterFunctions exposing (..)
 import Array exposing(..)
 import Html.Events.Extra as ExtraHtmlEvents
 import SearchFilterViews.SearchFilter exposing (..)
-import Element.Lazy as Lazy exposing(..)
+import Element.Lazy exposing(..)
 import TruckViews.SearchFilterBullet exposing (..)
 import List.Extra exposing (..)
 import TruckViews.SortDialog exposing (..)
@@ -59,7 +59,7 @@ update msg (model, uiModel) =
         
         buildTrucksHttpCmd =
                 let
-                    a = 1
+                    _ = 1
                     trucksHttpCmd = getFetchURL (getTruckCondition uiModel.workWithNewTrucks) uiModel.searchString uiModel.workWithAppraisedTrucks
                 in
                     --( ( { model | filteredTruckList = [], truckList = [], pagedTruckList = [] } , uiModel), trucksHttpCmd)
@@ -89,7 +89,7 @@ update msg (model, uiModel) =
             
             CollapseClicked searchFilterState userAction->
                 let
-                    a =1
+                    _ =1
                     newSearchFilterState = {searchFilterState | userAction = userAction }
                     updatedSearchFilterStates = 
                         uiModel.expandCollapseSearchFilterStates
@@ -175,7 +175,7 @@ textBox uiModel=
 view : (Model, UIModel) -> Html Msg
 view (model, uiModel) =
         let
-            (searchStringBtnStyle, searchBtnIcon) = 
+            (searchStringBtnStyle, _) = 
                         if String.length (String.trim <| uiModel.searchString) > 0 then 
                             ([ bc 226 63 63, fc 250 250 250],  image [] {src = "srch_white.ico", description ="Logo" })
                         else
@@ -238,7 +238,7 @@ view (model, uiModel) =
                                     ,placeholder = Just (Input.placeholder [fs 14] (el [eacy] <| textValue "Keyword truck Search"))
                                 }
                                 ,
-                                Input.button ([hf] ++ searchStringBtnStyle)
+                                Input.button (hf :: searchStringBtnStyle)
                                 { 
                                     onPress = if String.length uiModel.searchString > 0 then Just SearchPressed else Nothing --Just SearchPressed 
                                     ,label = el[pde 0 5 0 5] <| textValue "SEARCH"-- searchBtnIcon
@@ -397,7 +397,7 @@ view (model, uiModel) =
 ---- PROGRAM ----
 
 subscriptions : (Model,UIModel) -> Sub Msg
-subscriptions model =
+subscriptions _ =
     --Time.every 5000.00 (\pox -> SearchPressed)
     Sub.none
 
