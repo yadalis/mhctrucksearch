@@ -153,7 +153,6 @@ searchFilterRangeUnionTypeString str =
     Decode.succeed <| convertStringToRangeSearchFilter str
 
 convertStringToRangeSearchFilter rangeFilterStr =
-    
     find (\sfRangeMeta -> sfRangeMeta.filterNameString == rangeFilterStr) rangeSearchFiltersInitialExpandState
         |> Maybe.map (\sfRangeMeta -> sfRangeMeta.filterName)
         -- the below condition should never happen unless you misspell in metadata list in model.elm file

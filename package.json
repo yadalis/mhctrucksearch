@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "6.2.2",
+    "vite-plugin-elm": "3.0.1"
+  }
+}
