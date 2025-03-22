@@ -36,10 +36,10 @@ import MessageActions.HandleClearAllFilters exposing (handleClearAllFilters)
 
 ---- INIT ----
 
-type alias OnLoadSearchFilter =
+type alias OnLoadSearchFilterString =
     String
 
-init : OnLoadSearchFilter -> ( (Model, UIModel) , Cmd Msg)
+init : OnLoadSearchFilterString -> ( (Model, UIModel) , Cmd Msg)
 init jsflg =
     ( (initialModel,initalUIModel jsflg)
         , Cmd.batch [getFetchURL "used" "" False] -- initially loads used/non-appraised trucks
@@ -401,7 +401,7 @@ subscriptions model =
     --Time.every 5000.00 (\pox -> SearchPressed)
     Sub.none
 
-main : Program OnLoadSearchFilter (Model,UIModel) Msg
+main : Program OnLoadSearchFilterString (Model,UIModel) Msg
 main =
     Browser.element
         { 
